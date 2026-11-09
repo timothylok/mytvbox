@@ -62,28 +62,48 @@ def main():
             print(f"  {lang}/{artist}/{stem}.mp4")
         return
 
-    done = skipped = failed = 0
+    done = skipped = failed = fixed = 0
     t0 = time.time()
     for n, (lang, artist, stem, src) in enumerate(todo, 1):
         remote_dir = f"{a.box_root}/{lang}/{artist}"
         remote = f"{remote_dir}/{stem}.mp4"
         size = os.path.getsize(src)
-        r = run([ADB, "-s", a.box, "shell", f"stat -c %s '{remote}'"])
+        tmp = remote + ".part"
+        r = run([ADB, "-s", a.box, "shell", f"stat -c %s {q(remote)}"])
         if r.stdout.strip() == str(size):
             skipped += 1
             continue
+        # a complete .part left behind by an earlier run (the rename used to fail on names with an apostrophe)
+        r = run([ADB, "-s", a.box, "shell", f"stat -c %s {q(tmp)}"])
+        if r.stdout.strip() == str(size) and rename(a, tmp, remote, size):
+            print(f"[{n}/{len(todo)}] {lang}/{artist}/{stem}.mp4  (finished an earlier copy)", flush=True)
+            fixed += 1
+            continue
         print(f"[{n}/{len(todo)}] {lang}/{artist}/{stem}.mp4  ({size / 1e6:.0f} MB)", flush=True)
-        run([ADB, "-s", a.box, "shell", f"mkdir -p '{remote_dir}'"])
-        tmp = remote + ".part"
+        run([ADB, "-s", a.box, "shell", f"mkdir -p {q(remote_dir)}"])
         r = run([ADB, "-s", a.box, "push", src, tmp])
         if r.returncode != 0:
             print("   push failed:", r.stdout[-200:].strip())
             failed += 1
             continue
         # only a complete video gets its final name (the app ignores *.part*)
-        run([ADB, "-s", a.box, "shell", f"mv '{tmp}' '{remote}'"])
+        if not rename(a, tmp, remote, size):
+            print("   rename failed:", remote)
+            failed += 1
+            continue
         done += 1
-    print(f"copied {done}, already there {skipped}, failed {failed}, {(time.time() - t0) / 60:.1f} min")
+    print(f"copied {done}, finished earlier copies {fixed}, already there {skipped}, failed {failed}, {(time.time() - t0) / 60:.1f} min")
+
+
+def q(path):
+    """Quote a path for the box's shell (handles apostrophes in song names)."""
+    return "'" + path.replace("'", "'\\''") + "'"
+
+
+def rename(a, tmp, final, size):
+    run([ADB, "-s", a.box, "shell", f"mv {q(tmp)} {q(final)}"])
+    r = run([ADB, "-s", a.box, "shell", f"stat -c %s {q(final)}"])
+    return r.stdout.strip() == str(size)
 
 
 if __name__ == "__main__":
