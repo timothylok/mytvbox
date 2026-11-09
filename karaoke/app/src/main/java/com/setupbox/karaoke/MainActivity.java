@@ -25,7 +25,12 @@ public class MainActivity extends Activity {
     private static final String[] MODE_NAMES = {"Both channels (mixed)", "Karaoke - instrumental (left)", "Vocal - original (right)"};
     private ExoPlayer player;
     private final VocalProcessor vocal = new VocalProcessor();
-    private TextView status;
+    private TextView status, lyricsView;
+    private Lrc lrc;
+    private int lastLine = -2;
+    private long lyricOffsetMs = 0;   // positive = lyrics appear later
+    private boolean longPressed = false;
+    private String songPath = "";
     private final android.os.Handler ui = new android.os.Handler();
 
     @Override protected void onCreate(Bundle b) {
@@ -40,6 +45,10 @@ public class MainActivity extends Activity {
         status.setTextSize(24);
         status.setPadding(24, 12, 24, 12);
         root.addView(status, new FrameLayout.LayoutParams(-2, -2, Gravity.BOTTOM | Gravity.START));
+        lyricsView = new TextView(this);
+        lyricsView.setGravity(Gravity.CENTER);
+        lyricsView.setPadding(60, 0, 60, 160);
+        root.addView(lyricsView, new FrameLayout.LayoutParams(-1, -1, Gravity.CENTER));
         setContentView(root);
 
         DefaultRenderersFactory rf = new DefaultRenderersFactory(this) {
@@ -56,6 +65,10 @@ public class MainActivity extends Activity {
             status.setText("No file. Start with: --es path /sdcard/...");
             return;
         }
+        String base = path.replaceFirst("\\.[^./]+$", "");
+        lrc = Lrc.load(new File(base + ".lrc"));
+        songPath = path;
+        loadOffset();
         player.setMediaItem(MediaItem.fromUri(android.net.Uri.fromFile(new File(path))));
         player.prepare();
         player.play();
@@ -80,24 +93,93 @@ public class MainActivity extends Activity {
         else st = player.getPlayWhenReady() ? "Playing" : "Paused";
         long dur = player.getDuration();
         String time = fmt(player.getCurrentPosition()) + (dur > 0 ? " / " + fmt(dur) : "");
-        status.setText(st + "  |  " + MODE_NAMES[vocal.getMode()] + "  |  " + time + "\n[OK pause | Left/Right seek 10s | Down change mode]");
+        status.setText(st + "  |  " + MODE_NAMES[vocal.getMode()] + "  |  " + time
+                + (lrc != null ? "  |  Lyrics " + (lyricOffsetMs >= 0 ? "+" : "-") + String.format("%.1fs", Math.abs(lyricOffsetMs) / 1000.0) : "")
+                + "\n[OK pause | hold OK / Menu: vocal mode | Left/Right seek | Up: lyrics later | Down: lyrics earlier]");
+    }
+
+    private void showLyrics() {
+        if (lrc == null || lrc.lines.isEmpty()) return;
+        int i = lrc.indexAt(player.getCurrentPosition() - lyricOffsetMs);
+        if (i == lastLine) return;
+        lastLine = i;
+        android.text.SpannableStringBuilder sb = new android.text.SpannableStringBuilder();
+        for (int k = Math.max(0, i - 1); k <= Math.min(lrc.lines.size() - 1, i + 3); k++) {
+            String t = lrc.lines.get(k).text;
+            if (t.isEmpty()) t = " ";
+            int st = sb.length();
+            sb.append(t).append("\n\n");
+            boolean cur = k == i;
+            sb.setSpan(new android.text.style.ForegroundColorSpan(cur ? 0xFFFFE23B : 0x99FFFFFF), st, st + t.length(), 0);
+            sb.setSpan(new android.text.style.AbsoluteSizeSpan(cur ? 64 : 40, false), st, st + t.length(), 0);
+        }
+        lyricsView.setText(sb);
     }
 
     private final Runnable tick = new Runnable() {
-        @Override public void run() { if (player != null) showStatus(); ui.postDelayed(this, 1000); }
+        @Override public void run() { if (player != null) { showStatus(); showLyrics(); } ui.postDelayed(this, 250); }
     };
 
     @Override public boolean onKeyDown(int k, KeyEvent e) {
         if (player == null) return super.onKeyDown(k, e);
         switch (k) {
-            case KeyEvent.KEYCODE_DPAD_CENTER: case KeyEvent.KEYCODE_ENTER: case KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE:
+            case KeyEvent.KEYCODE_DPAD_CENTER: case KeyEvent.KEYCODE_ENTER:
+                e.startTracking(); return true; // short press = pause (on key up), long press = vocal mode
+            case KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE:
                 player.setPlayWhenReady(!player.getPlayWhenReady()); return true;
             case KeyEvent.KEYCODE_DPAD_RIGHT: player.seekTo(player.getCurrentPosition() + 10000); return true;
             case KeyEvent.KEYCODE_DPAD_LEFT: player.seekTo(Math.max(0, player.getCurrentPosition() - 10000)); return true;
-            case KeyEvent.KEYCODE_DPAD_DOWN: case KeyEvent.KEYCODE_V:
-                vocal.setMode((vocal.getMode() + 1) % 3); showStatus(); return true;
+            case KeyEvent.KEYCODE_DPAD_UP: nudge(500); return true;     // lyrics appear later
+            case KeyEvent.KEYCODE_DPAD_DOWN: nudge(-500); return true;  // lyrics appear earlier
+            case KeyEvent.KEYCODE_MENU: case KeyEvent.KEYCODE_V:
+                cycleMode(); return true;
         }
         return super.onKeyDown(k, e);
+    }
+
+    @Override public boolean onKeyLongPress(int k, KeyEvent e) {
+        if (k == KeyEvent.KEYCODE_DPAD_CENTER || k == KeyEvent.KEYCODE_ENTER) { longPressed = true; cycleMode(); return true; }
+        return super.onKeyLongPress(k, e);
+    }
+
+    @Override public boolean onKeyUp(int k, KeyEvent e) {
+        if ((k == KeyEvent.KEYCODE_DPAD_CENTER || k == KeyEvent.KEYCODE_ENTER) && player != null) {
+            if (!longPressed) player.setPlayWhenReady(!player.getPlayWhenReady());
+            longPressed = false;
+            return true;
+        }
+        return super.onKeyUp(k, e);
+    }
+
+    private void cycleMode() { vocal.setMode((vocal.getMode() + 1) % 3); showStatus(); }
+
+    private File offsetFile() { return new File(android.os.Environment.getExternalStorageDirectory(), "Karaoke/lyric_offsets.properties"); }
+
+    private void loadOffset() {
+        try (java.io.FileInputStream in = new java.io.FileInputStream(offsetFile())) {
+            java.util.Properties p = new java.util.Properties();
+            p.load(new java.io.InputStreamReader(in, "UTF-8"));
+            lyricOffsetMs = Long.parseLong(p.getProperty(songPath, "0"));
+        } catch (Exception ignored) { lyricOffsetMs = 0; }
+    }
+
+    private void saveOffset() {
+        try {
+            java.util.Properties p = new java.util.Properties();
+            File f = offsetFile();
+            if (f.exists()) try (java.io.FileInputStream in = new java.io.FileInputStream(f)) { p.load(new java.io.InputStreamReader(in, "UTF-8")); }
+            if (lyricOffsetMs == 0) p.remove(songPath); else p.setProperty(songPath, String.valueOf(lyricOffsetMs));
+            f.getParentFile().mkdirs();
+            try (java.io.OutputStreamWriter w = new java.io.OutputStreamWriter(new java.io.FileOutputStream(f), "UTF-8")) { p.store(w, null); }
+        } catch (Exception ignored) { }
+    }
+
+    private void nudge(long deltaMs) {
+        lyricOffsetMs += deltaMs;
+        lastLine = -2;
+        saveOffset();
+        showStatus();
+        showLyrics();
     }
 
     @Override protected void onDestroy() {
