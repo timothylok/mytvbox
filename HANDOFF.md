@@ -70,8 +70,8 @@ Commands: `python -u make_karaoke.py --push`, `python -u copy_videos.py`,
    rename the `.lrc` to match the mp3's file name, put it in the source folder, then run `align_folder.py`.
 5. ~~**Test the "Next up" banner**~~ DONE overnight (banner at 3:38 of 3:46, auto-advance to the next song, 16:9 video OK). (last 15 s of a song with another queued) and a normal 16:9 video background - only the
    square `K歌之王.mp4` has been tried.
-6. **Confirm the remote's keys**: hold OK is the vocal toggle (tested via adb); Menu / V are untested. Ask the user if
-   their remote has a Menu button; pick another key if not.
+6. ~~**Confirm the remote's keys**~~ DONE: the user confirmed on the real remote (2026-11-10) that holding OK toggles the
+   vocal mode. Menu / V were never needed.
 7. ~~**Keep the app alive**~~ DONE overnight: `KeepAliveService` (foreground service + notification) keeps the process
    alive when someone presses Home; the phone page answered while the launcher was in front. `launchMode=singleTask` so
    opening the tile again brings back the running instance instead of starting a second one (port clash).
