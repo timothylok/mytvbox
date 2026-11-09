@@ -42,8 +42,15 @@ public class MainActivity extends Activity implements Server.Host {
     private final VocalProcessor vocal = new VocalProcessor();
     private TextView status, lyricsView, idleInfo;
     private LinearLayout idleBox;
-    private ImageView qrSmall;
-    private long hintUntil = 0;       // show the key help line until this time
+    private ImageView qrSmall, backdropView;
+    private FrameLayout rootView;
+    private SurfaceView surfaceView;
+    private android.view.View dimView;
+    private TextView countdownView, bannerView;
+    private Backdrop backdrop;
+    private int lastCount = -1;                 // countdown dots currently shown
+    private boolean wantMp3 = false;            // a music video is merged in: its own audio must not be heard
+    private long hintUntil = 0;                 // show the key help line until this time
     private final android.os.Handler ui = new android.os.Handler();
 
     // lyrics
@@ -75,12 +82,41 @@ public class MainActivity extends Activity implements Server.Host {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         FrameLayout root = new FrameLayout(this);
         root.setBackgroundColor(Color.BLACK);
-        SurfaceView surface = new SurfaceView(this);
-        root.addView(surface, new FrameLayout.LayoutParams(-1, -1));
+        rootView = root;
+        backdropView = new ImageView(this);                    // gradient (+ photos when a song has no music video)
+        backdropView.setVisibility(android.view.View.GONE);
+        root.addView(backdropView, new FrameLayout.LayoutParams(-1, -1));
+        // The video surface comes after the backdrop and is sized to the video's own shape, so whatever the
+        // video does not cover (side bars of a square video) shows the gradient instead of black.
+        surfaceView = new SurfaceView(this);
+        root.addView(surfaceView, new FrameLayout.LayoutParams(-1, -1, Gravity.CENTER));
+        final SurfaceView surface = surfaceView;
+        backdrop = new Backdrop(backdropView, new File(android.os.Environment.getExternalStorageDirectory(), "Pictures/Screensaver"), ui);
+        dimView = new android.view.View(this);                 // darkens video/photos so the lyrics stay readable
+        dimView.setBackgroundColor(0x99000000);
+        dimView.setVisibility(android.view.View.GONE);
+        root.addView(dimView, new FrameLayout.LayoutParams(-1, -1));
         lyricsView = new TextView(this);
         lyricsView.setGravity(Gravity.CENTER);
         lyricsView.setPadding(60, 0, 60, 160);
+        lyricsView.setShadowLayer(10f, 0f, 0f, Color.BLACK);
         root.addView(lyricsView, new FrameLayout.LayoutParams(-1, -1, Gravity.CENTER));
+        countdownView = new TextView(this);                    // the 3-2-1 dots before the singing starts
+        countdownView.setGravity(Gravity.CENTER);
+        countdownView.setTextSize(64);
+        countdownView.setShadowLayer(10f, 0f, 0f, Color.BLACK);
+        FrameLayout.LayoutParams clp = new FrameLayout.LayoutParams(-1, -2, Gravity.CENTER_HORIZONTAL | Gravity.TOP);
+        clp.setMargins(0, 150, 0, 0);
+        root.addView(countdownView, clp);
+        bannerView = new TextView(this);                       // "Now singing" / "Next up" banner
+        bannerView.setTextColor(Color.WHITE);
+        bannerView.setBackgroundColor(0xB3101418);
+        bannerView.setTextSize(30);
+        bannerView.setPadding(28, 14, 28, 14);
+        bannerView.setVisibility(android.view.View.GONE);
+        FrameLayout.LayoutParams blp = new FrameLayout.LayoutParams(-2, -2, Gravity.TOP | Gravity.START);
+        blp.setMargins(24, 24, 0, 0);
+        root.addView(bannerView, blp);
         ip = localIp();
         final String url = "http://" + ip + ":" + PORT;
         android.graphics.Bitmap bigQr = qr(url, 440), smallQr = qr(url, 220);
@@ -138,7 +174,32 @@ public class MainActivity extends Activity implements Server.Host {
         };
         player = new ExoPlayer.Builder(this, rf).build();
         player.setVideoSurfaceView(surface);
+        player.setVideoScalingMode(androidx.media3.common.C.VIDEO_SCALING_MODE_SCALE_TO_FIT);   // never crop; the surface itself is fitted to the video's aspect ratio
+        // a music video has its own (vocal) soundtrack: always prefer the karaoke mp3 merged in next to it
+        player.setTrackSelectionParameters(player.getTrackSelectionParameters().buildUpon()
+                .setPreferredAudioMimeType(androidx.media3.common.MimeTypes.AUDIO_MPEG).build());
         player.addListener(new Player.Listener() {
+            @Override public void onVideoSizeChanged(androidx.media3.common.VideoSize vs) { fitVideo(vs); }
+            @Override public void onTracksChanged(androidx.media3.common.Tracks tracks) {
+                // With a music video merged in there are two audio tracks (the video's own vocal mix, AAC, and our
+                // karaoke mp3). Force the mp3; the player stays muted until that is the one selected.
+                androidx.media3.common.Tracks.Group mp3 = null;
+                for (androidx.media3.common.Tracks.Group g : tracks.getGroups()) {
+                    if (g.getType() == androidx.media3.common.C.TRACK_TYPE_AUDIO
+                            && androidx.media3.common.MimeTypes.AUDIO_MPEG.equals(g.getTrackFormat(0).sampleMimeType)) mp3 = g;
+                }
+                if (mp3 != null && wantMp3 && !mp3.isSelected()) {
+                    player.setTrackSelectionParameters(player.getTrackSelectionParameters().buildUpon()
+                            .setOverrideForType(new androidx.media3.common.TrackSelectionOverride(mp3.getMediaTrackGroup(), 0)).build());
+                    return;
+                }
+                for (androidx.media3.common.Tracks.Group g : tracks.getGroups()) {
+                    if (g.getType() == androidx.media3.common.C.TRACK_TYPE_AUDIO && g.isSelected()) {
+                        android.util.Log.i("KaraokeAudio", "playing audio track: " + g.getTrackFormat(0).sampleMimeType);
+                        if (!wantMp3 || androidx.media3.common.MimeTypes.AUDIO_MPEG.equals(g.getTrackFormat(0).sampleMimeType)) player.setVolume(1f);
+                    }
+                }
+            }
             @Override public void onPlaybackStateChanged(int st) {
                 if (st == Player.STATE_ENDED && !debugSingleFile) playNext();
                 refresh();
@@ -196,7 +257,8 @@ public class MainActivity extends Activity implements Server.Host {
             if (f == null || !f.isFile()) continue;     // file vanished: skip it
             currentSongId = s.id;
             vocalOn = false;
-            startFile(f);
+            File mv = s.video.isEmpty() ? null : new File(lib.root, s.video);
+            startFile(f, mv != null && mv.isFile() ? mv : null);
             return;
         }
     }
@@ -207,19 +269,47 @@ public class MainActivity extends Activity implements Server.Host {
         player.clearMediaItems();
         lrc = null;
         lyricsView.setText("");
+        countdownView.setText("");
+        backdrop.stop();
+        backdropView.setVisibility(android.view.View.GONE);
+        dimView.setVisibility(android.view.View.GONE);
         cPlaying = false; cPaused = false;
         refresh();
     }
 
-    private void startFile(File f) {
+    private void startFile(File f) { startFile(f, null); }
+
+    /** Plays f (the karaoke audio); if a music video is given it is shown muted behind the lyrics, in sync. */
+    private void startFile(File f, File video) {
         songPath = f.getPath();
         String base = songPath.replaceFirst("\\.[^./]+$", "");
         lrc = Lrc.load(new File(base + ".lrc"));
         lastLine = -2;
+        lastCount = -1;
         lyricsView.setText("");
+        countdownView.setText("");
         loadOffset();
         applyChannel();
-        player.setMediaItem(MediaItem.fromUri(android.net.Uri.fromFile(f)));
+        boolean mp4Own = f.getName().toLowerCase().endsWith(".mp4");
+        boolean showPhotos = video == null && !mp4Own;           // an audio-only song: photos behind the lyrics
+        backdropView.setVisibility(debugSingleFile ? android.view.View.GONE : android.view.View.VISIBLE);
+        dimView.setVisibility(debugSingleFile ? android.view.View.GONE : android.view.View.VISIBLE);
+        backdrop.stop();
+        if (!debugSingleFile) backdrop.start(showPhotos);
+        if (showPhotos) surfaceView.setLayoutParams(new FrameLayout.LayoutParams(-1, -1, Gravity.CENTER));
+        wantMp3 = video != null;
+        player.setVolume(video != null ? 0f : 1f);          // muted until the karaoke mp3 is the selected track
+        player.setTrackSelectionParameters(player.getTrackSelectionParameters().buildUpon()
+                .clearOverridesOfType(androidx.media3.common.C.TRACK_TYPE_AUDIO).build());
+        if (video != null) {
+            androidx.media3.exoplayer.source.ProgressiveMediaSource.Factory pf =
+                    new androidx.media3.exoplayer.source.ProgressiveMediaSource.Factory(new androidx.media3.datasource.DefaultDataSource.Factory(this));
+            player.setMediaSource(new androidx.media3.exoplayer.source.MergingMediaSource(
+                    pf.createMediaSource(MediaItem.fromUri(android.net.Uri.fromFile(video))),
+                    pf.createMediaSource(MediaItem.fromUri(android.net.Uri.fromFile(f)))));
+        } else {
+            player.setMediaItem(MediaItem.fromUri(android.net.Uri.fromFile(f)));
+        }
         player.prepare();
         player.play();
         cPlaying = true; cPaused = false;
@@ -378,9 +468,65 @@ public class MainActivity extends Activity implements Server.Host {
         } catch (Exception e) { return null; }
     }
 
+    /** Sizes the video surface to the video's true shape, centred and as large as fits the screen (no cropping, no stretching). */
+    private void fitVideo(androidx.media3.common.VideoSize vs) {
+        if (vs.width == 0 || vs.height == 0) return;
+        int rw = rootView.getWidth(), rh = rootView.getHeight();
+        if (rw == 0 || rh == 0) { android.util.DisplayMetrics m = getResources().getDisplayMetrics(); rw = m.widthPixels; rh = m.heightPixels; }
+        float aspect = vs.width * vs.pixelWidthHeightRatio / vs.height;
+        int w, h;
+        if (aspect > (float) rw / rh) { w = rw; h = Math.round(rw / aspect); } else { h = rh; w = Math.round(rh * aspect); }
+        surfaceView.setLayoutParams(new FrameLayout.LayoutParams(w, h, Gravity.CENTER));
+    }
+
+    /** Three dots that count down (3-2-1) in the last 3 s before singing starts after a gap of 5 s or more. */
+    private void updateCountdown(long pos) {
+        int count = 0, n = -1;
+        for (int k = 0; k < lrc.lines.size(); k++) {
+            if (!lrc.lines.get(k).text.isEmpty() && lrc.lines.get(k).ms > pos) { n = k; break; }
+        }
+        if (n >= 0) {
+            long until = lrc.lines.get(n).ms - pos;
+            long gapStart = 0;                                   // where the previous sung line ended (0 = song start)
+            for (int k = n - 1; k >= 0; k--) if (!lrc.lines.get(k).text.isEmpty()) { gapStart = lrc.endOf(k); break; }
+            if (until <= 3000 && pos >= gapStart && lrc.lines.get(n).ms - gapStart >= 5000) count = (int) Math.ceil(until / 1000.0);
+        }
+        if (count == lastCount) return;
+        lastCount = count;
+        if (count == 0) { countdownView.setText(""); return; }
+        android.text.SpannableStringBuilder sb = new android.text.SpannableStringBuilder();
+        for (int d = 0; d < 3; d++) {
+            int st = sb.length();
+            sb.append("● ");
+            sb.setSpan(new android.text.style.ForegroundColorSpan(d < count ? 0xFFFFE23B : 0x44FFFFFF), st, st + 1, 0);
+        }
+        countdownView.setText(sb);
+    }
+
+    private String describe(QueueManager.Item it) {
+        Library.Song s = lib.byId(it.songId);
+        String t = s == null ? "(missing song)" : s.title;
+        return it.singer.isEmpty() ? t : it.singer + " - " + t;
+    }
+
+    /** "Now singing" for the first 6 s of a song, "Next up" for the last 15 s. */
+    private void updateBanner() {
+        String text = null;
+        if (!debugSingleFile && (cPlaying || cPaused)) {
+            QueueManager.Item cur = queue.current();
+            java.util.List<QueueManager.Item> up = queue.upcoming();
+            if (cur != null && cPos < 6000) text = "Now singing:  " + describe(cur);
+            else if (!up.isEmpty() && cDur > 25000 && cDur - cPos <= 15000) text = "Next up:  " + describe(up.get(0));
+        }
+        if (text == null) { if (bannerView.getVisibility() != android.view.View.GONE) bannerView.setVisibility(android.view.View.GONE); return; }
+        if (!text.contentEquals(bannerView.getText())) bannerView.setText(text);
+        if (bannerView.getVisibility() != android.view.View.VISIBLE) bannerView.setVisibility(android.view.View.VISIBLE);
+    }
+
     private void showLyrics() {
         if (lrc == null || lrc.lines.isEmpty() || !(cPlaying || cPaused)) return;
         long pos = player.getCurrentPosition() - lyricOffsetMs;
+        updateCountdown(pos);
         int i = lrc.indexAt(pos);
 
         // Which character of the current line is being sung? LRC only times whole lines, so the line's
@@ -417,7 +563,7 @@ public class MainActivity extends Activity implements Server.Host {
     }
 
     private final Runnable tick = new Runnable() {
-        @Override public void run() { refresh(); showLyrics(); ui.postDelayed(this, 250); }
+        @Override public void run() { refresh(); showLyrics(); updateBanner(); ui.postDelayed(this, 250); }
     };
 
     // ---------- remote control keys ----------

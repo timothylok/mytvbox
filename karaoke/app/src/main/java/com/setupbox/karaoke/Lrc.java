@@ -129,6 +129,17 @@ public final class Lrc {
         return new Line(lineMs, text.substring(a, b), arr.length == 0 ? null : arr, endMs);
     }
 
+    /** When line {@code idx} is over: its end tag, else a little after its last word, else an estimate from its length. */
+    public long endOf(int idx) {
+        Line l = lines.get(idx);
+        long next = idx + 1 < lines.size() ? lines.get(idx + 1).ms : Long.MAX_VALUE;
+        if (l.endMs >= 0) return Math.min(l.endMs, next);
+        int total = 0;
+        for (int j = 0; j < l.text.length(); j++) if (!Character.isWhitespace(l.text.charAt(j))) total++;
+        if (l.charMs != null && l.charMs.length > 0) return Math.min(next, l.charMs[l.charMs.length - 1] + 800);
+        return Math.min(next, l.ms + Math.max(1000, total * 450L));
+    }
+
     /** Index of the line active at positionMs, or -1 before the first line. */
     public int indexAt(long positionMs) {
         int lo = 0, hi = lines.size() - 1, ans = -1;

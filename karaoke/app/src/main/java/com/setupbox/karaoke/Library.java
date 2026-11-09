@@ -20,12 +20,13 @@ import java.util.regex.Pattern;
 public final class Library {
     public static final class Song {
         public String id, language, artist, title, file;   // file = path relative to the Karaoke root
+        public String video = "";                           // companion music video (relative path), or "" if none
         public boolean hasLrc;
         String key;                                         // normalized search text
 
         JSONObject toJson() throws Exception {
             return new JSONObject().put("id", id).put("language", language).put("artist", artist)
-                    .put("title", title).put("file", file).put("lrc", hasLrc);
+                    .put("title", title).put("file", file).put("lrc", hasLrc).put("video", !video.isEmpty());
         }
 
         static Song fromJson(JSONObject o) {
@@ -76,16 +77,31 @@ public final class Library {
                 if (!artist.isDirectory()) continue;
                 File[] files = artist.listFiles();
                 if (files == null) continue;
+                // A song is one title: an .mp3 (karaoke audio) and an .mp4 with the same name (the music video,
+                // shown muted behind the lyrics) belong together. A lone .mp4 is a song with its own audio.
+                java.util.Map<String, String> audio = new java.util.TreeMap<>(), video = new java.util.TreeMap<>();
                 for (File f : files) {
                     String n = f.getName();
                     String low = n.toLowerCase(Locale.ROOT);
-                    if (!f.isFile() || n.contains(".part.") || !(low.endsWith(".mp3") || low.endsWith(".mp4"))) continue;
+                    if (!f.isFile() || n.contains(".part.")) continue;
+                    String stem = n.substring(0, Math.max(0, n.lastIndexOf('.')));
+                    if (low.endsWith(".mp3")) audio.put(stem, n);
+                    else if (low.endsWith(".mp4")) video.put(stem, n);
+                }
+                java.util.TreeSet<String> stems = new java.util.TreeSet<>(audio.keySet());
+                stems.addAll(video.keySet());
+                for (String stem : stems) {
                     Song s = new Song();
                     s.language = lang.getName();
                     s.artist = artist.getName();
-                    String stem = n.substring(0, n.lastIndexOf('.'));
                     s.title = cleanTitle(stem);
-                    s.file = lang.getName() + "/" + artist.getName() + "/" + n;
+                    String prefix = lang.getName() + "/" + artist.getName() + "/";
+                    if (audio.containsKey(stem)) {
+                        s.file = prefix + audio.get(stem);
+                        if (video.containsKey(stem)) s.video = prefix + video.get(stem);
+                    } else {
+                        s.file = prefix + video.get(stem);
+                    }
                     s.hasLrc = new File(artist, stem + ".lrc").isFile();
                     s.id = md5(s.file);
                     s.key = normalize(s.title + " " + s.artist + " " + s.language);
