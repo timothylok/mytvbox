@@ -380,9 +380,26 @@ public class MainActivity extends Activity implements Server.Host {
 
     private void showLyrics() {
         if (lrc == null || lrc.lines.isEmpty() || !(cPlaying || cPaused)) return;
-        int i = lrc.indexAt(player.getCurrentPosition() - lyricOffsetMs);
-        if (i == lastLine) return;
-        lastLine = i;
+        long pos = player.getCurrentPosition() - lyricOffsetMs;
+        int i = lrc.indexAt(pos);
+
+        // Which character of the current line is being sung? LRC only times whole lines, so the line's
+        // time (up to the next line, at most ~0.45 s per character) is shared out evenly over its characters.
+        int ci = -1, total = 0;
+        if (i >= 0) {
+            Lrc.Line cl = lrc.lines.get(i);
+            for (int j = 0; j < cl.text.length(); j++) if (!Character.isWhitespace(cl.text.charAt(j))) total++;
+            if (total > 0) {
+                long next = i + 1 < lrc.lines.size() ? lrc.lines.get(i + 1).ms : Long.MAX_VALUE;
+                long dur = Math.max(1000, Math.min(next - cl.ms, total * 450L));
+                long el = pos - cl.ms;
+                ci = el >= dur ? total : (int) (el * total / dur);   // total = whole line already sung
+            }
+        }
+        int key = i * 1000 + ci;
+        if (key == lastLine) return;
+        lastLine = key;
+
         android.text.SpannableStringBuilder sb = new android.text.SpannableStringBuilder();
         for (int k = Math.max(0, i - 1); k <= Math.min(lrc.lines.size() - 1, i + 3); k++) {
             String t = lrc.lines.get(k).text;
@@ -390,8 +407,21 @@ public class MainActivity extends Activity implements Server.Host {
             int st = sb.length();
             sb.append(t).append("\n\n");
             boolean cur = k == i;
-            sb.setSpan(new android.text.style.ForegroundColorSpan(cur ? 0xFFFFE23B : 0x99FFFFFF), st, st + t.length(), 0);
             sb.setSpan(new android.text.style.AbsoluteSizeSpan(cur ? 64 : 40, false), st, st + t.length(), 0);
+            if (!cur) {
+                sb.setSpan(new android.text.style.ForegroundColorSpan(0x99FFFFFF), st, st + t.length(), 0);
+                continue;
+            }
+            int rank = 0;
+            for (int j = 0; j < t.length(); j++) {
+                if (Character.isWhitespace(t.charAt(j))) { sb.setSpan(new android.text.style.ForegroundColorSpan(0xFFFFFFFF), st + j, st + j + 1, 0); continue; }
+                int color = rank < ci ? 0xFFFFE23B            // already sung: yellow
+                        : rank == ci ? 0xFFFF7A3B             // being sung now: orange + underline
+                        : 0xFFFFFFFF;                          // still to come: white
+                sb.setSpan(new android.text.style.ForegroundColorSpan(color), st + j, st + j + 1, 0);
+                if (rank == ci) sb.setSpan(new android.text.style.UnderlineSpan(), st + j, st + j + 1, 0);
+                rank++;
+            }
         }
         lyricsView.setText(sb);
     }
