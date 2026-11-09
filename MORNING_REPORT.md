@@ -3,6 +3,7 @@
 Loop: every 20 min, branch `overnight` (main is untouched). Task list: HANDOFF.md.
 
 ## Job status (latest first)
+- 4:41 am - round 19: batch 626/650 (0 failures, ~15 min left); video copy run 3 at 231/437 (0 failures).
 - 4:21 am - round 18: batch 599/650 (0 failures). Video copy run 3 at 223/437 - only 3 videos in 20 min; checked it is
   not stuck (the .part file on the drive is growing, 109 of 149 MB). USB writes are slow (~0.3 MB/s) while the batch is
   also pushing; it should speed up once the batch is done.
