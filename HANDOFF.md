@@ -43,8 +43,8 @@ Box: Android TV box 192.168.3.79 (open ADB on :5555). PC: Windows, GTX 1650 4 GB
 
 | Job | Log | Status at handoff |
 |---|---|---|
-| Karaoke batch (`make_karaoke.py --push`) | `tools/make_karaoke.log` | 12:45 am: ~275 / 650 songs (in Mandarin), 0 failures |
-| Video copy (`copy_videos.py`) | `tools/copy_videos.log` (run 1: 87/87 done), `copy_videos2.log` (run 2, 194 videos) | 12:45 am: run 2 ~30 / 194, 0 failures |
+| Karaoke batch (`make_karaoke.py --push`) | `tools/make_karaoke.log` | 1:15 am: ~310 / 650 songs (in Mandarin), 0 failures |
+| Video copy (`copy_videos.py`) | `tools/copy_videos.log` (run 1: 87/87 done), `copy_videos2.log` (run 2, 194 videos) | 1:15 am: run 2 ~55 / 194, 0 failures |
 | Lyric alignment (`align_folder.py` on `EasonChan\Eason Chan`) | `tools/align_folder.log` | DONE 6 / 6, every line aligned |
 
 Overnight loop (branch `overnight`, report `MORNING_REPORT.md`) updates this table each round.
@@ -60,12 +60,11 @@ Commands: `python -u make_karaoke.py --push`, `python -u copy_videos.py`,
    up/down/top/remove buttons, search, browse. Fix whatever feels wrong. (Step 7 of the plan; the launcher tile is done.)
 2. **Finish the batch**, then re-run `copy_videos.py` to cover songs made after its first run (~594 of 658 mp3s have a
    same-name mp4, ~72 GB; USB writes run ~6 MB/s, so several hours).
-3. **Aligned lyrics for the 6 Eason Chan songs** (Lonely Christmas, Shall We Talk, 人來人往, 人啊人, 十面埋伏, 明年今日):
-   `align_folder.py` is running. When it finishes, check `tools/align_folder.log` (look for "kept as-is" lines), spot-check
-   one on the TV. The aligned `.lrc` replaces the one in the source folder; the batch copies it to `D:\ai\Karaoke` and the
-   box when it reaches EasonChan (it comes after the Cantopop library). If a song was already processed, copy the `.lrc`
-   to `D:\ai\Karaoke\Cantopop\Eason Chan\` and push it to the drive by hand.
-   Known glitch: the aligner sometimes gives the first two characters the same start time.
+3. **Aligned lyrics for the 6 Eason Chan songs** - DONE overnight and on the drive (plus K歌之王). A new quality check
+   (`tools/scripts/clean_aligned.py`, now run automatically by `align_folder.py`) keeps per-character times only where they
+   agree with the lyric file and are not squeezed; other lines fall back to the estimate. Result (exact / estimated lines):
+   十面埋伏 25/0, 明年今日 34/0, Lonely Christmas 56/2, Shall We Talk 49/2, 人來人往 43/2, K歌之王 45/1, 人啊人 22/23
+   (the aligner went astray in 人啊人 - a bigger Whisper model, e.g. `--model medium`, might do better).
 4. **8 lyric files still in `C:\Users\timlo\Downloads`** with no matching mp3 in the library: King Kong, 隨意門,
    孤獨探戈, 幸災樂禍, 2001太空漫遊, 低等動物, 打回原形, 給愛麗斯. User said "leave them for now". When the mp3s exist:
    rename the `.lrc` to match the mp3's file name, put it in the source folder, then run `align_folder.py`.

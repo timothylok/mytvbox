@@ -10,6 +10,9 @@ usage: align_folder.py --dir "D:\\ai\\GetVideo\\EasonChan\\Eason Chan" [--backup
 """
 import argparse, os, shutil, subprocess, sys, tempfile, time
 
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from clean_aligned import clean_file
+
 HERE = os.path.dirname(os.path.abspath(__file__))
 TOOLS = os.path.abspath(os.path.join(HERE, ".."))
 DEMUCS_PY = os.path.join(TOOLS, "demucs-venv", "Scripts", "python.exe")
@@ -68,6 +71,8 @@ def main():
                 continue
             shutil.copy2(lrc, os.path.join(a.backup, stem + ".lrc"))   # keep the original
             shutil.copy2(out, lrc)
+            kept, dropped = clean_file(lrc)                           # drop word times that are clearly wrong
+            print(f"   quality check: {kept} lines exact, {dropped} back to estimate")
             os.remove(out)
             shutil.rmtree(os.path.join(tmp, "htdemucs", stem), ignore_errors=True)
             print(f"   done in {time.time() - t0:.0f}s", flush=True)

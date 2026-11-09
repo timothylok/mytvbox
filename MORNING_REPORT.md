@@ -3,6 +3,7 @@
 Loop: every 20 min, branch `overnight` (main is untouched). Task list: HANDOFF.md.
 
 ## Job status (latest first)
+- 1:15 am - round 8: batch ~310/650 (in Mandarin, 0 failures); video copy run 2 ~55/194 (0 failures).
 - 12:45 am - round 7: batch ~275/650 (in Mandarin, 0 failures); video copy run 2 ~30/194 (0 failures); alignment done.
 - 12:25 am - round 6: batch ~242/650 (0 failures); video copy run 1 finished 87/87 (0 failures, 90 min); started run 2 for the
   songs made since (194 videos to check, 21 GB); alignment done.
@@ -18,6 +19,11 @@ Loop: every 20 min, branch `overnight` (main is untouched). Task list: HANDOFF.m
   All three processes alive.
 
 ## Done
+- Round 8: spot-check of the aligned lyrics found bad timings in parts of 人啊人 (7 characters squeezed into 0.3 s,
+  a line timed 11.5 s off). Wrote clean_aligned.py: keeps per-character times only where they agree with the lyric file
+  (allowing a song-wide shift) and are not squeezed; otherwise the line falls back to the estimate. Applied to all 7 aligned
+  songs, copied to D:\ai\Karaoke and pushed to the drive; align_folder.py now runs the check itself.
+  Checked 十面埋伏 on the TV (muted): the aligned file loads, the right line is current, music video fills the screen.
 - Round 7: task 4(f) rewrote karaoke/PLAN.md to match what was built; Library cache now stores/restores the video path
   (verified: index.json on the box has videoFile entries; 274 songs, 116 with video after rescan).
 - Round 6: task 4(e) deleted /sdcard/test.mp3, /sdcard/test_lr.mp3 and D:\ai\Karaoke\Other\Timlok. The Timlok file was a real
@@ -48,6 +54,7 @@ Loop: every 20 min, branch `overnight` (main is untouched). Task list: HANDOFF.m
   video copy finish (the loop will retry).
 
 ## Choices made
+- Bad per-character times are dropped (estimate instead) rather than shown wrong. 人啊人 keeps only 22 of 45 lines exact.
 - 4(a) is waiting for the USB writes to finish, so I moved on to 4(b) instead of retrying it on a busy drive.
 - Muted the box (volume 0) during tests and restored it to 7 afterwards; queue empty, nothing playing at end of round.
 - While the batch + video copy run, expect video songs to stutter on the TV (disk contention) - not an app bug.
