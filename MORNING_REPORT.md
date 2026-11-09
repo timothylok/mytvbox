@@ -3,6 +3,8 @@
 Loop: every 20 min, branch `overnight` (main is untouched). Task list: HANDOFF.md.
 
 ## Job status (latest first)
+- 12:25 am - round 6: batch ~242/650 (0 failures); video copy run 1 finished 87/87 (0 failures, 90 min); started run 2 for the
+  songs made since (194 videos to check, 21 GB); alignment done.
 - 12:15 am - round 5: batch 202+/650 (in Cantopop/Eason Chan, 0 failures); video copy 76+/87 (0 failures); alignment done.
 - 11:45 pm - round 4: batch 164/650 (in Beyond, 0 failures); video copy 37/87 (0 failures); alignment done.
 - 11:30 pm - round 3: batch 132/650 (0 failures); video copy 12/87 (0 failures); alignment DONE 6/6 - every line of
@@ -15,6 +17,8 @@ Loop: every 20 min, branch `overnight` (main is untouched). Task list: HANDOFF.m
   All three processes alive.
 
 ## Done
+- Round 6: task 4(e) deleted /sdcard/test.mp3, /sdcard/test_lr.mp3 and D:i\Karaoke\Other\Timlok. The Timlok file was a real
+  karaoke output (not only a test), so it must be regenerated after the batch: `make_karaoke.py --only Timlok --push` (in HANDOFF.md).
 - Round 5: task 4(d) title overrides - `titles.txt` (on the drive and/or /sdcard/Karaoke) renames songs; formats in
   HANDOFF.md. Tested on the box with a temporary file (removed again): override shown in the list, old name still found
   by search, a bad line ignored, titles back to normal after deleting the file.

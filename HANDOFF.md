@@ -43,8 +43,8 @@ Box: Android TV box 192.168.3.79 (open ADB on :5555). PC: Windows, GTX 1650 4 GB
 
 | Job | Log | Status at handoff |
 |---|---|---|
-| Karaoke batch (`make_karaoke.py --push`) | `tools/make_karaoke.log` | 12:15 am: ~202 / 650 songs (in Eason Chan), 0 failures |
-| Video copy (`copy_videos.py`) | `tools/copy_videos.log` | 12:15 am: ~76 / 87, 0 failures |
+| Karaoke batch (`make_karaoke.py --push`) | `tools/make_karaoke.log` | 12:25 am: ~242 / 650 songs (Cantopop done soon -> Mandarin), 0 failures |
+| Video copy (`copy_videos.py`) | `tools/copy_videos.log` (run 1: 87/87 done), `copy_videos2.log` (run 2, 194 videos incl. newly made songs) | 12:25 am: run 2 in progress, 0 failures |
 | Lyric alignment (`align_folder.py` on `EasonChan\Eason Chan`) | `tools/align_folder.log` | DONE 6 / 6, every line aligned |
 
 Overnight loop (branch `overnight`, report `MORNING_REPORT.md`) updates this table each round.
@@ -84,9 +84,11 @@ Commands: `python -u make_karaoke.py --push`, `python -u copy_videos.py`,
    Still open: nobody has actually written the overrides - a generated draft of all titles would be the next step.
 9. ~~**Search nicety**~~ DONE overnight: search converts traditional to simplified (Android ICU transliterator, API 29+)
    on both sides, so 世纪末烟花 finds 世紀末煙花 and 生活无小事 finds 生活無小事.
-10. **Housekeeping**: delete `/sdcard/test.mp3` and `/sdcard/test_lr.mp3` on the box and `D:\ai\Karaoke\Other\Timlok`
-    (my test song); `Library.fromJson` ignores the "video" flag (cache is not loaded anywhere today - harmless, fix if the
-    cache is ever used); update `karaoke/PLAN.md` (it still describes the original plan, not the lyrics/video/alignment work).
+10. **Housekeeping**: test files `/sdcard/test.mp3`, `/sdcard/test_lr.mp3` and `D:i\Karaoke\Other\Timlok` DELETED overnight.
+    NOTE: the Timlok one was the real karaoke output of the song `Timlok/Timlok/Neon Nights 1980 Flowing.mp3`, so after
+    the main batch finishes run `python -u make_karaoke.py --only Timlok --push` (and `copy_videos.py`) to recreate it.
+    Still open: `Library.fromJson` ignores the "video" flag (cache is not loaded anywhere today - harmless);
+    update `karaoke/PLAN.md` (it still describes the original plan).
 11. **Security (unchanged, known)**: the box's ADB on :5555 has no authentication, and the launcher's Power tile depends on it.
 
 ## Gotchas learned
