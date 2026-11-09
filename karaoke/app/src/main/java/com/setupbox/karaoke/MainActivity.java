@@ -385,17 +385,7 @@ public class MainActivity extends Activity implements Server.Host {
 
         // Which character of the current line is being sung? LRC only times whole lines, so the line's
         // time (up to the next line, at most ~0.45 s per character) is shared out evenly over its characters.
-        int ci = -1, total = 0;
-        if (i >= 0) {
-            Lrc.Line cl = lrc.lines.get(i);
-            for (int j = 0; j < cl.text.length(); j++) if (!Character.isWhitespace(cl.text.charAt(j))) total++;
-            if (total > 0) {
-                long next = i + 1 < lrc.lines.size() ? lrc.lines.get(i + 1).ms : Long.MAX_VALUE;
-                long dur = Math.max(1000, Math.min(next - cl.ms, total * 450L));
-                long el = pos - cl.ms;
-                ci = el >= dur ? total : (int) (el * total / dur);   // total = whole line already sung
-            }
-        }
+        int ci = i >= 0 ? lrc.currentChar(i, pos) : -1;   // real word times if the .lrc has them, else the estimate
         int key = i * 1000 + ci;
         if (key == lastLine) return;
         lastLine = key;
