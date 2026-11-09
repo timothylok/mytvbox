@@ -3,6 +3,9 @@
 Loop: every 20 min, branch `overnight` (main is untouched). Task list: HANDOFF.md.
 
 ## Job status (latest first)
+- 11:30 pm - round 3: batch 132/650 (0 failures); video copy 12/87 (0 failures); alignment DONE 6/6 - every line of
+  all 6 songs aligned, times all in order (checked by script). Credit lines like "作曲: 李峻一" get squeezed times
+  because they are not sung - harmless.
 - 11:17 pm - round 2: batch 114+/650 (0 failures); video copy 7+/87 (0 failures); alignment 4/6 done
   (人啊人 45/45, 十面埋伏 25/25, Shall We Talk 51/51, 人來人往 45/45 lines aligned, none kept as-is), song 5 running.
 - 10:45 pm - round 1: batch 97/650, 0 failures; video copy 2/87 started (push of #2 in progress), 0 failures;
@@ -10,6 +13,11 @@ Loop: every 20 min, branch `overnight` (main is untouched). Task list: HANDOFF.m
   All three processes alive.
 
 ## Done
+- Round 3: task 4(b) foreground service - KeepAliveService keeps the app alive in the background (verified: pressed
+  Home, the phone page still answered; reopening the tile brought back the same instance). Quick muted playback check OK.
+- Round 3: alignment of the 6 Eason Chan songs finished; the aligned .lrc files replaced the originals in
+  D:i\GetVideo\EasonChan\Eason Chan (originals in toolslign_out\orig). The batch has not reached Eason Chan yet,
+  so it will copy the aligned versions itself; spot-check on the TV once they are on the drive.
 - Round 2: tested a 16:9 music video on the box - fills the screen correctly (no bars, no crop).
 - Round 2: found + fixed a bug: after a song with a video, the next audio-only song kept showing the last video frame
   instead of the photo backdrop (hidden the video surface when there is no picture). Verified on the box.
@@ -23,5 +31,6 @@ Loop: every 20 min, branch `overnight` (main is untouched). Task list: HANDOFF.m
   video copy finish (the loop will retry).
 
 ## Choices made
+- 4(a) is waiting for the USB writes to finish, so I moved on to 4(b) instead of retrying it on a busy drive.
 - Muted the box (volume 0) during tests and restored it to 7 afterwards; queue empty, nothing playing at end of round.
 - While the batch + video copy run, expect video songs to stutter on the TV (disk contention) - not an app bug.

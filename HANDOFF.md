@@ -43,9 +43,11 @@ Box: Android TV box 192.168.3.79 (open ADB on :5555). PC: Windows, GTX 1650 4 GB
 
 | Job | Log | Status at handoff |
 |---|---|---|
-| Karaoke batch (`make_karaoke.py --push`) | `tools/make_karaoke.log` | ~92 / 650 songs, 0 failures, ~30 s/song -> ~5 h total |
-| Video copy (`copy_videos.py`) | `tools/copy_videos.log` | started, 2 / 87 (10.6 GB) |
-| Lyric alignment (`align_folder.py` on `EasonChan\Eason Chan`) | `tools/align_folder.log` | started, song 1 / 6 |
+| Karaoke batch (`make_karaoke.py --push`) | `tools/make_karaoke.log` | 11:25 pm: 132 / 650 songs, 0 failures, ~30 s/song |
+| Video copy (`copy_videos.py`) | `tools/copy_videos.log` | 11:25 pm: 12 / 87 (10.6 GB), 0 failures |
+| Lyric alignment (`align_folder.py` on `EasonChan\Eason Chan`) | `tools/align_folder.log` | DONE 6 / 6, every line aligned |
+
+Overnight loop (branch `overnight`, report `MORNING_REPORT.md`) updates this table each round.
 
 If a job died (PC restarted etc.): just re-run the same command - all three skip finished work.
 Commands: `python -u make_karaoke.py --push`, `python -u copy_videos.py`,
@@ -71,8 +73,9 @@ Commands: `python -u make_karaoke.py --push`, `python -u copy_videos.py`,
    square `K歌之王.mp4` has been tried.
 6. **Confirm the remote's keys**: hold OK is the vocal toggle (tested via adb); Menu / V are untested. Ask the user if
    their remote has a Menu button; pick another key if not.
-7. **Keep the app alive**: it only serves the web page while open. Optional: a foreground service so the phone page keeps
-   working when the app is in the background.
+7. ~~**Keep the app alive**~~ DONE overnight: `KeepAliveService` (foreground service + notification) keeps the process
+   alive when someone presses Home; the phone page answered while the launcher was in front. `launchMode=singleTask` so
+   opening the tile again brings back the running instance instead of starting a second one (port clash).
 8. **Clean-up of titles**: file names still carry YouTube clutter ("(Official Music Video)", "【...】", ids). `Library.cleanTitle`
    strips obvious noise only. Options: rename the files in the library, or add a title-override file.
 9. **Search nicety**: treat traditional and simplified Chinese as the same (浮夸 / 浮誇). Not done.

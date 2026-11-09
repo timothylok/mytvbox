@@ -219,6 +219,7 @@ public class MainActivity extends Activity implements Server.Host {
         loadFlips();
         server = new Server(this, this, PORT);
         try { server.start(); } catch (Exception e) { libraryNote = "Web server failed: " + e.getMessage(); }
+        try { KeepAliveService.start(this, "http://" + ip + ":" + PORT); } catch (Exception ignored) { }   // survive Home / other apps
         rescan();
         ui.post(tick);
     }
@@ -659,6 +660,7 @@ public class MainActivity extends Activity implements Server.Host {
         super.onDestroy();
         ui.removeCallbacksAndMessages(null);
         if (server != null) server.stop();
+        if (!debugSingleFile) KeepAliveService.stop(this);
         if (player != null) player.release();
     }
 }
