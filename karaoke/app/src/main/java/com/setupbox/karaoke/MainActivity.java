@@ -328,8 +328,8 @@ public class MainActivity extends Activity implements Server.Host {
 
     private String titleOf(QueueManager.Item it) {
         Library.Song s = lib.byId(it.songId);
-        String t = s == null ? "(missing song)" : s.title;
-        return it.singer.isEmpty() ? t : t + "  -  " + it.singer;
+        String t = s == null ? "(missing song)" : s.title + (s.artist.isEmpty() ? "" : "  (" + s.artist + ")");
+        return it.singer.isEmpty() ? t : t + "   Singer: " + it.singer;
     }
 
     private void showStatus() {
