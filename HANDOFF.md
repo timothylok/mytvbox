@@ -59,7 +59,7 @@ Commands: `python -u make_karaoke.py --push`, `python -u copy_videos.py`,
 0. **USB DRIVE FAULT (2026-11-10 11:20)**: kernel log on the box shows SCSI medium errors (Sense Key 0x3, ASC 0x03
    write fault) and 'Buffer I/O error on dev sda5 ... lost async page write'; exFAT failed to extend files; afterwards even
    reading a known-good song failed. Copy job and overnight loop were stopped. Nothing is lost: every karaoke mp3/.lrc is
-   in D:i\Karaoke and every video in D:i\GetVideo. Next: shut the box down (Power tile), unplug the drive, check it on
+   in D:\ai\Karaoke and every video in D:\ai\GetVideo. Next: shut the box down (Power tile), unplug the drive, check it on
    the PC (chkdsk /f on its drive letter, SMART e.g. CrystalDiskInfo), then decide: repair/reformat and re-copy, or replace.
 
 1. **Two-phone test** (needs the user): open the QR code on two phones, add songs from both, try shuffle, the
