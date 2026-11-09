@@ -49,6 +49,7 @@ public class MainActivity extends Activity implements Server.Host {
     private TextView countdownView, bannerView;
     private Backdrop backdrop;
     private int lastCount = -1;                 // countdown dots currently shown
+    private volatile boolean scanning = false;
     private boolean wantMp3 = false;            // a music video is merged in: its own audio must not be heard
     private long hintUntil = 0;                 // show the key help line until this time
     private final android.os.Handler ui = new android.os.Handler();
@@ -224,12 +225,15 @@ public class MainActivity extends Activity implements Server.Host {
 
     /** Re-reads the Karaoke folder off the main thread; starts playing if songs are waiting. */
     private void rescan() {
+        if (scanning) return;          // a scan can take long while the USB drive is busy; never pile them up
+        scanning = true;
         new Thread(new Runnable() {
             @Override public void run() {
                 File root = Library.findRoot();
                 final Library l = root == null ? null : Library.scan(root);
                 runOnUiThread(new Runnable() {
                     @Override public void run() {
+                        scanning = false;
                         if (l == null) { lib = Library.empty(); libraryNote = "Karaoke folder not found - is the USB drive plugged in?"; }
                         else { lib = l; libraryNote = ""; l.save(new File(android.os.Environment.getExternalStorageDirectory(), "Karaoke/index.json")); }
                         kick();
@@ -273,6 +277,7 @@ public class MainActivity extends Activity implements Server.Host {
         backdrop.stop();
         backdropView.setVisibility(android.view.View.GONE);
         dimView.setVisibility(android.view.View.GONE);
+        surfaceView.setVisibility(android.view.View.INVISIBLE);
         cPlaying = false; cPaused = false;
         refresh();
     }
@@ -296,7 +301,9 @@ public class MainActivity extends Activity implements Server.Host {
         dimView.setVisibility(debugSingleFile ? android.view.View.GONE : android.view.View.VISIBLE);
         backdrop.stop();
         if (!debugSingleFile) backdrop.start(showPhotos);
-        if (showPhotos) surfaceView.setLayoutParams(new FrameLayout.LayoutParams(-1, -1, Gravity.CENTER));
+        // Only show the video surface when there is a picture to show: an idle surface keeps the previous song's
+        // last frame and would cover the photo backdrop (it sits above it).
+        surfaceView.setVisibility(showPhotos ? android.view.View.INVISIBLE : android.view.View.VISIBLE);
         wantMp3 = video != null;
         player.setVolume(video != null ? 0f : 1f);          // muted until the karaoke mp3 is the selected track
         player.setTrackSelectionParameters(player.getTrackSelectionParameters().buildUpon()
