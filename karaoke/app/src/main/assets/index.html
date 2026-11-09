@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Karaoke</title>
+<style>
+  :root { --bg:#111318; --card:#1c1f27; --line:#2b2f3a; --text:#f2f3f5; --dim:#9aa0ad; --accent:#ffd23f; --good:#3ddc84; --bad:#ff5c5c; }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  body { margin:0; background:var(--bg); color:var(--text); font:16px/1.35 system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans CJK SC", sans-serif; padding-bottom:70px; }
+  header { position:sticky; top:0; z-index:5; background:var(--bg); padding:10px 16px 0; border-bottom:1px solid var(--line); }
+  .row { display:flex; gap:8px; align-items:center; }
+  h1 { font-size:18px; margin:0; flex:1; }
+  input[type=text], input[type=search] { width:100%; background:var(--card); border:1px solid var(--line); color:var(--text); border-radius:10px; padding:10px 12px; font-size:16px; }
+  .tabs { display:flex; margin-top:8px; }
+  .tab { flex:1; text-align:center; padding:10px 0; color:var(--dim); border-bottom:3px solid transparent; font-weight:600; }
+  .tab.on { color:var(--accent); border-color:var(--accent); }
+  main { padding:12px 16px; }
+  button { background:var(--card); color:var(--text); border:1px solid var(--line); border-radius:10px; padding:10px 14px; font-size:15px; min-height:44px; }
+  button:active { background:var(--line); }
+  button.primary { background:var(--accent); color:#222; border-color:var(--accent); font-weight:700; }
+  button.small { padding:6px 10px; min-height:36px; min-width:38px; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:14px; padding:12px; margin-bottom:12px; }
+  .now .title { font-size:20px; font-weight:700; }
+  .dim { color:var(--dim); font-size:14px; }
+  .bar { height:6px; background:var(--line); border-radius:3px; margin:10px 0; overflow:hidden; }
+  .bar > div { height:100%; background:var(--accent); width:0; }
+  .controls { display:flex; flex-wrap:wrap; gap:8px; }
+  .item { display:flex; align-items:center; gap:8px; padding:10px 0; border-bottom:1px solid var(--line); }
+  .item:last-child { border-bottom:0; }
+  .item .info { flex:1; min-width:0; }
+  .item .t { font-weight:600; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .item .n { width:22px; color:var(--dim); text-align:right; }
+  .chips { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:12px; }
+  .chip { background:var(--card); border:1px solid var(--line); border-radius:20px; padding:8px 14px; }
+  .chip.on { background:var(--accent); color:#222; border-color:var(--accent); font-weight:700; }
+  .badge { font-size:11px; background:var(--good); color:#062; border-radius:4px; padding:1px 5px; margin-left:6px; vertical-align:middle; }
+  .back { color:var(--accent); background:none; border:0; padding:6px 0; min-height:0; }
+  .toast { position:fixed; left:50%; bottom:24px; transform:translateX(-50%); background:#000c; border:1px solid var(--line); padding:10px 16px; border-radius:20px; opacity:0; transition:opacity .2s; pointer-events:none; max-width:90%; }
+  .toast.show { opacity:1; }
+  .note { background:#4a2b00; border:1px solid #8a5200; color:#ffd9a0; border-radius:10px; padding:10px 12px; margin-bottom:12px; }
+  .empty { text-align:center; color:var(--dim); padding:24px 0; }
+</style>
+</head>
+<body>
+<header>
+  <div class="row"><h1>🎤 Karaoke</h1><div style="width:46%"><input id="singer" type="text" placeholder="Your name" maxlength="40" autocomplete="off"></div></div>
+  <div class="tabs"><div class="tab on" data-tab="queue">Queue</div><div class="tab" data-tab="browse">Browse</div><div class="tab" data-tab="search">Search</div></div>
+</header>
+<main>
+  <section id="queue"></section>
+  <section id="browse" hidden></section>
+  <section id="search" hidden>
+    <input id="q" type="search" placeholder="Search song or artist" autocomplete="off">
+    <div id="results" style="margin-top:12px"></div>
+  </section>
+</main>
+<div class="toast" id="toast"></div>
+
+<script>
+"use strict";
+const $ = (s) => document.querySelector(s);
+const el = (tag, attrs, ...kids) => {
+  const e = document.createElement(tag);
+  for (const k in (attrs || {})) {
+    if (k === "class") e.className = attrs[k];
+    else if (k.startsWith("on")) e.addEventListener(k.slice(2), attrs[k]);
+    else e.setAttribute(k, attrs[k]);
+  }
+  for (const c of kids) e.append(c);
+  return e;
+};
+
+// ---- singer name (remembered on this phone) ----
+const singerBox = $("#singer");
+try { singerBox.value = localStorage.getItem("singer") || ""; } catch (e) {}
+singerBox.addEventListener("input", () => { try { localStorage.setItem("singer", singerBox.value); } catch (e) {} });
+
+// ---- tabs ----
+for (const t of document.querySelectorAll(".tab")) {
+  t.addEventListener("click", () => {
+    document.querySelectorAll(".tab").forEach((x) => x.classList.toggle("on", x === t));
+    for (const s of ["queue", "browse", "search"]) $("#" + s).hidden = s !== t.dataset.tab;
+    if (t.dataset.tab === "browse" && !browseLoaded) loadBrowse();
+    if (t.dataset.tab === "search") $("#q").focus();
+  });
+}
+
+// ---- api ----
+async function api(path, params, post) {
+  const url = path + (params ? "?" + new URLSearchParams(params) : "");
+  const r = await fetch(url, { method: post ? "POST" : "GET", cache: "no-store" });
+  if (!r.ok) throw new Error(await r.text());
+  return r.json();
+}
+let toastTimer;
+function toast(msg) {
+  const t = $("#toast"); t.textContent = msg; t.classList.add("show");
+  clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove("show"), 1800);
+}
+async function act(path, params, okMsg) {
+  try { render(await api(path, params, true)); if (okMsg) toast(okMsg); }
+  catch (e) { toast("Failed: " + e.message); }
+}
+const fmt = (ms) => { const s = Math.floor(Math.max(0, ms) / 1000); return Math.floor(s / 60) + ":" + String(s % 60).padStart(2, "0"); };
+
+// ---- queue tab ----
+let last = null, lastKey = "";
+function render(st) {
+  last = st;
+  const key = JSON.stringify([st.current, st.upcoming, st.playing, st.paused, st.vocalOn, st.flipped, st.note, st.songCount]);
+  if (key !== lastKey) { lastKey = key; drawQueue(st); }
+  const bar = $("#bar"); if (bar) bar.style.width = st.durMs ? Math.min(100, st.posMs / st.durMs * 100) + "%" : "0";
+  const tm = $("#time"); if (tm) tm.textContent = fmt(st.posMs) + " / " + fmt(st.durMs);
+}
+function drawQueue(st) {
+  const root = $("#queue");
+  root.replaceChildren();
+  if (st.note) root.append(el("div", { class: "note" }, st.note));
+  const c = st.current;
+  if (c) {
+    root.append(el("div", { class: "card now" },
+      el("div", { class: "dim" }, st.paused ? "Paused" : "Now playing"),
+      el("div", { class: "title" }, c.title),
+      el("div", { class: "dim" }, c.artist + (c.singer ? " · 🎤 " + c.singer : "")),
+      el("div", { class: "bar" }, el("div", { id: "bar" })),
+      el("div", { class: "dim", id: "time", style: "margin-bottom:10px" }, ""),
+      el("div", { class: "controls" },
+        el("button", { class: "primary", onclick: () => act("/api/player/" + (st.paused ? "resume" : "pause")) }, st.paused ? "▶ Play" : "⏸ Pause"),
+        el("button", { onclick: () => act("/api/player/restart") }, "⏮ Restart"),
+        el("button", { onclick: () => act("/api/player/skip") }, "⏭ Skip"),
+        el("button", { onclick: () => act("/api/player/vocal") }, st.vocalOn ? "🎤 Vocal: ON" : "🎤 Vocal: off"),
+        el("button", { onclick: () => act("/api/player/flip") }, "⇄ Flip channels" + (st.flipped ? " ✓" : "")))));
+  } else {
+    root.append(el("div", { class: "card empty" }, "Nothing playing. Add a song from Browse or Search."));
+  }
+  const up = st.upcoming;
+  const head = el("div", { class: "row", style: "margin-bottom:6px" },
+    el("div", { class: "dim", style: "flex:1" }, up.length ? "Up next (" + up.length + ")" : "Queue is empty"));
+  if (up.length > 1) head.append(el("button", { class: "small", onclick: () => act("/api/queue/shuffle", null, "Shuffled") }, "🔀 Shuffle"));
+  if (up.length) head.append(el("button", { class: "small", onclick: () => { if (confirm("Clear the whole queue?")) act("/api/queue/clear"); } }, "Clear"));
+  root.append(head);
+  if (up.length) {
+    const card = el("div", { class: "card" });
+    up.forEach((it, i) => {
+      card.append(el("div", { class: "item" },
+        el("div", { class: "n" }, String(i + 1)),
+        el("div", { class: "info" },
+          el("div", { class: "t" }, it.title),
+          el("div", { class: "dim" }, it.artist + (it.singer ? " · 🎤 " + it.singer : ""))),
+        el("button", { class: "small", title: "Move up", onclick: () => act("/api/queue/move", { id: it.id, dir: "up" }) }, "▲"),
+        el("button", { class: "small", title: "Move down", onclick: () => act("/api/queue/move", { id: it.id, dir: "down" }) }, "▼"),
+        el("button", { class: "small", title: "Play next", onclick: () => act("/api/queue/move", { id: it.id, dir: "top" }) }, "⤒"),
+        el("button", { class: "small", title: "Remove", onclick: () => act("/api/queue/remove", { id: it.id }) }, "✕")));
+    });
+    root.append(card);
+  }
+}
+async function poll() {
+  try { render(await api("/api/state")); $("#queue").dataset.err = ""; }
+  catch (e) { if (!$("#queue").dataset.err) { $("#queue").dataset.err = "1"; toast("Lost connection to the TV box…"); } }
+  setTimeout(poll, 1000);
+}
+
+// ---- songs (browse + search) ----
+function songRow(s) {
+  const title = el("div", { class: "t" }, s.title);
+  if (s.lrc) title.append(el("span", { class: "badge" }, "lyrics"));
+  return el("div", { class: "item" },
+    el("div", { class: "info" }, title, el("div", { class: "dim" }, s.artist + " · " + s.language)),
+    el("button", { class: "small", onclick: () => add(s, "end") }, "＋ Add"),
+    el("button", { class: "small", onclick: () => add(s, "next") }, "Next"));
+}
+function add(s, position) {
+  act("/api/queue/add", { song: s.id, singer: singerBox.value.trim(), position },
+      (position === "next" ? "Playing next: " : "Added: ") + s.title);
+}
+
+let browseLoaded = false, browseData = null, browseLang = null, browseArtist = null;
+async function loadBrowse() {
+  try { browseData = await api("/api/browse"); browseLoaded = true; drawBrowse(); }
+  catch (e) { toast("Failed: " + e.message); }
+}
+async function drawBrowse() {
+  const root = $("#browse"); root.replaceChildren();
+  const refresh = el("button", { class: "small", style: "float:right", onclick: async () => {
+    try { await api("/api/rescan", null, true); } catch (e) {}
+    setTimeout(loadBrowse, 1500); toast("Rescanning the drive…"); } }, "↻ Rescan");
+  root.append(refresh);
+  if (!browseData || !browseData.total) { root.append(el("div", { class: "empty" }, "No songs found yet.")); return; }
+  const chips = el("div", { class: "chips" });
+  for (const l of browseData.languages) {
+    chips.append(el("button", { class: "chip" + (browseLang === l.name ? " on" : ""), onclick: () => { browseLang = l.name; browseArtist = null; drawBrowse(); } },
+      l.name + " (" + l.artists.reduce((n, a) => n + a.count, 0) + ")"));
+  }
+  root.append(chips);
+  if (!browseLang) { root.append(el("div", { class: "empty" }, browseData.total + " songs. Pick a language.")); return; }
+  if (!browseArtist) {
+    const lang = browseData.languages.find((l) => l.name === browseLang);
+    const card = el("div", { class: "card" });
+    for (const a of lang.artists) {
+      card.append(el("div", { class: "item", onclick: () => { browseArtist = a.name; drawBrowse(); } },
+        el("div", { class: "info" }, el("div", { class: "t" }, a.name)), el("div", { class: "dim" }, a.count + " ›")));
+    }
+    root.append(card);
+    return;
+  }
+  root.append(el("button", { class: "back", onclick: () => { browseArtist = null; drawBrowse(); } }, "‹ " + browseLang));
+  root.append(el("h2", { style: "margin:4px 0 10px;font-size:18px" }, browseArtist));
+  const card = el("div", { class: "card" });
+  root.append(card);
+  try {
+    const r = await api("/api/library", { lang: browseLang, artist: browseArtist, limit: 300 });
+    r.songs.forEach((s) => card.append(songRow(s)));
+  } catch (e) { toast("Failed: " + e.message); }
+}
+
+let searchTimer, searchSeq = 0;
+$("#q").addEventListener("input", () => { clearTimeout(searchTimer); searchTimer = setTimeout(doSearch, 250); });
+async function doSearch() {
+  const q = $("#q").value.trim(), box = $("#results"), seq = ++searchSeq;
+  if (!q) { box.replaceChildren(); return; }
+  try {
+    const r = await api("/api/library", { q, limit: 100 });
+    if (seq !== searchSeq) return;           // a newer search is already running
+    box.replaceChildren();
+    if (!r.songs.length) { box.append(el("div", { class: "empty" }, "No matches")); return; }
+    const card = el("div", { class: "card" });
+    r.songs.forEach((s) => card.append(songRow(s)));
+    box.append(card);
+    if (r.total > r.songs.length) box.append(el("div", { class: "dim", style: "text-align:center" }, "Showing " + r.songs.length + " of " + r.total + " — type more to narrow down"));
+  } catch (e) { toast("Failed: " + e.message); }
+}
+
+poll();
+</script>
+</body>
+</html>

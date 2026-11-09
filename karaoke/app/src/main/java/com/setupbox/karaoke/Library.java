@@ -42,6 +42,9 @@ public final class Library {
 
     private Library(File root) { this.root = root; }
 
+    /** A library with no songs, used while the USB drive is missing. */
+    public static Library empty() { return new Library(new File("/nonexistent")); }
+
     public File fileOf(Song s) { return new File(root, s.file); }
 
     // ---------- finding the folder ----------

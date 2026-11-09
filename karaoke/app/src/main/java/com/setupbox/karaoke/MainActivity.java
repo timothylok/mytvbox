@@ -7,7 +7,7 @@ import android.os.Bundle;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.SurfaceView;
-import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
@@ -18,37 +18,75 @@ import androidx.media3.exoplayer.ExoPlayer;
 import androidx.media3.exoplayer.audio.AudioSink;
 import androidx.media3.exoplayer.audio.DefaultAudioSink;
 
-import java.io.File;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
-/** Step 2: plays one file (intent extra "path") with a switchable vocal channel. */
-public class MainActivity extends Activity {
-    private static final String[] MODE_NAMES = {"Both channels (mixed)", "Karaoke - instrumental (left)", "Vocal - original (right)"};
+import java.io.File;
+import java.net.Inet4Address;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+
+/**
+ * Karaoke app: plays the queue, shows lyrics, and runs the phone web server.
+ * Debug: starting with --es path /some/file.mp3 plays just that file (no queue, no server).
+ */
+public class MainActivity extends Activity implements Server.Host {
+    private static final int PORT = 8080;
+
     private ExoPlayer player;
     private final VocalProcessor vocal = new VocalProcessor();
-    private TextView status, lyricsView;
+    private TextView status, lyricsView, idleView;
+    private final android.os.Handler ui = new android.os.Handler();
+
+    // lyrics
     private Lrc lrc;
     private int lastLine = -2;
     private long lyricOffsetMs = 0;   // positive = lyrics appear later
-    private boolean longPressed = false;
     private String songPath = "";
-    private final android.os.Handler ui = new android.os.Handler();
+    private boolean longPressed = false;
+
+    // karaoke state
+    private volatile Library lib = Library.empty();
+    private QueueManager queue;
+    private Server server;
+    private String ip = "";
+    private String libraryNote = "Starting...";
+    private boolean debugSingleFile = false;
+    private boolean vocalOn = false;                 // false = karaoke (singer sings), true = original vocal
+    private String currentSongId = "";
+    private final Set<String> flipped = Collections.synchronizedSet(new HashSet<String>());
+
+    // player state cached for the web server thread (ExoPlayer may only be touched on the main thread)
+    private volatile boolean cPlaying, cPaused;
+    private volatile long cPos, cDur;
+
+    // ---------- start-up ----------
 
     @Override protected void onCreate(Bundle b) {
         super.onCreate(b);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         FrameLayout root = new FrameLayout(this);
         root.setBackgroundColor(Color.BLACK);
         SurfaceView surface = new SurfaceView(this);
         root.addView(surface, new FrameLayout.LayoutParams(-1, -1));
+        lyricsView = new TextView(this);
+        lyricsView.setGravity(Gravity.CENTER);
+        lyricsView.setPadding(60, 0, 60, 160);
+        root.addView(lyricsView, new FrameLayout.LayoutParams(-1, -1, Gravity.CENTER));
+        idleView = new TextView(this);
+        idleView.setGravity(Gravity.CENTER);
+        idleView.setTextColor(Color.WHITE);
+        idleView.setTextSize(40);
+        root.addView(idleView, new FrameLayout.LayoutParams(-1, -1, Gravity.CENTER));
         status = new TextView(this);
         status.setTextColor(Color.WHITE);
         status.setBackgroundColor(0x99000000);
         status.setTextSize(24);
         status.setPadding(24, 12, 24, 12);
         root.addView(status, new FrameLayout.LayoutParams(-2, -2, Gravity.BOTTOM | Gravity.START));
-        lyricsView = new TextView(this);
-        lyricsView.setGravity(Gravity.CENTER);
-        lyricsView.setPadding(60, 0, 60, 160);
-        root.addView(lyricsView, new FrameLayout.LayoutParams(-1, -1, Gravity.CENTER));
         setContentView(root);
 
         DefaultRenderersFactory rf = new DefaultRenderersFactory(this) {
@@ -60,47 +98,221 @@ public class MainActivity extends Activity {
         };
         player = new ExoPlayer.Builder(this, rf).build();
         player.setVideoSurfaceView(surface);
-        String path = getIntent().getStringExtra("path");
-        if (getIntent().getBooleanExtra("scan", false)) { debugScan(getIntent().getStringExtra("q")); return; }
-        if (path == null) {
-            status.setText("No file. Start with: --es path /sdcard/...");
-            return;
-        }
-        String base = path.replaceFirst("\\.[^./]+$", "");
-        lrc = Lrc.load(new File(base + ".lrc"));
-        songPath = path;
-        loadOffset();
-        player.setMediaItem(MediaItem.fromUri(android.net.Uri.fromFile(new File(path))));
-        player.prepare();
-        player.play();
         player.addListener(new Player.Listener() {
-            @Override public void onIsPlayingChanged(boolean p) { showStatus(); }
-            @Override public void onPlaybackStateChanged(int st) { showStatus(); }
+            @Override public void onPlaybackStateChanged(int st) {
+                if (st == Player.STATE_ENDED && !debugSingleFile) playNext();
+                refresh();
+            }
+            @Override public void onIsPlayingChanged(boolean p) { refresh(); }
             @Override public void onPlayerError(androidx.media3.common.PlaybackException e) {
-                status.setText("Error: " + e.getMessage());
+                if (debugSingleFile) status.setText("Error: " + e.getMessage());
+                else playNext();                    // a broken file must not stall the party
             }
         });
-        vocal.setMode(VocalProcessor.LEFT);
+
+        ip = localIp();
+        String path = getIntent().getStringExtra("path");
+        if (path != null) { debugSingleFile = true; startFile(new File(path)); ui.post(tick); return; }
+
+        queue = QueueManager.withFile(new File(android.os.Environment.getExternalStorageDirectory(), "Karaoke/state.txt"));
+        loadFlips();
+        server = new Server(this, this, PORT);
+        try { server.start(); } catch (Exception e) { libraryNote = "Web server failed: " + e.getMessage(); }
+        rescan();
         ui.post(tick);
     }
 
+    /** Re-reads the Karaoke folder off the main thread; starts playing if songs are waiting. */
+    private void rescan() {
+        new Thread(new Runnable() {
+            @Override public void run() {
+                File root = Library.findRoot();
+                final Library l = root == null ? null : Library.scan(root);
+                runOnUiThread(new Runnable() {
+                    @Override public void run() {
+                        if (l == null) { lib = Library.empty(); libraryNote = "Karaoke folder not found - is the USB drive plugged in?"; }
+                        else { lib = l; libraryNote = ""; l.save(new File(android.os.Environment.getExternalStorageDirectory(), "Karaoke/index.json")); }
+                        kick();
+                    }
+                });
+            }
+        }).start();
+    }
+
+    // ---------- playing the queue ----------
+
+    /** If nothing is playing and songs are waiting, start the next one. */
+    private void kick() {
+        if (debugSingleFile || player == null) return;
+        if (!cPlaying && !cPaused && player.getPlaybackState() != Player.STATE_BUFFERING && !queue.upcoming().isEmpty()) playNext();
+        refresh();
+    }
+
+    private void playNext() {
+        for (;;) {
+            QueueManager.Item it = queue.advance();
+            if (it == null) { stopPlayback(); return; }
+            Library.Song s = lib.byId(it.songId);
+            File f = s == null ? null : lib.fileOf(s);
+            if (f == null || !f.isFile()) continue;     // file vanished: skip it
+            currentSongId = s.id;
+            vocalOn = false;
+            startFile(f);
+            return;
+        }
+    }
+
+    private void stopPlayback() {
+        currentSongId = "";
+        player.stop();
+        player.clearMediaItems();
+        lrc = null;
+        lyricsView.setText("");
+        cPlaying = false; cPaused = false;
+        refresh();
+    }
+
+    private void startFile(File f) {
+        songPath = f.getPath();
+        String base = songPath.replaceFirst("\\.[^./]+$", "");
+        lrc = Lrc.load(new File(base + ".lrc"));
+        lastLine = -2;
+        lyricsView.setText("");
+        loadOffset();
+        applyChannel();
+        player.setMediaItem(MediaItem.fromUri(android.net.Uri.fromFile(f)));
+        player.prepare();
+        player.play();
+        cPlaying = true; cPaused = false;
+        refresh();
+    }
+
+    // ---------- vocal channel ----------
+
+    /** Karaoke channel is LEFT unless this song was flipped; vocal on = the other channel. */
+    private void applyChannel() {
+        boolean flip = flipped.contains(currentSongId);
+        boolean left = vocalOn == flip;      // karaoke+normal -> LEFT, vocal+normal -> RIGHT, flipped swaps
+        vocal.setMode(left ? VocalProcessor.LEFT : VocalProcessor.RIGHT);
+    }
+
+    private File flipFile() { return new File(android.os.Environment.getExternalStorageDirectory(), "Karaoke/flips.txt"); }
+
+    private void loadFlips() {
+        try {
+            java.io.BufferedReader r = new java.io.BufferedReader(new java.io.InputStreamReader(new java.io.FileInputStream(flipFile()), "UTF-8"));
+            for (String l; (l = r.readLine()) != null; ) if (!l.trim().isEmpty()) flipped.add(l.trim());
+            r.close();
+        } catch (Exception ignored) { }
+    }
+
+    private void saveFlips() {
+        try {
+            File f = flipFile();
+            f.getParentFile().mkdirs();
+            java.io.Writer w = new java.io.OutputStreamWriter(new java.io.FileOutputStream(f), "UTF-8");
+            synchronized (flipped) { for (String s : flipped) w.write(s + "\n"); }
+            w.close();
+        } catch (Exception ignored) { }
+    }
+
+    // ---------- Server.Host (called from the web server threads) ----------
+
+    @Override public Library library() { return lib; }
+    @Override public QueueManager queue() { return queue; }
+
+    @Override public void command(final String cmd) {
+        runOnUiThread(new Runnable() {
+            @Override public void run() { handle(cmd); }
+        });
+    }
+
+    private void handle(String cmd) {
+        switch (cmd) {
+            case "kick": kick(); break;
+            case "rescan": rescan(); break;
+            case "pause": if (cPlaying) { player.pause(); cPaused = true; } break;
+            case "resume": if (cPaused) { player.play(); cPaused = false; } break;
+            case "skip": if (cPlaying || cPaused) playNext(); break;
+            case "restart": if (cPlaying || cPaused) player.seekTo(0); break;
+            case "vocal": vocalOn = !vocalOn; applyChannel(); break;
+            case "flip":
+                if (!currentSongId.isEmpty()) {
+                    if (!flipped.remove(currentSongId)) flipped.add(currentSongId);
+                    saveFlips();
+                    applyChannel();
+                }
+                break;
+        }
+        refresh();
+    }
+
+    @Override public JSONObject state() {
+        JSONObject o = new JSONObject();
+        try {
+            Library l = lib;
+            o.put("songCount", l.songs.size()).put("note", libraryNote).put("url", "http://" + ip + ":" + PORT);
+            o.put("version", queue.version());
+            QueueManager.Item cur = queue.current();
+            o.put("current", cur == null ? JSONObject.NULL : itemJson(cur, l));
+            JSONArray up = new JSONArray();
+            for (QueueManager.Item it : queue.upcoming()) up.put(itemJson(it, l));
+            o.put("upcoming", up);
+            o.put("playing", cPlaying && !cPaused).put("paused", cPaused);
+            o.put("posMs", cPos).put("durMs", cDur);
+            o.put("vocalOn", vocalOn).put("flipped", flipped.contains(currentSongId));
+        } catch (Exception ignored) { }
+        return o;
+    }
+
+    private JSONObject itemJson(QueueManager.Item it, Library l) throws Exception {
+        Library.Song s = l.byId(it.songId);
+        return new JSONObject().put("id", it.id).put("songId", it.songId).put("singer", it.singer)
+                .put("title", s == null ? "(missing song)" : s.title)
+                .put("artist", s == null ? "" : s.artist)
+                .put("language", s == null ? "" : s.language)
+                .put("lrc", s != null && s.hasLrc);
+    }
+
+    // ---------- screen ----------
+
     private static String fmt(long ms) { long s = Math.max(0, ms) / 1000; return String.format("%d:%02d", s / 60, s % 60); }
 
-    private void showStatus() {
-        String st;
+    private void refresh() {
+        if (player == null) return;
         int ps = player.getPlaybackState();
-        if (ps == Player.STATE_BUFFERING) st = "Buffering";
-        else if (ps == Player.STATE_ENDED) st = "Ended";
-        else st = player.getPlayWhenReady() ? "Playing" : "Paused";
-        long dur = player.getDuration();
-        String time = fmt(player.getCurrentPosition()) + (dur > 0 ? " / " + fmt(dur) : "");
-        status.setText(st + "  |  " + MODE_NAMES[vocal.getMode()] + "  |  " + time
+        cPos = player.getCurrentPosition();
+        cDur = Math.max(0, player.getDuration());
+        if (ps == Player.STATE_ENDED) { cPlaying = false; cPaused = false; }
+        showStatus();
+    }
+
+    private void showStatus() {
+        boolean active = cPlaying || cPaused;
+        if (debugSingleFile) {
+            idleView.setText("");
+        } else if (!active) {
+            StringBuilder sb = new StringBuilder("Karaoke\n\nScan or open on your phone:\n" + "http://" + ip + ":" + PORT);
+            if (!libraryNote.isEmpty()) sb.append("\n\n").append(libraryNote);
+            else sb.append("\n\n").append(lib.songs.size()).append(" songs - add one to start");
+            idleView.setText(sb.toString());
+        } else {
+            idleView.setText("");
+        }
+        if (!active && !debugSingleFile) { status.setText(""); status.setVisibility(android.view.View.INVISIBLE); return; }
+        status.setVisibility(android.view.View.VISIBLE);
+        String st = player.getPlaybackState() == Player.STATE_BUFFERING ? "Buffering" : (cPaused ? "Paused" : "Playing");
+        String time = fmt(cPos) + (cDur > 0 ? " / " + fmt(cDur) : "");
+        QueueManager.Item cur = debugSingleFile ? null : queue.current();
+        String singer = cur != null && !cur.singer.isEmpty() ? "  |  Singer: " + cur.singer : "";
+        status.setText(st + "  |  " + (vocalOn ? "Vocal ON (original)" : "Karaoke (vocal off)") + "  |  " + time
                 + (lrc != null ? "  |  Lyrics " + (lyricOffsetMs >= 0 ? "+" : "-") + String.format("%.1fs", Math.abs(lyricOffsetMs) / 1000.0) : "")
-                + "\n[OK pause | hold OK / Menu: vocal mode | Left/Right seek | Up: lyrics later | Down: lyrics earlier]");
+                + singer
+                + "\n[OK pause | hold OK / Menu: vocal | Left/Right seek | Up: lyrics later | Down: lyrics earlier]");
     }
 
     private void showLyrics() {
-        if (lrc == null || lrc.lines.isEmpty()) return;
+        if (lrc == null || lrc.lines.isEmpty() || !(cPlaying || cPaused)) return;
         int i = lrc.indexAt(player.getCurrentPosition() - lyricOffsetMs);
         if (i == lastLine) return;
         lastLine = i;
@@ -118,76 +330,55 @@ public class MainActivity extends Activity {
     }
 
     private final Runnable tick = new Runnable() {
-        @Override public void run() { if (player != null) { showStatus(); showLyrics(); } ui.postDelayed(this, 250); }
+        @Override public void run() { refresh(); showLyrics(); ui.postDelayed(this, 250); }
     };
+
+    // ---------- remote control keys ----------
 
     @Override public boolean onKeyDown(int k, KeyEvent e) {
         if (player == null) return super.onKeyDown(k, e);
         switch (k) {
             case KeyEvent.KEYCODE_DPAD_CENTER: case KeyEvent.KEYCODE_ENTER:
-                e.startTracking(); return true; // short press = pause (on key up), long press = vocal mode
-            case KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE:
-                player.setPlayWhenReady(!player.getPlayWhenReady()); return true;
-            case KeyEvent.KEYCODE_DPAD_RIGHT: player.seekTo(player.getCurrentPosition() + 10000); return true;
+                e.startTracking(); return true; // short press = pause (on key up), long press = vocal
+            case KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE: togglePause(); return true;
+            case KeyEvent.KEYCODE_DPAD_RIGHT:
+                if (debugSingleFile) player.seekTo(player.getCurrentPosition() + 10000); else if (cPlaying || cPaused) playNext();
+                return true;
             case KeyEvent.KEYCODE_DPAD_LEFT: player.seekTo(Math.max(0, player.getCurrentPosition() - 10000)); return true;
             case KeyEvent.KEYCODE_DPAD_UP: nudge(500); return true;     // lyrics appear later
             case KeyEvent.KEYCODE_DPAD_DOWN: nudge(-500); return true;  // lyrics appear earlier
-            case KeyEvent.KEYCODE_MENU: case KeyEvent.KEYCODE_V:
-                cycleMode(); return true;
+            case KeyEvent.KEYCODE_MENU: case KeyEvent.KEYCODE_V: handle("vocal"); return true;
         }
         return super.onKeyDown(k, e);
     }
 
     @Override public boolean onKeyLongPress(int k, KeyEvent e) {
-        if (k == KeyEvent.KEYCODE_DPAD_CENTER || k == KeyEvent.KEYCODE_ENTER) { longPressed = true; cycleMode(); return true; }
+        if (k == KeyEvent.KEYCODE_DPAD_CENTER || k == KeyEvent.KEYCODE_ENTER) { longPressed = true; handle("vocal"); return true; }
         return super.onKeyLongPress(k, e);
     }
 
     @Override public boolean onKeyUp(int k, KeyEvent e) {
         if ((k == KeyEvent.KEYCODE_DPAD_CENTER || k == KeyEvent.KEYCODE_ENTER) && player != null) {
-            if (!longPressed) player.setPlayWhenReady(!player.getPlayWhenReady());
+            if (!longPressed) togglePause();
             longPressed = false;
             return true;
         }
         return super.onKeyUp(k, e);
     }
 
-    /** Developer check: adb shell am start ... --ez scan true [--es q "text"] shows the library summary. */
-    private void debugScan(final String q) {
-        status.setText("Scanning...");
-        new Thread(new Runnable() {
-            @Override public void run() {
-                long t0 = System.currentTimeMillis();
-                File root = Library.findRoot();
-                if (root == null) { post("Karaoke folder not found (USB drive missing?)"); return; }
-                Library lib = Library.scan(root);
-                long ms = System.currentTimeMillis() - t0;
-                lib.save(new File(android.os.Environment.getExternalStorageDirectory(), "Karaoke/index.json"));
-                StringBuilder sb = new StringBuilder("Root: " + root + "\n" + lib.songs.size() + " songs, "
-                        + lib.languages() + ", " + lib.artists(null).size() + " artists, scan " + ms + " ms\n");
-                java.util.List<Library.Song> hits = lib.search(q == null ? "" : q, null, null);
-                sb.append("Search '" + (q == null ? "" : q) + "': " + hits.size() + " hits\n");
-                for (int i = 0; i < Math.min(8, hits.size()); i++) {
-                    Library.Song s = hits.get(i);
-                    sb.append(s.language + " / " + s.artist + " / " + s.title + (s.hasLrc ? "  [lyrics]" : "") + "\n");
-                }
-                android.util.Log.i("KaraokeScan", sb.toString());
-                post(sb.toString());
-            }
-            private void post(final String t) { runOnUiThread(new Runnable() { @Override public void run() { status.setText(t); } }); }
-        }).start();
-    }
+    private void togglePause() { handle(cPaused ? "resume" : "pause"); }
 
-    private void cycleMode() { vocal.setMode((vocal.getMode() + 1) % 3); showStatus(); }
+    // ---------- lyric timing nudge (saved per song) ----------
 
     private File offsetFile() { return new File(android.os.Environment.getExternalStorageDirectory(), "Karaoke/lyric_offsets.properties"); }
 
     private void loadOffset() {
+        lyricOffsetMs = 0;
         try (java.io.FileInputStream in = new java.io.FileInputStream(offsetFile())) {
             java.util.Properties p = new java.util.Properties();
             p.load(new java.io.InputStreamReader(in, "UTF-8"));
             lyricOffsetMs = Long.parseLong(p.getProperty(songPath, "0"));
-        } catch (Exception ignored) { lyricOffsetMs = 0; }
+        } catch (Exception ignored) { }
     }
 
     private void saveOffset() {
@@ -205,13 +396,28 @@ public class MainActivity extends Activity {
         lyricOffsetMs += deltaMs;
         lastLine = -2;
         saveOffset();
-        showStatus();
+        refresh();
         showLyrics();
+    }
+
+    // ---------- misc ----------
+
+    private static String localIp() {
+        try {
+            for (NetworkInterface ni : Collections.list(NetworkInterface.getNetworkInterfaces())) {
+                if (ni.isLoopback() || !ni.isUp()) continue;
+                for (InetAddress a : Collections.list(ni.getInetAddresses())) {
+                    if (a instanceof Inet4Address && !a.isLoopbackAddress()) return a.getHostAddress();
+                }
+            }
+        } catch (Exception ignored) { }
+        return "?.?.?.?";
     }
 
     @Override protected void onDestroy() {
         super.onDestroy();
         ui.removeCallbacksAndMessages(null);
+        if (server != null) server.stop();
         if (player != null) player.release();
     }
 }
