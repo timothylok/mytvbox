@@ -1,0 +1,95 @@
+# Handoff - TV box karaoke project (as of 2026-11-09, ~11 pm NZ)
+
+Repo: https://github.com/timothylok/mytvbox (branch `main`, everything committed up to `469abc9`, except the
+new `tools/scripts/align_folder.py` and this file).
+Box: Android TV box 192.168.3.79 (open ADB on :5555). PC: Windows, GTX 1650 4 GB. See also the memory notes
+`project_setupbox_overview`, `project_jellyfin_music_library_layout`, `project_karaoke_app`.
+
+## What exists
+
+**Launcher** (`launcher/`, package `com.setupbox.launcher`) - the box's home screen. Karaoke is pinned third in
+`/sdcard/Launcher/config.json` (backup of the old config: `tools/config.backup.json`).
+
+**Karaoke app** (`karaoke/`, package `com.setupbox.karaoke`, Java + Media3 ExoPlayer + NanoHTTPD + ZXing):
+- Plays a queue; guests use a phone web page (QR code on the TV, `http://192.168.3.79:8080`).
+- Phone page: Queue / Browse / Search tabs; add (end / next), remove, move up / down / top, shuffle, clear,
+  pause / resume / skip / restart, vocal on/off, flip channels, singer name per song, Rescan button.
+- Songs live on the box's USB drive: `/storage/A6D0-F59E/Karaoke/<Language>/<Artist>/<name>.mp3` (+ `.lrc`, + `.mp4`).
+  The mp3 is stereo with **LEFT = instrumental, RIGHT = original** (made by Demucs). Vocal on/off switches the channel;
+  "flip" swaps it per song (saved in `/sdcard/Karaoke/flips.txt`).
+- A `.mp4` with the same name next to the mp3 is shown muted and dimmed behind the lyrics (merged into one player; the
+  mp3 track is forced). No video -> Bing photo slideshow over a gradient (or photos in `/sdcard/Pictures/Screensaver`).
+- Lyrics from `<name>.lrc`: plain LRC or enhanced LRC (per-character `<mm:ss.xx>` tags). The character being sung is
+  orange + underlined, sung ones yellow. Plain lines get an estimated sweep. Up/Down on the remote nudges timing
+  (saved per song in `/sdcard/Karaoke/lyric_offsets.properties`).
+- Countdown dots before singing starts, "Now singing" banner (first 6 s), "Next up" banner (last 15 s).
+- Remote keys: OK = pause, hold OK or Menu = vocal on/off, Left = back 10 s, Right = skip, Up/Down = lyrics later/earlier.
+- State saved to `/sdcard/Karaoke/state.txt` (queue survives restarts).
+
+**Tools** (`tools/scripts/`, big stuff in `tools/` is git-ignored):
+- `make_karaoke.py` - Demucs batch: GetVideo mp3 -> `D:\ai\Karaoke\<Language>\<Artist>\` (L/R file + copies `.lrc`);
+  `--push` also adb-pushes to the drive. Resumable (skips finished songs).
+- `copy_videos.py` - pushes the matching `.mp4` (same name, found anywhere under GetVideo) next to each finished karaoke
+  song. Only for songs whose karaoke mp3 already exists. Re-runnable (skips same-size files).
+- `align_lyrics.py` / `align_folder.py` - listen to the Demucs vocals (stable-ts / Whisper "small", CPU) and write
+  enhanced-LRC with per-character times. `align_folder.py` does a whole folder and backs the originals up to
+  `tools/align_out/orig/`.
+- Python envs: `tools/demucs-venv` (torch cu121 + demucs), `tools/align-venv` (CPU torch + stable-ts). **Do not modify
+  `demucs-venv` while the batch runs.**
+- Tests (plain Java, no Android): `karaoke/tests/QueueManagerTest.java`, `LrcTest.java` (21 + 23 checks, all pass).
+  Commands are in each file's header.
+
+## Running right now (check these first)
+
+| Job | Log | Status at handoff |
+|---|---|---|
+| Karaoke batch (`make_karaoke.py --push`) | `tools/make_karaoke.log` | ~92 / 650 songs, 0 failures, ~30 s/song -> ~5 h total |
+| Video copy (`copy_videos.py`) | `tools/copy_videos.log` | started, 2 / 87 (10.6 GB) |
+| Lyric alignment (`align_folder.py` on `EasonChan\Eason Chan`) | `tools/align_folder.log` | started, song 1 / 6 |
+
+If a job died (PC restarted etc.): just re-run the same command - all three skip finished work.
+Commands: `python -u make_karaoke.py --push`, `python -u copy_videos.py`,
+`python -u align_folder.py --dir "D:\ai\GetVideo\EasonChan\Eason Chan"` (run from `tools/scripts`, set
+`PYTHONIOENCODING=utf-8`). The box must be on and reachable by ADB for `--push` / `copy_videos.py`.
+
+## Outstanding tasks
+
+1. **Two-phone test** (needs the user): open the QR code on two phones, add songs from both, try shuffle, the
+   up/down/top/remove buttons, search, browse. Fix whatever feels wrong. (Step 7 of the plan; the launcher tile is done.)
+2. **Finish the batch**, then re-run `copy_videos.py` to cover songs made after its first run (~594 of 658 mp3s have a
+   same-name mp4, ~72 GB; USB writes run ~6 MB/s, so several hours).
+3. **Aligned lyrics for the 6 Eason Chan songs** (Lonely Christmas, Shall We Talk, 人來人往, 人啊人, 十面埋伏, 明年今日):
+   `align_folder.py` is running. When it finishes, check `tools/align_folder.log` (look for "kept as-is" lines), spot-check
+   one on the TV. The aligned `.lrc` replaces the one in the source folder; the batch copies it to `D:\ai\Karaoke` and the
+   box when it reaches EasonChan (it comes after the Cantopop library). If a song was already processed, copy the `.lrc`
+   to `D:\ai\Karaoke\Cantopop\Eason Chan\` and push it to the drive by hand.
+   Known glitch: the aligner sometimes gives the first two characters the same start time.
+4. **8 lyric files still in `C:\Users\timlo\Downloads`** with no matching mp3 in the library: King Kong, 隨意門,
+   孤獨探戈, 幸災樂禍, 2001太空漫遊, 低等動物, 打回原形, 給愛麗斯. User said "leave them for now". When the mp3s exist:
+   rename the `.lrc` to match the mp3's file name, put it in the source folder, then run `align_folder.py`.
+5. **Test the "Next up" banner** (last 15 s of a song with another queued) and a normal 16:9 video background - only the
+   square `K歌之王.mp4` has been tried.
+6. **Confirm the remote's keys**: hold OK is the vocal toggle (tested via adb); Menu / V are untested. Ask the user if
+   their remote has a Menu button; pick another key if not.
+7. **Keep the app alive**: it only serves the web page while open. Optional: a foreground service so the phone page keeps
+   working when the app is in the background.
+8. **Clean-up of titles**: file names still carry YouTube clutter ("(Official Music Video)", "【...】", ids). `Library.cleanTitle`
+   strips obvious noise only. Options: rename the files in the library, or add a title-override file.
+9. **Search nicety**: treat traditional and simplified Chinese as the same (浮夸 / 浮誇). Not done.
+10. **Housekeeping**: delete `/sdcard/test.mp3` and `/sdcard/test_lr.mp3` on the box and `D:\ai\Karaoke\Other\Timlok`
+    (my test song); `Library.fromJson` ignores the "video" flag (cache is not loaded anywhere today - harmless, fix if the
+    cache is ever used); update `karaoke/PLAN.md` (it still describes the original plan, not the lyrics/video/alignment work).
+11. **Security (unchanged, known)**: the box's ADB on :5555 has no authentication, and the launcher's Power tile depends on it.
+
+## Gotchas learned
+
+- ADB from Git Bash: set `MSYS_NO_PATHCONV=1`, and give `adb push/pull` Windows paths (`D:\\...`); `/d/...` paths fail.
+- Do not write Java/regex with backslashes through a bash heredoc or `python - <<EOF` replace: backslashes get collapsed.
+  Use the Write / Edit tools for source files.
+- Starting the app: `adb shell am start -n com.setupbox.karaoke/.MainActivity` (add `--es path /file.mp3` to play one
+  file with no queue). Build: `JAVA_HOME=C:\Program Files\Java\jdk-20 ANDROID_HOME=D:\ai\setupbox\tools\sdk
+  tools\gradle-8.7\bin\gradle.bat assembleDebug` in `karaoke/`, then `adb install -r`.
+- A lone `.mp4` on the drive (no same-name mp3) shows up as a song of its own with the original vocals. That's why
+  `copy_videos.py` only copies videos for songs whose karaoke mp3 already exists.
+- `*.part` files are ignored by the app; the scripts write to `.part` and rename when complete.
+- The user asks for commits explicitly ("commit and push"); don't commit unasked.
