@@ -84,7 +84,7 @@ Commands: `python -u make_karaoke.py --push`, `python -u copy_videos.py`,
    Still open: nobody has actually written the overrides - a generated draft of all titles would be the next step.
 9. ~~**Search nicety**~~ DONE overnight: search converts traditional to simplified (Android ICU transliterator, API 29+)
    on both sides, so 世纪末烟花 finds 世紀末煙花 and 生活无小事 finds 生活無小事.
-10. **Housekeeping**: test files `/sdcard/test.mp3`, `/sdcard/test_lr.mp3` and `D:i\Karaoke\Other\Timlok` DELETED overnight.
+10. **Housekeeping**: test files `/sdcard/test.mp3`, `/sdcard/test_lr.mp3` and `D:\ai\Karaoke\Other\Timlok` DELETED overnight.
     NOTE: the Timlok one was the real karaoke output of the song `Timlok/Timlok/Neon Nights 1980 Flowing.mp3`, so after
     the main batch finishes run `python -u make_karaoke.py --only Timlok --push` (and `copy_videos.py`) to recreate it.
     Still open: `Library.fromJson` ignores the "video" flag (cache is not loaded anywhere today - harmless);

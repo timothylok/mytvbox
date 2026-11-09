@@ -17,7 +17,7 @@ Loop: every 20 min, branch `overnight` (main is untouched). Task list: HANDOFF.m
   All three processes alive.
 
 ## Done
-- Round 6: task 4(e) deleted /sdcard/test.mp3, /sdcard/test_lr.mp3 and D:i\Karaoke\Other\Timlok. The Timlok file was a real
+- Round 6: task 4(e) deleted /sdcard/test.mp3, /sdcard/test_lr.mp3 and D:\ai\Karaoke\Other\Timlok. The Timlok file was a real
   karaoke output (not only a test), so it must be regenerated after the batch: `make_karaoke.py --only Timlok --push` (in HANDOFF.md).
 - Round 5: task 4(d) title overrides - `titles.txt` (on the drive and/or /sdcard/Karaoke) renames songs; formats in
   HANDOFF.md. Tested on the box with a temporary file (removed again): override shown in the list, old name still found
