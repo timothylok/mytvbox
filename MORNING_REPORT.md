@@ -3,6 +3,8 @@
 Loop: every 20 min, branch `overnight` (main is untouched). Task list: HANDOFF.md.
 
 ## Job status (latest first)
+- 1:21 am - round 9: batch 341/650 (Mandarin, 0 failures); video copy run 2 at 157/194 (0 failures). Nothing else to do
+  until the drive is quiet (task 4a needs it); all other Claude-side tasks are done.
 - 1:15 am - round 8: batch ~310/650 (in Mandarin, 0 failures); video copy run 2 ~55/194 (0 failures).
 - 12:45 am - round 7: batch ~275/650 (in Mandarin, 0 failures); video copy run 2 ~30/194 (0 failures); alignment done.
 - 12:25 am - round 6: batch ~242/650 (0 failures); video copy run 1 finished 87/87 (0 failures, 90 min); started run 2 for the
