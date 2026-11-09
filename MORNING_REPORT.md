@@ -2,6 +2,19 @@
 
 Loop: every 20 min, branch `overnight` (main is untouched). Task list: HANDOFF.md.
 
+## Summary for the morning (written 7:05 am)
+- **Karaoke batch finished**: all 650 songs made and on the drive, 0 failures (423 min).
+- **All Claude-side tasks done**: "Next up" banner + 16:9 video verified; foreground service (app survives Home);
+  traditional/simplified Chinese search; `titles.txt` title overrides; test files deleted (Timlok song recreated);
+  PLAN.md rewritten + cache fix; aligned lyrics for the 6 Eason Chan songs + K歌之王, with a new quality check
+  (`clean_aligned.py`) that drops bad per-character timings.
+- **Two bugs found and fixed**: an audio-only song after a video song showed the old video frame; library rescans could pile up.
+- **Still running**: video copy (run 3, `tools/copy_videos3.log`) - ~0.9 MB/s with 150-300 MB videos, several hours left.
+  The loop keeps going until it copies nothing, then stops.
+- **For you to review**: branch `overnight` (merge into main when happy); the two-phone test; your remote's Menu key;
+  the 8 lyric files still in Downloads.
+- Box: idle, queue empty, volume 7.
+
 ## Job status (latest first)
 - 7:01 am - round 26: video copy run 3 at 273/437 (0 failures), still copying.
 - 6:41 am - round 25: video copy run 3 at 268/437 (0 failures), still copying.
