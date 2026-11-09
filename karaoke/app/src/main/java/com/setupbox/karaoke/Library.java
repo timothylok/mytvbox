@@ -29,10 +29,14 @@ public final class Library {
                     .put("title", title).put("file", file).put("lrc", hasLrc).put("video", !video.isEmpty());
         }
 
+        /** For the on-disk cache: same as the API form, but with the video's path (the API only says whether there is one). */
+        JSONObject toCacheJson() throws Exception { return toJson().put("videoFile", video); }
+
         static Song fromJson(JSONObject o) {
             Song s = new Song();
             s.id = o.optString("id"); s.language = o.optString("language"); s.artist = o.optString("artist");
             s.title = o.optString("title"); s.file = o.optString("file"); s.hasLrc = o.optBoolean("lrc");
+            s.video = o.optString("videoFile", "");
             s.key = normalize(s.title + " " + s.artist + " " + s.language);
             return s;
         }
@@ -167,7 +171,7 @@ public final class Library {
     public void save(File cache) {
         try {
             JSONArray arr = new JSONArray();
-            for (Song s : songs) arr.put(s.toJson());
+            for (Song s : songs) arr.put(s.toCacheJson());
             File dir = cache.getParentFile();
             if (dir != null) dir.mkdirs();
             Files.write(cache.toPath(), arr.toString().getBytes(StandardCharsets.UTF_8));

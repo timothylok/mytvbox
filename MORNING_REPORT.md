@@ -3,6 +3,7 @@
 Loop: every 20 min, branch `overnight` (main is untouched). Task list: HANDOFF.md.
 
 ## Job status (latest first)
+- 12:45 am - round 7: batch ~275/650 (in Mandarin, 0 failures); video copy run 2 ~30/194 (0 failures); alignment done.
 - 12:25 am - round 6: batch ~242/650 (0 failures); video copy run 1 finished 87/87 (0 failures, 90 min); started run 2 for the
   songs made since (194 videos to check, 21 GB); alignment done.
 - 12:15 am - round 5: batch 202+/650 (in Cantopop/Eason Chan, 0 failures); video copy 76+/87 (0 failures); alignment done.
@@ -17,6 +18,8 @@ Loop: every 20 min, branch `overnight` (main is untouched). Task list: HANDOFF.m
   All three processes alive.
 
 ## Done
+- Round 7: task 4(f) rewrote karaoke/PLAN.md to match what was built; Library cache now stores/restores the video path
+  (verified: index.json on the box has videoFile entries; 274 songs, 116 with video after rescan).
 - Round 6: task 4(e) deleted /sdcard/test.mp3, /sdcard/test_lr.mp3 and D:\ai\Karaoke\Other\Timlok. The Timlok file was a real
   karaoke output (not only a test), so it must be regenerated after the batch: `make_karaoke.py --only Timlok --push` (in HANDOFF.md).
 - Round 5: task 4(d) title overrides - `titles.txt` (on the drive and/or /sdcard/Karaoke) renames songs; formats in
