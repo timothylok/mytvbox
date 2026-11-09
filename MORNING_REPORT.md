@@ -16,6 +16,7 @@ Loop: every 20 min, branch `overnight` (main is untouched). Task list: HANDOFF.m
 - Box: idle, queue empty, volume 7.
 
 ## Job status (latest first)
+- 9:01 am - round 32: video copy run 3 at 296/437 (KPop, 0 failures), still copying.
 - 8:41 am - round 31: video copy run 3 at 293/437 (KPop, 0 failures), still copying.
 - 8:21 am - round 30: video copy run 3 at 290/437 (KPop, 0 failures), still copying.
 - 8:01 am - round 29: video copy run 3 at 286/437 (KPop, 0 failures), still copying.
