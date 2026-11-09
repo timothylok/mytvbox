@@ -16,6 +16,7 @@ Loop: every 20 min, branch `overnight` (main is untouched). Task list: HANDOFF.m
 - Box: idle, queue empty, volume 7.
 
 ## Job status (latest first)
+- 10:01 am - round 35: video copy run 4 at 217/587 (English, 0 failures), still copying.
 - 9:50 am - round 34: FOUND + FIXED a bug in copy_videos.py: the final rename (and the "already there" check) used
   single-quoted shell commands, which break on song names containing an apostrophe (e.g. 'SUGAR HONEY ICE TEA', It's Me).
   Those videos stayed as invisible .part files and would have been re-copied forever (the job could never reach "0 copied").
