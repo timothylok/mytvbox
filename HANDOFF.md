@@ -44,7 +44,7 @@ Box: Android TV box 192.168.3.79 (open ADB on :5555). PC: Windows, GTX 1650 4 GB
 | Job | Log | Status at handoff |
 |---|---|---|
 | Karaoke batch (`make_karaoke.py --push`) | `tools/make_karaoke.log` | DONE 5:00 am: 650 / 650 songs, 0 failures, 423 min (+ Timlok recreated) |
-| Video copy (`copy_videos.py`) | `tools/copy_videos.log` (run 1: 87 copied), `copy_videos2.log` (run 2: 110 copied), `copy_videos3.log` (run 3) | 5:41 am: run 3 at 247 / 437, 0 failures, ~0.9 MB/s - several hours left |
+| Video copy (`copy_videos.py`) | `tools/copy_videos.log` (run 1: 87 copied), `copy_videos2.log` (run 2: 110 copied), `copy_videos3.log` (run 3) | 6:01 am: run 3 at 256 / 437, 0 failures - several hours left |
 | Lyric alignment (`align_folder.py` on `EasonChan\Eason Chan`) | `tools/align_folder.log` | DONE 6 / 6, every line aligned |
 
 Overnight loop (branch `overnight`, report `MORNING_REPORT.md`) updates this table each round.
