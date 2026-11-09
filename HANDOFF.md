@@ -89,6 +89,10 @@ Commands: `python -u make_karaoke.py --push`, `python -u copy_videos.py`,
 12. **Skip (Right key) is slow while the video copy runs**: measured 8-38 s until the next song is audible, and even
     `adb input` took 2-16 s - the USB drive is saturated by the copy. Re-measure when the copy is done; if still slow, move
     the file checks / .lrc loading in `playNext()` off the main thread.
+    THE USER ASKED (2026-11-10): wait for the copy to finish, then re-measure. Run `python tools/scripts/skip_latency.py`
+    (mutes nothing by itself - mute the box first: `adb shell media volume --stream 3 --set 0`, restore to 7 after). It queues
+    video and audio-only songs, presses Right via adb and prints the time until the next song is audible. Compare with the
+    8-38 s measured while copying. Report the numbers to the user; only change the code if skips are still slow.
 11. **Security (unchanged, known)**: the box's ADB on :5555 has no authentication, and the launcher's Power tile depends on it.
 
 ## Gotchas learned

@@ -16,6 +16,8 @@ Loop: every 20 min, branch `overnight` (main is untouched). Task list: HANDOFF.m
 - Box: idle, queue empty, volume 7.
 
 ## Job status (latest first)
+- NEXT (user request): when the video copy finishes, re-measure the Right-key skip delay with tools/scripts/skip_latency.py
+  (box muted, volume restored to 7 after) and put the numbers here before stopping the loop.
 - 10:41 am - round 37: video copy run 4 at 229/587 (English, 0 failures).
 - 10:21 am - round 36: video copy run 4 at 221/587 (English, 0 failures), still copying. (main was merged from overnight at 10:07 at your request.)
 - 10:01 am - round 35: video copy run 4 at 217/587 (English, 0 failures), still copying.
