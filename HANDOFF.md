@@ -44,7 +44,7 @@ Box: Android TV box 192.168.3.79 (open ADB on :5555). PC: Windows, GTX 1650 4 GB
 | Job | Log | Status at handoff |
 |---|---|---|
 | Karaoke batch (`make_karaoke.py --push`) | `tools/make_karaoke.log` | DONE 5:00 am: 650 / 650 songs, 0 failures, 423 min (+ Timlok recreated) |
-| Video copy (`copy_videos.py`) | `tools/copy_videos.log` (run 1: 87 copied), `copy_videos2.log` (run 2: 110 copied), `copy_videos3.log` (run 3) | 5:01 am: run 3 at 238 / 437, 0 failures; re-run until it copies 0 |
+| Video copy (`copy_videos.py`) | `tools/copy_videos.log` (run 1: 87 copied), `copy_videos2.log` (run 2: 110 copied), `copy_videos3.log` (run 3) | 5:30 am: run 3 at ~243 / 437, 0 failures, ~0.9 MB/s with 170-300 MB videos - several hours left |
 | Lyric alignment (`align_folder.py` on `EasonChan\Eason Chan`) | `tools/align_folder.log` | DONE 6 / 6, every line aligned |
 
 Overnight loop (branch `overnight`, report `MORNING_REPORT.md`) updates this table each round.
@@ -68,7 +68,7 @@ Commands: `python -u make_karaoke.py --push`, `python -u copy_videos.py`,
 4. **8 lyric files still in `C:\Users\timlo\Downloads`** with no matching mp3 in the library: King Kong, 隨意門,
    孤獨探戈, 幸災樂禍, 2001太空漫遊, 低等動物, 打回原形, 給愛麗斯. User said "leave them for now". When the mp3s exist:
    rename the `.lrc` to match the mp3's file name, put it in the source folder, then run `align_folder.py`.
-5. **Test the "Next up" banner** (last 15 s of a song with another queued) and a normal 16:9 video background - only the
+5. ~~**Test the "Next up" banner**~~ DONE overnight (banner at 3:38 of 3:46, auto-advance to the next song, 16:9 video OK). (last 15 s of a song with another queued) and a normal 16:9 video background - only the
    square `K歌之王.mp4` has been tried.
 6. **Confirm the remote's keys**: hold OK is the vocal toggle (tested via adb); Menu / V are untested. Ask the user if
    their remote has a Menu button; pick another key if not.

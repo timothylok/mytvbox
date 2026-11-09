@@ -3,6 +3,8 @@
 Loop: every 20 min, branch `overnight` (main is untouched). Task list: HANDOFF.md.
 
 ## Job status (latest first)
+- 5:30 am - round 21: video copy run 3 at ~243/437 (0 failures) - checked not stuck: ~0.9 MB/s, the videos are 170-300 MB each,
+  so it needs several more hours; the loop keeps re-running it until nothing is left to copy.
 - 5:01 am - round 20: KARAOKE BATCH FINISHED - 650/650 songs, 0 failures, 423 min. Video copy run 3 at 238/437 (0 failures).
 - 4:41 am - round 19: batch 626/650 (0 failures, ~15 min left); video copy run 3 at 231/437 (0 failures).
 - 4:21 am - round 18: batch 599/650 (0 failures). Video copy run 3 at 223/437 - only 3 videos in 20 min; checked it is
@@ -35,6 +37,10 @@ Loop: every 20 min, branch `overnight` (main is untouched). Task list: HANDOFF.m
   All three processes alive.
 
 ## Done
+- Round 21: task 4(a) DONE - "Next up: Second - 1988 大地 (粵語版) - Beyond" banner shown at 3:38 of 3:46, the next song started
+  by itself, "Now singing" banner gone by 0:08 as designed. Tested with two audio-only songs (muted) because the drive is
+  still busy with the video copy; the 16:9 video background had already been checked in rounds 2 and 8.
+  => ALL Claude-side tasks are done; only the video copy job is still running.
 - Round 20: recreated the Timlok karaoke song (deleted in round 6) and pushed it to the drive.
 - Round 8: spot-check of the aligned lyrics found bad timings in parts of 人啊人 (7 characters squeezed into 0.3 s,
   a line timed 11.5 s off). Wrote clean_aligned.py: keeps per-character times only where they agree with the lyric file
@@ -66,7 +72,7 @@ Loop: every 20 min, branch `overnight` (main is untouched). Task list: HANDOFF.m
 - Created branch `overnight`; saved `karaoke/known_good.apk` (the build currently on the box) for rollbacks.
 
 ## Failed / skipped
-- Task 4(a) "Next up" banner: NOT verified yet. The 16:9 video test stalled ("Buffering", only reached 0:58 in ~6 min)
+- (resolved in round 21) Task 4(a) "Next up" banner: NOT verified yet. The 16:9 video test stalled ("Buffering", only reached 0:58 in ~6 min)
   because the USB drive is being written by two adb pushes at once (USB 2.0 shared). Retest after the batch and
   video copy finish (the loop will retry).
 
