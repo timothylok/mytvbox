@@ -65,8 +65,48 @@ public final class Library {
 
     // ---------- scanning ----------
 
+    /**
+     * Title overrides for messy file names. Optional text files (UTF-8), one entry per line, '#' starts a comment:
+     *     <file name without extension> = Title to show
+     *     <Artist>/<file name without extension> = Title to show
+     *     <Language>/<Artist>/<file name without extension> = Title to show
+     * Read from <Karaoke root>/titles.txt (travels with the USB drive) and /sdcard/Karaoke/titles.txt (this wins).
+     */
+    static java.util.Map<String, String> loadOverrides(File root) {
+        java.util.Map<String, String> m = new java.util.HashMap<>();
+        File[] files = {new File(root, "titles.txt"), new File(android.os.Environment.getExternalStorageDirectory(), "Karaoke/titles.txt")};
+        for (File f : files) {
+            try {
+                String text = new String(Files.readAllBytes(f.toPath()), StandardCharsets.UTF_8);
+                if (text.startsWith("﻿")) text = text.substring(1);
+                parseOverrides(text, m);
+            } catch (Exception ignored) { }      // no file = no overrides
+        }
+        return m;
+    }
+
+    static void parseOverrides(String text, java.util.Map<String, String> into) {
+        for (String line : text.split("\r?\n")) {
+            line = line.trim();
+            if (line.isEmpty() || line.startsWith("#")) continue;
+            int eq = line.indexOf('=');
+            if (eq <= 0) continue;
+            String key = line.substring(0, eq).trim(), val = line.substring(eq + 1).trim();
+            if (!key.isEmpty() && !val.isEmpty()) into.put(key, val);
+        }
+    }
+
+    static String titleOverride(java.util.Map<String, String> o, String lang, String artist, String stem) {
+        if (o.isEmpty()) return null;
+        String v = o.get(lang + "/" + artist + "/" + stem);
+        if (v == null) v = o.get(artist + "/" + stem);
+        if (v == null) v = o.get(stem);
+        return v;
+    }
+
     public static Library scan(File root) {
         Library lib = new Library(root);
+        java.util.Map<String, String> overrides = loadOverrides(root);
         File[] langs = root.listFiles();
         if (langs == null) return lib;
         for (File lang : langs) {
@@ -95,6 +135,9 @@ public final class Library {
                     s.language = lang.getName();
                     s.artist = artist.getName();
                     s.title = cleanTitle(stem);
+                    String shown = titleOverride(overrides, lang.getName(), artist.getName(), stem);
+                    String autoTitle = s.title;
+                    if (shown != null) s.title = shown;
                     String prefix = lang.getName() + "/" + artist.getName() + "/";
                     if (audio.containsKey(stem)) {
                         s.file = prefix + audio.get(stem);
@@ -104,7 +147,7 @@ public final class Library {
                     }
                     s.hasLrc = new File(artist, stem + ".lrc").isFile();
                     s.id = md5(s.file);
-                    s.key = normalize(s.title + " " + s.artist + " " + s.language);
+                    s.key = normalize(s.title + " " + autoTitle + " " + s.artist + " " + s.language);   // search finds the old name too
                     lib.songs.add(s);
                 }
             }

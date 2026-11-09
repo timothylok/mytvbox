@@ -43,8 +43,8 @@ Box: Android TV box 192.168.3.79 (open ADB on :5555). PC: Windows, GTX 1650 4 GB
 
 | Job | Log | Status at handoff |
 |---|---|---|
-| Karaoke batch (`make_karaoke.py --push`) | `tools/make_karaoke.log` | 11:41 pm: 164 / 650 songs (now in Beyond), 0 failures |
-| Video copy (`copy_videos.py`) | `tools/copy_videos.log` | 11:41 pm: 37 / 87 (10.6 GB), 0 failures |
+| Karaoke batch (`make_karaoke.py --push`) | `tools/make_karaoke.log` | 12:15 am: ~202 / 650 songs (in Eason Chan), 0 failures |
+| Video copy (`copy_videos.py`) | `tools/copy_videos.log` | 12:15 am: ~76 / 87, 0 failures |
 | Lyric alignment (`align_folder.py` on `EasonChan\Eason Chan`) | `tools/align_folder.log` | DONE 6 / 6, every line aligned |
 
 Overnight loop (branch `overnight`, report `MORNING_REPORT.md`) updates this table each round.
@@ -76,8 +76,12 @@ Commands: `python -u make_karaoke.py --push`, `python -u copy_videos.py`,
 7. ~~**Keep the app alive**~~ DONE overnight: `KeepAliveService` (foreground service + notification) keeps the process
    alive when someone presses Home; the phone page answered while the launcher was in front. `launchMode=singleTask` so
    opening the tile again brings back the running instance instead of starting a second one (port clash).
-8. **Clean-up of titles**: file names still carry YouTube clutter ("(Official Music Video)", "【...】", ids). `Library.cleanTitle`
-   strips obvious noise only. Options: rename the files in the library, or add a title-override file.
+8. **Clean-up of titles** - override file DONE overnight. File names still carry YouTube clutter and `Library.cleanTitle`
+   strips obvious noise only, but any title can now be set by hand in `titles.txt` (UTF-8, `#` comments), either on the
+   drive (`/storage/A6D0-F59E/Karaoke/titles.txt`) or on the box (`/sdcard/Karaoke/titles.txt`, wins). Lines:
+   `<file name without extension> = Title`, or `Artist/<file name> = Title`, or `Language/Artist/<file name> = Title`.
+   The old name stays searchable. Press Rescan on the phone page (or restart the app) after editing.
+   Still open: nobody has actually written the overrides - a generated draft of all titles would be the next step.
 9. ~~**Search nicety**~~ DONE overnight: search converts traditional to simplified (Android ICU transliterator, API 29+)
    on both sides, so 世纪末烟花 finds 世紀末煙花 and 生活无小事 finds 生活無小事.
 10. **Housekeeping**: delete `/sdcard/test.mp3` and `/sdcard/test_lr.mp3` on the box and `D:\ai\Karaoke\Other\Timlok`
