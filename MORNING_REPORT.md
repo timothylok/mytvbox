@@ -16,6 +16,7 @@ Loop: every 20 min, branch `overnight` (main is untouched). Task list: HANDOFF.m
 - Box: idle, queue empty, volume 7.
 
 ## Job status (latest first)
+- 10:41 am - round 37: video copy run 4 at 229/587 (English, 0 failures).
 - 10:21 am - round 36: video copy run 4 at 221/587 (English, 0 failures), still copying. (main was merged from overnight at 10:07 at your request.)
 - 10:01 am - round 35: video copy run 4 at 217/587 (English, 0 failures), still copying.
 - 9:50 am - round 34: FOUND + FIXED a bug in copy_videos.py: the final rename (and the "already there" check) used
@@ -69,6 +70,9 @@ Loop: every 20 min, branch `overnight` (main is untouched). Task list: HANDOFF.m
   All three processes alive.
 
 ## Done
+- 10:35 am (asked by the user): Browse showed no songs right after the app restarted (the drive scan takes minutes while the
+  copy runs). The app now shows the last scan's song list at once (651 songs ~8 s after start) and refreshes behind it; the
+  phone page reloads Browse by itself when the song count changes. Measured skip delay (see HANDOFF item 12).
 - Round 21: task 4(a) DONE - "Next up: Second - 1988 大地 (粵語版) - Beyond" banner shown at 3:38 of 3:46, the next song started
   by itself, "Now singing" banner gone by 0:08 as designed. Tested with two audio-only songs (muted) because the drive is
   still busy with the video copy; the 16:9 video background had already been checked in rounds 2 and 8.

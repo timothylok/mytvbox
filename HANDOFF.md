@@ -44,7 +44,7 @@ Box: Android TV box 192.168.3.79 (open ADB on :5555). PC: Windows, GTX 1650 4 GB
 | Job | Log | Status at handoff |
 |---|---|---|
 | Karaoke batch (`make_karaoke.py --push`) | `tools/make_karaoke.log` | DONE 5:00 am: 650 / 650 songs, 0 failures, 423 min (+ Timlok recreated) |
-| Video copy (`copy_videos.py`) | `tools/copy_videos.log` (run 1: 87), `copy_videos2.log` (run 2: 110), `copy_videos3.log` (run 3, stopped), `copy_videos4.log` (run 4, fixed script) | 10:21 am: run 4 at 221 / 587 (English), 0 failures |
+| Video copy (`copy_videos.py`) | `tools/copy_videos.log` (run 1: 87), `copy_videos2.log` (run 2: 110), `copy_videos3.log` (run 3, stopped), `copy_videos4.log` (run 4, fixed script) | 10:41 am: run 4 at 229 / 587 (English), 0 failures |
 | Lyric alignment (`align_folder.py` on `EasonChan\Eason Chan`) | `tools/align_folder.log` | DONE 6 / 6, every line aligned |
 
 Overnight loop (branch `overnight`, report `MORNING_REPORT.md`) updates this table each round.
@@ -86,6 +86,9 @@ Commands: `python -u make_karaoke.py --push`, `python -u copy_videos.py`,
 10. **Housekeeping** DONE overnight: test files `/sdcard/test.mp3`, `/sdcard/test_lr.mp3` and `D:\ai\Karaoke\Other\Timlok` deleted;
     `Library.fromJson` now restores the video path (the cache stores `videoFile`); `karaoke/PLAN.md` rewritten to match what was built.
     The deleted Timlok karaoke file was recreated after the batch (`make_karaoke.py --only Timlok --push`, 5:01 am).
+12. **Skip (Right key) is slow while the video copy runs**: measured 8-38 s until the next song is audible, and even
+    `adb input` took 2-16 s - the USB drive is saturated by the copy. Re-measure when the copy is done; if still slow, move
+    the file checks / .lrc loading in `playNext()` off the main thread.
 11. **Security (unchanged, known)**: the box's ADB on :5555 has no authentication, and the launcher's Power tile depends on it.
 
 ## Gotchas learned

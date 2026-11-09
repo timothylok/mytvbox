@@ -108,6 +108,11 @@ const fmt = (ms) => { const s = Math.floor(Math.max(0, ms) / 1000); return Math.
 let last = null, lastKey = "";
 function render(st) {
   last = st;
+  // the TV is still scanning the drive after a restart (or songs were added): refresh Browse when the song count changes
+  if (browseLoaded && browseData && browseData.total !== st.songCount && !browseReloading) {
+    browseReloading = true;
+    loadBrowse().finally(() => { browseReloading = false; });
+  }
   const key = JSON.stringify([st.current, st.upcoming, st.playing, st.paused, st.vocalOn, st.flipped, st.note, st.songCount]);
   if (key !== lastKey) { lastKey = key; drawQueue(st); }
   const bar = $("#bar"); if (bar) bar.style.width = st.durMs ? Math.min(100, st.posMs / st.durMs * 100) + "%" : "0";
@@ -176,7 +181,7 @@ function add(s, position) {
       (position === "next" ? "Playing next: " : "Added: ") + s.title);
 }
 
-let browseLoaded = false, browseData = null, browseLang = null, browseArtist = null;
+let browseLoaded = false, browseData = null, browseLang = null, browseArtist = null, browseReloading = false;
 async function loadBrowse() {
   try { browseData = await api("/api/browse"); browseLoaded = true; drawBrowse(); }
   catch (e) { toast("Failed: " + e.message); }
@@ -187,7 +192,10 @@ async function drawBrowse() {
     try { await api("/api/rescan", null, true); } catch (e) {}
     setTimeout(loadBrowse, 1500); toast("Rescanning the drive…"); } }, "↻ Rescan");
   root.append(refresh);
-  if (!browseData || !browseData.total) { root.append(el("div", { class: "empty" }, "No songs found yet.")); return; }
+  if (!browseData || !browseData.total) {
+    root.append(el("div", { class: "empty" }, (last && last.note) ? last.note : "The TV is still reading the song list - this page will fill in by itself."));
+    return;
+  }
   const chips = el("div", { class: "chips" });
   for (const l of browseData.languages) {
     chips.append(el("button", { class: "chip" + (browseLang === l.name ? " on" : ""), onclick: () => { browseLang = l.name; browseArtist = null; drawBrowse(); } },

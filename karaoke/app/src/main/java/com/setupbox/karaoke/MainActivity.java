@@ -220,6 +220,12 @@ public class MainActivity extends Activity implements Server.Host {
         server = new Server(this, this, PORT);
         try { server.start(); } catch (Exception e) { libraryNote = "Web server failed: " + e.getMessage(); }
         try { KeepAliveService.start(this, "http://" + ip + ":" + PORT); } catch (Exception ignored) { }   // survive Home / other apps
+        // Scanning a busy USB drive can take minutes: show the list from the last scan straight away, refresh behind it.
+        try {
+            File karaokeRoot = Library.findRoot();
+            Library cached = karaokeRoot == null ? null : Library.load(karaokeRoot, new File(android.os.Environment.getExternalStorageDirectory(), "Karaoke/index.json"));
+            if (cached != null && !cached.songs.isEmpty()) { lib = cached; libraryNote = ""; }
+        } catch (Exception ignored) { }
         rescan();
         ui.post(tick);
     }
