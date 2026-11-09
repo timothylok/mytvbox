@@ -61,6 +61,7 @@ public class MainActivity extends Activity {
         player = new ExoPlayer.Builder(this, rf).build();
         player.setVideoSurfaceView(surface);
         String path = getIntent().getStringExtra("path");
+        if (getIntent().getBooleanExtra("scan", false)) { debugScan(getIntent().getStringExtra("q")); return; }
         if (path == null) {
             status.setText("No file. Start with: --es path /sdcard/...");
             return;
@@ -149,6 +150,32 @@ public class MainActivity extends Activity {
             return true;
         }
         return super.onKeyUp(k, e);
+    }
+
+    /** Developer check: adb shell am start ... --ez scan true [--es q "text"] shows the library summary. */
+    private void debugScan(final String q) {
+        status.setText("Scanning...");
+        new Thread(new Runnable() {
+            @Override public void run() {
+                long t0 = System.currentTimeMillis();
+                File root = Library.findRoot();
+                if (root == null) { post("Karaoke folder not found (USB drive missing?)"); return; }
+                Library lib = Library.scan(root);
+                long ms = System.currentTimeMillis() - t0;
+                lib.save(new File(android.os.Environment.getExternalStorageDirectory(), "Karaoke/index.json"));
+                StringBuilder sb = new StringBuilder("Root: " + root + "\n" + lib.songs.size() + " songs, "
+                        + lib.languages() + ", " + lib.artists(null).size() + " artists, scan " + ms + " ms\n");
+                java.util.List<Library.Song> hits = lib.search(q == null ? "" : q, null, null);
+                sb.append("Search '" + (q == null ? "" : q) + "': " + hits.size() + " hits\n");
+                for (int i = 0; i < Math.min(8, hits.size()); i++) {
+                    Library.Song s = hits.get(i);
+                    sb.append(s.language + " / " + s.artist + " / " + s.title + (s.hasLrc ? "  [lyrics]" : "") + "\n");
+                }
+                android.util.Log.i("KaraokeScan", sb.toString());
+                post(sb.toString());
+            }
+            private void post(final String t) { runOnUiThread(new Runnable() { @Override public void run() { status.setText(t); } }); }
+        }).start();
     }
 
     private void cycleMode() { vocal.setMode((vocal.getMode() + 1) % 3); showStatus(); }
