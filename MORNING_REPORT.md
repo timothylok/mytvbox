@@ -3,6 +3,8 @@
 Loop: every 20 min, branch `overnight` (main is untouched). Task list: HANDOFF.md.
 
 ## Job status (latest first)
+- 3:01 am - round 14: batch 492/650 (0 failures). Video copy run 2 FINISHED: 110 copied, 84 already there, 0 failed
+  (150 min). Started run 3 for the songs made since (216 to check, 23.9 GB).
 - 2:41 am - round 13: batch 455/650 (0 failures); video copy run 2 at 189/194 (0 failures). Waiting for a quiet drive.
 - 2:21 am - round 12: batch 428/650 (0 failures); video copy run 2 at 183/194 (0 failures). Waiting for a quiet drive.
 - 2:01 am - round 11: batch 400/650 (0 failures); video copy run 2 at 174/194 (0 failures). Waiting for a quiet drive.
