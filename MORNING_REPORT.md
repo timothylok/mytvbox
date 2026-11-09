@@ -3,6 +3,7 @@
 Loop: every 20 min, branch `overnight` (main is untouched). Task list: HANDOFF.md.
 
 ## Job status (latest first)
+- 5:41 am - round 22: video copy run 3 at 247/437 (0 failures), still copying. Nothing else left to do.
 - 5:30 am - round 21: video copy run 3 at ~243/437 (0 failures) - checked not stuck: ~0.9 MB/s, the videos are 170-300 MB each,
   so it needs several more hours; the loop keeps re-running it until nothing is left to copy.
 - 5:01 am - round 20: KARAOKE BATCH FINISHED - 650/650 songs, 0 failures, 423 min. Video copy run 3 at 238/437 (0 failures).
