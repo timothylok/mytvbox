@@ -9,6 +9,8 @@ import android.view.KeyEvent;
 import android.view.SurfaceView;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.media3.common.MediaItem;
@@ -38,7 +40,10 @@ public class MainActivity extends Activity implements Server.Host {
 
     private ExoPlayer player;
     private final VocalProcessor vocal = new VocalProcessor();
-    private TextView status, lyricsView, idleView;
+    private TextView status, lyricsView, idleInfo;
+    private LinearLayout idleBox;
+    private ImageView qrSmall;
+    private long hintUntil = 0;       // show the key help line until this time
     private final android.os.Handler ui = new android.os.Handler();
 
     // lyrics
@@ -76,11 +81,46 @@ public class MainActivity extends Activity implements Server.Host {
         lyricsView.setGravity(Gravity.CENTER);
         lyricsView.setPadding(60, 0, 60, 160);
         root.addView(lyricsView, new FrameLayout.LayoutParams(-1, -1, Gravity.CENTER));
-        idleView = new TextView(this);
-        idleView.setGravity(Gravity.CENTER);
-        idleView.setTextColor(Color.WHITE);
-        idleView.setTextSize(40);
-        root.addView(idleView, new FrameLayout.LayoutParams(-1, -1, Gravity.CENTER));
+        ip = localIp();
+        final String url = "http://" + ip + ":" + PORT;
+        android.graphics.Bitmap bigQr = qr(url, 440), smallQr = qr(url, 220);
+
+        idleBox = new LinearLayout(this);
+        idleBox.setOrientation(LinearLayout.VERTICAL);
+        idleBox.setGravity(Gravity.CENTER);
+        idleBox.setBackgroundColor(0xFF101418);
+        TextView idleTitle = new TextView(this);
+        idleTitle.setText("Karaoke");
+        idleTitle.setTextColor(0xFFFFE23B);
+        idleTitle.setTextSize(64);
+        idleTitle.setGravity(Gravity.CENTER);
+        idleBox.addView(idleTitle);
+        ImageView qrBig = new ImageView(this);
+        qrBig.setImageBitmap(bigQr);
+        LinearLayout.LayoutParams qlp = new LinearLayout.LayoutParams(440, 440);
+        qlp.setMargins(0, 24, 0, 24);
+        idleBox.addView(qrBig, qlp);
+        TextView idleUrl = new TextView(this);
+        idleUrl.setText(url);
+        idleUrl.setTextColor(Color.WHITE);
+        idleUrl.setTextSize(36);
+        idleUrl.setGravity(Gravity.CENTER);
+        idleBox.addView(idleUrl);
+        idleInfo = new TextView(this);
+        idleInfo.setTextColor(0xFF9AA0AD);
+        idleInfo.setTextSize(26);
+        idleInfo.setGravity(Gravity.CENTER);
+        idleInfo.setPadding(40, 16, 40, 0);
+        idleBox.addView(idleInfo);
+        root.addView(idleBox, new FrameLayout.LayoutParams(-1, -1));
+
+        qrSmall = new ImageView(this);
+        qrSmall.setImageBitmap(smallQr);
+        qrSmall.setAlpha(0.85f);
+        FrameLayout.LayoutParams slp = new FrameLayout.LayoutParams(160, 160, Gravity.TOP | Gravity.END);
+        slp.setMargins(0, 24, 24, 0);
+        root.addView(qrSmall, slp);
+
         status = new TextView(this);
         status.setTextColor(Color.WHITE);
         status.setBackgroundColor(0x99000000);
@@ -110,7 +150,6 @@ public class MainActivity extends Activity implements Server.Host {
             }
         });
 
-        ip = localIp();
         String path = getIntent().getStringExtra("path");
         if (path != null) { debugSingleFile = true; startFile(new File(path)); ui.post(tick); return; }
 
@@ -287,28 +326,56 @@ public class MainActivity extends Activity implements Server.Host {
         showStatus();
     }
 
+    private String titleOf(QueueManager.Item it) {
+        Library.Song s = lib.byId(it.songId);
+        String t = s == null ? "(missing song)" : s.title;
+        return it.singer.isEmpty() ? t : t + "  -  " + it.singer;
+    }
+
     private void showStatus() {
         boolean active = cPlaying || cPaused;
-        if (debugSingleFile) {
-            idleView.setText("");
-        } else if (!active) {
-            StringBuilder sb = new StringBuilder("Karaoke\n\nScan or open on your phone:\n" + "http://" + ip + ":" + PORT);
-            if (!libraryNote.isEmpty()) sb.append("\n\n").append(libraryNote);
-            else sb.append("\n\n").append(lib.songs.size()).append(" songs - add one to start");
-            idleView.setText(sb.toString());
-        } else {
-            idleView.setText("");
+        boolean idle = !active && !debugSingleFile;
+        idleBox.setVisibility(idle ? android.view.View.VISIBLE : android.view.View.GONE);
+        qrSmall.setVisibility(active && !debugSingleFile ? android.view.View.VISIBLE : android.view.View.GONE);
+        if (idle) {
+            String info = !libraryNote.isEmpty() ? libraryNote
+                    : lib.songs.size() + " songs  -  scan the code to pick one";
+            idleInfo.setText(info);
+            status.setVisibility(android.view.View.INVISIBLE);
+            return;
         }
-        if (!active && !debugSingleFile) { status.setText(""); status.setVisibility(android.view.View.INVISIBLE); return; }
         status.setVisibility(android.view.View.VISIBLE);
         String st = player.getPlaybackState() == Player.STATE_BUFFERING ? "Buffering" : (cPaused ? "Paused" : "Playing");
         String time = fmt(cPos) + (cDur > 0 ? " / " + fmt(cDur) : "");
-        QueueManager.Item cur = debugSingleFile ? null : queue.current();
-        String singer = cur != null && !cur.singer.isEmpty() ? "  |  Singer: " + cur.singer : "";
-        status.setText(st + "  |  " + (vocalOn ? "Vocal ON (original)" : "Karaoke (vocal off)") + "  |  " + time
-                + (lrc != null ? "  |  Lyrics " + (lyricOffsetMs >= 0 ? "+" : "-") + String.format("%.1fs", Math.abs(lyricOffsetMs) / 1000.0) : "")
-                + singer
-                + "\n[OK pause | hold OK / Menu: vocal | Left/Right seek | Up: lyrics later | Down: lyrics earlier]");
+        StringBuilder sb = new StringBuilder();
+        if (!debugSingleFile) {
+            QueueManager.Item cur = queue.current();
+            java.util.List<QueueManager.Item> up = queue.upcoming();
+            sb.append("Now: ").append(cur == null ? "-" : titleOf(cur)).append('\n');
+            sb.append("Next: ").append(up.isEmpty() ? "-" : titleOf(up.get(0)))
+              .append(up.size() > 1 ? "  (+" + (up.size() - 1) + " more)" : "").append('\n');
+        }
+        sb.append(st).append("  |  ").append(vocalOn ? "VOCAL ON" : "KARAOKE").append("  |  ").append(time);
+        if (lrc != null) sb.append("  |  Lyrics ").append(lyricOffsetMs >= 0 ? "+" : "-").append(String.format("%.1fs", Math.abs(lyricOffsetMs) / 1000.0));
+        if (System.currentTimeMillis() < hintUntil) {
+            sb.append("\nOK: pause   hold OK / Menu: vocal   Left/Right: seek or skip   Up/Down: lyrics later/earlier");
+        }
+        status.setText(sb.toString());
+    }
+
+    /** QR code for the phone address (dark modules on white, with a quiet zone). */
+    private static android.graphics.Bitmap qr(String text, int px) {
+        try {
+            java.util.Map<com.google.zxing.EncodeHintType, Object> hints = new java.util.HashMap<>();
+            hints.put(com.google.zxing.EncodeHintType.MARGIN, 2);
+            com.google.zxing.common.BitMatrix m = new com.google.zxing.qrcode.QRCodeWriter()
+                    .encode(text, com.google.zxing.BarcodeFormat.QR_CODE, px, px, hints);
+            int[] pix = new int[px * px];
+            for (int y = 0; y < px; y++) for (int x = 0; x < px; x++) pix[y * px + x] = m.get(x, y) ? Color.BLACK : Color.WHITE;
+            android.graphics.Bitmap bmp = android.graphics.Bitmap.createBitmap(px, px, android.graphics.Bitmap.Config.ARGB_8888);
+            bmp.setPixels(pix, 0, px, 0, 0, px, px);
+            return bmp;
+        } catch (Exception e) { return null; }
     }
 
     private void showLyrics() {
@@ -337,6 +404,7 @@ public class MainActivity extends Activity implements Server.Host {
 
     @Override public boolean onKeyDown(int k, KeyEvent e) {
         if (player == null) return super.onKeyDown(k, e);
+        hintUntil = System.currentTimeMillis() + 6000;
         switch (k) {
             case KeyEvent.KEYCODE_DPAD_CENTER: case KeyEvent.KEYCODE_ENTER:
                 e.startTracking(); return true; // short press = pause (on key up), long press = vocal
