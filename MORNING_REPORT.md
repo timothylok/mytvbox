@@ -16,6 +16,10 @@ Loop: every 20 min, branch `overnight` (main is untouched). Task list: HANDOFF.m
 - Box: idle, queue empty, volume 7.
 
 ## Job status (latest first)
+- 11:23 am - round 39: STOPPED EVERYTHING. 4 pushes failed with 'remote write failed: I/O error'; the box's kernel log shows
+  write faults reported by the USB drive (SCSI Sense Key 0x3 / ASC 0x03, 'lost async page write', exFAT could not extend
+  files) and then a read error on a song that played fine before. Killed the copy job and deleted the overnight loop
+  (job 148264c6) so nothing keeps writing to the drive. The skip-delay re-measure could not be done. Data is safe on the PC.
 - 11:01 am - round 38: video copy run 4 at 234/587 (English, 0 failures). User chose option 1: wait for the copy, then re-measure skip delay.
 - NEXT (user request): when the video copy finishes, re-measure the Right-key skip delay with tools/scripts/skip_latency.py
   (box muted, volume restored to 7 after) and put the numbers here before stopping the loop.
