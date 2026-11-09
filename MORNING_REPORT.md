@@ -16,7 +16,7 @@ Loop: every 20 min, branch `overnight` (main is untouched). Task list: HANDOFF.m
 - Round 3: task 4(b) foreground service - KeepAliveService keeps the app alive in the background (verified: pressed
   Home, the phone page still answered; reopening the tile brought back the same instance). Quick muted playback check OK.
 - Round 3: alignment of the 6 Eason Chan songs finished; the aligned .lrc files replaced the originals in
-  D:i\GetVideo\EasonChan\Eason Chan (originals in toolslign_out\orig). The batch has not reached Eason Chan yet,
+  D:\ai\GetVideo\EasonChan\Eason Chan (originals in tools\align_out\orig). The batch has not reached Eason Chan yet,
   so it will copy the aligned versions itself; spot-check on the TV once they are on the drive.
 - Round 2: tested a 16:9 music video on the box - fills the screen correctly (no bars, no crop).
 - Round 2: found + fixed a bug: after a song with a video, the next audio-only song kept showing the last video frame
