@@ -43,8 +43,8 @@ Box: Android TV box 192.168.3.79 (open ADB on :5555). PC: Windows, GTX 1650 4 GB
 
 | Job | Log | Status at handoff |
 |---|---|---|
-| Karaoke batch (`make_karaoke.py --push`) | `tools/make_karaoke.log` | 4:41 am: 626 / 650 songs (in English), 0 failures |
-| Video copy (`copy_videos.py`) | `tools/copy_videos.log` (run 1: 87 copied), `copy_videos2.log` (run 2: 110 copied), `copy_videos3.log` (run 3) | 4:41 am: run 3 at 231 / 437, 0 failures, slow while the batch writes |
+| Karaoke batch (`make_karaoke.py --push`) | `tools/make_karaoke.log` | DONE 5:00 am: 650 / 650 songs, 0 failures, 423 min (+ Timlok recreated) |
+| Video copy (`copy_videos.py`) | `tools/copy_videos.log` (run 1: 87 copied), `copy_videos2.log` (run 2: 110 copied), `copy_videos3.log` (run 3) | 5:01 am: run 3 at 238 / 437, 0 failures; re-run until it copies 0 |
 | Lyric alignment (`align_folder.py` on `EasonChan\Eason Chan`) | `tools/align_folder.log` | DONE 6 / 6, every line aligned |
 
 Overnight loop (branch `overnight`, report `MORNING_REPORT.md`) updates this table each round.
@@ -85,8 +85,7 @@ Commands: `python -u make_karaoke.py --push`, `python -u copy_videos.py`,
    on both sides, so 世纪末烟花 finds 世紀末煙花 and 生活无小事 finds 生活無小事.
 10. **Housekeeping** DONE overnight: test files `/sdcard/test.mp3`, `/sdcard/test_lr.mp3` and `D:\ai\Karaoke\Other\Timlok` deleted;
     `Library.fromJson` now restores the video path (the cache stores `videoFile`); `karaoke/PLAN.md` rewritten to match what was built.
-    STILL TO DO: the deleted Timlok file was the real karaoke output of `Timlok/Timlok/Neon Nights 1980 Flowing.mp3`, so after
-    the main batch finishes run `python -u make_karaoke.py --only Timlok --push` (and `copy_videos.py`) to recreate it.
+    The deleted Timlok karaoke file was recreated after the batch (`make_karaoke.py --only Timlok --push`, 5:01 am).
 11. **Security (unchanged, known)**: the box's ADB on :5555 has no authentication, and the launcher's Power tile depends on it.
 
 ## Gotchas learned
