@@ -3,6 +3,7 @@
 Loop: every 20 min, branch `overnight` (main is untouched). Task list: HANDOFF.md.
 
 ## Job status (latest first)
+- 11:45 pm - round 4: batch 164/650 (in Beyond, 0 failures); video copy 37/87 (0 failures); alignment done.
 - 11:30 pm - round 3: batch 132/650 (0 failures); video copy 12/87 (0 failures); alignment DONE 6/6 - every line of
   all 6 songs aligned, times all in order (checked by script). Credit lines like "作曲: 李峻一" get squeezed times
   because they are not sung - harmless.
@@ -13,6 +14,9 @@ Loop: every 20 min, branch `overnight` (main is untouched). Task list: HANDOFF.m
   All three processes alive.
 
 ## Done
+- Round 4: task 4(c) search treats traditional and simplified Chinese the same (Android's built-in ICU
+  "Traditional-Simplified" transliterator, applied to song text and to the query). Verified on the box:
+  世纪末烟花 / 烟花 -> 世紀末煙花, 生活无小事 -> 生活無小事; English search unchanged.
 - Round 3: task 4(b) foreground service - KeepAliveService keeps the app alive in the background (verified: pressed
   Home, the phone page still answered; reopening the tile brought back the same instance). Quick muted playback check OK.
 - Round 3: alignment of the 6 Eason Chan songs finished; the aligned .lrc files replaced the originals in

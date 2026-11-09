@@ -43,8 +43,8 @@ Box: Android TV box 192.168.3.79 (open ADB on :5555). PC: Windows, GTX 1650 4 GB
 
 | Job | Log | Status at handoff |
 |---|---|---|
-| Karaoke batch (`make_karaoke.py --push`) | `tools/make_karaoke.log` | 11:25 pm: 132 / 650 songs, 0 failures, ~30 s/song |
-| Video copy (`copy_videos.py`) | `tools/copy_videos.log` | 11:25 pm: 12 / 87 (10.6 GB), 0 failures |
+| Karaoke batch (`make_karaoke.py --push`) | `tools/make_karaoke.log` | 11:41 pm: 164 / 650 songs (now in Beyond), 0 failures |
+| Video copy (`copy_videos.py`) | `tools/copy_videos.log` | 11:41 pm: 37 / 87 (10.6 GB), 0 failures |
 | Lyric alignment (`align_folder.py` on `EasonChan\Eason Chan`) | `tools/align_folder.log` | DONE 6 / 6, every line aligned |
 
 Overnight loop (branch `overnight`, report `MORNING_REPORT.md`) updates this table each round.
@@ -78,7 +78,8 @@ Commands: `python -u make_karaoke.py --push`, `python -u copy_videos.py`,
    opening the tile again brings back the running instance instead of starting a second one (port clash).
 8. **Clean-up of titles**: file names still carry YouTube clutter ("(Official Music Video)", "【...】", ids). `Library.cleanTitle`
    strips obvious noise only. Options: rename the files in the library, or add a title-override file.
-9. **Search nicety**: treat traditional and simplified Chinese as the same (浮夸 / 浮誇). Not done.
+9. ~~**Search nicety**~~ DONE overnight: search converts traditional to simplified (Android ICU transliterator, API 29+)
+   on both sides, so 世纪末烟花 finds 世紀末煙花 and 生活无小事 finds 生活無小事.
 10. **Housekeeping**: delete `/sdcard/test.mp3` and `/sdcard/test_lr.mp3` on the box and `D:\ai\Karaoke\Other\Timlok`
     (my test song); `Library.fromJson` ignores the "video" flag (cache is not loaded anywhere today - harmless, fix if the
     cache is ever used); update `karaoke/PLAN.md` (it still describes the original plan, not the lyrics/video/alignment work).

@@ -189,9 +189,26 @@ public final class Library {
 
     /** Lowercase, strip accents, turn punctuation into spaces (CJK characters are kept as they are). */
     static String normalize(String s) {
-        String t = Normalizer.normalize(s, Normalizer.Form.NFKD).replaceAll("\\p{M}+", "");
+        String t = toSimplified(s);
+        t = Normalizer.normalize(t, Normalizer.Form.NFKD).replaceAll("\\p{M}+", "");
         t = t.toLowerCase(Locale.ROOT).replaceAll("[^\\p{L}\\p{N}]+", " ");
         return SPACES.matcher(t).replaceAll(" ").trim();
+    }
+
+    // Traditional -> Simplified Chinese, so 浮誇 and 浮夸 match each other. Uses Android's built-in ICU transliterator
+    // (API 29+, the box is Android 10); on older systems search simply stays exact.
+    private static Object t2s;
+    private static boolean t2sTried = false;
+
+    static synchronized String toSimplified(String s) {
+        if (!t2sTried) {
+            t2sTried = true;
+            if (android.os.Build.VERSION.SDK_INT >= 29) {
+                try { t2s = android.icu.text.Transliterator.getInstance("Traditional-Simplified"); } catch (Throwable ignored) { }
+            }
+        }
+        if (t2s == null) return s;
+        try { return ((android.icu.text.Transliterator) t2s).transliterate(s); } catch (Throwable e) { return s; }
     }
 
     private static String md5(String s) {
