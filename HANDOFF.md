@@ -1,4 +1,4 @@
-# Handoff - TV box karaoke project (as of 2026-11-09, ~11 pm NZ)
+# Handoff - TV box karaoke project (as of 2026-11-10, evening NZ)
 
 Repo: https://github.com/timothylok/mytvbox (branch `main`, everything committed up to `469abc9`, except the
 new `tools/scripts/align_folder.py` and this file).
@@ -42,20 +42,14 @@ Box: Android TV box 192.168.3.79 (open ADB on :5555). PC: Windows, GTX 1650 4 GB
 - Tests (plain Java, no Android): `karaoke/tests/QueueManagerTest.java`, `LrcTest.java` (21 + 23 checks, all pass).
   Commands are in each file's header.
 
-## Running right now (check these first)
+## Running right now
 
-| Job | Log | Status at handoff |
-|---|---|---|
-| Karaoke batch (`make_karaoke.py --push`) | `tools/make_karaoke.log` | DONE 5:00 am: 650 / 650 songs, 0 failures, 423 min (+ Timlok recreated) |
-| Video copy (`copy_videos.py`) | `tools/copy_videos.log` (run 1: 87), `copy_videos2.log` (run 2: 110), `copy_videos3.log` (run 3, stopped), `copy_videos4.log` (run 4, fixed script) | STOPPED 11:23 am at 244 / 587 - the USB drive reported write faults, then read errors. DO NOT restart until the drive is checked. |
-| Lyric alignment (`align_folder.py` on `EasonChan\Eason Chan`) | `tools/align_folder.log` | DONE 6 / 6, every line aligned |
+Nothing is running. All batch jobs are finished or stopped: karaoke batch DONE (650/650), Eason Chan alignment DONE, video copy STOPPED
+at 244/587 (USB drive faults; the drive has since been repaired but is not on the box). The unattended loop is deleted.
 
-Overnight loop (branch `overnight`, report `MORNING_REPORT.md`) updates this table each round.
-
-If a job died (PC restarted etc.): just re-run the same command - all three skip finished work.
-Commands: `python -u make_karaoke.py --push`, `python -u copy_videos.py`,
-`python -u align_folder.py --dir "D:\ai\GetVideo\EasonChan\Eason Chan"` (run from `tools/scripts`, set
-`PYTHONIOENCODING=utf-8`). The box must be on and reachable by ADB for `--push` / `copy_videos.py`.
+Current box state: runs from INTERNAL storage (`/sdcard/Karaoke`), movies deleted, only the Eason Chan set (65 songs: mp3 + lrc + mp4, 40 real
+videos) plus `titles.txt`, `static_videos.txt`, `config.properties`. The USB drive (F: on the PC, serial A6D0-F59E) is plugged into the PC.
+Branch state: `main` = `overnight` up to f58fccc; later commits (fc602ca: make_titles.py, align_folder --model, notes) are on `overnight` only.
 
 ## Outstanding tasks
 
@@ -63,7 +57,7 @@ Commands: `python -u make_karaoke.py --push`, `python -u copy_videos.py`,
 
 1. **Two-phone test** (needs the user): open the QR code on two phones, add songs from both, try shuffle, the
    up/down/top/remove buttons, search, browse. Fix whatever feels wrong. (Step 7 of the plan; the launcher tile is done.)
-2. **Finish the batch**, then re-run `copy_videos.py` to cover songs made after its first run (~594 of 658 mp3s have a
+2. ~~**Finish the batch**~~ DONE (650/650); video copy now see item 14. Original note: re-run `copy_videos.py` to cover songs made after its first run (~594 of 658 mp3s have a
    same-name mp4, ~72 GB; USB writes run ~6 MB/s, so several hours).
 3. **Aligned lyrics for the 6 Eason Chan songs** - DONE overnight and on the drive (plus K歌之王). A new quality check
    (`tools/scripts/clean_aligned.py`, now run automatically by `align_folder.py`) keeps per-character times only where they
@@ -80,7 +74,7 @@ Commands: `python -u make_karaoke.py --push`, `python -u copy_videos.py`,
 7. ~~**Keep the app alive**~~ DONE overnight: `KeepAliveService` (foreground service + notification) keeps the process
    alive when someone presses Home; the phone page answered while the launcher was in front. `launchMode=singleTask` so
    opening the tile again brings back the running instance instead of starting a second one (port clash).
-8. **Clean-up of titles** - override file DONE overnight. File names still carry YouTube clutter and `Library.cleanTitle`
+8. **Clean-up of titles** - override file DONE overnight, and a draft for Eason Chan is on the box (item 15). File names still carry YouTube clutter and `Library.cleanTitle`
    strips obvious noise only, but any title can now be set by hand in `titles.txt` (UTF-8, `#` comments), either on the
    drive (`/storage/A6D0-F59E/Karaoke/titles.txt`) or on the box (`/sdcard/Karaoke/titles.txt`, wins). Lines:
    `<file name without extension> = Title`, or `Artist/<file name> = Title`, or `Language/Artist/<file name> = Title`.
@@ -91,14 +85,16 @@ Commands: `python -u make_karaoke.py --push`, `python -u copy_videos.py`,
 10. **Housekeeping** DONE overnight: test files `/sdcard/test.mp3`, `/sdcard/test_lr.mp3` and `D:\ai\Karaoke\Other\Timlok` deleted;
     `Library.fromJson` now restores the video path (the cache stores `videoFile`); `karaoke/PLAN.md` rewritten to match what was built.
     The deleted Timlok karaoke file was recreated after the batch (`make_karaoke.py --only Timlok --push`, 5:01 am).
-12. **Skip (Right key) is slow while the video copy runs**: measured 8-38 s until the next song is audible, and even
-    `adb input` took 2-16 s - the USB drive is saturated by the copy. Re-measure when the copy is done; if still slow, move
-    the file checks / .lrc loading in `playNext()` off the main thread.
-    THE USER ASKED (2026-11-10): wait for the copy to finish, then re-measure. Run `python tools/scripts/skip_latency.py`
-    (mutes nothing by itself - mute the box first: `adb shell media volume --stream 3 --set 0`, restore to 7 after). It queues
-    video and audio-only songs, presses Right via adb and prints the time until the next song is audible. Compare with the
-    8-38 s measured while copying. Report the numbers to the user; only change the code if skips are still slow.
-11. **Security (unchanged, known)**: the box's ADB on :5555 has no authentication, and the launcher's Power tile depends on it.
+12. ~~**Skip (Right key) is slow**~~ DONE: it was the busy USB drive. On a quiet drive a skip takes ~2.5 s (`tools/scripts/skip_latency.py`).
+13. **Lyrics for the other songs**: only 7 of the 65 Eason Chan songs have an .lrc (K歌之王, 十面埋伏, 明年今日, Lonely Christmas, Shall We Talk,
+    人來人往 - 人啊人's file was DELETED at the user's request, they will download a new one: put it in `D:\ai\GetVideo\EasonChan\Eason Chan\` named like the mp3,
+    then `align_folder.py --dir ...`, copy to `D:\ai\Karaoke\Cantopop\Eason Chan\` and push to the box). `--model medium` was tried on 人啊人: worse (0 exact lines).
+    The user's other 8 .lrc files in Downloads still have no matching mp3.
+14. **Full library back on the TV**: decide whether to put the USB drive back on the box. If yes, finish the video copy FROM THE PC with the drive plugged into the
+    PC (copy_videos.py pushes via adb; it needs a variant that copies straight to F:\Karaoke), skipping `static_videos.txt` songs, then check for I/O errors.
+    Until then the box only has the Eason Chan test set on internal storage (the app uses /sdcard/Karaoke when no USB volume has a Karaoke folder).
+15. **Titles**: `D:\ai\Karaoke\titles.txt` (made by `tools/scripts/make_titles.py`, Eason Chan only) is on the box. Other artists still show the file-name title.
+11. **Security (unchanged, known; user was told, no decision)**: the box's ADB on :5555 has no authentication, and the launcher's Power tile depends on it.
 
 ## Gotchas learned
 
