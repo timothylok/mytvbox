@@ -910,6 +910,13 @@ public class MainActivity extends Activity implements Server.Host {
 
         // Which character of the current line is being sung? LRC only times whole lines, so the line's
         // time (up to the next line, at most ~0.45 s per character) is shared out evenly over its characters.
+        // Every word has been sung (the last line with text is over): take the lyrics off the screen instead of leaving the last lines up
+        int lastText = -1;
+        for (int k = lrc.lines.size() - 1; k >= 0; k--) if (!lrc.lines.get(k).text.isEmpty()) { lastText = k; break; }
+        if (lastText >= 0 && i >= lastText && pos >= lrc.endOf(lastText) + 1500) {
+            if (lastLine != -9) { lastLine = -9; lyricsView.setText(""); }
+            return;
+        }
         int ci = i >= 0 ? lrc.currentChar(i, pos) : -1;   // real word times if the .lrc has them, else the estimate
         int cd = Math.max(0, lastCount), next = cdNext;       // 3-2-1 countdown dots before a long instrumental gap
         int key = i * 1000 + ci + cd * 10000000;
