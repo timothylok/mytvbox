@@ -35,6 +35,7 @@ def main():
     ap.add_argument("--backup", default=os.path.join(TOOLS, "align_out", "orig"))
     ap.add_argument("--device", default="cpu", help="demucs device; cpu keeps the GPU free for the batch")
     ap.add_argument("--language", default="zh")
+    ap.add_argument("--model", default="small", help="Whisper model for the alignment (small, medium, ...)")
     ap.add_argument("--dry-run", action="store_true")
     a = ap.parse_args()
 
@@ -62,7 +63,7 @@ def main():
                 print("   demucs failed:", r.stdout[-300:].strip())
                 continue
             out = os.path.join(tmp, "aligned.lrc")
-            r = run([ALIGN_PY, ALIGN, vocals, lrc, out, "--language", a.language])
+            r = run([ALIGN_PY, ALIGN, vocals, lrc, out, "--language", a.language, "--model", a.model])
             lines = [l for l in r.stdout.splitlines() if "lines aligned" in l or "kept as-is" in l or "no lyric" in l]
             for l in lines:
                 print("  ", l.strip())

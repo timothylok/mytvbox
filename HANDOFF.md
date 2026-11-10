@@ -59,11 +59,7 @@ Commands: `python -u make_karaoke.py --push`, `python -u copy_videos.py`,
 
 ## Outstanding tasks
 
-0. **USB DRIVE FAULT (2026-11-10 11:20)**: kernel log on the box shows SCSI medium errors (Sense Key 0x3, ASC 0x03
-   write fault) and 'Buffer I/O error on dev sda5 ... lost async page write'; exFAT failed to extend files; afterwards even
-   reading a known-good song failed. Copy job and overnight loop were stopped. Nothing is lost: every karaoke mp3/.lrc is
-   in D:\ai\Karaoke and every video in D:\ai\GetVideo. Next: shut the box down (Power tile), unplug the drive, check it on
-   the PC (chkdsk /f on its drive letter, SMART e.g. CrystalDiskInfo), then decide: repair/reformat and re-copy, or replace.
+0. **USB drive repaired 2026-11-10** (`chkdsk F: /f` fixed the exFAT bitmap/directory damage, 0 bad sectors, all 609 mp3s read OK, stale .part files deleted). It is NOT on the box now: the box runs from internal storage with only the Eason Chan set (movies deleted). Next: decide whether to put the drive back, and finish the video copy FROM THE PC with the drive plugged into the PC (`copy_videos.py` pushes via adb - needs rewriting to copy to F:\Karaoke directly), skipping `static_videos.txt` songs.
 
 1. **Two-phone test** (needs the user): open the QR code on two phones, add songs from both, try shuffle, the
    up/down/top/remove buttons, search, browse. Fix whatever feels wrong. (Step 7 of the plan; the launcher tile is done.)
