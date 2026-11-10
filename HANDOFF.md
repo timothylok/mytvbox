@@ -127,15 +127,15 @@ All song-folder access now goes through `Storage` (`SafStorage` = the folder the
   the USB-rejection branch is only unit-tested (needs a USB drive for a device test); stale old files in /sdcard/Karaoke
   (`index.json`, `state.txt`, `history.jsonl`, `flips.txt`, `lyric_offsets.properties`) can be deleted; test on a second/newer Android device.
 
-## Play prep, step 1 (branch `play-target35`, NOT merged: release build not yet run on the box)
+## Play prep, step 1 (done 2026-11-10, merged to main; branch deleted)
 
 Done on the branch: AGP 8.6.1, compileSdk/targetSdk 35 (SDK platform 35 + build-tools 35 installed in tools/sdk), minSdk stays 21;
 removed `requestLegacyExternalStorage` and READ/WRITE_EXTERNAL_STORAGE (the one-time migration just finds nothing now);
 added FOREGROUND_SERVICE_MEDIA_PLAYBACK + POST_NOTIFICATIONS (runtime request on Android 13+), the service passes the media-playback type;
 release build has R8 (`minifyEnabled`, `shrinkResources`, `proguard-rules.pro`). Both `assembleDebug` and `assembleRelease` compile.
 Tested on the box (Android 10): debug build, target 35 -> release-tests 19 JVM + 13 device checks pass.
-Still to do before merging: install the signed RELEASE build on the box and play a song (R8 could break something at runtime; sign with the
-debug keystore for the test, apksigner is in build-tools 35); POST_NOTIFICATIONS dialog is untested (needs an Android 13+ device/emulator);
+The signed RELEASE build (R8, debug keystore, zipalign+apksigner from build-tools 35) was installed on the box: library, playback, lyrics, video, history, phone API,
+foreground service and all 13 device checks pass (run the UI test with --no-preserve: a release build has no run-as). Still to do: POST_NOTIFICATIONS dialog is untested (needs an Android 13+ device/emulator);
 USB drive in the picker (rejection + speed) needs the drive plugged into the box; second/newer Android device; cleartext HTTP is still allowed
 (narrow it to local addresses with a network security config). Do NOT test while someone is singing: check `/api/state` `playing` first.
 
