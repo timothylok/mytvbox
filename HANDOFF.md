@@ -49,7 +49,8 @@ at 244/587 (USB drive faults; the drive has since been repaired but is not on th
 
 Current box state: runs from INTERNAL storage (`/sdcard/Karaoke`), movies deleted, only the Eason Chan set (65 songs: mp3 + lrc + mp4, 40 real
 videos) plus `titles.txt`, `static_videos.txt`, `config.properties`. The USB drive (F: on the PC, serial A6D0-F59E) is plugged into the PC.
-Branch state: `main` = `overnight` up to f58fccc; later commits (fc602ca: make_titles.py, align_folder --model, notes) are on `overnight` only.
+Branch state: `main` = `overnight` up to f58fccc; later commits (fc602ca: make_titles.py, align_folder --model, notes; 8590d8a: TV status omits the "Next:" line when nothing is queued) are on `overnight` only.
+Known quirk (user chose to leave it, 2026-11-10): "Lyrics MV" videos (e.g. Shall We Talk) are one still title card with only a small burned-in lyric changing, so they look frozen on the TV. `find_static_videos.py` scores them ~2.8 (cutoff 2.0) and does not flag them. Options if it bothers anyone: add the stem to `static_videos.txt`, or raise the cutoff and review the list.
 
 ## Outstanding tasks
 
@@ -98,6 +99,7 @@ Branch state: `main` = `overnight` up to f58fccc; later commits (fc602ca: make_t
 
 ## Gotchas learned
 
+- `adb` is not on PATH: use `D:\ai\setupbox\tools\sdk\platform-tools\adb.exe`. In Git Bash, `JAVA_HOME` must be a Windows path (`C:\Program Files\Java\jdk-20`); the build is easiest from PowerShell.
 - ADB from Git Bash: set `MSYS_NO_PATHCONV=1`, and give `adb push/pull` Windows paths (`D:\\...`); `/d/...` paths fail.
 - Do not write Java/regex with backslashes through a bash heredoc or `python - <<EOF` replace: backslashes get collapsed.
   Use the Write / Edit tools for source files.
