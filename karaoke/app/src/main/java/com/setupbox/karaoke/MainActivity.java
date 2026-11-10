@@ -551,9 +551,10 @@ public class MainActivity extends Activity implements Server.Host {
         if (!debugSingleFile) {
             QueueManager.Item cur = queue.current();
             java.util.List<QueueManager.Item> up = queue.upcoming();
-            sb.append(fitLine("Now: ", cur == null ? "-" : titleOf(cur, true), "")).append('\n');
-            sb.append(fitLine("Next: ", up.isEmpty() ? "-" : titleOf(up.get(0), false),
-                    up.size() > 1 ? "  (+" + (up.size() - 1) + " more)" : ""));
+            sb.append(fitLine("Now: ", cur == null ? "-" : titleOf(cur, true), ""));
+            if (!up.isEmpty())
+                sb.append('\n').append(fitLine("Next: ", titleOf(up.get(0), false),
+                        up.size() > 1 ? "  (+" + (up.size() - 1) + " more)" : ""));
         }
         status.setVisibility(sb.length() > 0 ? android.view.View.VISIBLE : android.view.View.INVISIBLE);
         status.setText(sb.toString());
