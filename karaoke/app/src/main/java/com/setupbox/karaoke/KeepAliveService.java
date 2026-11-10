@@ -38,7 +38,8 @@ public class KeepAliveService extends Service {
          .setContentText(url == null || url.isEmpty() ? "Phone page is on" : "Phones: " + url)
          .setSmallIcon(android.R.drawable.ic_media_play)
          .setOngoing(true);
-        startForeground(1, b.build());
+        if (Build.VERSION.SDK_INT >= 29) startForeground(1, b.build(), android.content.pm.ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PLAYBACK);
+        else startForeground(1, b.build());
         return START_NOT_STICKY;      // only meaningful while the activity (which owns the player and server) exists
     }
 

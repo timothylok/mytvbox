@@ -290,6 +290,9 @@ public class MainActivity extends Activity implements Server.Host {
         });
 
         prefs = getSharedPreferences("karaoke", MODE_PRIVATE);
+        if (android.os.Build.VERSION.SDK_INT >= 33 && checkSelfPermission(android.Manifest.permission.POST_NOTIFICATIONS) != android.content.pm.PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[]{android.Manifest.permission.POST_NOTIFICATIONS}, 42);   // Android 13+: the foreground-service notification needs it
+        }
         String path = getIntent().getStringExtra("path");
         if (path != null) { debugSingleFile = true; startFile(new FileStorage(new File(path).getParentFile()).uri(path), null, null, "", false); ui.post(tick); return; }
 

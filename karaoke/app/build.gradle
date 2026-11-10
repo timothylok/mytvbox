@@ -1,15 +1,21 @@
 plugins { id 'com.android.application' }
 android {
     namespace 'com.setupbox.karaoke'
-    compileSdk 34
+    compileSdk 35
     defaultConfig {
         applicationId 'com.setupbox.karaoke'
         minSdk 21
-        targetSdk 29
+        targetSdk 35          // Play needs a recent target; the box (Android 10 / API 29) still runs it, minSdk stays 21
         versionCode 1
         versionName '1.0'
     }
-    buildTypes { release { minifyEnabled false } }
+    buildTypes {
+        release {
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
     compileOptions { sourceCompatibility JavaVersion.VERSION_1_8; targetCompatibility JavaVersion.VERSION_1_8 }
 }
 dependencies {
