@@ -1,7 +1,7 @@
 # Handoff - TV box karaoke project (as of 2026-11-10, evening NZ)
 
-Repo: https://github.com/timothylok/mytvbox (branch `main`, everything committed up to `469abc9`, except the
-new `tools/scripts/align_folder.py` and this file).
+Repo: https://github.com/timothylok/mytvbox (single branch `main`; everything is committed and pushed. The old
+`overnight` branch was merged and deleted on 2026-11-10).
 Box: Android TV box 192.168.3.79 (open ADB on :5555). PC: Windows, GTX 1650 4 GB. See also the memory notes
 `project_setupbox_overview`, `project_jellyfin_music_library_layout`, `project_karaoke_app`.
 
@@ -49,7 +49,7 @@ at 244/587 (USB drive faults; the drive has since been repaired but is not on th
 
 Current box state: runs from INTERNAL storage (`/sdcard/Karaoke`), movies deleted, only the Eason Chan set (65 songs: mp3 + lrc + mp4, 40 real
 videos) plus `titles.txt`, `static_videos.txt`, `config.properties`. The USB drive (F: on the PC, serial A6D0-F59E) is plugged into the PC.
-Branch state: `main` = `overnight` up to f58fccc; later commits (fc602ca: make_titles.py, align_folder --model, notes; 8590d8a: TV status omits the "Next:" line when nothing is queued) are on `overnight` only.
+Branch state: only `main` exists (local and on GitHub). Latest app change: 8590d8a, the TV status omits the "Next:" line when nothing is queued (installed on the box).
 Known quirk (user chose to leave it, 2026-11-10): "Lyrics MV" videos (e.g. Shall We Talk) are one still title card with only a small burned-in lyric changing, so they look frozen on the TV. `find_static_videos.py` scores them ~2.8 (cutoff 2.0) and does not flag them. Options if it bothers anyone: add the stem to `static_videos.txt`, or raise the cutoff and review the list.
 
 ## Outstanding tasks
