@@ -8,10 +8,13 @@ Read `HANDOFF.md` first (state, outstanding tasks, gotchas). Tools live in `tool
    - plain-Java tests in `karaoke/tests/` (commands are in each file's header) when the code they cover changed;
    - Python scripts: `python -I -m py_compile` and a dry run (`--dry-run`) or a one-song run;
    - app changes: build, install on the box, and check the behaviour on the TV (screenshot / `/api/state`), not only that it compiles.
-   - changes to storage, the folder picker or the library scan: `python karaokeelease-testsun_tests.py --ui` (see `karaoke/release-tests/README.md`; the box must be idle: it clears the app's data and restores history/queue).
+   - changes to storage, the folder picker or the library scan: `python karaoke
+elease-tests
+un_tests.py --ui` (see `karaoke/release-tests/README.md`; the box must be idle: it clears the app's data and restores history/queue).
    Commit and push only when asked ("commit and push"); never push untested work. Say what was tested (and what could not be).
 2. **Only copy songs to the TV box that have a lyric file, and only after the lyric file has been processed.**
    "Processed" = `align_folder.py` has given the `.lrc` per-character `<mm:ss.xx>` tags and the quality check (`clean_aligned.py`) has run.
+   Before copying, the song's mp3 must also be loudness-normalized: `python tools\scripts\normalize_karaoke.py` (target -18 LUFS, originals backed up to `D:\ai\Karaoke_pre_normalize`); new Demucs files are not normalized automatically. Order: Demucs -> normalize -> align lyrics -> video/crops -> push.
    A song with no `.lrc`, or with an unprocessed (plain) `.lrc`, is not pushed to the box (mp3, lrc or mp4). Push the aligned `.lrc`
    together with the mp3 (and the mp4, if it is a real video). Log each push in `processed.csv`.
 3. **Android best practices (top 10) - follow them when changing the app in `karaoke/` and `launcher/`:**

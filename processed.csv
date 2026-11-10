@@ -300,3 +300,62 @@
 2026-11-10 19:27:03,remove,,/sdcard/Karaoke/Cantopop/Eason Chan/《致明日的舞》A DANCE FOR TOMORROW 陳奕迅 Eason Chan [Official MV].*,ok,removed from box: lyric file not processed
 2026-11-10 19:27:03,remove,,/sdcard/Karaoke/Cantopop/Eason Chan/《擺渡人》 主題曲 MV 《讓我留在你身邊》 ： 主唱 - 陳奕迅 Eason Chan (In Cinemas 23 December).*,ok,removed from box: no processed lyric file
 2026-11-10 19:41:48,note,,,ok,"make_titles.py generalized to all artists (586 new titles, 21 rules/manual fixes); titles.txt pushed to the box"
+2026-11-10 19:59:19,normalize,D:\ai\Karaoke\Cantopop\Eason Chan\《是但求其愛》陳奕迅 Eason Chan [Official MV].mp3,D:\ai\Karaoke\Cantopop\Eason Chan\《是但求其愛》陳奕迅 Eason Chan [Official MV].mp3,ok,-26.4 LUFS -> gain +8.4 dB (target -18.0)
+2026-11-10 19:59:23,normalize,D:\ai\Karaoke\Cantopop\Eason Chan\《盲婚啞嫁》陳奕迅 Eason Chan [Official MV].mp3,D:\ai\Karaoke\Cantopop\Eason Chan\《盲婚啞嫁》陳奕迅 Eason Chan [Official MV].mp3,ok,-20.9 LUFS -> gain +2.9 dB (target -18.0)
+2026-11-10 19:59:25,normalize,D:\ai\Karaoke\Cantopop\Eason Chan\《空城記》Something Missing 陳奕迅 Eason Chan [Official MV].mp3,D:\ai\Karaoke\Cantopop\Eason Chan\《空城記》Something Missing 陳奕迅 Eason Chan [Official MV].mp3,ok,-25.7 LUFS -> gain +7.7 dB (target -18.0)
+2026-11-10 19:59:27,normalize,D:\ai\Karaoke\Cantopop\Eason Chan\《黃偉文 十年選》陳奕迅 - 反高潮 HD.mp3,D:\ai\Karaoke\Cantopop\Eason Chan\《黃偉文 十年選》陳奕迅 - 反高潮 HD.mp3,ok,-20.1 LUFS -> gain +2.1 dB (target -18.0)
+2026-11-10 19:59:30,normalize,D:\ai\Karaoke\Cantopop\Eason Chan\不來也不去.mp3,D:\ai\Karaoke\Cantopop\Eason Chan\不來也不去.mp3,ok,-24.2 LUFS -> gain +6.2 dB (target -18.0)
+2026-11-10 19:59:34,normalize,D:\ai\Karaoke\Cantopop\Eason Chan\心的距離.mp3,D:\ai\Karaoke\Cantopop\Eason Chan\心的距離.mp3,ok,-16.4 LUFS -> gain -1.6 dB (target -18.0)
+2026-11-10 19:59:36,normalize,D:\ai\Karaoke\Cantopop\Eason Chan\怕死.mp3,D:\ai\Karaoke\Cantopop\Eason Chan\怕死.mp3,ok,-16.3 LUFS -> gain -1.7 dB (target -18.0)
+2026-11-10 19:59:39,normalize,D:\ai\Karaoke\Cantopop\Eason Chan\最佳損友.mp3,D:\ai\Karaoke\Cantopop\Eason Chan\最佳損友.mp3,ok,-20.2 LUFS -> gain +2.2 dB (target -18.0)
+2026-11-10 19:59:41,normalize,D:\ai\Karaoke\Cantopop\Eason Chan\裙下之臣--陳奕迅(from solidays disc1).mp3,D:\ai\Karaoke\Cantopop\Eason Chan\裙下之臣--陳奕迅(from solidays disc1).mp3,ok,-15.3 LUFS -> gain -2.7 dB (target -18.0)
+2026-11-10 19:59:44,normalize,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 - 《六月飛霜》MV.mp3,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 - 《六月飛霜》MV.mp3,ok,-26.1 LUFS -> gain +8.1 dB (target -18.0)
+2026-11-10 19:59:47,normalize,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 - 《苦瓜》MV.mp3,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 - 《苦瓜》MV.mp3,ok,-27.8 LUFS -> gain +9.8 dB (target -18.0)
+2026-11-10 19:59:50,normalize,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 - 人車誌 320Kbps Eason Chan.mp3,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 - 人車誌 320Kbps Eason Chan.mp3,ok,-16.3 LUFS -> gain -1.7 dB (target -18.0)
+2026-11-10 19:59:52,normalize,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 - 今天只做一件事.mp3,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 - 今天只做一件事.mp3,ok,-19.8 LUFS -> gain +1.8 dB (target -18.0)
+2026-11-10 19:59:55,normalize,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 - 富士山下.mp3,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 - 富士山下.mp3,ok,-20.2 LUFS -> gain +2.2 dB (target -18.0)
+2026-11-10 19:59:57,normalize,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 - 與我常在.mp3,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 - 與我常在.mp3,ok,-19.6 LUFS -> gain +1.6 dB (target -18.0)
+2026-11-10 19:59:59,normalize,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 - 那一夜有沒有說.mp3,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 - 那一夜有沒有說.mp3,ok,-16.1 LUFS -> gain -1.9 dB (target -18.0)
+2026-11-10 20:00:02,normalize,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 Eason Chan  《主旋律》MV首播!!!.mp3,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 Eason Chan  《主旋律》MV首播!!!.mp3,ok,-16.2 LUFS -> gain -1.8 dB (target -18.0)
+2026-11-10 20:00:05,normalize,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 Eason Chan - 《四季》MV.mp3,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 Eason Chan - 《四季》MV.mp3,ok,-20.4 LUFS -> gain +2.4 dB (target -18.0)
+2026-11-10 20:00:09,normalize,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 Eason Chan - 一絲不掛 (Official Music Video).mp3,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 Eason Chan - 一絲不掛 (Official Music Video).mp3,ok,-27.8 LUFS -> gain +9.8 dB (target -18.0)
+2026-11-10 20:00:11,normalize,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 Eason Chan - 七百年後 (Official Music Video).mp3,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 Eason Chan - 七百年後 (Official Music Video).mp3,ok,-20.5 LUFS -> gain +2.5 dB (target -18.0)
+2026-11-10 20:00:14,normalize,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 Eason Chan - 於心有愧 (Official Music Video).mp3,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 Eason Chan - 於心有愧 (Official Music Video).mp3,ok,-22.5 LUFS -> gain +4.5 dB (target -18.0)
+2026-11-10 20:00:16,normalize,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 Eason Chan - 無人之境 (Official Music Video).mp3,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 Eason Chan - 無人之境 (Official Music Video).mp3,ok,-28.8 LUFS -> gain +10.8 dB (target -18.0)
+2026-11-10 20:00:19,normalize,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 Eason Chan - 無條件 (Official Music Video).mp3,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 Eason Chan - 無條件 (Official Music Video).mp3,ok,-20.6 LUFS -> gain +2.6 dB (target -18.0)
+2026-11-10 20:00:21,normalize,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 Eason Chan - 重口味 (Official Music Video) (Full Version).mp3,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 Eason Chan - 重口味 (Official Music Video) (Full Version).mp3,ok,-14.9 LUFS -> gain -3.1 dB (target -18.0)
+2026-11-10 20:00:24,normalize,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 Eason Chan - 陀飛輪 (Official Music Video).mp3,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 Eason Chan - 陀飛輪 (Official Music Video).mp3,ok,-29.7 LUFS -> gain +11.7 dB (target -18.0)
+2026-11-10 20:00:27,normalize,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 Eason Chan - 黑洞 (Official Music Video).mp3,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 Eason Chan - 黑洞 (Official Music Video).mp3,ok,-19.6 LUFS -> gain +1.6 dB (target -18.0)
+2026-11-10 20:00:29,normalize,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 Eason Chan《單車》[Official MV].mp3,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 Eason Chan《單車》[Official MV].mp3,ok,-24.3 LUFS -> gain +6.3 dB (target -18.0)
+2026-11-10 20:00:31,normalize,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 Eason Chan《天使的禮物》[MV].mp3,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 Eason Chan《天使的禮物》[MV].mp3,ok,-16.4 LUFS -> gain -1.6 dB (target -18.0)
+2026-11-10 20:00:34,normalize,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 Eason Chan《忘記歌詞》Official 官方完整版 [首播] [MV].mp3,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 Eason Chan《忘記歌詞》Official 官方完整版 [首播] [MV].mp3,ok,-20.0 LUFS -> gain +2.0 dB (target -18.0)
+2026-11-10 20:00:36,normalize,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 天下無雙.mp3,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 天下無雙.mp3,ok,-28.9 LUFS -> gain +10.9 dB (target -18.0)
+2026-11-10 20:00:39,normalize,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 ｜ Lonely Christmas (高清音).mp3,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 ｜ Lonely Christmas (高清音).mp3,ok,-20.0 LUFS -> gain +2.0 dB (target -18.0)
+2026-11-10 20:00:41,normalize,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅Eason Chan-歲月如歌(衝上雲霄II MV).mp3,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅Eason Chan-歲月如歌(衝上雲霄II MV).mp3,ok,-26.1 LUFS -> gain +8.1 dB (target -18.0)
+2026-11-10 20:01:42,karaoke,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 ｜ Lonely Christmas (高清音).mp3,/sdcard/Karaoke/Cantopop/Eason Chan/陳奕迅 ｜ Lonely Christmas (高清音).mp3,ok,loudness-normalized mp3 pushed to box
+2026-11-10 20:01:44,karaoke,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 Eason Chan - 七百年後 (Official Music Video).mp3,/sdcard/Karaoke/Cantopop/Eason Chan/陳奕迅 Eason Chan - 七百年後 (Official Music Video).mp3,ok,loudness-normalized mp3 pushed to box
+2026-11-10 20:01:45,karaoke,D:\ai\Karaoke\Cantopop\Eason Chan\不來也不去.mp3,/sdcard/Karaoke/Cantopop/Eason Chan/不來也不去.mp3,ok,loudness-normalized mp3 pushed to box
+2026-11-10 20:01:46,karaoke,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 Eason Chan  《主旋律》MV首播!!!.mp3,/sdcard/Karaoke/Cantopop/Eason Chan/陳奕迅 Eason Chan  《主旋律》MV首播!!!.mp3,ok,loudness-normalized mp3 pushed to box
+2026-11-10 20:01:48,karaoke,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 - 人車誌 320Kbps Eason Chan.mp3,/sdcard/Karaoke/Cantopop/Eason Chan/陳奕迅 - 人車誌 320Kbps Eason Chan.mp3,ok,loudness-normalized mp3 pushed to box
+2026-11-10 20:01:49,karaoke,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 - 今天只做一件事.mp3,/sdcard/Karaoke/Cantopop/Eason Chan/陳奕迅 - 今天只做一件事.mp3,ok,loudness-normalized mp3 pushed to box
+2026-11-10 20:01:50,karaoke,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 - 《六月飛霜》MV.mp3,/sdcard/Karaoke/Cantopop/Eason Chan/陳奕迅 - 《六月飛霜》MV.mp3,ok,loudness-normalized mp3 pushed to box
+2026-11-10 20:01:51,karaoke,D:\ai\Karaoke\Cantopop\Eason Chan\《黃偉文 十年選》陳奕迅 - 反高潮 HD.mp3,/sdcard/Karaoke/Cantopop/Eason Chan/《黃偉文 十年選》陳奕迅 - 反高潮 HD.mp3,ok,loudness-normalized mp3 pushed to box
+2026-11-10 20:01:53,karaoke,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 Eason Chan - 《四季》MV.mp3,/sdcard/Karaoke/Cantopop/Eason Chan/陳奕迅 Eason Chan - 《四季》MV.mp3,ok,loudness-normalized mp3 pushed to box
+2026-11-10 20:01:54,karaoke,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 天下無雙.mp3,/sdcard/Karaoke/Cantopop/Eason Chan/陳奕迅 天下無雙.mp3,ok,loudness-normalized mp3 pushed to box
+2026-11-10 20:01:55,karaoke,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 Eason Chan《天使的禮物》[MV].mp3,/sdcard/Karaoke/Cantopop/Eason Chan/陳奕迅 Eason Chan《天使的禮物》[MV].mp3,ok,loudness-normalized mp3 pushed to box
+2026-11-10 20:01:56,karaoke,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 - 富士山下.mp3,/sdcard/Karaoke/Cantopop/Eason Chan/陳奕迅 - 富士山下.mp3,ok,loudness-normalized mp3 pushed to box
+2026-11-10 20:01:58,karaoke,D:\ai\Karaoke\Cantopop\Eason Chan\心的距離.mp3,/sdcard/Karaoke/Cantopop/Eason Chan/心的距離.mp3,ok,loudness-normalized mp3 pushed to box
+2026-11-10 20:01:59,karaoke,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 Eason Chan《忘記歌詞》Official 官方完整版 [首播] [MV].mp3,/sdcard/Karaoke/Cantopop/Eason Chan/陳奕迅 Eason Chan《忘記歌詞》Official 官方完整版 [首播] [MV].mp3,ok,loudness-normalized mp3 pushed to box
+2026-11-10 20:02:00,karaoke,D:\ai\Karaoke\Cantopop\Eason Chan\怕死.mp3,/sdcard/Karaoke/Cantopop/Eason Chan/怕死.mp3,ok,loudness-normalized mp3 pushed to box
+2026-11-10 20:02:01,karaoke,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 Eason Chan - 於心有愧 (Official Music Video).mp3,/sdcard/Karaoke/Cantopop/Eason Chan/陳奕迅 Eason Chan - 於心有愧 (Official Music Video).mp3,ok,loudness-normalized mp3 pushed to box
+2026-11-10 20:02:02,karaoke,D:\ai\Karaoke\Cantopop\Eason Chan\最佳損友.mp3,/sdcard/Karaoke/Cantopop/Eason Chan/最佳損友.mp3,ok,loudness-normalized mp3 pushed to box
+2026-11-10 20:02:03,karaoke,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅Eason Chan-歲月如歌(衝上雲霄II MV).mp3,/sdcard/Karaoke/Cantopop/Eason Chan/陳奕迅Eason Chan-歲月如歌(衝上雲霄II MV).mp3,ok,loudness-normalized mp3 pushed to box
+2026-11-10 20:02:04,karaoke,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 Eason Chan - 無人之境 (Official Music Video).mp3,/sdcard/Karaoke/Cantopop/Eason Chan/陳奕迅 Eason Chan - 無人之境 (Official Music Video).mp3,ok,loudness-normalized mp3 pushed to box
+2026-11-10 20:02:06,karaoke,D:\ai\Karaoke\Cantopop\Eason Chan\《盲婚啞嫁》陳奕迅 Eason Chan [Official MV].mp3,/sdcard/Karaoke/Cantopop/Eason Chan/《盲婚啞嫁》陳奕迅 Eason Chan [Official MV].mp3,ok,loudness-normalized mp3 pushed to box
+2026-11-10 20:02:07,karaoke,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 - 與我常在.mp3,/sdcard/Karaoke/Cantopop/Eason Chan/陳奕迅 - 與我常在.mp3,ok,loudness-normalized mp3 pushed to box
+2026-11-10 20:02:08,karaoke,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 - 《苦瓜》MV.mp3,/sdcard/Karaoke/Cantopop/Eason Chan/陳奕迅 - 《苦瓜》MV.mp3,ok,loudness-normalized mp3 pushed to box
+2026-11-10 20:02:09,karaoke,D:\ai\Karaoke\Cantopop\Eason Chan\裙下之臣--陳奕迅(from solidays disc1).mp3,/sdcard/Karaoke/Cantopop/Eason Chan/裙下之臣--陳奕迅(from solidays disc1).mp3,ok,loudness-normalized mp3 pushed to box
+2026-11-10 20:02:10,karaoke,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 - 那一夜有沒有說.mp3,/sdcard/Karaoke/Cantopop/Eason Chan/陳奕迅 - 那一夜有沒有說.mp3,ok,loudness-normalized mp3 pushed to box
+2026-11-10 20:02:11,karaoke,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 Eason Chan - 重口味 (Official Music Video) (Full Version).mp3,/sdcard/Karaoke/Cantopop/Eason Chan/陳奕迅 Eason Chan - 重口味 (Official Music Video) (Full Version).mp3,ok,loudness-normalized mp3 pushed to box
+2026-11-10 20:02:12,karaoke,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 Eason Chan - 陀飛輪 (Official Music Video).mp3,/sdcard/Karaoke/Cantopop/Eason Chan/陳奕迅 Eason Chan - 陀飛輪 (Official Music Video).mp3,ok,loudness-normalized mp3 pushed to box
+2026-11-10 20:02:14,karaoke,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 Eason Chan - 黑洞 (Official Music Video).mp3,/sdcard/Karaoke/Cantopop/Eason Chan/陳奕迅 Eason Chan - 黑洞 (Official Music Video).mp3,ok,loudness-normalized mp3 pushed to box

@@ -97,6 +97,14 @@ Known quirk (user chose to leave it, 2026-11-10): "Lyrics MV" videos (e.g. Shall
 15. **Titles**: `D:\ai\Karaoke\titles.txt` (made by `tools/scripts/make_titles.py`, Eason Chan only) is on the box. Other artists still show the file-name title.
 11. **Security (unchanged, known; user was told, no decision)**: the box's ADB on :5555 has no authentication, and the launcher's Power tile depends on it.
 
+## Loudness normalization (2026-11-10, user request: a song was too quiet)
+
+`tools/scripts/normalize_karaoke.py` measures the LEFT (instrumental) channel with ebur128 and re-encodes files that are more than 1.5 dB from -18 LUFS
+(same gain both channels, peak limiter); originals go to `D:\ai\Karaoke_pre_normalize` first; logged in `processed.csv`. Eason Chan set done: 32 of 65 changed
+(median -18.0, range -19.4..-16.6 after; before: median -18.7, range -29.7..-14.9). MUST run before copying songs to the box (CLAUDE.md rule 2);
+`make_karaoke.py` does not do it yet (candidate: call it at the end). The other artists (about 586 songs) are not normalized yet - run it on them before they ever go to the box.
+For the Play release a per-song gain in the app (VocalProcessor) would be the cleaner fix.
+
 ## Folder picker refactor (done 2026-11-10, merged to `main` as 8b4e329; the `saf-picker` branch is deleted)
 
 All song-folder access now goes through `Storage` (`SafStorage` = the folder the user picks once; `FileStorage` = tests/debug).
