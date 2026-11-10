@@ -16,56 +16,43 @@ import java.util.Locale;
 import java.util.TreeSet;
 import java.util.regex.Pattern;
 
-/** Index of the Karaoke folder: &lt;root&gt;/&lt;Language&gt;/&lt;Artist&gt;/&lt;Title&gt;.mp3|mp4 (+ optional .lrc). */
+/** Index of the Karaoke folder: &lt;root&gt;/&lt;Language&gt;/&lt;Artist&gt;/&lt;Title&gt;.mp3|mp4 (+ optional .lrc), read through a Storage. */
 public final class Library {
     public static final class Song {
-        public String id, language, artist, title, file;   // file = path relative to the Karaoke root
+        public String id, language, artist, title, file;   // file = path relative to the Karaoke root (also what the id is made from)
         public String video = "";                           // companion music video (relative path), or "" if none
         public boolean hasLrc;
         String key;                                         // normalized search text
+        public String audioH = "", videoH = "", lrcH = "";  // Storage handles of the audio, video and lyric files ("" = none)
 
         JSONObject toJson() throws Exception {
             return new JSONObject().put("id", id).put("language", language).put("artist", artist)
                     .put("title", title).put("file", file).put("lrc", hasLrc).put("video", !video.isEmpty());
         }
 
-        /** For the on-disk cache: same as the API form, but with the video's path (the API only says whether there is one). */
-        JSONObject toCacheJson() throws Exception { return toJson().put("videoFile", video); }
+        /** For the on-disk cache: same as the API form, but with the video's path and the storage handles. */
+        JSONObject toCacheJson() throws Exception {
+            return toJson().put("videoFile", video).put("audioH", audioH).put("videoH", videoH).put("lrcH", lrcH);
+        }
 
         static Song fromJson(JSONObject o) {
             Song s = new Song();
             s.id = o.optString("id"); s.language = o.optString("language"); s.artist = o.optString("artist");
             s.title = o.optString("title"); s.file = o.optString("file"); s.hasLrc = o.optBoolean("lrc");
             s.video = o.optString("videoFile", "");
+            s.audioH = o.optString("audioH", ""); s.videoH = o.optString("videoH", ""); s.lrcH = o.optString("lrcH", "");
             s.key = normalize(s.title + " " + s.artist + " " + s.language);
             return s;
         }
     }
 
-    public final File root;
+    public final Storage storage;
     public final List<Song> songs = new ArrayList<>();
 
-    private Library(File root) { this.root = root; }
+    private Library(Storage storage) { this.storage = storage; }
 
-    /** A library with no songs, used while the USB drive is missing. */
-    public static Library empty() { return new Library(new File("/nonexistent")); }
-
-    public File fileOf(Song s) { return new File(root, s.file); }
-
-    // ---------- finding the folder ----------
-
-    /** First existing "Karaoke" folder on any mounted storage (USB drives live under /storage/XXXX-XXXX). */
-    public static File findRoot() {
-        File[] vols = new File("/storage").listFiles();
-        if (vols != null) {
-            for (File v : vols) {
-                File k = new File(v, "Karaoke");
-                if (k.isDirectory() && !v.getName().equals("emulated") && !v.getName().equals("self")) return k;
-            }
-        }
-        File k = new File(android.os.Environment.getExternalStorageDirectory(), "Karaoke");
-        return k.isDirectory() ? k : null;
-    }
+    /** A library with no songs, used while no folder has been picked (or it cannot be read). */
+    public static Library empty() { return new Library(null); }
 
     // ---------- scanning ----------
 
@@ -74,18 +61,11 @@ public final class Library {
      *     <file name without extension> = Title to show
      *     <Artist>/<file name without extension> = Title to show
      *     <Language>/<Artist>/<file name without extension> = Title to show
-     * Read from <Karaoke root>/titles.txt (travels with the USB drive) and /sdcard/Karaoke/titles.txt (this wins).
+     * Read from titles.txt in the Karaoke folder (it travels with the songs) and from the app's private copy (this wins).
      */
-    static java.util.Map<String, String> loadOverrides(File root) {
+    static java.util.Map<String, String> loadOverrides(String[] texts) {
         java.util.Map<String, String> m = new java.util.HashMap<>();
-        File[] files = {new File(root, "titles.txt"), new File(android.os.Environment.getExternalStorageDirectory(), "Karaoke/titles.txt")};
-        for (File f : files) {
-            try {
-                String text = new String(Files.readAllBytes(f.toPath()), StandardCharsets.UTF_8);
-                if (text.startsWith("﻿")) text = text.substring(1);
-                parseOverrides(text, m);
-            } catch (Exception ignored) { }      // no file = no overrides
-        }
+        for (String t : texts) if (t != null) parseOverrides(t, m);
         return m;
     }
 
@@ -101,21 +81,17 @@ public final class Library {
     }
 
     /**
-     * static_videos.txt (one file name without extension per line, '#' = comment): music videos that are only a still picture.
-     * Those songs play as audio-only (photo / gradient backdrop). Read from the Karaoke root and /sdcard/Karaoke (both count).
+     * static_videos.txt (one file name without extension per line, '#' = comment): music videos that are not worth showing
+     * (a still picture, or a video that does not fit the audio). Those songs play as audio-only (photo / gradient backdrop).
      */
-    static java.util.Set<String> loadStaticVideos(File root) {
+    static java.util.Set<String> parseStaticVideos(String[] texts) {
         java.util.Set<String> set = new java.util.HashSet<>();
-        File[] files = {new File(root, "static_videos.txt"), new File(android.os.Environment.getExternalStorageDirectory(), "Karaoke/static_videos.txt")};
-        for (File f : files) {
-            try {
-                String text = new String(Files.readAllBytes(f.toPath()), StandardCharsets.UTF_8);
-                if (text.startsWith("\uFEFF")) text = text.substring(1);
-                for (String line : text.split("\r?\n")) {
-                    line = line.trim();
-                    if (!line.isEmpty() && !line.startsWith("#")) set.add(line);
-                }
-            } catch (Exception ignored) { }
+        for (String text : texts) {
+            if (text == null) continue;
+            for (String line : text.split("\r?\n")) {
+                line = line.trim();
+                if (!line.isEmpty() && !line.startsWith("#")) set.add(line);
+            }
         }
         return set;
     }
@@ -128,49 +104,63 @@ public final class Library {
         return v;
     }
 
-    public static Library scan(File root) {
-        Library lib = new Library(root);
-        java.util.Map<String, String> overrides = loadOverrides(root);
-        java.util.Set<String> staticVideos = loadStaticVideos(root);
-        File[] langs = root.listFiles();
-        if (langs == null) return lib;
-        for (File lang : langs) {
-            if (!lang.isDirectory()) continue;
-            File[] artists = lang.listFiles();
-            if (artists == null) continue;
-            for (File artist : artists) {
-                if (!artist.isDirectory()) continue;
-                File[] files = artist.listFiles();
-                if (files == null) continue;
+    /**
+     * Scans the Karaoke folder. extraTitles / extraStatic are the app's private copies of titles.txt and static_videos.txt
+     * (may be null); the copies inside the Karaoke folder are read too.
+     */
+    public static Library scan(Storage st, String extraTitles, String extraStatic) {
+        Library lib = new Library(st);
+        String root = st.root();
+        java.util.List<Storage.Entry> top = st.list(root);
+        Storage.Entry titlesFile = null, staticFile = null;
+        for (Storage.Entry e : top) {
+            if (e.dir) continue;
+            if (e.name.equals("titles.txt")) titlesFile = e;
+            else if (e.name.equals("static_videos.txt")) staticFile = e;
+        }
+        java.util.Map<String, String> overrides = loadOverrides(new String[]{titlesFile == null ? null : Storage.readText(st, titlesFile.handle), extraTitles});
+        java.util.Set<String> staticVideos = parseStaticVideos(new String[]{staticFile == null ? null : Storage.readText(st, staticFile.handle), extraStatic});
+        for (Storage.Entry lang : top) {
+            if (!lang.dir) continue;
+            for (Storage.Entry artist : st.list(lang.handle)) {
+                if (!artist.dir) continue;
                 // A song is one title: an .mp3 (karaoke audio) and an .mp4 with the same name (the music video,
                 // shown muted behind the lyrics) belong together. A lone .mp4 is a song with its own audio.
-                java.util.Map<String, String> audio = new java.util.TreeMap<>(), video = new java.util.TreeMap<>();
-                for (File f : files) {
-                    String n = f.getName();
+                java.util.Map<String, Storage.Entry> audio = new java.util.TreeMap<>(), video = new java.util.TreeMap<>(), lrcs = new java.util.HashMap<>();
+                for (Storage.Entry f : st.list(artist.handle)) {
+                    String n = f.name;
                     String low = n.toLowerCase(Locale.ROOT);
-                    if (!f.isFile() || n.contains(".part.")) continue;
+                    if (f.dir || n.contains(".part.") || low.endsWith(".part")) continue;
                     String stem = n.substring(0, Math.max(0, n.lastIndexOf('.')));
-                    if (low.endsWith(".mp3")) audio.put(stem, n);
-                    else if (low.endsWith(".mp4")) video.put(stem, n);
+                    if (low.endsWith(".mp3")) audio.put(stem, f);
+                    else if (low.endsWith(".mp4")) video.put(stem, f);
+                    else if (low.endsWith(".lrc")) lrcs.put(stem, f);
                 }
                 java.util.TreeSet<String> stems = new java.util.TreeSet<>(audio.keySet());
                 stems.addAll(video.keySet());
                 for (String stem : stems) {
                     Song s = new Song();
-                    s.language = lang.getName();
-                    s.artist = artist.getName();
+                    s.language = lang.name;
+                    s.artist = artist.name;
                     s.title = cleanTitle(stem);
-                    String shown = titleOverride(overrides, lang.getName(), artist.getName(), stem);
+                    String shown = titleOverride(overrides, lang.name, artist.name, stem);
                     String autoTitle = s.title;
                     if (shown != null) s.title = shown;
-                    String prefix = lang.getName() + "/" + artist.getName() + "/";
+                    String prefix = lang.name + "/" + artist.name + "/";
                     if (audio.containsKey(stem)) {
-                        s.file = prefix + audio.get(stem);
-                        if (video.containsKey(stem) && !staticVideos.contains(stem)) s.video = prefix + video.get(stem);
+                        s.file = prefix + audio.get(stem).name;
+                        s.audioH = audio.get(stem).handle;
+                        if (video.containsKey(stem) && !staticVideos.contains(stem)) {
+                            s.video = prefix + video.get(stem).name;
+                            s.videoH = video.get(stem).handle;
+                        }
                     } else {
-                        s.file = prefix + video.get(stem);
+                        s.file = prefix + video.get(stem).name;
+                        s.audioH = video.get(stem).handle;
                     }
-                    s.hasLrc = new File(artist, stem + ".lrc").isFile();
+                    Storage.Entry l = lrcs.get(stem);
+                    s.hasLrc = l != null;
+                    s.lrcH = l == null ? "" : l.handle;
                     s.id = md5(s.file);
                     s.key = normalize(s.title + " " + autoTitle + " " + s.artist + " " + s.language);   // search finds the old name too
                     lib.songs.add(s);
@@ -199,11 +189,16 @@ public final class Library {
         } catch (Exception ignored) { }
     }
 
-    public static Library load(File root, File cache) {
+    /** The cached list from the last scan (handles included); null if there is none or it predates the folder picker. */
+    public static Library load(Storage st, File cache) {
         try {
             JSONArray arr = new JSONArray(new String(Files.readAllBytes(cache.toPath()), StandardCharsets.UTF_8));
-            Library lib = new Library(root);
-            for (int i = 0; i < arr.length(); i++) lib.songs.add(Song.fromJson(arr.getJSONObject(i)));
+            Library lib = new Library(st);
+            for (int i = 0; i < arr.length(); i++) {
+                Song s = Song.fromJson(arr.getJSONObject(i));
+                if (s.audioH.isEmpty()) return null;          // old cache without storage handles: scan again
+                lib.songs.add(s);
+            }
             return lib;
         } catch (Exception e) { return null; }
     }

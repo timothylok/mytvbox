@@ -8,6 +8,7 @@ Read `HANDOFF.md` first (state, outstanding tasks, gotchas). Tools live in `tool
    - plain-Java tests in `karaoke/tests/` (commands are in each file's header) when the code they cover changed;
    - Python scripts: `python -I -m py_compile` and a dry run (`--dry-run`) or a one-song run;
    - app changes: build, install on the box, and check the behaviour on the TV (screenshot / `/api/state`), not only that it compiles.
+   - changes to storage, the folder picker or the library scan: `python karaokeelease-testsun_tests.py --ui` (see `karaoke/release-tests/README.md`; the box must be idle: it clears the app's data and restores history/queue).
    Commit and push only when asked ("commit and push"); never push untested work. Say what was tested (and what could not be).
 2. **Only copy songs to the TV box that have a lyric file, and only after the lyric file has been processed.**
    "Processed" = `align_folder.py` has given the `.lrc` per-character `<mm:ss.xx>` tags and the quality check (`clean_aligned.py`) has run.

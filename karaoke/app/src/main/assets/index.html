@@ -192,7 +192,7 @@ async function drawBrowse() {
   const root = $("#browse"); root.replaceChildren();
   const refresh = el("button", { class: "small", style: "float:right", onclick: async () => {
     try { await api("/api/rescan", null, true); } catch (e) {}
-    setTimeout(loadBrowse, 1500); toast("Rescanning the drive…"); } }, "↻ Rescan");
+    setTimeout(loadBrowse, 1500); toast("Rescanning the songs…"); } }, "↻ Rescan");
   root.append(refresh);
   if (!browseData || !browseData.total) {
     root.append(el("div", { class: "empty" }, (last && last.note) ? last.note : "The TV is still reading the song list - this page will fill in by itself."));

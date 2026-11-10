@@ -97,6 +97,28 @@ Known quirk (user chose to leave it, 2026-11-10): "Lyrics MV" videos (e.g. Shall
 15. **Titles**: `D:\ai\Karaoke\titles.txt` (made by `tools/scripts/make_titles.py`, Eason Chan only) is on the box. Other artists still show the file-name title.
 11. **Security (unchanged, known; user was told, no decision)**: the box's ADB on :5555 has no authentication, and the launcher's Power tile depends on it.
 
+## Folder picker refactor (branch `saf-picker`, built and tested on the box 2026-11-10, NOT merged / committed yet)
+
+All song-folder access now goes through `Storage` (`SafStorage` = the folder the user picks once; `FileStorage` = tests/debug).
+- First run (or lost permission): the TV shows "Choose your Karaoke folder" with a warning NOT to pick a USB drive / SD card;
+  OK opens the system chooser (starts in /sdcard/Karaoke); a non-`primary:` folder is rejected with a message. The grant is
+  persisted (`takePersistableUriPermission`); the choice is in SharedPreferences `karaoke`/`tree`. The remote's OK key works on that
+  screen whatever has focus (regression: it did nothing in touch mode). The phone page has NO folder feature (user's decision);
+  only `adb shell am start -n com.setupbox.karaoke/.MainActivity --ez pickfolder true` re-asks (maintenance/test hook).
+- The user's folder is read-only for the app: songs, `.lrc`, `titles.txt`, `static_videos.txt`, `crops.txt`, `config.properties` are read
+  from it. The app's own files (queue `state.txt`, `history.jsonl`, `flips.txt`, `lyric_offsets.properties` (now keyed by song id),
+  `index.json` cache) are in private storage (`getFilesDir()`); migrated once from /sdcard/Karaoke on first start. Photos folder:
+  app external files `Screensaver`.
+- Library: `Library.scan(Storage, extraTitles, extraStatic)`; songs carry storage handles (`audioH`, `videoH`, `lrcH`), ids are unchanged
+  (md5 of the relative path), so queue/history/flips survive. Cache `index.json` without handles is ignored (rescan).
+- Release tests: `karaoke/release-tests/` (`run_tests.py`, `--ui` drives the box: 13 checks incl. persistence and touch-mode OK key).
+  The box's `uiautomator` does not work ("could not get idle state"), so the test reads the app's `/api/state` (`setup`, `setupText`)
+  and taps the system chooser by screen ratio (calibrated 1920x1080, Android 10 DocumentsUI).
+- Still to do: remove `requestLegacyExternalStorage` + READ/WRITE_EXTERNAL_STORAGE from the manifest AFTER the target-SDK bump (they are
+  kept now only for the one-time migration); lyric file is read on the main thread (small, but move it to the player thread/background);
+  the USB-rejection branch is only unit-tested (needs a USB drive for a device test); stale old files in /sdcard/Karaoke
+  (`index.json`, `state.txt`, `history.jsonl`, `flips.txt`, `lyric_offsets.properties`) can be deleted; test on a second/newer Android device.
+
 ## Future: publish the Karaoke app on Google Play (user's goal, 2026-11-10)
 
 The app is built for one box today. Before it is "production grade" for Google Play, plan and work through this list

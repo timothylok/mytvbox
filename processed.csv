@@ -68,3 +68,234 @@
 2026-11-10 18:25:21,karaoke,D:\ai\GetVideo\EasonChan\Eason Chan\人啊人.mp3,D:\ai\Karaoke\Cantopop\Eason Chan\《人啊人》Homo Sapiens 陳奕迅 Eason Chan [Official MV].mp3,ok,new official-MV audio (6:31); old file in tools/renren/old_karaoke.mp3
 2026-11-10 18:26:51,align,D:\ai\GetVideo\EasonChan\Eason Chan\人啊人.mp3,D:\ai\GetVideo\EasonChan\Eason Chan\人啊人.lrc,ok,"40 lines exact, 10 estimated; original in tools/align_out/orig"
 2026-11-10 18:26:51,lrc,D:\ai\GetVideo\EasonChan\Eason Chan\人啊人.lrc,D:\ai\Karaoke\Cantopop\Eason Chan\《人啊人》Homo Sapiens 陳奕迅 Eason Chan [Official MV].lrc,ok,copied to Karaoke folder under the long name
+2026-11-10 18:58:01,align,D:\ai\GetVideo\EasonChan\Eason Chan\1874.mp3,D:\ai\GetVideo\EasonChan\Eason Chan\1874.lrc,ok,"34 lines exact, 0 estimated; original in tools/align_out/orig (backfilled from align_eason2.log)"
+2026-11-10 18:58:01,align,D:\ai\GetVideo\EasonChan\Eason Chan\七百年後.mp3,D:\ai\GetVideo\EasonChan\Eason Chan\七百年後.lrc,ok,"33 lines exact, 2 estimated; original in tools/align_out/orig (backfilled from align_eason2.log)"
+2026-11-10 18:58:01,align,D:\ai\GetVideo\EasonChan\Eason Chan\不來也不去.mp3,D:\ai\GetVideo\EasonChan\Eason Chan\不來也不去.lrc,ok,"37 lines exact, 0 estimated; original in tools/align_out/orig (backfilled from align_eason2.log)"
+2026-11-10 18:58:01,align,D:\ai\GetVideo\EasonChan\Eason Chan\主旋律.mp3,D:\ai\GetVideo\EasonChan\Eason Chan\主旋律.lrc,ok,"50 lines exact, 1 estimated; original in tools/align_out/orig (backfilled from align_eason2.log)"
+2026-11-10 18:58:01,align,D:\ai\GetVideo\EasonChan\Eason Chan\人車誌.mp3,D:\ai\GetVideo\EasonChan\Eason Chan\人車誌.lrc,ok,"38 lines exact, 4 estimated; original in tools/align_out/orig (backfilled from align_eason2.log)"
+2026-11-10 18:58:01,align,D:\ai\GetVideo\EasonChan\Eason Chan\今天只做一件事.mp3,D:\ai\GetVideo\EasonChan\Eason Chan\今天只做一件事.lrc,ok,"42 lines exact, 1 estimated; original in tools/align_out/orig (backfilled from align_eason2.log)"
+2026-11-10 18:58:01,align,D:\ai\GetVideo\EasonChan\Eason Chan\今日.mp3,D:\ai\GetVideo\EasonChan\Eason Chan\今日.lrc,ok,"36 lines exact, 1 estimated; original in tools/align_out/orig (backfilled from align_eason2.log)"
+2026-11-10 18:58:01,align,D:\ai\GetVideo\EasonChan\Eason Chan\任我行.mp3,D:\ai\GetVideo\EasonChan\Eason Chan\任我行.lrc,ok,"0 lines exact, 55 estimated; original in tools/align_out/orig (backfilled from align_eason2.log)"
+2026-11-10 18:58:01,align,D:\ai\GetVideo\EasonChan\Eason Chan\六月飛霜.mp3,D:\ai\GetVideo\EasonChan\Eason Chan\六月飛霜.lrc,ok,"35 lines exact, 1 estimated; original in tools/align_out/orig (backfilled from align_eason2.log)"
+2026-11-10 18:58:01,align,D:\ai\GetVideo\EasonChan\Eason Chan\反高潮.mp3,D:\ai\GetVideo\EasonChan\Eason Chan\反高潮.lrc,ok,"33 lines exact, 0 estimated; original in tools/align_out/orig (backfilled from align_eason2.log)"
+2026-11-10 18:58:01,align,D:\ai\GetVideo\EasonChan\Eason Chan\可以了.mp3,D:\ai\GetVideo\EasonChan\Eason Chan\可以了.lrc,ok,"28 lines exact, 1 estimated; original in tools/align_out/orig (backfilled from align_eason2.log)"
+2026-11-10 18:58:01,align,D:\ai\GetVideo\EasonChan\Eason Chan\單車.mp3,D:\ai\GetVideo\EasonChan\Eason Chan\單車.lrc,ok,"0 lines exact, 25 estimated; original in tools/align_out/orig (backfilled from align_eason2.log)"
+2026-11-10 18:58:01,align,D:\ai\GetVideo\EasonChan\Eason Chan\四季.mp3,D:\ai\GetVideo\EasonChan\Eason Chan\四季.lrc,ok,"30 lines exact, 0 estimated; original in tools/align_out/orig (backfilled from align_eason2.log)"
+2026-11-10 18:58:01,align,D:\ai\GetVideo\EasonChan\Eason Chan\塵大師.mp3,D:\ai\GetVideo\EasonChan\Eason Chan\塵大師.lrc,ok,"33 lines exact, 17 estimated; original in tools/align_out/orig (backfilled from align_eason2.log)"
+2026-11-10 18:58:01,align,D:\ai\GetVideo\EasonChan\Eason Chan\夕陽無限好.mp3,D:\ai\GetVideo\EasonChan\Eason Chan\夕陽無限好.lrc,ok,"27 lines exact, 0 estimated; original in tools/align_out/orig (backfilled from align_eason2.log)"
+2026-11-10 18:58:01,align,D:\ai\GetVideo\EasonChan\Eason Chan\大開眼戒.mp3,D:\ai\GetVideo\EasonChan\Eason Chan\大開眼戒.lrc,ok,"25 lines exact, 1 estimated; original in tools/align_out/orig (backfilled from align_eason2.log)"
+2026-11-10 18:58:01,align,D:\ai\GetVideo\EasonChan\Eason Chan\天下無雙.mp3,D:\ai\GetVideo\EasonChan\Eason Chan\天下無雙.lrc,ok,"17 lines exact, 15 estimated; original in tools/align_out/orig (backfilled from align_eason2.log)"
+2026-11-10 18:58:01,align,D:\ai\GetVideo\EasonChan\Eason Chan\天使的禮物.mp3,D:\ai\GetVideo\EasonChan\Eason Chan\天使的禮物.lrc,ok,"22 lines exact, 1 estimated; original in tools/align_out/orig (backfilled from align_eason2.log)"
+2026-11-10 18:58:01,align,D:\ai\GetVideo\EasonChan\Eason Chan\太陽照常升起.mp3,D:\ai\GetVideo\EasonChan\Eason Chan\太陽照常升起.lrc,ok,"26 lines exact, 0 estimated; original in tools/align_out/orig (backfilled from align_eason2.log)"
+2026-11-10 18:58:01,align,D:\ai\GetVideo\EasonChan\Eason Chan\孤勇者.mp3,D:\ai\GetVideo\EasonChan\Eason Chan\孤勇者.lrc,ok,"2 lines exact, 38 estimated; original in tools/align_out/orig (backfilled from align_eason2.log)"
+2026-11-10 18:58:01,align,D:\ai\GetVideo\EasonChan\Eason Chan\富士山下.mp3,D:\ai\GetVideo\EasonChan\Eason Chan\富士山下.lrc,ok,"41 lines exact, 0 estimated; original in tools/align_out/orig (backfilled from align_eason2.log)"
+2026-11-10 18:58:01,align,D:\ai\GetVideo\EasonChan\Eason Chan\幸福摩天輪.mp3,D:\ai\GetVideo\EasonChan\Eason Chan\幸福摩天輪.lrc,ok,"0 lines exact, 32 estimated; original in tools/align_out/orig (backfilled from align_eason2.log)"
+2026-11-10 18:58:01,align,D:\ai\GetVideo\EasonChan\Eason Chan\心的距離.mp3,D:\ai\GetVideo\EasonChan\Eason Chan\心的距離.lrc,ok,"40 lines exact, 3 estimated; original in tools/align_out/orig (backfilled from align_eason2.log)"
+2026-11-10 18:58:01,align,D:\ai\GetVideo\EasonChan\Eason Chan\忘記歌詞.mp3,D:\ai\GetVideo\EasonChan\Eason Chan\忘記歌詞.lrc,ok,"25 lines exact, 0 estimated; original in tools/align_out/orig (backfilled from align_eason2.log)"
+2026-11-10 18:58:01,align,D:\ai\GetVideo\EasonChan\Eason Chan\怕死.mp3,D:\ai\GetVideo\EasonChan\Eason Chan\怕死.lrc,ok,"36 lines exact, 0 estimated; original in tools/align_out/orig (backfilled from align_eason2.log)"
+2026-11-10 18:58:01,align,D:\ai\GetVideo\EasonChan\Eason Chan\我們萬歲.mp3,D:\ai\GetVideo\EasonChan\Eason Chan\我們萬歲.lrc,ok,"34 lines exact, 0 estimated; original in tools/align_out/orig (backfilled from align_eason2.log)"
+2026-11-10 18:58:01,align,D:\ai\GetVideo\EasonChan\Eason Chan\我的快樂時代.mp3,D:\ai\GetVideo\EasonChan\Eason Chan\我的快樂時代.lrc,ok,"33 lines exact, 1 estimated; original in tools/align_out/orig (backfilled from align_eason2.log)"
+2026-11-10 18:58:01,align,D:\ai\GetVideo\EasonChan\Eason Chan\於心有愧.mp3,D:\ai\GetVideo\EasonChan\Eason Chan\於心有愧.lrc,ok,"21 lines exact, 14 estimated; original in tools/align_out/orig (backfilled from align_eason2.log)"
+2026-11-10 18:58:01,align,D:\ai\GetVideo\EasonChan\Eason Chan\是但求其愛.mp3,D:\ai\GetVideo\EasonChan\Eason Chan\是但求其愛.lrc,ok,"0 lines exact, 40 estimated; original in tools/align_out/orig (backfilled from align_eason2.log)"
+2026-11-10 18:58:01,align,D:\ai\GetVideo\EasonChan\Eason Chan\最佳損友.mp3,D:\ai\GetVideo\EasonChan\Eason Chan\最佳損友.lrc,ok,"47 lines exact, 0 estimated; original in tools/align_out/orig (backfilled from align_eason2.log)"
+2026-11-10 18:58:01,align,D:\ai\GetVideo\EasonChan\Eason Chan\最後派對.mp3,D:\ai\GetVideo\EasonChan\Eason Chan\最後派對.lrc,ok,"28 lines exact, 1 estimated; original in tools/align_out/orig (backfilled from align_eason2.log)"
+2026-11-10 18:58:01,align,D:\ai\GetVideo\EasonChan\Eason Chan\歲月如歌.mp3,D:\ai\GetVideo\EasonChan\Eason Chan\歲月如歌.lrc,ok,"25 lines exact, 1 estimated; original in tools/align_out/orig (backfilled from align_eason2.log)"
+2026-11-10 18:58:01,align,D:\ai\GetVideo\EasonChan\Eason Chan\每一個明天.mp3,D:\ai\GetVideo\EasonChan\Eason Chan\每一個明天.lrc,ok,"0 lines exact, 26 estimated; original in tools/align_out/orig (backfilled from align_eason2.log)"
+2026-11-10 18:58:01,align,D:\ai\GetVideo\EasonChan\Eason Chan\沙龍.mp3,D:\ai\GetVideo\EasonChan\Eason Chan\沙龍.lrc,ok,"33 lines exact, 0 estimated; original in tools/align_out/orig (backfilled from align_eason2.log)"
+2026-11-10 18:58:01,align,D:\ai\GetVideo\EasonChan\Eason Chan\浮誇.mp3,D:\ai\GetVideo\EasonChan\Eason Chan\浮誇.lrc,ok,"51 lines exact, 0 estimated; original in tools/align_out/orig (backfilled from align_eason2.log)"
+2026-11-10 18:58:01,align,D:\ai\GetVideo\EasonChan\Eason Chan\淘汰(國).mp3,D:\ai\GetVideo\EasonChan\Eason Chan\淘汰(國).lrc,ok,"16 lines exact, 11 estimated; original in tools/align_out/orig (backfilled from align_eason2.log)"
+2026-11-10 18:58:01,align,D:\ai\GetVideo\EasonChan\Eason Chan\漸漸.mp3,D:\ai\GetVideo\EasonChan\Eason Chan\漸漸.lrc,ok,"31 lines exact, 1 estimated; original in tools/align_out/orig (backfilled from align_eason2.log)"
+2026-11-10 18:58:01,align,D:\ai\GetVideo\EasonChan\Eason Chan\無人之境.mp3,D:\ai\GetVideo\EasonChan\Eason Chan\無人之境.lrc,ok,"18 lines exact, 3 estimated; original in tools/align_out/orig (backfilled from align_eason2.log)"
+2026-11-10 18:58:01,align,D:\ai\GetVideo\EasonChan\Eason Chan\無條件.mp3,D:\ai\GetVideo\EasonChan\Eason Chan\無條件.lrc,ok,"0 lines exact, 38 estimated; original in tools/align_out/orig (backfilled from align_eason2.log)"
+2026-11-10 18:58:01,align,D:\ai\GetVideo\EasonChan\Eason Chan\盲婚啞嫁.mp3,D:\ai\GetVideo\EasonChan\Eason Chan\盲婚啞嫁.lrc,ok,"1 lines exact, 25 estimated; original in tools/align_out/orig (backfilled from align_eason2.log)"
+2026-11-10 18:58:01,align,D:\ai\GetVideo\EasonChan\Eason Chan\粵語殘片.mp3,D:\ai\GetVideo\EasonChan\Eason Chan\粵語殘片.lrc,ok,"35 lines exact, 1 estimated; original in tools/align_out/orig (backfilled from align_eason2.log)"
+2026-11-10 18:58:01,align,D:\ai\GetVideo\EasonChan\Eason Chan\致明日的舞.mp3,D:\ai\GetVideo\EasonChan\Eason Chan\致明日的舞.lrc,ok,"0 lines exact, 31 estimated; original in tools/align_out/orig (backfilled from align_eason2.log)"
+2026-11-10 18:58:01,align,D:\ai\GetVideo\EasonChan\Eason Chan\與我常在.mp3,D:\ai\GetVideo\EasonChan\Eason Chan\與我常在.lrc,ok,"32 lines exact, 0 estimated; original in tools/align_out/orig (backfilled from align_eason2.log)"
+2026-11-10 18:58:01,align,D:\ai\GetVideo\EasonChan\Eason Chan\苦瓜.mp3,D:\ai\GetVideo\EasonChan\Eason Chan\苦瓜.lrc,ok,"47 lines exact, 1 estimated; original in tools/align_out/orig (backfilled from align_eason2.log)"
+2026-11-10 18:58:01,align,D:\ai\GetVideo\EasonChan\Eason Chan\落花流水.mp3,D:\ai\GetVideo\EasonChan\Eason Chan\落花流水.lrc,ok,"42 lines exact, 0 estimated; original in tools/align_out/orig (backfilled from align_eason2.log)"
+2026-11-10 18:58:01,align,D:\ai\GetVideo\EasonChan\Eason Chan\葡萄成熟時.mp3,D:\ai\GetVideo\EasonChan\Eason Chan\葡萄成熟時.lrc,ok,"38 lines exact, 3 estimated; original in tools/align_out/orig (backfilled from align_eason2.log)"
+2026-11-10 18:58:01,align,D:\ai\GetVideo\EasonChan\Eason Chan\裙下之臣.mp3,D:\ai\GetVideo\EasonChan\Eason Chan\裙下之臣.lrc,ok,"41 lines exact, 1 estimated; original in tools/align_out/orig (backfilled from align_eason2.log)"
+2026-11-10 18:58:01,align,D:\ai\GetVideo\EasonChan\Eason Chan\那一夜有沒有說.mp3,D:\ai\GetVideo\EasonChan\Eason Chan\那一夜有沒有說.lrc,ok,"17 lines exact, 1 estimated; original in tools/align_out/orig (backfilled from align_eason2.log)"
+2026-11-10 18:58:01,align,D:\ai\GetVideo\EasonChan\Eason Chan\重口味.mp3,D:\ai\GetVideo\EasonChan\Eason Chan\重口味.lrc,ok,"39 lines exact, 4 estimated; original in tools/align_out/orig (backfilled from align_eason2.log)"
+2026-11-10 18:58:01,align,D:\ai\GetVideo\EasonChan\Eason Chan\防不勝防.mp3,D:\ai\GetVideo\EasonChan\Eason Chan\防不勝防.lrc,ok,"25 lines exact, 1 estimated; original in tools/align_out/orig (backfilled from align_eason2.log)"
+2026-11-10 18:58:01,align,D:\ai\GetVideo\EasonChan\Eason Chan\阿牛.mp3,D:\ai\GetVideo\EasonChan\Eason Chan\阿牛.lrc,ok,"40 lines exact, 1 estimated; original in tools/align_out/orig (backfilled from align_eason2.log)"
+2026-11-10 18:58:01,align,D:\ai\GetVideo\EasonChan\Eason Chan\陀飛輪.mp3,D:\ai\GetVideo\EasonChan\Eason Chan\陀飛輪.lrc,ok,"35 lines exact, 1 estimated; original in tools/align_out/orig (backfilled from align_eason2.log)"
+2026-11-10 18:58:01,align,D:\ai\GetVideo\EasonChan\Eason Chan\黃金時代.mp3,D:\ai\GetVideo\EasonChan\Eason Chan\黃金時代.lrc,ok,"28 lines exact, 0 estimated; original in tools/align_out/orig (backfilled from align_eason2.log)"
+2026-11-10 18:58:01,align,D:\ai\GetVideo\EasonChan\Eason Chan\黑洞.mp3,D:\ai\GetVideo\EasonChan\Eason Chan\黑洞.lrc,ok,"24 lines exact, 1 estimated; original in tools/align_out/orig (backfilled from align_eason2.log)"
+2026-11-10 19:00:19,align,D:\ai\GetVideo\EasonChan\Eason Chan\任我行.mp3,D:\ai\GetVideo\EasonChan\Eason Chan\任我行.lrc,ok,"0 lines exact, 55 estimated; original in D:\ai\setupbox\tools\align_out\orig"
+2026-11-10 19:01:41,align,D:\ai\GetVideo\EasonChan\Eason Chan\單車.mp3,D:\ai\GetVideo\EasonChan\Eason Chan\單車.lrc,ok,"0 lines exact, 25 estimated; original in D:\ai\setupbox\tools\align_out\orig"
+2026-11-10 19:04:10,align,D:\ai\GetVideo\EasonChan\Eason Chan\幸福摩天輪.mp3,D:\ai\GetVideo\EasonChan\Eason Chan\幸福摩天輪.lrc,ok,"0 lines exact, 32 estimated; original in D:\ai\setupbox\tools\align_out\orig"
+2026-11-10 19:06:01,align,D:\ai\GetVideo\EasonChan\Eason Chan\是但求其愛.mp3,D:\ai\GetVideo\EasonChan\Eason Chan\是但求其愛.lrc,ok,"0 lines exact, 40 estimated; original in D:\ai\setupbox\tools\align_out\orig"
+2026-11-10 19:08:12,align,D:\ai\GetVideo\EasonChan\Eason Chan\每一個明天.mp3,D:\ai\GetVideo\EasonChan\Eason Chan\每一個明天.lrc,ok,"0 lines exact, 26 estimated; original in D:\ai\setupbox\tools\align_out\orig"
+2026-11-10 19:09:37,align,D:\ai\GetVideo\EasonChan\Eason Chan\無條件.mp3,D:\ai\GetVideo\EasonChan\Eason Chan\無條件.lrc,ok,"0 lines exact, 38 estimated; original in D:\ai\setupbox\tools\align_out\orig"
+2026-11-10 19:12:01,align,D:\ai\GetVideo\EasonChan\Eason Chan\致明日的舞.mp3,D:\ai\GetVideo\EasonChan\Eason Chan\致明日的舞.lrc,ok,"0 lines exact, 31 estimated; original in D:\ai\setupbox\tools\align_out\orig"
+2026-11-10 19:23:11,lrc,D:\ai\GetVideo\EasonChan\Eason Chan\1874.lrc,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 ｜ 1874 (高清音).lrc,ok,processed lyric copied to Karaoke folder
+2026-11-10 19:23:11,lrc,D:\ai\GetVideo\EasonChan\Eason Chan\K歌之王.lrc,D:\ai\Karaoke\Cantopop\Eason Chan\K歌之王.lrc,ok,processed lyric copied to Karaoke folder
+2026-11-10 19:23:11,lrc,D:\ai\GetVideo\EasonChan\Eason Chan\Lonely Christmas.lrc,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 ｜ Lonely Christmas (高清音).lrc,ok,processed lyric copied to Karaoke folder
+2026-11-10 19:23:11,lrc,D:\ai\GetVideo\EasonChan\Eason Chan\Shall We Talk.lrc,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 Eason Chan《Shall We Talk》[Lyrics MV].lrc,ok,processed lyric copied to Karaoke folder
+2026-11-10 19:23:11,lrc,D:\ai\GetVideo\EasonChan\Eason Chan\七百年後.lrc,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 Eason Chan - 七百年後 (Official Music Video).lrc,ok,processed lyric copied to Karaoke folder
+2026-11-10 19:23:11,lrc,D:\ai\GetVideo\EasonChan\Eason Chan\不來也不去.lrc,D:\ai\Karaoke\Cantopop\Eason Chan\不來也不去.lrc,ok,processed lyric copied to Karaoke folder
+2026-11-10 19:23:11,lrc,D:\ai\GetVideo\EasonChan\Eason Chan\主旋律.lrc,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 Eason Chan  《主旋律》MV首播!!!.lrc,ok,processed lyric copied to Karaoke folder
+2026-11-10 19:23:11,lrc,D:\ai\GetVideo\EasonChan\Eason Chan\人來人往.lrc,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 Eason Chan《人來人往》[Official MV].lrc,ok,processed lyric copied to Karaoke folder
+2026-11-10 19:23:11,lrc,D:\ai\GetVideo\EasonChan\Eason Chan\人啊人.lrc,D:\ai\Karaoke\Cantopop\Eason Chan\《人啊人》Homo Sapiens 陳奕迅 Eason Chan [Official MV].lrc,ok,processed lyric copied to Karaoke folder
+2026-11-10 19:23:11,lrc,D:\ai\GetVideo\EasonChan\Eason Chan\人車誌.lrc,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 - 人車誌 320Kbps Eason Chan.lrc,ok,processed lyric copied to Karaoke folder
+2026-11-10 19:23:11,lrc,D:\ai\GetVideo\EasonChan\Eason Chan\今天只做一件事.lrc,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 - 今天只做一件事.lrc,ok,processed lyric copied to Karaoke folder
+2026-11-10 19:23:11,lrc,D:\ai\GetVideo\EasonChan\Eason Chan\今日.lrc,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 - 今日 HD.lrc,ok,processed lyric copied to Karaoke folder
+2026-11-10 19:23:11,lrc,D:\ai\GetVideo\EasonChan\Eason Chan\六月飛霜.lrc,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 - 《六月飛霜》MV.lrc,ok,processed lyric copied to Karaoke folder
+2026-11-10 19:23:11,lrc,D:\ai\GetVideo\EasonChan\Eason Chan\十面埋伏.lrc,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅  ｜ 十面埋伏 (高清音).lrc,ok,processed lyric copied to Karaoke folder
+2026-11-10 19:23:11,lrc,D:\ai\GetVideo\EasonChan\Eason Chan\反高潮.lrc,D:\ai\Karaoke\Cantopop\Eason Chan\《黃偉文 十年選》陳奕迅 - 反高潮 HD.lrc,ok,processed lyric copied to Karaoke folder
+2026-11-10 19:23:11,lrc,D:\ai\GetVideo\EasonChan\Eason Chan\可以了.lrc,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 Eason Chan 《可以了》 IT’S OVER  [Official MV].lrc,ok,processed lyric copied to Karaoke folder
+2026-11-10 19:23:11,lrc,D:\ai\GetVideo\EasonChan\Eason Chan\四季.lrc,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 Eason Chan - 《四季》MV.lrc,ok,processed lyric copied to Karaoke folder
+2026-11-10 19:23:11,lrc,D:\ai\GetVideo\EasonChan\Eason Chan\塵大師.lrc,D:\ai\Karaoke\Cantopop\Eason Chan\《塵大師》陳奕迅 Eason Chan [Official MV].lrc,ok,processed lyric copied to Karaoke folder
+2026-11-10 19:23:11,lrc,D:\ai\GetVideo\EasonChan\Eason Chan\夕陽無限好.lrc,D:\ai\Karaoke\Cantopop\Eason Chan\夕陽無限好.lrc,ok,processed lyric copied to Karaoke folder
+2026-11-10 19:23:11,lrc,D:\ai\GetVideo\EasonChan\Eason Chan\大開眼戒.lrc,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅Eason Chan《大開眼戒》[Lyrics MV].lrc,ok,processed lyric copied to Karaoke folder
+2026-11-10 19:23:11,lrc,D:\ai\GetVideo\EasonChan\Eason Chan\天下無雙.lrc,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 天下無雙.lrc,ok,processed lyric copied to Karaoke folder
+2026-11-10 19:23:11,lrc,D:\ai\GetVideo\EasonChan\Eason Chan\天使的禮物.lrc,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 Eason Chan《天使的禮物》[MV].lrc,ok,processed lyric copied to Karaoke folder
+2026-11-10 19:23:11,lrc,D:\ai\GetVideo\EasonChan\Eason Chan\太陽照常升起.lrc,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 - 太陽照常升起.lrc,ok,processed lyric copied to Karaoke folder
+2026-11-10 19:23:11,lrc,D:\ai\GetVideo\EasonChan\Eason Chan\孤勇者.lrc,D:\ai\Karaoke\Cantopop\Eason Chan\《孤勇者》（《英雄聯盟：雙城之戰》動畫劇集中文主題曲）陳奕迅 Eason Chan [Official MV].lrc,ok,processed lyric copied to Karaoke folder
+2026-11-10 19:23:11,lrc,D:\ai\GetVideo\EasonChan\Eason Chan\富士山下.lrc,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 - 富士山下.lrc,ok,processed lyric copied to Karaoke folder
+2026-11-10 19:23:11,lrc,D:\ai\GetVideo\EasonChan\Eason Chan\心的距離.lrc,D:\ai\Karaoke\Cantopop\Eason Chan\心的距離.lrc,ok,processed lyric copied to Karaoke folder
+2026-11-10 19:23:11,lrc,D:\ai\GetVideo\EasonChan\Eason Chan\忘記歌詞.lrc,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 Eason Chan《忘記歌詞》Official 官方完整版 [首播] [MV].lrc,ok,processed lyric copied to Karaoke folder
+2026-11-10 19:23:11,lrc,D:\ai\GetVideo\EasonChan\Eason Chan\怕死.lrc,D:\ai\Karaoke\Cantopop\Eason Chan\怕死.lrc,ok,processed lyric copied to Karaoke folder
+2026-11-10 19:23:11,lrc,D:\ai\GetVideo\EasonChan\Eason Chan\我們萬歲.lrc,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 Eason《我們萬歲》歌詞(lyrics).lrc,ok,processed lyric copied to Karaoke folder
+2026-11-10 19:23:11,lrc,D:\ai\GetVideo\EasonChan\Eason Chan\我的快樂時代.lrc,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 - 我的快樂時代 HD.lrc,ok,processed lyric copied to Karaoke folder
+2026-11-10 19:23:11,lrc,D:\ai\GetVideo\EasonChan\Eason Chan\於心有愧.lrc,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 Eason Chan - 於心有愧 (Official Music Video).lrc,ok,processed lyric copied to Karaoke folder
+2026-11-10 19:23:11,lrc,D:\ai\GetVideo\EasonChan\Eason Chan\明年今日.lrc,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 Eason Chan《明年今日》[Official MV].lrc,ok,processed lyric copied to Karaoke folder
+2026-11-10 19:23:11,lrc,D:\ai\GetVideo\EasonChan\Eason Chan\最佳損友.lrc,D:\ai\Karaoke\Cantopop\Eason Chan\最佳損友.lrc,ok,processed lyric copied to Karaoke folder
+2026-11-10 19:23:11,lrc,D:\ai\GetVideo\EasonChan\Eason Chan\最後派對.lrc,D:\ai\Karaoke\Cantopop\Eason Chan\最後派對.lrc,ok,processed lyric copied to Karaoke folder
+2026-11-10 19:23:11,lrc,D:\ai\GetVideo\EasonChan\Eason Chan\歲月如歌.lrc,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅Eason Chan-歲月如歌(衝上雲霄II MV).lrc,ok,processed lyric copied to Karaoke folder
+2026-11-10 19:23:11,lrc,D:\ai\GetVideo\EasonChan\Eason Chan\沙龍.lrc,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 Eason Chan - 沙龍 (Official Music Video).lrc,ok,processed lyric copied to Karaoke folder
+2026-11-10 19:23:11,lrc,D:\ai\GetVideo\EasonChan\Eason Chan\浮誇.lrc,D:\ai\Karaoke\Cantopop\Eason Chan\Eason陳奕迅 浮誇[HD].lrc,ok,processed lyric copied to Karaoke folder
+2026-11-10 19:23:11,lrc,D:\ai\GetVideo\EasonChan\Eason Chan\淘汰(國).lrc,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 - 淘汰 HD.lrc,ok,processed lyric copied to Karaoke folder
+2026-11-10 19:23:11,lrc,D:\ai\GetVideo\EasonChan\Eason Chan\漸漸.lrc,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 Eason Chan《漸漸》AM I ME - eason and the duo band [Official MV].lrc,ok,processed lyric copied to Karaoke folder
+2026-11-10 19:23:11,lrc,D:\ai\GetVideo\EasonChan\Eason Chan\無人之境.lrc,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 Eason Chan - 無人之境 (Official Music Video).lrc,ok,processed lyric copied to Karaoke folder
+2026-11-10 19:23:11,lrc,D:\ai\GetVideo\EasonChan\Eason Chan\盲婚啞嫁.lrc,D:\ai\Karaoke\Cantopop\Eason Chan\《盲婚啞嫁》陳奕迅 Eason Chan [Official MV].lrc,ok,processed lyric copied to Karaoke folder
+2026-11-10 19:23:11,lrc,D:\ai\GetVideo\EasonChan\Eason Chan\粵語殘片.lrc,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 - 粵語殘片 HD.lrc,ok,processed lyric copied to Karaoke folder
+2026-11-10 19:23:11,lrc,D:\ai\GetVideo\EasonChan\Eason Chan\與我常在.lrc,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 - 與我常在.lrc,ok,processed lyric copied to Karaoke folder
+2026-11-10 19:23:11,lrc,D:\ai\GetVideo\EasonChan\Eason Chan\苦瓜.lrc,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 - 《苦瓜》MV.lrc,ok,processed lyric copied to Karaoke folder
+2026-11-10 19:23:11,lrc,D:\ai\GetVideo\EasonChan\Eason Chan\落花流水.lrc,D:\ai\Karaoke\Cantopop\Eason Chan\落花流水.lrc,ok,processed lyric copied to Karaoke folder
+2026-11-10 19:23:11,lrc,D:\ai\GetVideo\EasonChan\Eason Chan\葡萄成熟時.lrc,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 葡萄成熟時 MV.lrc,ok,processed lyric copied to Karaoke folder
+2026-11-10 19:23:11,lrc,D:\ai\GetVideo\EasonChan\Eason Chan\裙下之臣.lrc,D:\ai\Karaoke\Cantopop\Eason Chan\裙下之臣--陳奕迅(from solidays disc1).lrc,ok,processed lyric copied to Karaoke folder
+2026-11-10 19:23:11,lrc,D:\ai\GetVideo\EasonChan\Eason Chan\那一夜有沒有說.lrc,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 - 那一夜有沒有說.lrc,ok,processed lyric copied to Karaoke folder
+2026-11-10 19:23:11,lrc,D:\ai\GetVideo\EasonChan\Eason Chan\重口味.lrc,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 Eason Chan - 重口味 (Official Music Video) (Full Version).lrc,ok,processed lyric copied to Karaoke folder
+2026-11-10 19:23:11,lrc,D:\ai\GetVideo\EasonChan\Eason Chan\防不勝防.lrc,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅Eason Chan《防不勝防》[Lyrics MV].lrc,ok,processed lyric copied to Karaoke folder
+2026-11-10 19:23:11,lrc,D:\ai\GetVideo\EasonChan\Eason Chan\阿牛.lrc,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 Eason Chan - 阿牛 Aa  Ngau.lrc,ok,processed lyric copied to Karaoke folder
+2026-11-10 19:23:11,lrc,D:\ai\GetVideo\EasonChan\Eason Chan\陀飛輪.lrc,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 Eason Chan - 陀飛輪 (Official Music Video).lrc,ok,processed lyric copied to Karaoke folder
+2026-11-10 19:23:11,lrc,D:\ai\GetVideo\EasonChan\Eason Chan\黃金時代.lrc,D:\ai\Karaoke\Cantopop\Eason Chan\黃金時代.lrc,ok,processed lyric copied to Karaoke folder
+2026-11-10 19:23:11,lrc,D:\ai\GetVideo\EasonChan\Eason Chan\黑洞.lrc,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 Eason Chan - 黑洞 (Official Music Video).lrc,ok,processed lyric copied to Karaoke folder
+2026-11-10 19:23:14,crop,D:\ai\GetVideo\EasonChan\Eason Chan\塵大師.mp4,D:\ai\Karaoke\crops.txt,ok,0:138:1920:804 in 1920x1080
+2026-11-10 19:23:16,crop,D:\ai\GetVideo\EasonChan\Eason Chan\孤勇者.mp4,D:\ai\Karaoke\crops.txt,ok,0:164:1920:830 in 1920x1080
+2026-11-10 19:23:17,crop,D:\ai\GetVideo\EasonChan\Eason Chan\盲婚啞嫁.mp4,D:\ai\Karaoke\crops.txt,ok,0:140:1920:862 in 1920x1080
+2026-11-10 19:23:18,crop,D:\ai\GetVideo\EasonChan\Eason Chan\心的距離.mp4,D:\ai\Karaoke\crops.txt,ok,0:66:640:374 in 640x480
+2026-11-10 19:23:19,crop,D:\ai\GetVideo\EasonChan\Eason Chan\六月飛霜.mp4,D:\ai\Karaoke\crops.txt,ok,18:58:412:230 in 448x336
+2026-11-10 19:23:19,crop,D:\ai\GetVideo\EasonChan\Eason Chan\苦瓜.mp4,D:\ai\Karaoke\crops.txt,ok,4:82:634:314 in 640x480
+2026-11-10 19:23:21,crop,D:\ai\GetVideo\Videos\Other\陳奕迅 - 富士山下.mp4,D:\ai\Karaoke\crops.txt,ok,2:56:1894:1002 in 1920x1080
+2026-11-10 19:23:23,crop,D:\ai\GetVideo\Videos\Other\陳奕迅 - 與我常在.mp4,D:\ai\Karaoke\crops.txt,ok,176:216:1742:676 in 1920x1080
+2026-11-10 19:23:29,crop,D:\ai\GetVideo\EasonChan\Eason Chan\無人之境.mp4,D:\ai\Karaoke\crops.txt,ok,0:62:640:380 in 640x480
+2026-11-10 19:23:36,crop,D:\ai\GetVideo\Videos\Other\陳奕迅 Eason Chan《Shall We Talk》[Lyrics MV].mp4,D:\ai\Karaoke\crops.txt,ok,2:0:1918:1030 in 1920x1080
+2026-11-10 19:23:37,crop,D:\ai\GetVideo\EasonChan\Eason Chan\人來人往.mp4,D:\ai\Karaoke\crops.txt,ok,134:104:514:274 in 656x480
+2026-11-10 19:23:37,crop,D:\ai\GetVideo\EasonChan\Eason Chan\天使的禮物.mp4,D:\ai\Karaoke\crops.txt,ok,56:2:534:478 in 656x480
+2026-11-10 19:23:38,crop,D:\ai\GetVideo\EasonChan\Eason Chan\忘記歌詞.mp4,D:\ai\Karaoke\crops.txt,ok,8:122:640:238 in 656x480
+2026-11-10 19:23:42,crop,D:\ai\GetVideo\Videos\Other\陳奕迅 Eason《我們萬歲》歌詞(lyrics).mp4,D:\ai\Karaoke\crops.txt,ok,72:0:1776:1080 in 1920x1080
+2026-11-10 19:23:43,crop,D:\ai\GetVideo\EasonChan\Eason Chan\天下無雙.mp4,D:\ai\Karaoke\crops.txt,ok,0:30:318:190 in 320x238
+2026-11-10 19:23:43,crop,D:\ai\GetVideo\EasonChan\Eason Chan\葡萄成熟時.mp4,D:\ai\Karaoke\crops.txt,ok,0:14:448:314 in 448x336
+2026-11-10 19:23:44,crop,D:\ai\GetVideo\Videos\Other\陳奕迅Eason Chan-歲月如歌(衝上雲霄II MV).mp4,D:\ai\Karaoke\crops.txt,ok,0:90:1280:582 in 1280x720
+2026-11-10 19:23:46,crop,D:\ai\GetVideo\EasonChan\Eason Chan\大開眼戒.mp4,D:\ai\Karaoke\crops.txt,ok,46:0:1874:1034 in 1920x1080
+2026-11-10 19:23:46,remove,,/sdcard/Karaoke/Cantopop/Eason Chan/陳奕迅 Eason Chan - 一絲不掛 (Official Music Video).*,ok,removed from box: no processed lyric file
+2026-11-10 19:23:46,remove,,/sdcard/Karaoke/Cantopop/Eason Chan/陳奕迅 Eason Chan - 任我行 (Official Music Video).*,ok,removed from box: lyric file not processed
+2026-11-10 19:23:46,remove,,/sdcard/Karaoke/Cantopop/Eason Chan/陳奕迅 Eason Chan《單車》[Official MV].*,ok,removed from box: lyric file not processed
+2026-11-10 19:23:46,remove,,/sdcard/Karaoke/Cantopop/Eason Chan/幸福摩天輪 - 陳奕迅.*,ok,removed from box: lyric file not processed
+2026-11-10 19:23:46,remove,,/sdcard/Karaoke/Cantopop/Eason Chan/《是但求其愛》陳奕迅 Eason Chan [Official MV].*,ok,removed from box: lyric file not processed
+2026-11-10 19:23:46,remove,,/sdcard/Karaoke/Cantopop/Eason Chan/陳奕迅 Eason Chan - 每一個明天 (Official Music Video).*,ok,removed from box: lyric file not processed
+2026-11-10 19:23:46,remove,,/sdcard/Karaoke/Cantopop/Eason Chan/陳奕迅 Eason Chan - 無條件 (Official Music Video).*,ok,removed from box: lyric file not processed
+2026-11-10 19:23:47,remove,,/sdcard/Karaoke/Cantopop/Eason Chan/《社交恐懼癌》陳奕迅 Eason Chan [Official MV].*,ok,removed from box: no processed lyric file
+2026-11-10 19:23:47,remove,,/sdcard/Karaoke/Cantopop/Eason Chan/《空城記》Something Missing 陳奕迅 Eason Chan [Official MV].*,ok,removed from box: no processed lyric file
+2026-11-10 19:23:47,remove,,/sdcard/Karaoke/Cantopop/Eason Chan/《致明日的舞》A DANCE FOR TOMORROW 陳奕迅 Eason Chan [Official MV].*,ok,removed from box: lyric file not processed
+2026-11-10 19:23:47,remove,,/sdcard/Karaoke/Cantopop/Eason Chan/《擺渡人》 主題曲 MV 《讓我留在你身邊》 ： 主唱 - 陳奕迅 Eason Chan (In Cinemas 23 December).*,ok,removed from box: no processed lyric file
+2026-11-10 19:23:47,lrc,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 ｜ 1874 (高清音).lrc,/sdcard/Karaoke/Cantopop/Eason Chan/陳奕迅 ｜ 1874 (高清音).lrc,ok,pushed to box
+2026-11-10 19:23:48,lrc,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 Eason Chan - 七百年後 (Official Music Video).lrc,/sdcard/Karaoke/Cantopop/Eason Chan/陳奕迅 Eason Chan - 七百年後 (Official Music Video).lrc,ok,pushed to box
+2026-11-10 19:23:49,video,D:\ai\GetVideo\EasonChan\Eason Chan\七百年後.mp4,/sdcard/Karaoke/Cantopop/Eason Chan/陳奕迅 Eason Chan - 七百年後 (Official Music Video).mp4,ok,"new video, length matches"
+2026-11-10 19:23:49,lrc,D:\ai\Karaoke\Cantopop\Eason Chan\不來也不去.lrc,/sdcard/Karaoke/Cantopop/Eason Chan/不來也不去.lrc,ok,pushed to box
+2026-11-10 19:23:49,lrc,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 Eason Chan  《主旋律》MV首播!!!.lrc,/sdcard/Karaoke/Cantopop/Eason Chan/陳奕迅 Eason Chan  《主旋律》MV首播!!!.lrc,ok,pushed to box
+2026-11-10 19:24:01,video,D:\ai\GetVideo\EasonChan\Eason Chan\主旋律.mp4,/sdcard/Karaoke/Cantopop/Eason Chan/陳奕迅 Eason Chan  《主旋律》MV首播!!!.mp4,ok,"new video, length matches"
+2026-11-10 19:24:02,video,D:\ai\GetVideo\EasonChan\Eason Chan\人來人往.mp4,/sdcard/Karaoke/Cantopop/Eason Chan/陳奕迅 Eason Chan《人來人往》[Official MV].mp4,ok,"new video, length matches"
+2026-11-10 19:24:03,lrc,D:\ai\Karaoke\Cantopop\Eason Chan\《人啊人》Homo Sapiens 陳奕迅 Eason Chan [Official MV].lrc,/sdcard/Karaoke/Cantopop/Eason Chan/《人啊人》Homo Sapiens 陳奕迅 Eason Chan [Official MV].lrc,ok,pushed to box
+2026-11-10 19:24:04,karaoke,D:\ai\Karaoke\Cantopop\Eason Chan\《人啊人》Homo Sapiens 陳奕迅 Eason Chan [Official MV].mp3,/sdcard/Karaoke/Cantopop/Eason Chan/《人啊人》Homo Sapiens 陳奕迅 Eason Chan [Official MV].mp3,ok,pushed to box
+2026-11-10 19:24:19,video,D:\ai\GetVideo\EasonChan\Eason Chan\人啊人.mp4,/sdcard/Karaoke/Cantopop/Eason Chan/《人啊人》Homo Sapiens 陳奕迅 Eason Chan [Official MV].mp4,ok,"new video, length matches"
+2026-11-10 19:24:19,lrc,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 - 人車誌 320Kbps Eason Chan.lrc,/sdcard/Karaoke/Cantopop/Eason Chan/陳奕迅 - 人車誌 320Kbps Eason Chan.lrc,ok,pushed to box
+2026-11-10 19:24:19,lrc,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 - 今天只做一件事.lrc,/sdcard/Karaoke/Cantopop/Eason Chan/陳奕迅 - 今天只做一件事.lrc,ok,pushed to box
+2026-11-10 19:24:19,lrc,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 - 今日 HD.lrc,/sdcard/Karaoke/Cantopop/Eason Chan/陳奕迅 - 今日 HD.lrc,ok,pushed to box
+2026-11-10 19:24:20,lrc,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 - 《六月飛霜》MV.lrc,/sdcard/Karaoke/Cantopop/Eason Chan/陳奕迅 - 《六月飛霜》MV.lrc,ok,pushed to box
+2026-11-10 19:24:21,video,D:\ai\GetVideo\EasonChan\Eason Chan\六月飛霜.mp4,/sdcard/Karaoke/Cantopop/Eason Chan/陳奕迅 - 《六月飛霜》MV.mp4,ok,"new video, length matches"
+2026-11-10 19:24:21,lrc,D:\ai\Karaoke\Cantopop\Eason Chan\《黃偉文 十年選》陳奕迅 - 反高潮 HD.lrc,/sdcard/Karaoke/Cantopop/Eason Chan/《黃偉文 十年選》陳奕迅 - 反高潮 HD.lrc,ok,pushed to box
+2026-11-10 19:24:22,lrc,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 Eason Chan 《可以了》 IT’S OVER  [Official MV].lrc,/sdcard/Karaoke/Cantopop/Eason Chan/陳奕迅 Eason Chan 《可以了》 IT’S OVER  [Official MV].lrc,ok,pushed to box
+2026-11-10 19:24:36,video,D:\ai\GetVideo\EasonChan\Eason Chan\可以了.mp4,/sdcard/Karaoke/Cantopop/Eason Chan/陳奕迅 Eason Chan 《可以了》 IT’S OVER  [Official MV].mp4,ok,"new video, length matches"
+2026-11-10 19:24:36,lrc,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 Eason Chan - 《四季》MV.lrc,/sdcard/Karaoke/Cantopop/Eason Chan/陳奕迅 Eason Chan - 《四季》MV.lrc,ok,pushed to box
+2026-11-10 19:24:43,video,D:\ai\GetVideo\EasonChan\Eason Chan\四季.mp4,/sdcard/Karaoke/Cantopop/Eason Chan/陳奕迅 Eason Chan - 《四季》MV.mp4,ok,"new video, length matches"
+2026-11-10 19:24:43,lrc,D:\ai\Karaoke\Cantopop\Eason Chan\《塵大師》陳奕迅 Eason Chan [Official MV].lrc,/sdcard/Karaoke/Cantopop/Eason Chan/《塵大師》陳奕迅 Eason Chan [Official MV].lrc,ok,pushed to box
+2026-11-10 19:24:51,video,D:\ai\GetVideo\EasonChan\Eason Chan\塵大師.mp4,/sdcard/Karaoke/Cantopop/Eason Chan/《塵大師》陳奕迅 Eason Chan [Official MV].mp4,ok,"new video, length matches"
+2026-11-10 19:24:51,lrc,D:\ai\Karaoke\Cantopop\Eason Chan\夕陽無限好.lrc,/sdcard/Karaoke/Cantopop/Eason Chan/夕陽無限好.lrc,ok,pushed to box
+2026-11-10 19:24:51,lrc,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅Eason Chan《大開眼戒》[Lyrics MV].lrc,/sdcard/Karaoke/Cantopop/Eason Chan/陳奕迅Eason Chan《大開眼戒》[Lyrics MV].lrc,ok,pushed to box
+2026-11-10 19:24:53,video,D:\ai\GetVideo\EasonChan\Eason Chan\大開眼戒.mp4,/sdcard/Karaoke/Cantopop/Eason Chan/陳奕迅Eason Chan《大開眼戒》[Lyrics MV].mp4,ok,"new video, length matches"
+2026-11-10 19:24:53,lrc,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 天下無雙.lrc,/sdcard/Karaoke/Cantopop/Eason Chan/陳奕迅 天下無雙.lrc,ok,pushed to box
+2026-11-10 19:24:54,video,D:\ai\GetVideo\EasonChan\Eason Chan\天下無雙.mp4,/sdcard/Karaoke/Cantopop/Eason Chan/陳奕迅 天下無雙.mp4,ok,"new video, length matches"
+2026-11-10 19:24:54,lrc,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 Eason Chan《天使的禮物》[MV].lrc,/sdcard/Karaoke/Cantopop/Eason Chan/陳奕迅 Eason Chan《天使的禮物》[MV].lrc,ok,pushed to box
+2026-11-10 19:24:57,video,D:\ai\GetVideo\EasonChan\Eason Chan\天使的禮物.mp4,/sdcard/Karaoke/Cantopop/Eason Chan/陳奕迅 Eason Chan《天使的禮物》[MV].mp4,ok,"new video, length matches"
+2026-11-10 19:24:57,lrc,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 - 太陽照常升起.lrc,/sdcard/Karaoke/Cantopop/Eason Chan/陳奕迅 - 太陽照常升起.lrc,ok,pushed to box
+2026-11-10 19:24:57,lrc,D:\ai\Karaoke\Cantopop\Eason Chan\《孤勇者》（《英雄聯盟：雙城之戰》動畫劇集中文主題曲）陳奕迅 Eason Chan [Official MV].lrc,/sdcard/Karaoke/Cantopop/Eason Chan/《孤勇者》（《英雄聯盟：雙城之戰》動畫劇集中文主題曲）陳奕迅 Eason Chan [Official MV].lrc,ok,pushed to box
+2026-11-10 19:25:06,video,D:\ai\GetVideo\EasonChan\Eason Chan\孤勇者.mp4,/sdcard/Karaoke/Cantopop/Eason Chan/《孤勇者》（《英雄聯盟：雙城之戰》動畫劇集中文主題曲）陳奕迅 Eason Chan [Official MV].mp4,ok,"new video, length matches"
+2026-11-10 19:25:06,lrc,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 - 富士山下.lrc,/sdcard/Karaoke/Cantopop/Eason Chan/陳奕迅 - 富士山下.lrc,ok,pushed to box
+2026-11-10 19:25:06,lrc,D:\ai\Karaoke\Cantopop\Eason Chan\心的距離.lrc,/sdcard/Karaoke/Cantopop/Eason Chan/心的距離.lrc,ok,pushed to box
+2026-11-10 19:25:08,video,D:\ai\GetVideo\EasonChan\Eason Chan\心的距離.mp4,/sdcard/Karaoke/Cantopop/Eason Chan/心的距離.mp4,ok,"new video, length matches"
+2026-11-10 19:25:08,lrc,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 Eason Chan《忘記歌詞》Official 官方完整版 [首播] [MV].lrc,/sdcard/Karaoke/Cantopop/Eason Chan/陳奕迅 Eason Chan《忘記歌詞》Official 官方完整版 [首播] [MV].lrc,ok,pushed to box
+2026-11-10 19:25:11,video,D:\ai\GetVideo\EasonChan\Eason Chan\忘記歌詞.mp4,/sdcard/Karaoke/Cantopop/Eason Chan/陳奕迅 Eason Chan《忘記歌詞》Official 官方完整版 [首播] [MV].mp4,ok,"new video, length matches"
+2026-11-10 19:25:11,lrc,D:\ai\Karaoke\Cantopop\Eason Chan\怕死.lrc,/sdcard/Karaoke/Cantopop/Eason Chan/怕死.lrc,ok,pushed to box
+2026-11-10 19:25:11,lrc,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 Eason《我們萬歲》歌詞(lyrics).lrc,/sdcard/Karaoke/Cantopop/Eason Chan/陳奕迅 Eason《我們萬歲》歌詞(lyrics).lrc,ok,pushed to box
+2026-11-10 19:25:12,lrc,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 - 我的快樂時代 HD.lrc,/sdcard/Karaoke/Cantopop/Eason Chan/陳奕迅 - 我的快樂時代 HD.lrc,ok,pushed to box
+2026-11-10 19:25:12,lrc,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 Eason Chan - 於心有愧 (Official Music Video).lrc,/sdcard/Karaoke/Cantopop/Eason Chan/陳奕迅 Eason Chan - 於心有愧 (Official Music Video).lrc,ok,pushed to box
+2026-11-10 19:25:13,video,D:\ai\GetVideo\EasonChan\Eason Chan\於心有愧.mp4,/sdcard/Karaoke/Cantopop/Eason Chan/陳奕迅 Eason Chan - 於心有愧 (Official Music Video).mp4,ok,"new video, length matches"
+2026-11-10 19:25:14,video,D:\ai\GetVideo\EasonChan\Eason Chan\明年今日.mp4,/sdcard/Karaoke/Cantopop/Eason Chan/陳奕迅 Eason Chan《明年今日》[Official MV].mp4,ok,"new video, length matches"
+2026-11-10 19:25:15,lrc,D:\ai\Karaoke\Cantopop\Eason Chan\最佳損友.lrc,/sdcard/Karaoke/Cantopop/Eason Chan/最佳損友.lrc,ok,pushed to box
+2026-11-10 19:25:15,lrc,D:\ai\Karaoke\Cantopop\Eason Chan\最後派對.lrc,/sdcard/Karaoke/Cantopop/Eason Chan/最後派對.lrc,ok,pushed to box
+2026-11-10 19:25:15,lrc,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅Eason Chan-歲月如歌(衝上雲霄II MV).lrc,/sdcard/Karaoke/Cantopop/Eason Chan/陳奕迅Eason Chan-歲月如歌(衝上雲霄II MV).lrc,ok,pushed to box
+2026-11-10 19:25:15,lrc,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 Eason Chan - 沙龍 (Official Music Video).lrc,/sdcard/Karaoke/Cantopop/Eason Chan/陳奕迅 Eason Chan - 沙龍 (Official Music Video).lrc,ok,pushed to box
+2026-11-10 19:25:16,video,D:\ai\GetVideo\EasonChan\Eason Chan\沙龍.mp4,/sdcard/Karaoke/Cantopop/Eason Chan/陳奕迅 Eason Chan - 沙龍 (Official Music Video).mp4,ok,"new video, length matches"
+2026-11-10 19:25:17,lrc,D:\ai\Karaoke\Cantopop\Eason Chan\Eason陳奕迅 浮誇[HD].lrc,/sdcard/Karaoke/Cantopop/Eason Chan/Eason陳奕迅 浮誇[HD].lrc,ok,pushed to box
+2026-11-10 19:25:17,lrc,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 - 淘汰 HD.lrc,/sdcard/Karaoke/Cantopop/Eason Chan/陳奕迅 - 淘汰 HD.lrc,ok,pushed to box
+2026-11-10 19:25:25,video,D:\ai\GetVideo\EasonChan\Eason Chan\淘汰(國).mp4,/sdcard/Karaoke/Cantopop/Eason Chan/陳奕迅 - 淘汰 HD.mp4,ok,"new video, length matches"
+2026-11-10 19:25:25,lrc,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 Eason Chan《漸漸》AM I ME - eason and the duo band [Official MV].lrc,/sdcard/Karaoke/Cantopop/Eason Chan/陳奕迅 Eason Chan《漸漸》AM I ME - eason and the duo band [Official MV].lrc,ok,pushed to box
+2026-11-10 19:25:32,video,D:\ai\GetVideo\EasonChan\Eason Chan\漸漸.mp4,/sdcard/Karaoke/Cantopop/Eason Chan/陳奕迅 Eason Chan《漸漸》AM I ME - eason and the duo band [Official MV].mp4,ok,"new video, length matches"
+2026-11-10 19:25:32,lrc,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 Eason Chan - 無人之境 (Official Music Video).lrc,/sdcard/Karaoke/Cantopop/Eason Chan/陳奕迅 Eason Chan - 無人之境 (Official Music Video).lrc,ok,pushed to box
+2026-11-10 19:25:34,video,D:\ai\GetVideo\EasonChan\Eason Chan\無人之境.mp4,/sdcard/Karaoke/Cantopop/Eason Chan/陳奕迅 Eason Chan - 無人之境 (Official Music Video).mp4,ok,"new video, length matches"
+2026-11-10 19:25:34,lrc,D:\ai\Karaoke\Cantopop\Eason Chan\《盲婚啞嫁》陳奕迅 Eason Chan [Official MV].lrc,/sdcard/Karaoke/Cantopop/Eason Chan/《盲婚啞嫁》陳奕迅 Eason Chan [Official MV].lrc,ok,pushed to box
+2026-11-10 19:25:39,video,D:\ai\GetVideo\EasonChan\Eason Chan\盲婚啞嫁.mp4,/sdcard/Karaoke/Cantopop/Eason Chan/《盲婚啞嫁》陳奕迅 Eason Chan [Official MV].mp4,ok,"new video, length matches"
+2026-11-10 19:25:39,lrc,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 - 粵語殘片 HD.lrc,/sdcard/Karaoke/Cantopop/Eason Chan/陳奕迅 - 粵語殘片 HD.lrc,ok,pushed to box
+2026-11-10 19:25:39,lrc,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 - 與我常在.lrc,/sdcard/Karaoke/Cantopop/Eason Chan/陳奕迅 - 與我常在.lrc,ok,pushed to box
+2026-11-10 19:25:39,lrc,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 - 《苦瓜》MV.lrc,/sdcard/Karaoke/Cantopop/Eason Chan/陳奕迅 - 《苦瓜》MV.lrc,ok,pushed to box
+2026-11-10 19:25:42,video,D:\ai\GetVideo\EasonChan\Eason Chan\苦瓜.mp4,/sdcard/Karaoke/Cantopop/Eason Chan/陳奕迅 - 《苦瓜》MV.mp4,ok,"new video, length matches"
+2026-11-10 19:25:42,lrc,D:\ai\Karaoke\Cantopop\Eason Chan\落花流水.lrc,/sdcard/Karaoke/Cantopop/Eason Chan/落花流水.lrc,ok,pushed to box
+2026-11-10 19:25:43,video,D:\ai\GetVideo\EasonChan\Eason Chan\落花流水.mp4,/sdcard/Karaoke/Cantopop/Eason Chan/落花流水.mp4,ok,"new video, length matches"
+2026-11-10 19:25:43,lrc,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 葡萄成熟時 MV.lrc,/sdcard/Karaoke/Cantopop/Eason Chan/陳奕迅 葡萄成熟時 MV.lrc,ok,pushed to box
+2026-11-10 19:25:45,video,D:\ai\GetVideo\EasonChan\Eason Chan\葡萄成熟時.mp4,/sdcard/Karaoke/Cantopop/Eason Chan/陳奕迅 葡萄成熟時 MV.mp4,ok,"new video, length matches"
+2026-11-10 19:25:45,lrc,D:\ai\Karaoke\Cantopop\Eason Chan\裙下之臣--陳奕迅(from solidays disc1).lrc,/sdcard/Karaoke/Cantopop/Eason Chan/裙下之臣--陳奕迅(from solidays disc1).lrc,ok,pushed to box
+2026-11-10 19:25:45,lrc,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 - 那一夜有沒有說.lrc,/sdcard/Karaoke/Cantopop/Eason Chan/陳奕迅 - 那一夜有沒有說.lrc,ok,pushed to box
+2026-11-10 19:25:45,lrc,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 Eason Chan - 重口味 (Official Music Video) (Full Version).lrc,/sdcard/Karaoke/Cantopop/Eason Chan/陳奕迅 Eason Chan - 重口味 (Official Music Video) (Full Version).lrc,ok,pushed to box
+2026-11-10 19:25:50,video,D:\ai\GetVideo\EasonChan\Eason Chan\重口味.mp4,/sdcard/Karaoke/Cantopop/Eason Chan/陳奕迅 Eason Chan - 重口味 (Official Music Video) (Full Version).mp4,ok,"new video, length matches"
+2026-11-10 19:25:50,lrc,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅Eason Chan《防不勝防》[Lyrics MV].lrc,/sdcard/Karaoke/Cantopop/Eason Chan/陳奕迅Eason Chan《防不勝防》[Lyrics MV].lrc,ok,pushed to box
+2026-11-10 19:25:50,lrc,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 Eason Chan - 阿牛 Aa  Ngau.lrc,/sdcard/Karaoke/Cantopop/Eason Chan/陳奕迅 Eason Chan - 阿牛 Aa  Ngau.lrc,ok,pushed to box
+2026-11-10 19:25:51,lrc,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 Eason Chan - 陀飛輪 (Official Music Video).lrc,/sdcard/Karaoke/Cantopop/Eason Chan/陳奕迅 Eason Chan - 陀飛輪 (Official Music Video).lrc,ok,pushed to box
+2026-11-10 19:25:52,video,D:\ai\GetVideo\EasonChan\Eason Chan\陀飛輪.mp4,/sdcard/Karaoke/Cantopop/Eason Chan/陳奕迅 Eason Chan - 陀飛輪 (Official Music Video).mp4,ok,"new video, length matches"
+2026-11-10 19:25:52,lrc,D:\ai\Karaoke\Cantopop\Eason Chan\黃金時代.lrc,/sdcard/Karaoke/Cantopop/Eason Chan/黃金時代.lrc,ok,pushed to box
+2026-11-10 19:25:52,lrc,D:\ai\Karaoke\Cantopop\Eason Chan\陳奕迅 Eason Chan - 黑洞 (Official Music Video).lrc,/sdcard/Karaoke/Cantopop/Eason Chan/陳奕迅 Eason Chan - 黑洞 (Official Music Video).lrc,ok,pushed to box
+2026-11-10 19:26:11,video,D:\ai\GetVideo\EasonChan\Eason Chan\黑洞.mp4,/sdcard/Karaoke/Cantopop/Eason Chan/陳奕迅 Eason Chan - 黑洞 (Official Music Video).mp4,ok,"new video, length matches"
+2026-11-10 19:27:00,remove,,/sdcard/Karaoke/Cantopop/Eason Chan/陳奕迅 Eason Chan - 一絲不掛 (Official Music Video).*,ok,removed from box: no processed lyric file
+2026-11-10 19:27:01,remove,,/sdcard/Karaoke/Cantopop/Eason Chan/陳奕迅 Eason Chan - 任我行 (Official Music Video).*,ok,removed from box: lyric file not processed
+2026-11-10 19:27:01,remove,,/sdcard/Karaoke/Cantopop/Eason Chan/陳奕迅 Eason Chan《單車》[Official MV].*,ok,removed from box: lyric file not processed
+2026-11-10 19:27:01,remove,,/sdcard/Karaoke/Cantopop/Eason Chan/幸福摩天輪 - 陳奕迅.*,ok,removed from box: lyric file not processed
+2026-11-10 19:27:01,remove,,/sdcard/Karaoke/Cantopop/Eason Chan/《是但求其愛》陳奕迅 Eason Chan [Official MV].*,ok,removed from box: lyric file not processed
+2026-11-10 19:27:02,remove,,/sdcard/Karaoke/Cantopop/Eason Chan/陳奕迅 Eason Chan - 每一個明天 (Official Music Video).*,ok,removed from box: lyric file not processed
+2026-11-10 19:27:02,remove,,/sdcard/Karaoke/Cantopop/Eason Chan/陳奕迅 Eason Chan - 無條件 (Official Music Video).*,ok,removed from box: lyric file not processed
+2026-11-10 19:27:02,remove,,/sdcard/Karaoke/Cantopop/Eason Chan/《社交恐懼癌》陳奕迅 Eason Chan [Official MV].*,ok,removed from box: no processed lyric file
+2026-11-10 19:27:02,remove,,/sdcard/Karaoke/Cantopop/Eason Chan/《空城記》Something Missing 陳奕迅 Eason Chan [Official MV].*,ok,removed from box: no processed lyric file
+2026-11-10 19:27:03,remove,,/sdcard/Karaoke/Cantopop/Eason Chan/《致明日的舞》A DANCE FOR TOMORROW 陳奕迅 Eason Chan [Official MV].*,ok,removed from box: lyric file not processed
+2026-11-10 19:27:03,remove,,/sdcard/Karaoke/Cantopop/Eason Chan/《擺渡人》 主題曲 MV 《讓我留在你身邊》 ： 主唱 - 陳奕迅 Eason Chan (In Cinemas 23 December).*,ok,removed from box: no processed lyric file

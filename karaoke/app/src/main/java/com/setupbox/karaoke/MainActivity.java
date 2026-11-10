@@ -84,6 +84,16 @@ public class MainActivity extends Activity implements Server.Host {
     private boolean vocalOn = false;                 // false = karaoke (singer sings), true = original vocal
     private String currentSongId = "";
     private History history;                 // play history, last 30 days (history.jsonl)
+    private volatile Storage storage;        // the Karaoke folder the user picked (null until then); ALL song files go through it
+    private android.content.SharedPreferences prefs;
+    private FrameLayout setupView;           // first-run screen: choose the Karaoke folder
+    private TextView setupText;
+    private android.widget.Button setupButton;
+    private volatile boolean setupShown;     // read by the web server thread
+    private volatile String setupMsg = "";
+    private static final int REQ_PICK = 41;
+    /** The app's own files (queue, history, flips, offsets, index cache) live in private storage, never in the user's folder. */
+    private File priv(String name) { return new File(getFilesDir(), name); }
     private long lastPrune = 0;
     private final Set<String> flipped = Collections.synchronizedSet(new HashSet<String>());
 
@@ -110,7 +120,7 @@ public class MainActivity extends Activity implements Server.Host {
         videoBand.addView(surfaceView, new FrameLayout.LayoutParams(-1, -1, Gravity.CENTER));
         root.addView(videoBand, new FrameLayout.LayoutParams(-1, -1));
         final SurfaceView surface = surfaceView;
-        backdrop = new Backdrop(backdropView, new File(android.os.Environment.getExternalStorageDirectory(), "Pictures/Screensaver"), ui);
+        backdrop = new Backdrop(backdropView, new File(getExternalFilesDir(null) == null ? getFilesDir() : getExternalFilesDir(null), "Screensaver"), ui);
         dimView = new android.view.View(this);                 // darkens video/photos so the lyrics stay readable
         dimView.setBackgroundColor(0x99000000);
         dimView.setVisibility(android.view.View.GONE);
@@ -206,6 +216,30 @@ public class MainActivity extends Activity implements Server.Host {
         sleepBox.addView(sleepClock, new LinearLayout.LayoutParams(160, -2));
         sleepView.addView(sleepBox, new FrameLayout.LayoutParams(-2, -2, Gravity.CENTER));
         root.addView(sleepView, new FrameLayout.LayoutParams(-1, -1));
+        setupView = new FrameLayout(this);                     // first run: choose the Karaoke folder (and a warning about USB drives)
+        setupView.setBackgroundColor(0xFF101418);
+        setupView.setVisibility(android.view.View.GONE);
+        LinearLayout setupBox = new LinearLayout(this);
+        setupBox.setOrientation(LinearLayout.VERTICAL);
+        setupBox.setGravity(Gravity.CENTER_HORIZONTAL);
+        setupText = new TextView(this);
+        setupText.setTextColor(Color.WHITE);
+        setupText.setTextSize(28);
+        setupText.setGravity(Gravity.CENTER);
+        setupBox.addView(setupText, new LinearLayout.LayoutParams(1400, -2));
+        setupButton = new android.widget.Button(this);
+        setupButton.setText("Choose the Karaoke folder");
+        setupButton.setTextSize(26);
+        setupButton.setFocusable(true);
+        setupButton.setFocusableInTouchMode(true);                // a mouse/touch must not leave the button unfocusable
+        setupButton.setOnClickListener(new android.view.View.OnClickListener() {
+            @Override public void onClick(android.view.View v) { pickFolder(); }
+        });
+        LinearLayout.LayoutParams bl = new LinearLayout.LayoutParams(-2, -2);
+        bl.topMargin = 48;
+        setupBox.addView(setupButton, bl);
+        setupView.addView(setupBox, new FrameLayout.LayoutParams(-2, -2, Gravity.CENTER));
+        root.addView(setupView, new FrameLayout.LayoutParams(-1, -1));
         setContentView(root);
 
         DefaultRenderersFactory rf = new DefaultRenderersFactory(this) {
@@ -255,46 +289,136 @@ public class MainActivity extends Activity implements Server.Host {
             }
         });
 
+        prefs = getSharedPreferences("karaoke", MODE_PRIVATE);
         String path = getIntent().getStringExtra("path");
-        if (path != null) { debugSingleFile = true; startFile(new File(path)); ui.post(tick); return; }
+        if (path != null) { debugSingleFile = true; startFile(new FileStorage(new File(path).getParentFile()).uri(path), null, null, "", false); ui.post(tick); return; }
 
-        queue = QueueManager.withFile(new File(android.os.Environment.getExternalStorageDirectory(), "Karaoke/state.txt"));
-        loadCrops();
-        history = new History(new File(android.os.Environment.getExternalStorageDirectory(), "Karaoke/history.jsonl"));
+        migrateLegacyFiles();
+        queue = QueueManager.withFile(priv("state.txt"));
+        history = new History(priv("history.jsonl"));
         loadFlips();
         server = new Server(this, this, PORT);
         try { server.start(); } catch (Exception e) { libraryNote = "Web server failed: " + e.getMessage(); }
         try { KeepAliveService.start(this, "http://" + ip + ":" + PORT); } catch (Exception ignored) { }   // survive Home / other apps
-        // Scanning a busy USB drive can take minutes: show the list from the last scan straight away, refresh behind it.
-        try {
-            File karaokeRoot = Library.findRoot();
-            Library cached = karaokeRoot == null ? null : Library.load(karaokeRoot, new File(android.os.Environment.getExternalStorageDirectory(), "Karaoke/index.json"));
-            if (cached != null && !cached.songs.isEmpty()) { lib = cached; libraryNote = ""; }
-        } catch (Exception ignored) { }
-        rescan();
+        openStorage();
         ui.post(tick);
     }
 
-    private void loadCrops() {
-        File ext = android.os.Environment.getExternalStorageDirectory();
-        File root = Library.findRoot();
-        crops = Crops.load(root == null ? null : new File(root, "crops.txt"), new File(ext, "Karaoke/crops.txt"));
+    // ---------- the Karaoke folder (folder picker) ----------
+
+    /** Opens the folder the user picked earlier; asks for one when there is none or the permission is gone. */
+    private void openStorage() {
+        String saved = prefs.getString("tree", null);
+        if (saved != null) {
+            android.net.Uri tree = android.net.Uri.parse(saved);
+            boolean granted = false;
+            for (android.content.UriPermission p : getContentResolver().getPersistedUriPermissions()) {
+                if (p.getUri().equals(tree) && p.isReadPermission()) granted = true;
+            }
+            if (granted && SafStorage.isInternal(tree)) {
+                storage = new SafStorage(this, tree);
+                Library cached = Library.load(storage, priv("index.json"));     // show the list from the last scan at once
+                if (cached != null && !cached.songs.isEmpty()) { lib = cached; libraryNote = ""; }
+                setupView.setVisibility(android.view.View.GONE);
+                setupShown = false;
+                rescan();
+                return;
+            }
+        }
+        showSetup(saved == null ? "" : "The Karaoke folder is not available any more.\n\n");
+    }
+
+    private void showSetup(String problem) {
+        storage = null;
+        libraryNote = "Choose the Karaoke folder on the TV";
+        setupText.setText(problem
+                + "Choose your Karaoke folder\n\n"
+                + "Pick the folder that holds your song folders, for example  Internal storage > Karaoke.\n\n"
+                + "Do NOT choose a USB drive or SD card. They are slow to read and can disconnect in the middle of a song. "
+                + "Copy your songs to the box's own storage first.\n\n"
+                + "Press OK to open the folder chooser.");
+        setupMsg = setupText.getText().toString();
+        setupShown = true;
+        setupView.setVisibility(android.view.View.VISIBLE);
+        setupButton.requestFocus();
+    }
+
+    private void pickFolder() {
+        android.content.Intent i = new android.content.Intent(android.content.Intent.ACTION_OPEN_DOCUMENT_TREE);
+        i.addFlags(android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION | android.content.Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION
+                | android.content.Intent.FLAG_GRANT_PREFIX_URI_PERMISSION);
+        if (android.os.Build.VERSION.SDK_INT >= 26) {
+            i.putExtra(android.provider.DocumentsContract.EXTRA_INITIAL_URI,
+                    android.provider.DocumentsContract.buildDocumentUri("com.android.externalstorage.documents", "primary:Karaoke"));
+        }
+        try { startActivityForResult(i, REQ_PICK); }
+        catch (Exception e) { showSetup("This device has no folder chooser.\n\n"); }
+    }
+
+    @Override protected void onActivityResult(int req, int result, android.content.Intent data) {
+        super.onActivityResult(req, result, data);
+        if (req != REQ_PICK) return;
+        if (result != RESULT_OK || data == null || data.getData() == null) { showSetup(""); return; }
+        android.net.Uri tree = data.getData();
+        if (!SafStorage.isInternal(tree)) {
+            showSetup("That folder is on a USB drive or SD card.\nPlease copy your songs to the box's internal storage and choose that folder.\n\n");
+            return;
+        }
+        try {
+            getContentResolver().takePersistableUriPermission(tree, android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        } catch (Exception e) {
+            showSetup("Android would not keep access to that folder. Please choose it again.\n\n");
+            return;
+        }
+        prefs.edit().putString("tree", tree.toString()).apply();
+        priv("index.json").delete();               // the list belongs to the old folder
+        lib = Library.empty();
+        openStorage();
+    }
+
+    /** Maintenance hook (adb / tests only, not reachable from the network): am start ... --ez pickfolder true asks for the folder again. */
+    @Override protected void onNewIntent(android.content.Intent i) {
+        super.onNewIntent(i);
+        setIntent(i);
+        if (i != null && i.getBooleanExtra("pickfolder", false) && !debugSingleFile) showSetup("");
+    }
+
+    /** One-time copy of the app's own files from the old /sdcard/Karaoke location into private storage. */
+    private void migrateLegacyFiles() {
+        if (prefs.getBoolean("migrated", false)) return;
+        File old = new File(android.os.Environment.getExternalStorageDirectory(), "Karaoke");
+        for (String n : new String[]{"state.txt", "history.jsonl", "flips.txt"}) {
+            File from = new File(old, n), to = priv(n);
+            if (from.isFile() && !to.exists()) {
+                try { java.nio.file.Files.copy(from.toPath(), to.toPath()); } catch (Exception ignored) { }
+            }
+        }
+        prefs.edit().putBoolean("migrated", true).apply();
+    }
+
+    private static String textInRoot(Storage st, String name) {
+        Storage.Entry e = Storage.child(st, st.root(), name);
+        return e == null ? null : Storage.readText(st, e.handle);
     }
 
     /** Re-reads the Karaoke folder off the main thread; starts playing if songs are waiting. */
     private void rescan() {
-        if (scanning) return;          // a scan can take long while the USB drive is busy; never pile them up
+        if (scanning) return;          // a scan can take a while; never pile them up
+        final Storage st = storage;
+        if (st == null) return;
         scanning = true;
         new Thread(new Runnable() {
             @Override public void run() {
-                File root = Library.findRoot();
-                final Library l = root == null ? null : Library.scan(root);
+                final Library l = Library.scan(st, null, null);
+                final String cropsText = textInRoot(st, "crops.txt");
                 runOnUiThread(new Runnable() {
                     @Override public void run() {
                         scanning = false;
-                        loadCrops();
-                        if (l == null) { lib = Library.empty(); libraryNote = "Karaoke folder not found - is the USB drive plugged in?"; }
-                        else { lib = l; libraryNote = ""; l.save(new File(android.os.Environment.getExternalStorageDirectory(), "Karaoke/index.json")); }
+                        if (st != storage) return;              // the user picked another folder meanwhile
+                        crops = cropsText == null ? new java.util.HashMap<String, int[]>() : Crops.parse(cropsText);
+                        lib = l;
+                        libraryNote = l.songs.isEmpty() ? "No songs found in the chosen folder. Choose the folder that holds the language folders (for example Cantopop)." : "";
+                        l.save(priv("index.json"));
                         kick();
                     }
                 });
@@ -317,12 +441,13 @@ public class MainActivity extends Activity implements Server.Host {
             QueueManager.Item it = queue.advance();
             if (it == null) { stopPlayback(); return; }
             Library.Song s = lib.byId(it.songId);
-            File f = s == null ? null : lib.fileOf(s);
-            if (f == null || !f.isFile()) continue;     // file vanished: skip it
+            Storage st = storage;
+            if (s == null || st == null || s.audioH.isEmpty()) continue;     // song gone from the list: skip it
             currentSongId = s.id;
             vocalOn = false;
-            File mv = s.video.isEmpty() ? null : new File(lib.root, s.video);
-            startFile(f, mv != null && mv.isFile() ? mv : null);
+            String lrcText = s.lrcH.isEmpty() ? null : Storage.readText(st, s.lrcH);
+            String vstem = s.video.isEmpty() ? "" : s.video.substring(s.video.lastIndexOf('/') + 1).replaceFirst("\\.[^.]+$", "");
+            startFile(st.uri(s.audioH), s.videoH.isEmpty() ? null : st.uri(s.videoH), lrcText, vstem, s.file.toLowerCase().endsWith(".mp4"));
             if (history != null) history.started(System.currentTimeMillis(), s.id, s.title, s.artist, s.language, it.singer);
             return;
         }
@@ -351,21 +476,20 @@ public class MainActivity extends Activity implements Server.Host {
         history.finished(Math.min(player.getCurrentPosition(), dur > 0 ? dur : Long.MAX_VALUE), dur);
     }
 
-    private void startFile(File f) { startFile(f, null); }
-
-    /** Plays f (the karaoke audio); if a music video is given it is shown muted behind the lyrics, in sync. */
-    private void startFile(File f, File video) {
-        songPath = f.getPath();
-        String base = songPath.replaceFirst("\\.[^./]+$", "");
-        lrc = Lrc.load(new File(base + ".lrc"));
+    /**
+     * Plays the karaoke audio (a URI from the Storage); if a music video URI is given it is shown muted behind the lyrics, in sync.
+     * lrcText = the lyric file's text or null; videoStem = the video's file name without extension (key into crops.txt).
+     */
+    private void startFile(String audioUri, String video, String lrcText, String videoStem, boolean audioIsVideo) {
+        songPath = currentSongId.isEmpty() ? audioUri : currentSongId;
+        lrc = lrcText == null ? null : Lrc.parse(lrcText);
         lastLine = -2;
         lastCount = -1;
         lyricsView.setText("");
         countdownView.setText("");
         loadOffset();
         applyChannel();
-        boolean mp4Own = f.getName().toLowerCase().endsWith(".mp4");
-        boolean showPhotos = video == null && !mp4Own;           // an audio-only song: photos behind the lyrics
+        boolean showPhotos = video == null && !audioIsVideo;           // an audio-only song: photos behind the lyrics
         backdropView.setVisibility(debugSingleFile ? android.view.View.GONE : android.view.View.VISIBLE);
         dimView.setVisibility(debugSingleFile ? android.view.View.GONE : android.view.View.VISIBLE);
         backdrop.stop();
@@ -374,7 +498,7 @@ public class MainActivity extends Activity implements Server.Host {
         // last frame and would cover the photo backdrop (it sits above it).
         videoBand.setVisibility(showPhotos ? android.view.View.INVISIBLE : android.view.View.VISIBLE);
         wantMp3 = video != null;
-        videoCrop = video == null ? null : crops.get(video.getName().replaceFirst("\\.[^.]+$", ""));
+        videoCrop = video == null ? null : crops.get(videoStem);
         player.setVolume(video != null ? 0f : 1f);          // muted until the karaoke mp3 is the selected track
         player.setTrackSelectionParameters(player.getTrackSelectionParameters().buildUpon()
                 .clearOverridesOfType(androidx.media3.common.C.TRACK_TYPE_AUDIO).build());
@@ -382,10 +506,10 @@ public class MainActivity extends Activity implements Server.Host {
             androidx.media3.exoplayer.source.ProgressiveMediaSource.Factory pf =
                     new androidx.media3.exoplayer.source.ProgressiveMediaSource.Factory(new androidx.media3.datasource.DefaultDataSource.Factory(this));
             player.setMediaSource(new androidx.media3.exoplayer.source.MergingMediaSource(
-                    pf.createMediaSource(MediaItem.fromUri(android.net.Uri.fromFile(video))),
-                    pf.createMediaSource(MediaItem.fromUri(android.net.Uri.fromFile(f)))));
+                    pf.createMediaSource(MediaItem.fromUri(android.net.Uri.parse(video))),
+                    pf.createMediaSource(MediaItem.fromUri(android.net.Uri.parse(audioUri)))));
         } else {
-            player.setMediaItem(MediaItem.fromUri(android.net.Uri.fromFile(f)));
+            player.setMediaItem(MediaItem.fromUri(android.net.Uri.parse(audioUri)));
         }
         player.prepare();
         player.play();
@@ -402,7 +526,7 @@ public class MainActivity extends Activity implements Server.Host {
         vocal.setMode(left ? VocalProcessor.LEFT : VocalProcessor.RIGHT);
     }
 
-    private File flipFile() { return new File(android.os.Environment.getExternalStorageDirectory(), "Karaoke/flips.txt"); }
+    private File flipFile() { return priv("flips.txt"); }
 
     private void loadFlips() {
         try {
@@ -438,13 +562,20 @@ public class MainActivity extends Activity implements Server.Host {
 
     private void readSleepConfig() {
         lastConfigRead = System.currentTimeMillis();
-        try (java.io.FileInputStream in = new java.io.FileInputStream(
-                new File(android.os.Environment.getExternalStorageDirectory(), "Karaoke/config.properties"))) {
-            java.util.Properties p = new java.util.Properties();
-            p.load(new java.io.InputStreamReader(in, java.nio.charset.StandardCharsets.UTF_8));
-            String v = p.getProperty("sleep_minutes");
-            if (v != null) sleepMs = Math.max(0L, (long) (Double.parseDouble(v.trim()) * 60000L));
-        } catch (Exception ignored) { }       // no file or bad value: keep the current setting (default 5 minutes)
+        final Storage st = storage;
+        if (st == null) return;
+        new Thread(new Runnable() {                 // reading through the folder picker's storage: never on the main thread
+            @Override public void run() {
+                try {
+                    String t = textInRoot(st, "config.properties");
+                    if (t == null) return;
+                    java.util.Properties p = new java.util.Properties();
+                    p.load(new java.io.StringReader(t));
+                    String v = p.getProperty("sleep_minutes");
+                    if (v != null) sleepMs = Math.max(0L, (long) (Double.parseDouble(v.trim()) * 60000L));
+                } catch (Exception ignored) { }     // no file or bad value: keep the current setting (default 5 minutes)
+            }
+        }).start();
     }
 
     /** Called for every remote key and phone action. Returns true if it just woke the screen. */
@@ -517,6 +648,8 @@ public class MainActivity extends Activity implements Server.Host {
             o.put("playing", cPlaying && !cPaused).put("paused", cPaused);
             o.put("posMs", cPos).put("durMs", cDur);
             o.put("vocalOn", vocalOn).put("flipped", flipped.contains(currentSongId));
+            o.put("setup", setupShown);                            // the TV is asking for the Karaoke folder
+            if (setupShown) o.put("setupText", setupMsg);
         } catch (Exception ignored) { }
         return o;
     }
@@ -746,6 +879,10 @@ public class MainActivity extends Activity implements Server.Host {
 
     @Override public boolean onKeyDown(int k, KeyEvent e) {
         if (touch()) return true;                        // the key that wakes the screen does nothing else
+        if (setupView.getVisibility() == android.view.View.VISIBLE) {      // folder screen: OK always opens the chooser, whatever has focus
+            if (k == KeyEvent.KEYCODE_DPAD_CENTER || k == KeyEvent.KEYCODE_ENTER || k == KeyEvent.KEYCODE_BUTTON_A) { pickFolder(); return true; }
+            return super.onKeyDown(k, e);
+        }
         if (player == null) return super.onKeyDown(k, e);
         hintUntil = System.currentTimeMillis() + 6000;
         switch (k) {
@@ -781,7 +918,7 @@ public class MainActivity extends Activity implements Server.Host {
 
     // ---------- lyric timing nudge (saved per song) ----------
 
-    private File offsetFile() { return new File(android.os.Environment.getExternalStorageDirectory(), "Karaoke/lyric_offsets.properties"); }
+    private File offsetFile() { return priv("lyric_offsets.properties"); }
 
     private void loadOffset() {
         lyricOffsetMs = 0;
