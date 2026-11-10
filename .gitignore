@@ -8,3 +8,19 @@ local.properties
 
 __pycache__/
 *.pyc
+
+# song and video files
+*.mp3
+*.mp4
+*.m4a
+*.wav
+*.flac
+*.ogg
+*.opus
+*.aac
+*.wma
+*.mkv
+*.webm
+*.avi
+*.mov
+*.part

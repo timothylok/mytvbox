@@ -12,6 +12,7 @@ import argparse, os, shutil, subprocess, sys, tempfile, time
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from clean_aligned import clean_file
+from ledger import log
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 TOOLS = os.path.abspath(os.path.join(HERE, ".."))
@@ -61,6 +62,7 @@ def main():
             vocals = os.path.join(tmp, "htdemucs", stem, "vocals.wav")
             if r.returncode != 0 or not os.path.exists(vocals):
                 print("   demucs failed:", r.stdout[-300:].strip())
+                log("align", lrc, "", "failed", "demucs")
                 continue
             out = os.path.join(tmp, "aligned.lrc")
             r = run([ALIGN_PY, ALIGN, vocals, lrc, out, "--language", a.language, "--model", a.model])
@@ -69,11 +71,13 @@ def main():
                 print("  ", l.strip())
             if r.returncode != 0 or not os.path.exists(out):
                 print("   alignment failed:", r.stdout[-300:].strip())
+                log("align", lrc, "", "failed", "alignment")
                 continue
             shutil.copy2(lrc, os.path.join(a.backup, stem + ".lrc"))   # keep the original
             shutil.copy2(out, lrc)
             kept, dropped = clean_file(lrc)                           # drop word times that are clearly wrong
             print(f"   quality check: {kept} lines exact, {dropped} back to estimate")
+            log("align", mp3, lrc, "ok", f"{kept} lines exact, {dropped} estimated; original in {a.backup}")
             os.remove(out)
             shutil.rmtree(os.path.join(tmp, "htdemucs", stem), ignore_errors=True)
             print(f"   done in {time.time() - t0:.0f}s", flush=True)

@@ -13,6 +13,8 @@ usage: copy_videos.py [--dry-run] [--only ARTIST] [--limit N]
 import argparse, os, subprocess, sys, time
 
 HERE = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, HERE)
+from ledger import log
 ADB = os.path.join(HERE, "..", "sdk", "platform-tools", "adb.exe")
 
 
@@ -80,11 +82,13 @@ def main():
         r = run([ADB, "-s", a.box, "shell", f"stat -c %s {q(remote)}"])
         if r.stdout.strip() == str(size):
             skipped += 1
+            log("video", src, remote, "skipped", "same size already on box")
             continue
         # a complete .part left behind by an earlier run (the rename used to fail on names with an apostrophe)
         r = run([ADB, "-s", a.box, "shell", f"stat -c %s {q(tmp)}"])
         if r.stdout.strip() == str(size) and rename(a, tmp, remote, size):
             print(f"[{n}/{len(todo)}] {lang}/{artist}/{stem}.mp4  (finished an earlier copy)", flush=True)
+            log("video", src, remote, "ok", "finished earlier .part")
             fixed += 1
             continue
         print(f"[{n}/{len(todo)}] {lang}/{artist}/{stem}.mp4  ({size / 1e6:.0f} MB)", flush=True)
@@ -92,13 +96,16 @@ def main():
         r = run([ADB, "-s", a.box, "push", src, tmp])
         if r.returncode != 0:
             print("   push failed:", r.stdout[-200:].strip())
+            log("video", src, remote, "failed", "push")
             failed += 1
             continue
         # only a complete video gets its final name (the app ignores *.part*)
         if not rename(a, tmp, remote, size):
             print("   rename failed:", remote)
+            log("video", src, remote, "failed", "rename")
             failed += 1
             continue
+        log("video", src, remote, "ok", f"{size} bytes")
         done += 1
     print(f"copied {done}, finished earlier copies {fixed}, already there {skipped}, failed {failed}, {(time.time() - t0) / 60:.1f} min")
 

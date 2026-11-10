@@ -97,6 +97,75 @@ Known quirk (user chose to leave it, 2026-11-10): "Lyrics MV" videos (e.g. Shall
 15. **Titles**: `D:\ai\Karaoke\titles.txt` (made by `tools/scripts/make_titles.py`, Eason Chan only) is on the box. Other artists still show the file-name title.
 11. **Security (unchanged, known; user was told, no decision)**: the box's ADB on :5555 has no authentication, and the launcher's Power tile depends on it.
 
+## Future: publish the Karaoke app on Google Play (user's goal, 2026-11-10)
+
+The app is built for one box today. Before it is "production grade" for Google Play, plan and work through this list
+(check current Play policy at the time; requirements change every year). Today: `targetSdk 29`, `minSdk 21`,
+`compileSdk 34`, `requestLegacyExternalStorage`, cleartext HTTP, APK debug builds, package `com.setupbox.karaoke`.
+
+**Blockers (Play will reject the app or it will not work on other devices)**
+1. **Target SDK**: Play requires a recent target API (API 35+ by late 2026). Raising it from 29 breaks today's file access
+   (scoped storage), needs foreground-service types/permissions (`FOREGROUND_SERVICE_MEDIA_PLAYBACK`), the
+   notification permission (API 33+), and re-testing everything on Android 10 *and* a current Android TV / Google TV device.
+2. **Storage access**: `/sdcard/Karaoke` and raw USB paths will not be readable. Switch to the Storage Access Framework
+   (user picks the Karaoke folder / USB drive once, keep the persisted URI permission) or to MediaStore + the app's own folder.
+   Do not use `MANAGE_EXTERNAL_STORAGE` (Play restricts it). Settings/queue/history/flips move to app-private storage.
+3. **Content and copyright**: the app must ship with NO songs, videos or lyrics and must not download from YouTube or
+   similar. It plays the user's own files. The listing, screenshots and demo content must use material we have rights to.
+   The PC pipeline (Demucs, Whisper alignment, video copy) stays a separate desktop tool, or becomes an optional
+   companion app; decide how users get L/R karaoke files (docs for the desktop tool, or on-device separation - too heavy for most TV boxes).
+4. **Photo backdrop**: Bing daily images have usage terms; replace with bundled licensed images, the user's own photos, or a plain gradient.
+5. **Release build**: Android App Bundle (`.aab`), release signing with Play App Signing (keep the upload key safe and out of git),
+   R8/minify with keep rules for NanoHTTPD/ZXing/Media3, `versionCode` bumped on every upload, a permanent package name
+   (pick a domain we own before the first upload - it can never change).
+
+**Required for the listing**
+6. **Android TV quality**: banner (320x180) and TV icon, `LEANBACK_LAUNCHER` (done), full D-pad navigation, no touch-only
+   actions, overscan-safe layout, works without the phone page (on-TV song picker), meets the TV app quality checklist.
+7. **Phone web page security**: today it is open to anyone on the LAN. Add a pairing PIN / token in the QR code, rate-limit,
+   validate every parameter, keep it LAN-only, no cleartext outside the LAN (network security config limited to local addresses).
+8. **Policies and forms**: privacy policy URL (the app collects no personal data: say so; play history stays on the device),
+   Data safety form, content rating questionnaire, target audience, ads declaration (none), open-source licences screen
+   (Media3 Apache-2.0, ZXing Apache-2.0, NanoHTTPD BSD).
+9. **Testing track**: a new personal developer account must run a closed test (currently 12+ testers for 14 days) before
+   production. Plan a group of testers with Android TV / Google TV devices.
+
+**Production quality**
+10. Crash and ANR reporting (Play Console vitals; optional Crashlytics - then update the privacy policy and Data safety).
+11. Settings screen on the TV (sleep minutes, video margins, lyric size, language), not only `config.properties`.
+12. Localisation: English + Traditional/Simplified Chinese strings; no hard-coded text.
+13. Automated tests: keep logic Android-free (queue, lrc, history, crops) with JUnit; add instrumented UI tests for the TV flow;
+    CI build of the release bundle.
+14. Performance budget on low-end boxes (32-bit ARM, 2 GB): cold start, memory, frame drops with 1080p video + lyrics.
+15. Accessibility: readable font sizes, contrast, content descriptions for the TV screen and the phone page.
+16. The **launcher** (`launcher/`) is a HOME replacement for this box only - not part of the Play release.
+
+**Does a Play-ready build (target API 35+) still run on this box (Android 10 / API 29)? Yes.** `targetSdk` only selects
+compatibility behaviour for newer Android versions; it does not stop installing on older ones (`minSdk` stays 21). The box
+stays the Android 10 test device. Things to handle for both: (a) storage moves to the folder picker (SAF), which works on
+Android 10 and on current devices incl. USB drives; legacy `/sdcard` access cannot be relied on with a high target;
+(b) notification / `FOREGROUND_SERVICE_MEDIA_PLAYBACK` permissions are ignored on Android 10 - declare them, version-check before asking;
+(c) `compileSdk`/AGP upgrade is toolchain only; (d) guard any API newer than API 29.
+
+**Size of the change (target API + storage):** 1) raise compile/target SDK, plugin, service permissions: small (1-2 h);
+2) storage via the folder picker: medium-large, the bulk (about a dozen path uses in `Library.java` / `MainActivity.java`:
+scan, lrc, video lookup, history, queue, config, flips, crops, titles, index cache); 3) test on the box: small; 4) test on a
+newer Android TV/emulator: small but needs a device. Main risk is SPEED: listing a USB drive through SAF (DocumentFile) is
+far slower than java.io.File - 650 songs could take minutes, so use direct `ContentResolver`/`DocumentsContract` child-document
+queries plus the existing `index.json` cache from the start. Keep the app's own small files (queue, history, settings, crops)
+in app-private storage; only songs/lyrics/videos use the picker. Put file access behind one small interface so the box keeps
+working while the picker version is built. Estimate: one session to write, one to test/fix on the box.
+
+**Decision (2026-11-10): the box has no USB drive and runs from internal storage `/sdcard/Karaoke`.** When the folder picker is
+added the user picks the SAME folder (Internal storage -> Karaoke; pick `Karaoke` itself, not the storage root - newer Android
+blocks the root). Files stay where they are. On first launch migrate the app's own files that live there today (queue
+`state.txt`, `history.jsonl`, `flips.txt`, `lyric_offsets.properties`, `config.properties`, `crops.txt`, `index.json`) to
+app-private storage so history and settings carry over. Keep the old `/sdcard/Karaoke` path working on this box as a fallback
+while the picker is built. Test the USB-drive case later with the repaired drive (slow SAF listing), and check early that the
+box's system file picker exists and works with the remote.
+
+Suggested order: 5 (package name) -> 2 + 1 (storage + target SDK, the big refactor) -> 3/4 (content) -> 7 -> 6 -> 8 -> 9 -> 10-15.
+
 ## Gotchas learned
 
 - `adb` is not on PATH: use `D:\ai\setupbox\tools\sdk\platform-tools\adb.exe`. In Git Bash, `JAVA_HOME` must be a Windows path (`C:\Program Files\Java\jdk-20`); the build is easiest from PowerShell.

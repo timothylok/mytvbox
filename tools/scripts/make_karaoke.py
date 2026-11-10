@@ -17,6 +17,8 @@ Needs: Demucs venv (tools\\demucs-venv), ffmpeg on PATH, an NVIDIA GPU (use --de
 import argparse, os, shutil, subprocess, sys, tempfile, time
 
 HERE = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, HERE)
+from ledger import log
 DEFAULT_PY = os.path.join(HERE, "..", "demucs-venv", "Scripts", "python.exe")
 ADB = os.path.join(HERE, "..", "sdk", "platform-tools", "adb.exe")
 
@@ -92,6 +94,7 @@ def main():
             inst = os.path.join(tmp, "htdemucs", stem, "no_vocals.wav")
             if r.returncode != 0 or not os.path.exists(inst):
                 print("   demucs failed:", r.stdout[-300:].strip())
+                log("karaoke", src, dest, "failed", "demucs")
                 failed += 1
                 continue
             os.makedirs(dest_dir, exist_ok=True)
@@ -100,6 +103,7 @@ def main():
                      "-map", "[o]", "-c:a", "libmp3lame", "-q:a", "2", part])
             if r.returncode != 0 or not os.path.exists(part):
                 print("   ffmpeg failed:", r.stdout[-300:].strip())
+                log("karaoke", src, dest, "failed", "ffmpeg")
                 failed += 1
                 continue
             os.replace(part, dest)           # only a complete file ever gets the final name
@@ -107,6 +111,7 @@ def main():
             if os.path.exists(lrc):
                 shutil.copy2(lrc, os.path.splitext(dest)[0] + ".lrc")
             shutil.rmtree(os.path.join(tmp, "htdemucs", stem), ignore_errors=True)
+            log("karaoke", src, dest, "ok")
             done += 1
             if a.push:
                 push(a, dest, lang, artist)

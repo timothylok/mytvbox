@@ -19,6 +19,7 @@ import fi.iki.elonen.NanoHTTPD;
  *   GET  /api/state             queue, now playing, player state
  *   GET  /api/browse            languages -> artists
  *   GET  /api/library           ?q=&amp;lang=&amp;artist=&amp;limit=   songs
+ *   GET  /api/history           ?days=30   songs played, newest first (kept 30 days, older ones are dropped automatically)
  *   POST /api/queue/add         ?song=ID&amp;singer=NAME&amp;position=end|next
  *   POST /api/queue/remove      ?id=QID
  *   POST /api/queue/move        ?id=QID&amp;dir=up|down|top|bottom
@@ -33,6 +34,8 @@ public final class Server extends NanoHTTPD {
         JSONObject state();
         Library library();
         QueueManager queue();
+        /** Play history of the last 30 days (null in single-file debug mode). */
+        History history();
         /** Runs on the app's main thread: pause, resume, skip, restart, vocal, flip, kick, rescan. */
         void command(String cmd);
     }
@@ -64,6 +67,12 @@ public final class Server extends NanoHTTPD {
                 case "/api/state": return json(host.state());
                 case "/api/browse": return json(browse());
                 case "/api/library": return json(library(p));
+                case "/api/history": {
+                    int days = 30;
+                    try { days = Integer.parseInt(str(p, "days")); } catch (NumberFormatException ignored) { }
+                    History h = host.history();
+                    return json(h == null ? new JSONObject().put("days", days).put("total", 0).put("plays", new JSONArray()) : h.toJson(System.currentTimeMillis(), days));
+                }
                 default: break;
             }
             if (!post) return text(Response.Status.METHOD_NOT_ALLOWED, "Use POST");

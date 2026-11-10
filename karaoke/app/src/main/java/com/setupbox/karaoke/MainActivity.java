@@ -43,7 +43,9 @@ public class MainActivity extends Activity implements Server.Host {
     private TextView status, statusBar, lyricsView, idleInfo;
     private LinearLayout idleBox;
     private ImageView qrSmall, backdropView;
-    private FrameLayout rootView;
+    private FrameLayout rootView, videoBand;
+    private java.util.Map<String, int[]> crops = new java.util.HashMap<>();   // crops.txt: black bars to zoom away
+    private int[] videoCrop;                 // crop of the video now playing (or null)
     private SurfaceView surfaceView;
     private android.view.View dimView;
     private TextView countdownView, bannerView;
@@ -81,6 +83,8 @@ public class MainActivity extends Activity implements Server.Host {
     private boolean debugSingleFile = false;
     private boolean vocalOn = false;                 // false = karaoke (singer sings), true = original vocal
     private String currentSongId = "";
+    private History history;                 // play history, last 30 days (history.jsonl)
+    private long lastPrune = 0;
     private final Set<String> flipped = Collections.synchronizedSet(new HashSet<String>());
 
     // player state cached for the web server thread (ExoPlayer may only be touched on the main thread)
@@ -101,7 +105,10 @@ public class MainActivity extends Activity implements Server.Host {
         // The video surface comes after the backdrop and is sized to the video's own shape, so whatever the
         // video does not cover (side bars of a square video) shows the gradient instead of black.
         surfaceView = new SurfaceView(this);
-        root.addView(surfaceView, new FrameLayout.LayoutParams(-1, -1, Gravity.CENTER));
+        videoBand = new FrameLayout(this);                     // the band the video lives in; clips a zoomed-in video
+        videoBand.setClipChildren(true);
+        videoBand.addView(surfaceView, new FrameLayout.LayoutParams(-1, -1, Gravity.CENTER));
+        root.addView(videoBand, new FrameLayout.LayoutParams(-1, -1));
         final SurfaceView surface = surfaceView;
         backdrop = new Backdrop(backdropView, new File(android.os.Environment.getExternalStorageDirectory(), "Pictures/Screensaver"), ui);
         dimView = new android.view.View(this);                 // darkens video/photos so the lyrics stay readable
@@ -216,6 +223,7 @@ public class MainActivity extends Activity implements Server.Host {
                 .setPreferredAudioMimeType(androidx.media3.common.MimeTypes.AUDIO_MPEG).build());
         player.addListener(new Player.Listener() {
             @Override public void onVideoSizeChanged(androidx.media3.common.VideoSize vs) { fitVideo(vs); }
+            @Override public void onRenderedFirstFrame() { fitVideo(player.getVideoSize()); }   // same size as the last video: no size event, but the crop may differ
             @Override public void onTracksChanged(androidx.media3.common.Tracks tracks) {
                 // With a music video merged in there are two audio tracks (the video's own vocal mix, AAC, and our
                 // karaoke mp3). Force the mp3; the player stays muted until that is the one selected.
@@ -251,6 +259,8 @@ public class MainActivity extends Activity implements Server.Host {
         if (path != null) { debugSingleFile = true; startFile(new File(path)); ui.post(tick); return; }
 
         queue = QueueManager.withFile(new File(android.os.Environment.getExternalStorageDirectory(), "Karaoke/state.txt"));
+        loadCrops();
+        history = new History(new File(android.os.Environment.getExternalStorageDirectory(), "Karaoke/history.jsonl"));
         loadFlips();
         server = new Server(this, this, PORT);
         try { server.start(); } catch (Exception e) { libraryNote = "Web server failed: " + e.getMessage(); }
@@ -265,6 +275,12 @@ public class MainActivity extends Activity implements Server.Host {
         ui.post(tick);
     }
 
+    private void loadCrops() {
+        File ext = android.os.Environment.getExternalStorageDirectory();
+        File root = Library.findRoot();
+        crops = Crops.load(root == null ? null : new File(root, "crops.txt"), new File(ext, "Karaoke/crops.txt"));
+    }
+
     /** Re-reads the Karaoke folder off the main thread; starts playing if songs are waiting. */
     private void rescan() {
         if (scanning) return;          // a scan can take long while the USB drive is busy; never pile them up
@@ -276,6 +292,7 @@ public class MainActivity extends Activity implements Server.Host {
                 runOnUiThread(new Runnable() {
                     @Override public void run() {
                         scanning = false;
+                        loadCrops();
                         if (l == null) { lib = Library.empty(); libraryNote = "Karaoke folder not found - is the USB drive plugged in?"; }
                         else { lib = l; libraryNote = ""; l.save(new File(android.os.Environment.getExternalStorageDirectory(), "Karaoke/index.json")); }
                         kick();
@@ -295,6 +312,7 @@ public class MainActivity extends Activity implements Server.Host {
     }
 
     private void playNext() {
+        endHistory();                                   // the song that was playing (ended or skipped)
         for (;;) {
             QueueManager.Item it = queue.advance();
             if (it == null) { stopPlayback(); return; }
@@ -305,11 +323,13 @@ public class MainActivity extends Activity implements Server.Host {
             vocalOn = false;
             File mv = s.video.isEmpty() ? null : new File(lib.root, s.video);
             startFile(f, mv != null && mv.isFile() ? mv : null);
+            if (history != null) history.started(System.currentTimeMillis(), s.id, s.title, s.artist, s.language, it.singer);
             return;
         }
     }
 
     private void stopPlayback() {
+        endHistory();
         currentSongId = "";
         player.stop();
         player.clearMediaItems();
@@ -319,9 +339,16 @@ public class MainActivity extends Activity implements Server.Host {
         backdrop.stop();
         backdropView.setVisibility(android.view.View.GONE);
         dimView.setVisibility(android.view.View.GONE);
-        surfaceView.setVisibility(android.view.View.INVISIBLE);
+        videoBand.setVisibility(android.view.View.INVISIBLE);
         cPlaying = false; cPaused = false;
         refresh();
+    }
+
+    /** Records how long the song that is ending actually played. */
+    private void endHistory() {
+        if (history == null || player == null) return;
+        long dur = Math.max(0, player.getDuration());
+        history.finished(Math.min(player.getCurrentPosition(), dur > 0 ? dur : Long.MAX_VALUE), dur);
     }
 
     private void startFile(File f) { startFile(f, null); }
@@ -345,8 +372,9 @@ public class MainActivity extends Activity implements Server.Host {
         if (!debugSingleFile) backdrop.start(showPhotos);
         // Only show the video surface when there is a picture to show: an idle surface keeps the previous song's
         // last frame and would cover the photo backdrop (it sits above it).
-        surfaceView.setVisibility(showPhotos ? android.view.View.INVISIBLE : android.view.View.VISIBLE);
+        videoBand.setVisibility(showPhotos ? android.view.View.INVISIBLE : android.view.View.VISIBLE);
         wantMp3 = video != null;
+        videoCrop = video == null ? null : crops.get(video.getName().replaceFirst("\\.[^.]+$", ""));
         player.setVolume(video != null ? 0f : 1f);          // muted until the karaoke mp3 is the selected track
         player.setTrackSelectionParameters(player.getTrackSelectionParameters().buildUpon()
                 .clearOverridesOfType(androidx.media3.common.C.TRACK_TYPE_AUDIO).build());
@@ -398,6 +426,7 @@ public class MainActivity extends Activity implements Server.Host {
 
     @Override public Library library() { return lib; }
     @Override public QueueManager queue() { return queue; }
+    @Override public History history() { return history; }
 
     @Override public void command(final String cmd) {
         runOnUiThread(new Runnable() {
@@ -583,14 +612,31 @@ public class MainActivity extends Activity implements Server.Host {
     }
 
     /** Sizes the video surface to the video's true shape, centred and as large as fits the screen (no cropping, no stretching). */
+    // share of the screen height kept free above / below the video (Now+Next lines ~11%, status bar ~7% of 1080p)
+    private static final float VIDEO_TOP_MARGIN = 0.11f, VIDEO_BOTTOM_MARGIN = 0.07f;
+
     private void fitVideo(androidx.media3.common.VideoSize vs) {
         if (vs.width == 0 || vs.height == 0) return;
         int rw = rootView.getWidth(), rh = rootView.getHeight();
         if (rw == 0 || rh == 0) { android.util.DisplayMetrics m = getResources().getDisplayMetrics(); rw = m.widthPixels; rh = m.heightPixels; }
-        float aspect = vs.width * vs.pixelWidthHeightRatio / vs.height;
-        int w, h;
-        if (aspect > (float) rw / rh) { w = rw; h = Math.round(rw / aspect); } else { h = rh; w = Math.round(rh * aspect); }
-        surfaceView.setLayoutParams(new FrameLayout.LayoutParams(w, h, Gravity.CENTER));
+        float par = vs.pixelWidthHeightRatio;
+        // Every video is fitted (never cropped, except for burned-in black bars from crops.txt) into the same band:
+        // centred, with a small margin on top for the Now/Next lines and at the bottom for the status bar.
+        int top = Math.round(rh * VIDEO_TOP_MARGIN), bottom = Math.round(rh * VIDEO_BOTTOM_MARGIN);
+        int bh = rh - top - bottom;
+        int cx = 0, cy = 0, cw = vs.width, ch = vs.height;
+        int[] c = videoCrop;
+        if (c != null && c[4] == vs.width && c[5] == vs.height) { cx = c[0]; cy = c[1]; cw = c[2]; ch = c[3]; }
+        float cd = cw * par;                                    // displayed width of the picture area
+        float s = Math.min(rw / cd, (float) bh / ch);
+        FrameLayout.LayoutParams bp = new FrameLayout.LayoutParams(-1, bh, Gravity.TOP);
+        bp.topMargin = top;
+        videoBand.setLayoutParams(bp);
+        int sw = Math.round(vs.width * par * s), sh = Math.round(vs.height * s);
+        FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(sw, sh, Gravity.TOP | Gravity.START);
+        lp.leftMargin = Math.round((rw - cd * s) / 2 - cx * par * s);
+        lp.topMargin = Math.round((bh - ch * s) / 2 - cy * s);
+        surfaceView.setLayoutParams(lp);
     }
 
     /** Three dots that count down (3-2-1) in the last 3 s before singing starts after a gap of 5 s or more. */
@@ -677,7 +723,12 @@ public class MainActivity extends Activity implements Server.Host {
     }
 
     private final Runnable tick = new Runnable() {
-        @Override public void run() { refresh(); showLyrics(); updateBanner(); sleepTick(); ui.postDelayed(this, 250); }
+        @Override public void run() {
+            refresh(); showLyrics(); updateBanner(); sleepTick();
+            long now = System.currentTimeMillis();
+            if (history != null && now - lastPrune > 3600000L) { lastPrune = now; history.prune(now); }   // housekeeping: drop entries older than 30 days
+            ui.postDelayed(this, 250);
+        }
     };
 
     // ---------- remote control keys ----------
