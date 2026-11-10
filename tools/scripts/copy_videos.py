@@ -31,6 +31,14 @@ def main():
     ap.add_argument("--dry-run", action="store_true")
     a = ap.parse_args()
 
+    # still-picture videos (find_static_videos.py) are not worth copying: the app plays those songs audio-only
+    static = set()
+    try:
+        for ln in open(r"D:\ai\Karaoke\static_videos.txt", encoding="utf-8"):
+            if ln.strip() and not ln.startswith("#"):
+                static.add(ln.strip())
+    except OSError:
+        pass
     # every mp4 in the library, by file name without extension
     videos = {}
     for dp, _, fns in os.walk(a.library):
@@ -51,7 +59,7 @@ def main():
                 continue
             for f in sorted(os.listdir(adir)):
                 stem, ext = os.path.splitext(f)
-                if ext.lower() == ".mp3" and ".part" not in f and stem in videos:
+                if ext.lower() == ".mp3" and ".part" not in f and stem in videos and stem not in static:
                     todo.append((lang, artist, stem, videos[stem]))
     if a.limit:
         todo = todo[:a.limit]

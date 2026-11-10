@@ -61,6 +61,17 @@ public class MainActivity extends Activity implements Server.Host {
     private String songPath = "";
     private boolean longPressed = false;
 
+    // sleep mode: after sleepMinutes without a song playing, remote key or phone action the screen goes black
+    // (small QR + clock that drift). Any remote key or phone action wakes it. sleep_minutes in /sdcard/Karaoke/config.properties, 0 = never.
+    private long sleepMs = 5 * 60000L;
+    private long lastActivity = System.currentTimeMillis();
+    private long lastConfigRead = 0;
+    private boolean sleeping = false;
+    private FrameLayout sleepView;
+    private LinearLayout sleepBox;
+    private TextView sleepClock;
+    private long lastDrift = 0;
+
     // karaoke state
     private volatile Library lib = Library.empty();
     private QueueManager queue;
@@ -170,6 +181,24 @@ public class MainActivity extends Activity implements Server.Host {
         statusBar.setTextSize(24);
         statusBar.setPadding(24, 12, 24, 12);
         root.addView(statusBar, new FrameLayout.LayoutParams(-2, -2, Gravity.BOTTOM | Gravity.START));
+
+        sleepView = new FrameLayout(this);                     // sleep mode: black, with a dim QR + clock that drift around
+        sleepView.setBackgroundColor(0xFF000000);
+        sleepView.setVisibility(android.view.View.GONE);
+        sleepBox = new LinearLayout(this);
+        sleepBox.setOrientation(LinearLayout.VERTICAL);
+        sleepBox.setGravity(Gravity.CENTER_HORIZONTAL);
+        ImageView sleepQr = new ImageView(this);
+        sleepQr.setImageBitmap(smallQr);
+        sleepQr.setAlpha(0.35f);
+        sleepBox.addView(sleepQr, new LinearLayout.LayoutParams(160, 160));
+        sleepClock = new TextView(this);
+        sleepClock.setTextColor(0xFF666666);
+        sleepClock.setTextSize(36);
+        sleepClock.setGravity(Gravity.CENTER);
+        sleepBox.addView(sleepClock, new LinearLayout.LayoutParams(160, -2));
+        sleepView.addView(sleepBox, new FrameLayout.LayoutParams(-2, -2, Gravity.CENTER));
+        root.addView(sleepView, new FrameLayout.LayoutParams(-1, -1));
         setContentView(root);
 
         DefaultRenderersFactory rf = new DefaultRenderersFactory(this) {
@@ -376,7 +405,56 @@ public class MainActivity extends Activity implements Server.Host {
         });
     }
 
+    // ---------- sleep mode ----------
+
+    private void readSleepConfig() {
+        lastConfigRead = System.currentTimeMillis();
+        try (java.io.FileInputStream in = new java.io.FileInputStream(
+                new File(android.os.Environment.getExternalStorageDirectory(), "Karaoke/config.properties"))) {
+            java.util.Properties p = new java.util.Properties();
+            p.load(new java.io.InputStreamReader(in, java.nio.charset.StandardCharsets.UTF_8));
+            String v = p.getProperty("sleep_minutes");
+            if (v != null) sleepMs = Math.max(0L, (long) (Double.parseDouble(v.trim()) * 60000L));
+        } catch (Exception ignored) { }       // no file or bad value: keep the current setting (default 5 minutes)
+    }
+
+    /** Called for every remote key and phone action. Returns true if it just woke the screen. */
+    private boolean touch() {
+        lastActivity = System.currentTimeMillis();
+        if (!sleeping) return false;
+        sleeping = false;
+        sleepView.setVisibility(android.view.View.GONE);
+        return true;
+    }
+
+    private void sleepTick() {
+        long now = System.currentTimeMillis();
+        if (now - lastConfigRead > 30000) readSleepConfig();
+        if (debugSingleFile) return;
+        if (cPlaying && !cPaused) {                       // a song is playing: that is activity
+            if (sleeping) touch(); else lastActivity = now;
+            return;
+        }
+        if (!sleeping && sleepMs > 0 && now - lastActivity >= sleepMs) {
+            sleeping = true;
+            lastDrift = 0;
+            sleepView.setVisibility(android.view.View.VISIBLE);
+        }
+        if (sleeping) {
+            sleepClock.setText(new java.text.SimpleDateFormat("HH:mm", java.util.Locale.getDefault()).format(new java.util.Date(now)));
+            if (now - lastDrift > 60000) {                // move the QR + clock a bit every minute (no burn-in)
+                lastDrift = now;
+                java.util.Random r = new java.util.Random();
+                FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) sleepBox.getLayoutParams();
+                lp.gravity = Gravity.TOP | Gravity.START;
+                lp.setMargins(100 + r.nextInt(1400), 80 + r.nextInt(700), 0, 0);
+                sleepBox.setLayoutParams(lp);
+            }
+        }
+    }
+
     private void handle(String cmd) {
+        touch();
         switch (cmd) {
             case "kick": kick(); break;
             case "rescan": rescan(); break;
@@ -598,12 +676,24 @@ public class MainActivity extends Activity implements Server.Host {
     }
 
     private final Runnable tick = new Runnable() {
-        @Override public void run() { refresh(); showLyrics(); updateBanner(); ui.postDelayed(this, 250); }
+        @Override public void run() { refresh(); showLyrics(); updateBanner(); sleepTick(); ui.postDelayed(this, 250); }
     };
 
     // ---------- remote control keys ----------
 
+    // a mouse (move, click, wheel) or a touch also counts as activity and wakes the screen
+    @Override public boolean dispatchGenericMotionEvent(android.view.MotionEvent ev) {
+        touch();
+        return super.dispatchGenericMotionEvent(ev);
+    }
+
+    @Override public boolean dispatchTouchEvent(android.view.MotionEvent ev) {
+        touch();
+        return super.dispatchTouchEvent(ev);
+    }
+
     @Override public boolean onKeyDown(int k, KeyEvent e) {
+        if (touch()) return true;                        // the key that wakes the screen does nothing else
         if (player == null) return super.onKeyDown(k, e);
         hintUntil = System.currentTimeMillis() + 6000;
         switch (k) {

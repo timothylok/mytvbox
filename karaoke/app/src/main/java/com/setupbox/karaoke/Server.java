@@ -67,6 +67,7 @@ public final class Server extends NanoHTTPD {
                 default: break;
             }
             if (!post) return text(Response.Status.METHOD_NOT_ALLOWED, "Use POST");
+            host.command("touch");     // any phone action counts as activity (wakes the sleeping screen)
 
             if (uri.startsWith("/api/queue/")) {
                 if (!queueAction(uri.substring("/api/queue/".length()), p)) return text(Response.Status.BAD_REQUEST, "Bad request");

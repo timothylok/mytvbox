@@ -24,6 +24,9 @@ Box: Android TV box 192.168.3.79 (open ADB on :5555). PC: Windows, GTX 1650 4 GB
   (saved per song in `/sdcard/Karaoke/lyric_offsets.properties`).
 - Countdown dots before singing starts, "Now singing" banner (first 6 s), "Next up" banner (last 15 s).
 - Remote keys: OK = pause, hold OK or Menu = vocal on/off, Left = back 10 s, Right = skip, Up/Down = lyrics later/earlier.
+- Sleep mode: after `sleep_minutes` (default 5, file `/sdcard/Karaoke/config.properties`, re-read every 30 s, 0 = never) with no song playing, remote key,
+  mouse/touch or phone action, the screen goes black with a dim QR + clock that drift. Any key/mouse/phone action wakes it (the waking key does nothing else).
+  A paused song stays paused (position kept). Songs whose video is a still picture (`static_videos.txt`, made by `tools/scripts/find_static_videos.py`) play audio-only.
 - State saved to `/sdcard/Karaoke/state.txt` (queue survives restarts).
 
 **Tools** (`tools/scripts/`, big stuff in `tools/` is git-ignored):

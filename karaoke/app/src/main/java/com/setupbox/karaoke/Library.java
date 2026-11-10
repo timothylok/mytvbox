@@ -100,6 +100,26 @@ public final class Library {
         }
     }
 
+    /**
+     * static_videos.txt (one file name without extension per line, '#' = comment): music videos that are only a still picture.
+     * Those songs play as audio-only (photo / gradient backdrop). Read from the Karaoke root and /sdcard/Karaoke (both count).
+     */
+    static java.util.Set<String> loadStaticVideos(File root) {
+        java.util.Set<String> set = new java.util.HashSet<>();
+        File[] files = {new File(root, "static_videos.txt"), new File(android.os.Environment.getExternalStorageDirectory(), "Karaoke/static_videos.txt")};
+        for (File f : files) {
+            try {
+                String text = new String(Files.readAllBytes(f.toPath()), StandardCharsets.UTF_8);
+                if (text.startsWith("\uFEFF")) text = text.substring(1);
+                for (String line : text.split("\r?\n")) {
+                    line = line.trim();
+                    if (!line.isEmpty() && !line.startsWith("#")) set.add(line);
+                }
+            } catch (Exception ignored) { }
+        }
+        return set;
+    }
+
     static String titleOverride(java.util.Map<String, String> o, String lang, String artist, String stem) {
         if (o.isEmpty()) return null;
         String v = o.get(lang + "/" + artist + "/" + stem);
@@ -111,6 +131,7 @@ public final class Library {
     public static Library scan(File root) {
         Library lib = new Library(root);
         java.util.Map<String, String> overrides = loadOverrides(root);
+        java.util.Set<String> staticVideos = loadStaticVideos(root);
         File[] langs = root.listFiles();
         if (langs == null) return lib;
         for (File lang : langs) {
@@ -145,7 +166,7 @@ public final class Library {
                     String prefix = lang.getName() + "/" + artist.getName() + "/";
                     if (audio.containsKey(stem)) {
                         s.file = prefix + audio.get(stem);
-                        if (video.containsKey(stem)) s.video = prefix + video.get(stem);
+                        if (video.containsKey(stem) && !staticVideos.contains(stem)) s.video = prefix + video.get(stem);
                     } else {
                         s.file = prefix + video.get(stem);
                     }
