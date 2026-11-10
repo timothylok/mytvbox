@@ -473,7 +473,7 @@ public class MainActivity extends Activity implements Server.Host {
         if (!debugSingleFile) {
             QueueManager.Item cur = queue.current();
             java.util.List<QueueManager.Item> up = queue.upcoming();
-            sb.append("Now: ").append(cur == null ? "-" : titleOf(cur, true)).append('\n');
+            sb.append(fitLine("Now: ", cur == null ? "-" : titleOf(cur, true), "")).append('\n');
             sb.append(fitLine("Next: ", up.isEmpty() ? "-" : titleOf(up.get(0), false),
                     up.size() > 1 ? "  (+" + (up.size() - 1) + " more)" : ""));
         }
