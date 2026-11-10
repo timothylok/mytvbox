@@ -40,7 +40,7 @@ public class MainActivity extends Activity implements Server.Host {
 
     private ExoPlayer player;
     private final VocalProcessor vocal = new VocalProcessor();
-    private TextView status, lyricsView, idleInfo;
+    private TextView status, statusBar, lyricsView, idleInfo;
     private LinearLayout idleBox;
     private ImageView qrSmall, backdropView;
     private FrameLayout rootView;
@@ -107,7 +107,7 @@ public class MainActivity extends Activity implements Server.Host {
         countdownView.setTextSize(64);
         countdownView.setShadowLayer(10f, 0f, 0f, Color.BLACK);
         FrameLayout.LayoutParams clp = new FrameLayout.LayoutParams(-1, -2, Gravity.CENTER_HORIZONTAL | Gravity.TOP);
-        clp.setMargins(0, 150, 0, 0);
+        clp.setMargins(0, 280, 0, 0);
         root.addView(countdownView, clp);
         bannerView = new TextView(this);                       // "Now singing" / "Next up" banner
         bannerView.setTextColor(Color.WHITE);
@@ -115,8 +115,8 @@ public class MainActivity extends Activity implements Server.Host {
         bannerView.setTextSize(30);
         bannerView.setPadding(28, 14, 28, 14);
         bannerView.setVisibility(android.view.View.GONE);
-        FrameLayout.LayoutParams blp = new FrameLayout.LayoutParams(-2, -2, Gravity.TOP | Gravity.START);
-        blp.setMargins(24, 24, 0, 0);
+        FrameLayout.LayoutParams blp = new FrameLayout.LayoutParams(-2, -2, Gravity.BOTTOM | Gravity.START);
+        blp.setMargins(24, 0, 0, 130);
         root.addView(bannerView, blp);
         ip = localIp();
         final String url = "http://" + ip + ":" + PORT;
@@ -163,7 +163,13 @@ public class MainActivity extends Activity implements Server.Host {
         status.setBackgroundColor(0x99000000);
         status.setTextSize(24);
         status.setPadding(24, 12, 24, 12);
-        root.addView(status, new FrameLayout.LayoutParams(-2, -2, Gravity.BOTTOM | Gravity.START));
+        root.addView(status, new FrameLayout.LayoutParams(-2, -2, Gravity.TOP | Gravity.START));
+        statusBar = new TextView(this);                        // "Playing | KARAOKE | time" line, bottom-left
+        statusBar.setTextColor(Color.WHITE);
+        statusBar.setBackgroundColor(0x99000000);
+        statusBar.setTextSize(24);
+        statusBar.setPadding(24, 12, 24, 12);
+        root.addView(statusBar, new FrameLayout.LayoutParams(-2, -2, Gravity.BOTTOM | Gravity.START));
         setContentView(root);
 
         DefaultRenderersFactory rf = new DefaultRenderersFactory(this) {
@@ -430,10 +436,21 @@ public class MainActivity extends Activity implements Server.Host {
         showStatus();
     }
 
-    private String titleOf(QueueManager.Item it) {
+    private String titleOf(QueueManager.Item it, boolean withArtist) {
         Library.Song s = lib.byId(it.songId);
-        String t = s == null ? "(missing song)" : s.title + (s.artist.isEmpty() ? "" : "  (" + s.artist + ")");
-        return it.singer.isEmpty() ? t : t + "   Singer: " + it.singer;
+        String t = s == null ? "(missing song)" : s.title + (!withArtist || s.artist.isEmpty() ? "" : "  (" + s.artist + ")");
+        return it.singer.isEmpty() || !withArtist ? t : t + "   Singer: " + it.singer;
+    }
+
+    /** prefix + title + suffix on ONE line: the title is cut with "..." if it would not fit left of the small QR code. */
+    private String fitLine(String prefix, String title, String suffix) {
+        int maxPx = getResources().getDisplayMetrics().widthPixels - 48 /* padding */ - 24 - 200 /* QR + gap */;
+        android.graphics.Paint paint = status.getPaint();
+        String full = prefix + title + suffix;
+        if (paint.measureText(full) <= maxPx) return full;
+        String t = title;
+        while (t.length() > 1 && paint.measureText(prefix + t + "..." + suffix) > maxPx) t = t.substring(0, t.length() - 1);
+        return prefix + t + "..." + suffix;
     }
 
     private void showStatus() {
@@ -446,25 +463,29 @@ public class MainActivity extends Activity implements Server.Host {
                     : lib.songs.size() + " songs  -  scan the code to pick one";
             idleInfo.setText(info);
             status.setVisibility(android.view.View.INVISIBLE);
+            statusBar.setVisibility(android.view.View.INVISIBLE);
             return;
         }
-        status.setVisibility(android.view.View.VISIBLE);
+        statusBar.setVisibility(android.view.View.VISIBLE);
         String st = player.getPlaybackState() == Player.STATE_BUFFERING ? "Buffering" : (cPaused ? "Paused" : "Playing");
         String time = fmt(cPos) + (cDur > 0 ? " / " + fmt(cDur) : "");
         StringBuilder sb = new StringBuilder();
         if (!debugSingleFile) {
             QueueManager.Item cur = queue.current();
             java.util.List<QueueManager.Item> up = queue.upcoming();
-            sb.append("Now: ").append(cur == null ? "-" : titleOf(cur)).append('\n');
-            sb.append("Next: ").append(up.isEmpty() ? "-" : titleOf(up.get(0)))
-              .append(up.size() > 1 ? "  (+" + (up.size() - 1) + " more)" : "").append('\n');
+            sb.append("Now: ").append(cur == null ? "-" : titleOf(cur, true)).append('\n');
+            sb.append(fitLine("Next: ", up.isEmpty() ? "-" : titleOf(up.get(0), false),
+                    up.size() > 1 ? "  (+" + (up.size() - 1) + " more)" : ""));
         }
+        status.setVisibility(sb.length() > 0 ? android.view.View.VISIBLE : android.view.View.INVISIBLE);
+        status.setText(sb.toString());
+        sb.setLength(0);
         sb.append(st).append("  |  ").append(vocalOn ? "VOCAL ON" : "KARAOKE").append("  |  ").append(time);
         if (lrc != null) sb.append("  |  Lyrics ").append(lyricOffsetMs >= 0 ? "+" : "-").append(String.format("%.1fs", Math.abs(lyricOffsetMs) / 1000.0));
         if (System.currentTimeMillis() < hintUntil) {
             sb.append("\nOK: pause   hold OK / Menu: vocal   Left/Right: seek or skip   Up/Down: lyrics later/earlier");
         }
-        status.setText(sb.toString());
+        statusBar.setText(sb.toString());
     }
 
     /** QR code for the phone address (dark modules on white, with a quiet zone). */
