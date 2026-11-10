@@ -19,6 +19,7 @@ import argparse, os, shutil, subprocess, sys, tempfile, time
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 from ledger import log
+from normalize_karaoke import measure, apply_gain
 DEFAULT_PY = os.path.join(HERE, "..", "demucs-venv", "Scripts", "python.exe")
 ADB = os.path.join(HERE, "..", "sdk", "platform-tools", "adb.exe")
 
@@ -64,6 +65,8 @@ def main():
     ap.add_argument("--limit", type=int, help="stop after N songs")
     ap.add_argument("--dry-run", action="store_true")
     ap.add_argument("--push", action="store_true", help="adb push finished files to the box USB drive")
+    ap.add_argument("--target", type=float, default=-18.0, help="loudness target (LUFS) of the instrumental channel")
+    ap.add_argument("--tolerance", type=float, default=1.5, help="no re-encode when already within this many dB of the target")
     ap.add_argument("--box", default="192.168.3.79:5555")
     ap.add_argument("--box-root", default="/storage/A6D0-F59E/Karaoke")
     a = ap.parse_args()
@@ -111,6 +114,16 @@ def main():
             if os.path.exists(lrc):
                 shutil.copy2(lrc, os.path.splitext(dest)[0] + ".lrc")
             shutil.rmtree(os.path.join(tmp, "htdemucs", stem), ignore_errors=True)
+            # even out the loudness right away (the Demucs files differ by up to 15 dB); see normalize_karaoke.py
+            lu = measure(dest)
+            if lu is not None and lu < -45.0:
+                print("   WARNING: instrumental channel nearly silent (%.1f LUFS) - not boosted, check the Demucs output" % lu, flush=True)
+                log("normalize", dest, "", "skipped", "%.1f LUFS: instrumental channel nearly silent (check the Demucs output)" % lu)
+            elif lu is not None and abs(a.target - lu) > a.tolerance:
+                gain = min(20.0, a.target - lu)                     # never boost by more than 20 dB
+                ok, err = apply_gain(dest, gain)
+                print("   loudness %.1f LUFS -> gain %+.1f dB %s" % (lu, gain, "" if ok else "FAILED " + err), flush=True)
+                log("normalize", dest, dest, "ok" if ok else "failed", "%.1f LUFS -> gain %+.1f dB (target %.1f), done by make_karaoke" % (lu, gain, a.target))
             log("karaoke", src, dest, "ok")
             done += 1
             if a.push:

@@ -31,6 +31,11 @@ def main():
     if rc == 0:
         rc = run([os.path.join(JAVA, "bin", "java"), "-Dfile.encoding=UTF-8", "-cp", out, "FolderPickerLogicTest"])
     ok = ok and rc == 0
+    print("== YearsTest (JVM)")
+    rc = run([os.path.join(JAVA, "bin", "javac"), "-encoding", "UTF-8", "-d", out, os.path.join(SRC, "Years.java"), os.path.join(HERE, "YearsTest.java")])
+    if rc == 0:
+        rc = run([os.path.join(JAVA, "bin", "java"), "-Dfile.encoding=UTF-8", "-cp", out, "YearsTest"])
+    ok = ok and rc == 0
     print("== PairingTest (JVM)")
     rc = run([os.path.join(JAVA, "bin", "javac"), "-encoding", "UTF-8", "-d", out, os.path.join(SRC, "Pairing.java"), os.path.join(HERE, "PairingTest.java")])
     if rc == 0:

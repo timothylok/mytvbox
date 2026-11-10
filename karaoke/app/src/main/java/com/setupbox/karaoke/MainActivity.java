@@ -51,6 +51,7 @@ public class MainActivity extends Activity implements Server.Host {
     private TextView countdownView, bannerView;
     private Backdrop backdrop;
     private int lastCount = -1;                 // countdown dots currently shown
+    private int cdNext = -1;                    // line that follows the countdown
     private volatile boolean scanning = false;
     private boolean wantMp3 = false;            // a music video is merged in: its own audio must not be heard
     private long hintUntil = 0;                 // show the key help line until this time
@@ -91,6 +92,12 @@ public class MainActivity extends Activity implements Server.Host {
     private TextView setupText;
     private android.widget.Button setupButton;
     private volatile boolean setupShown;     // read by the web server thread
+    private FrameLayout menuView;            // TV settings: reset phone pairing (Menu key / hold OK while nothing plays)
+    private android.widget.Button menuReset, menuClose;
+    private TextView menuText;
+    private volatile boolean menuShown;
+    private boolean resetArmed = false;
+    private ImageView qrBigView, sleepQrView;
     private volatile String setupMsg = "";
     private static final int REQ_PICK = 41;
     /** The app's own files (queue, history, flips, offsets, index cache) live in private storage, never in the user's folder. */
@@ -165,6 +172,7 @@ public class MainActivity extends Activity implements Server.Host {
         idleTitle.setGravity(Gravity.CENTER);
         idleBox.addView(idleTitle);
         ImageView qrBig = new ImageView(this);
+        qrBigView = qrBig;
         qrBig.setImageBitmap(bigQr);
         LinearLayout.LayoutParams qlp = new LinearLayout.LayoutParams(440, 440);
         qlp.setMargins(0, 24, 0, 24);
@@ -210,6 +218,7 @@ public class MainActivity extends Activity implements Server.Host {
         sleepBox.setOrientation(LinearLayout.VERTICAL);
         sleepBox.setGravity(Gravity.CENTER_HORIZONTAL);
         ImageView sleepQr = new ImageView(this);
+        sleepQrView = sleepQr;
         sleepQr.setImageBitmap(smallQr);
         sleepQr.setAlpha(0.35f);
         sleepBox.addView(sleepQr, new LinearLayout.LayoutParams(160, 160));
@@ -244,6 +253,38 @@ public class MainActivity extends Activity implements Server.Host {
         setupBox.addView(setupButton, bl);
         setupView.addView(setupBox, new FrameLayout.LayoutParams(-2, -2, Gravity.CENTER));
         root.addView(setupView, new FrameLayout.LayoutParams(-1, -1));
+        menuView = new FrameLayout(this);                      // TV settings (only reachable with the remote while nothing is playing)
+        menuView.setBackgroundColor(0xF0101418);
+        menuView.setVisibility(android.view.View.GONE);
+        LinearLayout menuBox = new LinearLayout(this);
+        menuBox.setOrientation(LinearLayout.VERTICAL);
+        menuBox.setGravity(Gravity.CENTER_HORIZONTAL);
+        menuText = new TextView(this);
+        menuText.setTextColor(Color.WHITE);
+        menuText.setTextSize(28);
+        menuText.setGravity(Gravity.CENTER);
+        menuBox.addView(menuText, new LinearLayout.LayoutParams(1400, -2));
+        menuReset = new android.widget.Button(this);
+        menuReset.setTextSize(26);
+        menuReset.setFocusableInTouchMode(true);
+        menuReset.setOnClickListener(new android.view.View.OnClickListener() {
+            @Override public void onClick(android.view.View v) { resetPairingClicked(); }
+        });
+        LinearLayout.LayoutParams mb = new LinearLayout.LayoutParams(-2, -2);
+        mb.topMargin = 40;
+        menuBox.addView(menuReset, mb);
+        menuClose = new android.widget.Button(this);
+        menuClose.setText("Close");
+        menuClose.setTextSize(26);
+        menuClose.setFocusableInTouchMode(true);
+        menuClose.setOnClickListener(new android.view.View.OnClickListener() {
+            @Override public void onClick(android.view.View v) { hideMenu(); }
+        });
+        LinearLayout.LayoutParams mc = new LinearLayout.LayoutParams(-2, -2);
+        mc.topMargin = 24;
+        menuBox.addView(menuClose, mc);
+        menuView.addView(menuBox, new FrameLayout.LayoutParams(-2, -2, Gravity.CENTER));
+        root.addView(menuView, new FrameLayout.LayoutParams(-1, -1));
         setContentView(root);
 
         DefaultRenderersFactory rf = new DefaultRenderersFactory(this) {
@@ -310,6 +351,49 @@ public class MainActivity extends Activity implements Server.Host {
         openStorage();
         ui.post(tick);
     }
+
+    // ---------- TV settings: reset phone pairing ----------
+
+    private void showMenu() {
+        if (setupShown || menuShown) return;
+        resetArmed = false;
+        menuText.setText("Settings\n\nReset phone pairing makes a new QR code. Phones that scanned the old code stop working until they scan the new one.");
+        menuReset.setText("Reset phone pairing");
+        menuShown = true;
+        menuView.setVisibility(android.view.View.VISIBLE);
+        menuReset.requestFocus();
+    }
+
+    private void hideMenu() {
+        menuShown = false;
+        resetArmed = false;
+        menuView.setVisibility(android.view.View.GONE);
+    }
+
+    /** First press arms it ("Press OK again"), the second press does it: no accidental resets. */
+    private void resetPairingClicked() {
+        if (!resetArmed) {
+            resetArmed = true;
+            menuReset.setText("Press OK again to reset");
+            return;
+        }
+        pairToken = Pairing.newToken();
+        prefs.edit().putString("pair", pairToken).apply();
+        if (server != null) server.setToken(pairToken);
+        refreshQr();
+        hideMenu();
+    }
+
+    /** Rebuilds the QR codes (idle screen, corner, sleep screen) for the current token. */
+    private void refreshQr() {
+        String url = Pairing.pairUrl(ip, PORT, pairToken);
+        android.graphics.Bitmap big = qr(url, 440), small = qr(url, 220);
+        qrBigView.setImageBitmap(big);
+        qrSmall.setImageBitmap(small);
+        sleepQrView.setImageBitmap(small);
+    }
+
+    private boolean idleNow() { return !(cPlaying || cPaused) && storage != null && !debugSingleFile; }
 
     // ---------- the Karaoke folder (folder picker) ----------
 
@@ -655,6 +739,7 @@ public class MainActivity extends Activity implements Server.Host {
             o.put("playing", cPlaying && !cPaused).put("paused", cPaused);
             o.put("posMs", cPos).put("durMs", cDur);
             o.put("vocalOn", vocalOn).put("flipped", flipped.contains(currentSongId));
+            o.put("menu", menuShown);
             o.put("setup", setupShown);                            // the TV is asking for the Karaoke folder
             if (setupShown) o.put("setupText", setupMsg);
         } catch (Exception ignored) { }
@@ -791,16 +876,10 @@ public class MainActivity extends Activity implements Server.Host {
             for (int k = n - 1; k >= 0; k--) if (!lrc.lines.get(k).text.isEmpty()) { gapStart = lrc.endOf(k); break; }
             if (until <= 3000 && pos >= gapStart && lrc.lines.get(n).ms - gapStart >= 5000) count = (int) Math.ceil(until / 1000.0);
         }
-        if (count == lastCount) return;
+        // The dots are drawn INSIDE the lyric block (in the slot of the line being sung, see showLyrics) so they can never
+        // overlap the lyrics; here we only note how many are lit and which line comes next.
         lastCount = count;
-        if (count == 0) { countdownView.setText(""); return; }
-        android.text.SpannableStringBuilder sb = new android.text.SpannableStringBuilder();
-        for (int d = 0; d < 3; d++) {
-            int st = sb.length();
-            sb.append("● ");
-            sb.setSpan(new android.text.style.ForegroundColorSpan(d < count ? 0xFFFFE23B : 0x44FFFFFF), st, st + 1, 0);
-        }
-        countdownView.setText(sb);
+        cdNext = count > 0 ? n : -1;
     }
 
     private String describe(QueueManager.Item it) {
@@ -832,11 +911,40 @@ public class MainActivity extends Activity implements Server.Host {
         // Which character of the current line is being sung? LRC only times whole lines, so the line's
         // time (up to the next line, at most ~0.45 s per character) is shared out evenly over its characters.
         int ci = i >= 0 ? lrc.currentChar(i, pos) : -1;   // real word times if the .lrc has them, else the estimate
-        int key = i * 1000 + ci;
+        int cd = Math.max(0, lastCount), next = cdNext;       // 3-2-1 countdown dots before a long instrumental gap
+        int key = i * 1000 + ci + cd * 10000000;
         if (key == lastLine) return;
         lastLine = key;
 
         android.text.SpannableStringBuilder sb = new android.text.SpannableStringBuilder();
+        if (cd > 0 && next >= 0) {
+            // [last sung line, dim] [the dots, in the big "current" slot] [the next three lines, dim]
+            if (i >= 0 && !lrc.lines.get(i).text.isEmpty()) {
+                String prev = lrc.lines.get(i).text;
+                int ps = sb.length();
+                sb.append(prev).append("\n\n");
+                sb.setSpan(new android.text.style.AbsoluteSizeSpan(40, false), ps, ps + prev.length(), 0);
+                sb.setSpan(new android.text.style.ForegroundColorSpan(0x99FFFFFF), ps, ps + prev.length(), 0);
+            }
+            int ds = sb.length();
+            for (int d = 0; d < 3; d++) {
+                int st = sb.length();
+                sb.append("●  ");
+                sb.setSpan(new android.text.style.ForegroundColorSpan(d < cd ? 0xFFFFE23B : 0x44FFFFFF), st, st + 1, 0);
+            }
+            sb.setSpan(new android.text.style.AbsoluteSizeSpan(64, false), ds, sb.length(), 0);
+            sb.append("\n\n");
+            for (int k = next; k <= Math.min(lrc.lines.size() - 1, next + 2); k++) {
+                String t = lrc.lines.get(k).text;
+                if (t.isEmpty()) t = " ";
+                int st = sb.length();
+                sb.append(t).append("\n\n");
+                sb.setSpan(new android.text.style.AbsoluteSizeSpan(40, false), st, st + t.length(), 0);
+                sb.setSpan(new android.text.style.ForegroundColorSpan(0x99FFFFFF), st, st + t.length(), 0);
+            }
+            lyricsView.setText(sb);
+            return;
+        }
         for (int k = Math.max(0, i - 1); k <= Math.min(lrc.lines.size() - 1, i + 3); k++) {
             String t = lrc.lines.get(k).text;
             if (t.isEmpty()) t = " ";
@@ -890,6 +998,16 @@ public class MainActivity extends Activity implements Server.Host {
             if (k == KeyEvent.KEYCODE_DPAD_CENTER || k == KeyEvent.KEYCODE_ENTER || k == KeyEvent.KEYCODE_BUTTON_A) { pickFolder(); return true; }
             return super.onKeyDown(k, e);
         }
+        if (menuShown) {                                  // settings: BACK closes, OK presses the focused button
+            if (k == KeyEvent.KEYCODE_BACK) { hideMenu(); return true; }
+            if (k == KeyEvent.KEYCODE_DPAD_CENTER || k == KeyEvent.KEYCODE_ENTER || k == KeyEvent.KEYCODE_BUTTON_A) {
+                android.view.View f = getCurrentFocus();
+                (f == menuClose ? menuClose : menuReset).performClick();
+                return true;
+            }
+            return super.onKeyDown(k, e);
+        }
+        if (k == KeyEvent.KEYCODE_MENU && idleNow()) { showMenu(); return true; }
         if (player == null) return super.onKeyDown(k, e);
         hintUntil = System.currentTimeMillis() + 6000;
         switch (k) {
@@ -908,7 +1026,11 @@ public class MainActivity extends Activity implements Server.Host {
     }
 
     @Override public boolean onKeyLongPress(int k, KeyEvent e) {
-        if (k == KeyEvent.KEYCODE_DPAD_CENTER || k == KeyEvent.KEYCODE_ENTER) { longPressed = true; handle("vocal"); return true; }
+        if (k == KeyEvent.KEYCODE_DPAD_CENTER || k == KeyEvent.KEYCODE_ENTER) {
+            longPressed = true;
+            if (idleNow()) showMenu(); else handle("vocal");      // hold OK: vocal while singing, settings while idle
+            return true;
+        }
         return super.onKeyLongPress(k, e);
     }
 

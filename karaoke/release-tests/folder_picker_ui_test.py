@@ -211,6 +211,66 @@ def main():
         if not a.token:
             check("5c. the pairing token survives the restart (phones stay paired)", read_token(box) == TOKEN)
 
+        # 5d. TV settings: reset phone pairing (Menu key while nothing plays; needs two OK presses; BACK cancels)
+        old = TOKEN
+        box.sh("input keyevent KEYCODE_MENU")
+        st = state(base, wait=8, until=lambda s: s.get("menu") is True)
+        check("5d. Menu opens the TV settings while idle", st.get("menu") is True, st)
+        box.sh("input keyevent KEYCODE_BACK")
+        st = state(base, wait=8, until=lambda s: s.get("menu") is False)
+        check("5e. BACK closes the settings without resetting", st.get("menu") is False and (a.token or read_token(box)) == old, st)
+        box.sh("input keyevent KEYCODE_MENU")
+        state(base, wait=8, until=lambda s: s.get("menu") is True)
+        box.sh("input keyevent KEYCODE_DPAD_CENTER")                 # arms the reset ("Press OK again")
+        time.sleep(1)
+        st = state(base)
+        check("5f. the first OK only arms the reset", st.get("menu") is True and (a.token or read_token(box)) == old, st)
+        box.sh("input keyevent KEYCODE_DPAD_CENTER")                 # does it
+        time.sleep(2)
+        newtok = a.token or read_token(box)
+        if not a.token:
+            TOKEN = newtok                                           # the old cookie is dead now
+        st = state(base, wait=8, until=lambda s: s.get("menu") is False)
+        check("5g. the second OK makes a new pairing token and closes the settings", st.get("menu") is False and newtok != old and len(newtok) >= 8, (old, newtok))
+        code, _ = status(base + "/api/state", token=old)
+        check("5h. phones paired with the old token are refused (401)", code == 401, code)
+        code, _ = status(base + "/api/state", token=newtok)
+        check("5i. the new token works (200)", code == 200, code)
+
+        # 5j. release years: an optional years.txt in the Karaoke folder -> /api/library carries "year" (the phone page sorts by it)
+        songs = json.loads(api(base + "/api/library?limit=3")).get("songs", [])
+        want = {}
+        yl = ["# test years"]
+        for n, sg in enumerate(songs):
+            stem = os.path.splitext(sg["file"].split("/")[-1])[0]
+            want[sg["id"]] = 1990 + n * 7
+            yl.append("%s/%s = %d" % (sg["artist"], stem, 1990 + n * 7))
+        ypath = os.path.join(tmp, "years.txt")
+        open(ypath, "w", encoding="utf-8").write(chr(10).join(yl) + chr(10))
+        prev = box.run("exec-out", "cat", "/sdcard/Karaoke/years.txt", binary=True)
+        prev = prev if prev and b"No such file" not in prev[:60] else b""      # the real years.txt is put back afterwards
+        box.run("push", ypath, "/sdcard/Karaoke/years.txt")
+        try:
+            api(base + "/api/rescan", post=True)
+            got = {}
+            end = time.time() + 30
+            while time.time() < end:
+                got = {x["id"]: x.get("year", 0) for x in json.loads(api(base + "/api/library?limit=3")).get("songs", [])}
+                if got == want:
+                    break
+                time.sleep(2)
+            check("5j. years.txt years appear in /api/library (%d songs)" % len(want), bool(want) and got == want, (want, got))
+        finally:
+            if prev:
+                open(ypath, "wb").write(prev)
+                box.run("push", ypath, "/sdcard/Karaoke/years.txt")
+            else:
+                box.sh("rm -f /sdcard/Karaoke/years.txt")
+            try:
+                api(base + "/api/rescan", post=True)
+            except Exception:
+                pass
+
         # 6. folder change from the phone page; OK must work even after a touch (touch mode)
         box.sh("am start -n " + ACT + " --ez pickfolder true")        # maintenance hook, not reachable from the phone/network
         st = state(base, wait=10, until=lambda s: s.get("setup") is True)

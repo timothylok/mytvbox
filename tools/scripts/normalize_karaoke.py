@@ -26,7 +26,7 @@ def measure(path):
 
 def apply_gain(path, gain_db):
     tmp = path + ".norm.mp3"
-    r = subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", path, "-af", "volume=%.2fdB,alimiter=limit=0.95:level=disabled" % gain_db,
+    r = subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", path, "-af", "volume=%.2fdB,alimiter=limit=0.89:level=disabled" % gain_db,
                         "-c:a", "libmp3lame", "-q:a", "2", tmp], capture_output=True, text=True, encoding="utf-8", errors="replace")
     if r.returncode != 0 or not os.path.exists(tmp):
         return False, r.stderr[-200:]
@@ -41,6 +41,8 @@ def main():
     ap.add_argument("--only", help="only artist folders containing this text")
     ap.add_argument("--target", type=float, default=-18.0)
     ap.add_argument("--tolerance", type=float, default=1.5)
+    ap.add_argument("--floor", type=float, default=-45.0, help="below this the instrumental channel counts as empty: the file is skipped, not boosted")
+    ap.add_argument("--max-gain", type=float, default=20.0, help="never boost by more than this many dB")
     ap.add_argument("--backup", default=r"D:\ai\Karaoke_pre_normalize", help="the original of every changed file is copied here first (same sub-folders)")
     ap.add_argument("--dry-run", action="store_true")
     a = ap.parse_args()
@@ -65,7 +67,13 @@ def main():
             name = os.path.basename(path)
             if lu is None:
                 print("FAIL measure", name); log("normalize", path, "", "failed", "could not measure"); failed += 1; continue
-            gain = a.target - lu
+            if lu < a.floor:
+                # the instrumental channel is (nearly) empty: boosting it would only add noise AND overdrive the original-vocal channel
+                print("SKIP %-50s %6.1f LUFS: instrumental channel nearly silent - check the Demucs output" % (name[:50], lu), flush=True)
+                log("normalize", path, "", "skipped", "%.1f LUFS: instrumental channel nearly silent, not boosted (check the Demucs output)" % lu)
+                skipped += 1
+                continue
+            gain = min(a.max_gain, a.target - lu)
             if abs(gain) <= a.tolerance:
                 skipped += 1
                 continue

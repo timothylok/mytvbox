@@ -102,8 +102,28 @@ Known quirk (user chose to leave it, 2026-11-10): "Lyrics MV" videos (e.g. Shall
 `tools/scripts/normalize_karaoke.py` measures the LEFT (instrumental) channel with ebur128 and re-encodes files that are more than 1.5 dB from -18 LUFS
 (same gain both channels, peak limiter); originals go to `D:\ai\Karaoke_pre_normalize` first; logged in `processed.csv`. Eason Chan set done: 32 of 65 changed
 (median -18.0, range -19.4..-16.6 after; before: median -18.7, range -29.7..-14.9). MUST run before copying songs to the box (CLAUDE.md rule 2);
-`make_karaoke.py` does not do it yet (candidate: call it at the end). The other artists (about 586 songs) are not normalized yet - run it on them before they ever go to the box.
+`make_karaoke.py` now normalizes every new file right after Demucs (`--target`, `--tolerance`). The whole library (651 songs) was run through `normalize_karaoke.py` on 2026-11-10 (log `tools/normalize_all.log`, originals in `D:\ai\Karaoke_pre_normalize`).
 For the Play release a per-song gain in the app (VocalProcessor) would be the cleaner fix.
+
+## Release years (2026-11-10)
+
+`years.txt` in the Karaoke folder (`Artist/<file name> = 2009`, same keys as titles.txt, parsed by `Years.java`) -> `year` in `/api/library`; the phone page
+shows it in Browse/Search rows and sorts a Browse artist list newest first (songs without a year after the dated ones). `tools/scripts/make_years.py` builds it from
+the ID3 `date` tag of the SOURCE mp3s in D:\ai\GetVideo (the Demucs karaoke mp3s carry no tags; matched by file name, Eason Chan via titles.txt + 3 manual pairs).
+Status: 381 of 651 songs have a year (270 source mp3s have no date tag yet - tag them, then re-run `make_years.py`; lines already in years.txt are kept, push the file to the box root).
+Release tests: `YearsTest` (JVM) + a device check that a pushed years.txt reaches `/api/library` (the real years.txt is preserved).
+
+## Countdown dots (2026-11-10)
+
+The 3-2-1 dots used to be a separate overlay at a fixed height and overlapped the lyrics. They are now drawn INSIDE the lyric block, in the big "current line" slot
+(previous line dim, dots, next three lines dim), so they cannot overlap (`showLyrics`, `updateCountdown`).
+
+## Normalizer safeguards (2026-11-10)
+
+`normalize_karaoke.py` skips files whose instrumental channel is below -45 LUFS (nearly empty: boosting only adds noise and overdrives the original-vocal channel), caps the
+boost at +20 dB and limits peaks at 0.89. Two songs had been over-boosted before this was added (Beyond - Myth, IU - Dear my crazy soulmate): restored from
+`D:\ai\Karaoke_pre_normalize`. Known bad source: `JPop/YAO/YAO - For Okinawa` is digital silence in both channels (regenerate with Demucs). Not on the box.
+Note: each device test run does `pm clear`, which makes a NEW pairing token: phones must rescan afterwards.
 
 ## Folder picker refactor (done 2026-11-10, merged to `main` as 8b4e329; the `saf-picker` branch is deleted)
 
@@ -214,7 +234,7 @@ works with no typing. Without the cookie every page/API call gets 401 ("scan the
 SharedPreferences (`pair`), so phones stay paired across restarts and updates. A phone that has not paired yet (e.g. after this update) must scan the code once.
 The idle screen no longer prints the address (typing it would not work). Scripts/curl need the cookie:
 `T=$(adb shell run-as com.setupbox.karaoke cat shared_prefs/karaoke.xml | grep -oE 'pair">[a-z0-9]+' | cut -d'>' -f2)` then `curl -b karaoke_k=$T http://192.168.3.79:8080/api/state`
-(debug build only; the release-tests do this, `--token` for a release build). Not done: a "reset pairing" option on the TV (new token, all phones must rescan).
+(debug build only; the release-tests do this, `--token` for a release build). TV settings: Menu key (or hold OK) while nothing plays opens a Settings screen; "Reset phone pairing" (two OK presses) makes a new token + QR code, all phones must rescan (done 2026-11-10, release-tested).
 
 ## Gotchas learned
 

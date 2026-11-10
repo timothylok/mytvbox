@@ -42,7 +42,10 @@ public final class Server extends NanoHTTPD {
 
     private final Context ctx;
     private final Host host;
-    private final String token;      // pairing token (see Pairing): without it nothing is served
+    private volatile String token;   // pairing token (see Pairing): without it nothing is served
+
+    /** A new token: every phone paired with the old one has to scan the QR code again. */
+    public void setToken(String t) { token = t; }
     private byte[] page;
 
     public Server(Context ctx, Host host, int port, String token) {

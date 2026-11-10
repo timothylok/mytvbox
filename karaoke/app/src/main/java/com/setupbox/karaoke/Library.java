@@ -22,12 +22,13 @@ public final class Library {
         public String id, language, artist, title, file;   // file = path relative to the Karaoke root (also what the id is made from)
         public String video = "";                           // companion music video (relative path), or "" if none
         public boolean hasLrc;
+        public int year = 0;                                // release year from years.txt, 0 = unknown
         String key;                                         // normalized search text
         public String audioH = "", videoH = "", lrcH = "";  // Storage handles of the audio, video and lyric files ("" = none)
 
         JSONObject toJson() throws Exception {
             return new JSONObject().put("id", id).put("language", language).put("artist", artist)
-                    .put("title", title).put("file", file).put("lrc", hasLrc).put("video", !video.isEmpty());
+                    .put("title", title).put("file", file).put("lrc", hasLrc).put("video", !video.isEmpty()).put("year", year);
         }
 
         /** For the on-disk cache: same as the API form, but with the video's path and the storage handles. */
@@ -38,7 +39,7 @@ public final class Library {
         static Song fromJson(JSONObject o) {
             Song s = new Song();
             s.id = o.optString("id"); s.language = o.optString("language"); s.artist = o.optString("artist");
-            s.title = o.optString("title"); s.file = o.optString("file"); s.hasLrc = o.optBoolean("lrc");
+            s.title = o.optString("title"); s.file = o.optString("file"); s.hasLrc = o.optBoolean("lrc"); s.year = o.optInt("year", 0);
             s.video = o.optString("videoFile", "");
             s.audioH = o.optString("audioH", ""); s.videoH = o.optString("videoH", ""); s.lrcH = o.optString("lrcH", "");
             s.key = normalize(s.title + " " + s.artist + " " + s.language);
@@ -112,14 +113,16 @@ public final class Library {
         Library lib = new Library(st);
         String root = st.root();
         java.util.List<Storage.Entry> top = st.list(root);
-        Storage.Entry titlesFile = null, staticFile = null;
+        Storage.Entry titlesFile = null, staticFile = null, yearsFile = null;
         for (Storage.Entry e : top) {
             if (e.dir) continue;
             if (e.name.equals("titles.txt")) titlesFile = e;
             else if (e.name.equals("static_videos.txt")) staticFile = e;
+            else if (e.name.equals("years.txt")) yearsFile = e;
         }
         java.util.Map<String, String> overrides = loadOverrides(new String[]{titlesFile == null ? null : Storage.readText(st, titlesFile.handle), extraTitles});
         java.util.Set<String> staticVideos = parseStaticVideos(new String[]{staticFile == null ? null : Storage.readText(st, staticFile.handle), extraStatic});
+        java.util.Map<String, Integer> years = Years.parse(yearsFile == null ? null : Storage.readText(st, yearsFile.handle));
         for (Storage.Entry lang : top) {
             if (!lang.dir) continue;
             for (Storage.Entry artist : st.list(lang.handle)) {
@@ -161,6 +164,7 @@ public final class Library {
                     Storage.Entry l = lrcs.get(stem);
                     s.hasLrc = l != null;
                     s.lrcH = l == null ? "" : l.handle;
+                    s.year = Years.lookup(years, lang.name, artist.name, stem);
                     s.id = md5(s.file);
                     s.key = normalize(s.title + " " + autoTitle + " " + s.artist + " " + s.language);   // search finds the old name too
                     lib.songs.add(s);

@@ -27,10 +27,16 @@ The TV shows a QR code. Scan it with the phone's **camera** (no app needed). The
 Anyone on your Wi-Fi who has not scanned the code sees only "Scan the QR code on the TV" and cannot see or control anything.
 (After an update that adds pairing, or after the app's data is cleared, scan the code once more.)
 
+### Reset phone pairing (TV settings)
+If a phone should no longer have access (lost, borrowed), reset the pairing on the TV:
+1. While **nothing is playing**, press **Menu** (or hold **OK**). The **Settings** screen opens.
+2. Press **OK** on **Reset phone pairing**; the button changes to **Press OK again to reset**. Press **OK** once more.
+3. The TV makes a new QR code. Every phone that scanned the old code stops working until it scans the new one. (**Back** or **Close** leaves without changing anything.)
+
 ## 3. Phone page
 
 - **Queue**: now playing, up next, move up / down / play next / remove, shuffle, clear, pause / resume, restart, skip, vocal on/off, flip channels.
-- **Browse**: language > artist > songs. **Rescan** re-reads the folder after you add songs.
+- **Browse**: language > artist > songs. Each song shows its release year when known (`2018 · Eason Chan · Cantopop`) and the list runs newest to oldest; songs without a year follow. **Rescan** re-reads the folder after you add songs.
 - **Search**: finds songs by title or artist; Traditional and Simplified Chinese match each other.
 - **History**: songs played in the last 30 days (Today / 7 days / 30 days), with the singer and "skipped at ..." where it applies. **+ Add** queues a song again. Older entries are removed automatically.
 - Type your name in the box at the top: it is shown on the TV as the singer.
@@ -44,13 +50,14 @@ Anyone on your Wi-Fi who has not scanned the code sees only "Scan the QR code on
 | Left | back 10 seconds |
 | Right | skip to the next song |
 | Up / Down | lyrics later / earlier (saved for that song) |
+| Menu, or hold OK, while nothing is playing | TV settings (see below) |
 
 ## 5. What you see on the TV
 
 - Top left: **Now** (and **Next** when there is one), top right: the small QR code, bottom left: status (Playing / Paused, KARAOKE or VOCAL ON, time, lyric offset).
 - Music videos are shown centred with a small margin above and below; black bars baked into a video are zoomed away when the video is listed in `crops.txt`.
 - Songs without a video show a photo slideshow. Lyrics come from the `.lrc` file; the character being sung turns orange.
-- A countdown (3-2-1) appears before the singing starts, and a "Now singing" / "Next up" banner at the start and end of a song.
+- A countdown of three dots (3-2-1) appears in the lyric block, in the place of the line being sung, before the singing starts after a long gap, so it never overlaps the lyrics; and a "Now singing" / "Next up" banner at the start and end of a song.
 - After 5 minutes with nothing playing the screen goes black with a small moving QR code and clock; any remote key or phone action wakes it.
 
 ## 6. Your Karaoke folder
@@ -60,6 +67,7 @@ Karaoke/
   Cantopop/<Artist>/<Song>.mp3   (+ <Song>.lrc lyrics, + <Song>.mp4 music video)
   English/ ...
   titles.txt          optional: nicer song titles   (Artist/<file name> = Title)
+  years.txt           optional: release years       (Artist/<file name> = 2009; made by make_years.py from the mp3 date tags)
   static_videos.txt   optional: songs whose video is not shown (a still picture)
   crops.txt           optional: black bars to zoom away (made by detect_crops.py)
   config.properties   optional: sleep_minutes=5  (0 = never sleep)
