@@ -299,3 +299,4 @@
 2026-11-10 19:27:02,remove,,/sdcard/Karaoke/Cantopop/Eason Chan/《空城記》Something Missing 陳奕迅 Eason Chan [Official MV].*,ok,removed from box: no processed lyric file
 2026-11-10 19:27:03,remove,,/sdcard/Karaoke/Cantopop/Eason Chan/《致明日的舞》A DANCE FOR TOMORROW 陳奕迅 Eason Chan [Official MV].*,ok,removed from box: lyric file not processed
 2026-11-10 19:27:03,remove,,/sdcard/Karaoke/Cantopop/Eason Chan/《擺渡人》 主題曲 MV 《讓我留在你身邊》 ： 主唱 - 陳奕迅 Eason Chan (In Cinemas 23 December).*,ok,removed from box: no processed lyric file
+2026-11-10 19:41:48,note,,,ok,"make_titles.py generalized to all artists (586 new titles, 21 rules/manual fixes); titles.txt pushed to the box"
