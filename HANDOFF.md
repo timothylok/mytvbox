@@ -97,7 +97,7 @@ Known quirk (user chose to leave it, 2026-11-10): "Lyrics MV" videos (e.g. Shall
 15. **Titles**: `D:\ai\Karaoke\titles.txt` (made by `tools/scripts/make_titles.py`, Eason Chan only) is on the box. Other artists still show the file-name title.
 11. **Security (unchanged, known; user was told, no decision)**: the box's ADB on :5555 has no authentication, and the launcher's Power tile depends on it.
 
-## Folder picker refactor (branch `saf-picker`, built and tested on the box 2026-11-10, NOT merged / committed yet)
+## Folder picker refactor (done 2026-11-10, merged to `main` as 8b4e329; the `saf-picker` branch is deleted)
 
 All song-folder access now goes through `Storage` (`SafStorage` = the folder the user picks once; `FileStorage` = tests/debug).
 - First run (or lost permission): the TV shows "Choose your Karaoke folder" with a warning NOT to pick a USB drive / SD card;
