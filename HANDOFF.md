@@ -175,7 +175,7 @@ The app is built for one box today. Before it is "production grade" for Google P
    similar. It plays the user's own files. The listing, screenshots and demo content must use material we have rights to.
    The PC pipeline (Demucs, Whisper alignment, video copy) stays a separate desktop tool, or becomes an optional
    companion app; decide how users get L/R karaoke files (docs for the desktop tool, or on-device separation - too heavy for most TV boxes).
-4. **Photo backdrop**: Bing daily images have usage terms; replace with bundled licensed images, the user's own photos, or a plain gradient.
+4. ~~**Photo backdrop**: Bing daily images~~ DONE 2026-11-10: the Bing download is removed; songs without a video get a generated animated colour background (`Backdrop.java`, soft drifting blobs, a NEW RANDOM palette per song, no network, nothing bundled). Pictures the user puts in the app's `Screensaver` folder still show as a slideshow over it (optional; moving that folder into the picked Karaoke folder, e.g. `Backdrop/`, is a possible later step).
 5. **Release build**: Android App Bundle (`.aab`), release signing with Play App Signing (keep the upload key safe and out of git),
    R8/minify with keep rules for NanoHTTPD/ZXing/Media3, `versionCode` bumped on every upload, a permanent package name
    (pick a domain we own before the first upload - it can never change).

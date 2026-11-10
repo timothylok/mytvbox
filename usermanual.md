@@ -56,7 +56,7 @@ If a phone should no longer have access (lost, borrowed), reset the pairing on t
 
 - Top left: **Now** (and **Next** when there is one), top right: the small QR code, bottom left: status (Playing / Paused, KARAOKE or VOCAL ON, time, lyric offset).
 - Music videos are shown centred with a small margin above and below; black bars baked into a video are zoomed away when the video is listed in `crops.txt`.
-- Songs without a video show a photo slideshow. Lyrics come from the `.lrc` file; the character being sung turns orange.
+- Songs without a video show an animated colour background (soft drifting colour blobs, a new random colour scheme for every song; nothing is downloaded). Lyrics come from the `.lrc` file; the character being sung turns orange.
 - A countdown of three dots (3-2-1) appears in the lyric block, in the place of the line being sung, before the singing starts after a long gap, so it never overlaps the lyrics; and a "Now singing" / "Next up" banner at the start and end of a song.
 - After 5 minutes with nothing playing the screen goes black with a small moving QR code and clock; any remote key or phone action wakes it.
 
