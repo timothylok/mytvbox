@@ -136,8 +136,7 @@ release build has R8 (`minifyEnabled`, `shrinkResources`, `proguard-rules.pro`).
 Tested on the box (Android 10): debug build, target 35 -> release-tests 19 JVM + 13 device checks pass.
 The signed RELEASE build (R8, debug keystore, zipalign+apksigner from build-tools 35) was installed on the box: library, playback, lyrics, video, history, phone API,
 foreground service and all 13 device checks pass (run the UI test with --no-preserve: a release build has no run-as). Still to do: POST_NOTIFICATIONS dialog is untested (needs an Android 13+ device/emulator);
-USB drive in the picker (rejection + speed) needs the drive plugged into the box; second/newer Android device; cleartext HTTP is still allowed
-(narrow it to local addresses with a network security config). Do NOT test while someone is singing: check `/api/state` `playing` first.
+USB drive in the picker (rejection + speed) needs the drive plugged into the box; second/newer Android device; cleartext HTTP is now OFF in the manifest (the app's only outgoing request is the https Bing photo download; the phone page is a SERVER, so the setting does not affect it). Do NOT test while someone is singing: check `/api/state` `playing` first.
 
 ## Future: publish the Karaoke app on Google Play (user's goal, 2026-11-10)
 
