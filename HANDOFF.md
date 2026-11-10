@@ -1,4 +1,4 @@
-# Handoff - TV box karaoke project (as of 2026-11-10, evening NZ)
+# Handoff - TV box karaoke project (as of 2026-11-10, end of session)
 
 Repo: https://github.com/timothylok/mytvbox (single branch `main`; everything is committed and pushed. The old
 `overnight` branch was merged and deleted on 2026-11-10).
@@ -42,15 +42,30 @@ Box: Android TV box 192.168.3.79 (open ADB on :5555). PC: Windows, GTX 1650 4 GB
 - Tests (plain Java, no Android): `karaoke/tests/QueueManagerTest.java`, `LrcTest.java` (21 + 23 checks, all pass).
   Commands are in each file's header.
 
-## Running right now
+## START HERE - state at the end of the 2026-11-10 session
 
-Nothing is running. All batch jobs are finished or stopped: karaoke batch DONE (650/650), Eason Chan alignment DONE, video copy STOPPED
-at 244/587 (USB drive faults; the drive has since been repaired but is not on the box). The unattended loop is deleted.
+Everything is committed and pushed (`main`, last app/doc commits: 96979a3 and the handoff commit after it). Nothing is running; the box is idle at volume 7.
 
-Current box state: runs from INTERNAL storage (`/sdcard/Karaoke`), movies deleted, only the Eason Chan set (65 songs: mp3 + lrc + mp4, 40 real
-videos) plus `titles.txt`, `static_videos.txt`, `config.properties`. The USB drive (F: on the PC, serial A6D0-F59E) is plugged into the PC.
-Branch state: only `main` exists (local and on GitHub). Latest app change: 8590d8a, the TV status omits the "Next:" line when nothing is queued (installed on the box).
-Known quirk (user chose to leave it, 2026-11-10): "Lyrics MV" videos (e.g. Shall We Talk) are one still title card with only a small burned-in lyric changing, so they look frozen on the TV. `find_static_videos.py` scores them ~2.8 (cutoff 2.0) and does not flag them. Options if it bothers anyone: add the stem to `static_videos.txt`, or raise the cutoff and review the list.
+**Box (192.168.3.79, Android 10, internal storage only, no USB drive):** runs the DEBUG build of the current code (target SDK 35; the release build was verified earlier).
+54 songs, all with word-timed lyrics, all loudness-normalized, 32 with a real video, `titles.txt` / `years.txt` / `crops.txt` / `static_videos.txt` in `/sdcard/Karaoke`.
+The folder (Internal storage > Karaoke) was chosen once through the folder picker. Phones pair by scanning the QR code (the token changes whenever the app data is cleared:
+every device-test run does that).
+
+**Done this session (details in the sections below):** folder picker (SAF) + first-run screen with USB warning; phone-page pairing + TV settings (Menu / hold OK while idle: reset pairing);
+play history (30 days); video band fit + black-bar crops; countdown dots inside the lyric block; loudness normalization (+ safeguards, `make_karaoke.py` does it for new songs);
+release years (`years.txt`, `make_years.py`, shown and sorted newest-first on the phone Browse page; 381 of 651 songs have one); titles for all artists; generated random-colour
+backgrounds (Bing removed); target SDK 35 + R8 release build verified; cleartext off; `release-tests/` (JVM + device, run `python karaoke\release-tests\run_tests.py --ui`); `usermanual.md`.
+
+**Next steps, in rough order**
+1. Lyrics for the 11 songs removed from the box (一絲不掛, 社交恐懼癌, 空城記, 讓我留在你身邊 have none; 任我行, 單車, 幸福摩天輪, 是但求其愛, 每一個明天, 無條件, 致明日的舞 have a `.lrc`
+   that does not fit the audio: alignment kept 0 lines). Need matching `.lrc` files from the user -> `align_folder.py` -> normalize -> push (rule 2 in CLAUDE.md).
+2. The other ~586 songs (all artists) have mp3s normalized and titles/years but NO processed lyrics and no videos checked: they are not on the box. Do the pipeline per CLAUDE.md rule 2
+   when the user supplies lyrics. 270 songs still have no year (user is tagging the source mp3s; re-run `make_years.py`, push `years.txt`).
+3. Optional polish: remove the "lyrics" label from the Queue / Now-playing cards too (removed from Browse/Search only); `JPop/YAO/YAO - For Okinawa` karaoke mp3 is silent (regenerate).
+4. Google Play: see the Play sections below (open: Android 13+ notification dialog, USB-drive picker test, second device, upload signing key, final package name, privacy policy / Data safety).
+
+**Rules that matter** (full text in `CLAUDE.md`): test before commit/push; only copy songs to the box that have processed lyrics AND are loudness-normalized; commit/push only when asked;
+never test on the box while someone is singing (the guests use it from their phones; check `/api/state` with the pairing cookie, see the pairing section; a failed check must NOT count as idle).
 
 ## Outstanding tasks
 
