@@ -42,12 +42,14 @@ public final class Server extends NanoHTTPD {
 
     private final Context ctx;
     private final Host host;
+    private final String token;      // pairing token (see Pairing): without it nothing is served
     private byte[] page;
 
-    public Server(Context ctx, Host host, int port) {
+    public Server(Context ctx, Host host, int port, String token) {
         super(port);
         this.ctx = ctx.getApplicationContext();
         this.host = host;
+        this.token = token;
     }
 
     @Override public Response serve(IHTTPSession s) {
@@ -58,6 +60,15 @@ public final class Server extends NanoHTTPD {
                 try { s.parseBody(new HashMap<String, String>()); } catch (Exception ignored) { }
             }
             Map<String, String> p = s.getParms();
+
+            // Pairing: the QR code opens /?k=TOKEN -> cookie + redirect to /. Everything else needs that cookie.
+            if (Pairing.same(token, p.get(Pairing.PARAM)) && (uri.equals("/") || uri.equals("/index.html"))) {
+                Response r = newFixedLengthResponse(Response.Status.REDIRECT_SEE_OTHER, "text/plain; charset=utf-8", "Paired");
+                r.addHeader("Location", "/");
+                r.addHeader("Set-Cookie", Pairing.setCookie(token));
+                return noCache(r);
+            }
+            if (!Pairing.cookieOk(token, s.getHeaders().get("cookie"))) return unpaired(uri);
 
             if (uri.equals("/") || uri.equals("/index.html")) return html();
             if (!uri.startsWith("/api/")) return text(Response.Status.NOT_FOUND, "Not found");
@@ -155,6 +166,15 @@ public final class Server extends NanoHTTPD {
     private static String str(Map<String, String> p, String k) { String v = p.get(k); return v == null ? "" : v; }
 
     private Response json(JSONObject o) { return noCache(newFixedLengthResponse(Response.Status.OK, "application/json; charset=utf-8", o.toString())); }
+
+    /** Not paired: a friendly page for a browser, a plain 401 for the API. */
+    private Response unpaired(String uri) {
+        if (uri.startsWith("/api/")) return noCache(text(Response.Status.UNAUTHORIZED, "Scan the QR code on the TV"));
+        String body = "<!doctype html><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'>"
+                + "<body style='font-family:sans-serif;background:#101418;color:#fff;text-align:center;padding:48px 24px'>"
+                + "<h1>&#127908; Karaoke</h1><p style='font-size:20px'>Scan the QR code on the TV with your phone's camera to connect.</p>";
+        return noCache(newFixedLengthResponse(Response.Status.UNAUTHORIZED, "text/html; charset=utf-8", body));
+    }
 
     private Response text(Response.IStatus st, String t) { return newFixedLengthResponse(st, "text/plain; charset=utf-8", t); }
 

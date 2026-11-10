@@ -207,6 +207,15 @@ box's system file picker exists and works with the remote.
 
 Suggested order: 5 (package name) -> 2 + 1 (storage + target SDK, the big refactor) -> 3/4 (content) -> 7 -> 6 -> 8 -> 9 -> 10-15.
 
+## Phone-page pairing (done 2026-11-10)
+
+The QR code on the TV opens `http://ip:8080/?k=TOKEN`; the server answers 303 + a cookie `karaoke_k` (HttpOnly, SameSite=Lax, 1 year) and from then on that phone
+works with no typing. Without the cookie every page/API call gets 401 ("scan the QR code on the TV"). The token (12 chars, `Pairing.java`) is made once and kept in the app's
+SharedPreferences (`pair`), so phones stay paired across restarts and updates. A phone that has not paired yet (e.g. after this update) must scan the code once.
+The idle screen no longer prints the address (typing it would not work). Scripts/curl need the cookie:
+`T=$(adb shell run-as com.setupbox.karaoke cat shared_prefs/karaoke.xml | grep -oE 'pair">[a-z0-9]+' | cut -d'>' -f2)` then `curl -b karaoke_k=$T http://192.168.3.79:8080/api/state`
+(debug build only; the release-tests do this, `--token` for a release build). Not done: a "reset pairing" option on the TV (new token, all phones must rescan).
+
 ## Gotchas learned
 
 - `adb` is not on PATH: use `D:\ai\setupbox\tools\sdk\platform-tools\adb.exe`. In Git Bash, `JAVA_HOME` must be a Windows path (`C:\Program Files\Java\jdk-20`); the build is easiest from PowerShell.

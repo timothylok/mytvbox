@@ -5,7 +5,8 @@ Automated checks to run before a release (and before committing storage / folder
 | File | What | Needs |
 |---|---|---|
 | `FolderPickerLogicTest.java` | the "internal storage only" rule (rejects USB / SD card tree ids), `Storage` listing and text reading incl. Chinese names and BOM | JDK only |
-| `folder_picker_ui_test.py` | first run -> chooser screen + USB warning -> system picker -> Allow -> library loads -> persists after restart -> "change folder" shows the screen again | TV box on adb, debug build installed, songs in `/sdcard/Karaoke` |
+| `PairingTest.java` | the phone-page pairing token logic (token shape, constant-time compare, cookie parsing, Set-Cookie flags, QR address) | JDK only |
+| `folder_picker_ui_test.py` | pairing is enforced (401 without the QR token / cookie, 303 + cookie with it), first run -> chooser screen + USB warning -> system picker -> Allow -> library loads -> persists after restart -> "change folder" shows the screen again | TV box on adb, debug build installed, songs in `/sdcard/Karaoke` |
 | `run_tests.py` | runs the above (`--ui` adds the device test) | |
 
 ```

@@ -92,6 +92,10 @@ for (const t of document.querySelectorAll(".tab")) {
 async function api(path, params, post) {
   const url = path + (params ? "?" + new URLSearchParams(params) : "");
   const r = await fetch(url, { method: post ? "POST" : "GET", cache: "no-store" });
+  if (r.status === 401) {          // not paired (cookie lost, or the TV was reset): ask for the QR code again
+    document.body.innerHTML = "<div style='padding:48px 24px;text-align:center'><h2>🎤 Karaoke</h2><p>Scan the QR code on the TV with your phone's camera to connect.</p></div>";
+    throw new Error("Scan the QR code on the TV");
+  }
   if (!r.ok) throw new Error(await r.text());
   return r.json();
 }

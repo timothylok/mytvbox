@@ -72,10 +72,45 @@ class Box:
         return False
 
 
-def api(url, post=False, timeout=8):
+TOKEN = ""     # the phone-page pairing token, read from the app's private preferences (debug build) or --token
+
+
+def api(url, post=False, timeout=8, token=None):
+    """GET/POST with the pairing cookie (token=None uses the test's token, token="" sends none)."""
     req = urllib.request.Request(url, method="POST" if post else "GET", data=b"" if post else None)
+    t = TOKEN if token is None else token
+    if t:
+        req.add_header("Cookie", "karaoke_k=" + t)
     with urllib.request.urlopen(req, timeout=timeout) as r:
         return r.read().decode("utf-8")
+
+
+def status(url, token="", follow=False):
+    """HTTP status (and headers) without raising; redirects are not followed unless follow=True."""
+    class NoRedirect(urllib.request.HTTPRedirectHandler):
+        def redirect_request(self, *a, **k):
+            return None
+    opener = urllib.request.build_opener(*([] if follow else [NoRedirect()]))
+    req = urllib.request.Request(url)
+    if token:
+        req.add_header("Cookie", "karaoke_k=" + token)
+    try:
+        r = opener.open(req, timeout=8)
+        return r.status, r.headers
+    except urllib.error.HTTPError as e:
+        return e.code, e.headers
+
+
+def read_token(box, wait=20):
+    """The app writes its token to shared_prefs soon after it starts."""
+    end = time.time() + wait
+    while time.time() < end:
+        xml = box.run("exec-out", "run-as", PKG, "cat", "shared_prefs/karaoke.xml")
+        m = re.search(r'name="pair">([a-z0-9]+)<', xml)
+        if m:
+            return m.group(1)
+        time.sleep(1)
+    return ""
 
 
 def state(base, wait=0, until=None):
@@ -100,7 +135,9 @@ def main():
     ap.add_argument("--device", default="192.168.3.79:5555")
     ap.add_argument("--min-songs", type=int, default=1)
     ap.add_argument("--no-preserve", action="store_true")
+    ap.add_argument("--token", default="", help="pairing token (needed for a release build, where run-as is not available)")
     a = ap.parse_args()
+    global TOKEN
     box = Box(a.adb, a.device)
     base = "http://" + a.device.split(":")[0] + ":8080"
     print(box.run("connect", a.device).strip())
@@ -120,11 +157,29 @@ def main():
         # 1. fresh state: clear the app's data (this also drops the saved folder permission)
         box.sh("pm clear " + PKG)
         box.sh("am start -n " + ACT)
+        TOKEN = a.token or read_token(box)
+        check("0. the app made a pairing token", len(TOKEN) >= 8, TOKEN)
         st = state(base, wait=30, until=lambda s: s.get("setup") is True)
         check("1. first run asks for the Karaoke folder", st.get("setup") is True, st)
         txt = st.get("setupText", "")
         check("1b. the screen warns against USB drives", "Do NOT choose a USB drive" in txt, txt[:80])
         check("1c. no songs before a folder is chosen", st.get("songCount", -1) == 0, st.get("songCount"))
+
+        # 1d. pairing: nobody without the QR token can read or control anything
+        code, _ = status(base + "/api/state")
+        check("1d. /api/state without pairing is refused (401)", code == 401, code)
+        code, _ = status(base + "/api/queue/clear")
+        check("1e. an API call without pairing is refused (401)", code == 401, code)
+        code, _ = status(base + "/")
+        check("1f. the page without pairing says 'scan the code' (401)", code == 401, code)
+        code, _ = status(base + "/api/state", token="wrongwrongwr")
+        check("1g. a wrong cookie is refused (401)", code == 401, code)
+        code, _ = status(base + "/?k=wrongwrongwr")
+        check("1h. a wrong token in the address is refused (401)", code == 401, code)
+        code, hdr = status(base + "/?k=" + TOKEN)
+        check("1i. the QR address pairs: redirect (303) + cookie", code == 303 and "karaoke_k=" + TOKEN in (hdr.get("Set-Cookie") or ""), (code, hdr.get("Set-Cookie")))
+        code, _ = status(base + "/", token=TOKEN)
+        check("1j. the page opens with the cookie (200)", code == 200, code)
 
         # 2. the remote's OK key opens the system chooser
         box.sh("input keyevent KEYCODE_DPAD_CENTER")
@@ -153,6 +208,8 @@ def main():
         st = state(base, wait=40, until=lambda s: s.get("songCount", 0) >= a.min_songs)
         check("5a. after a restart the library is back (%d songs)" % st.get("songCount", 0), st.get("songCount", 0) >= a.min_songs)
         check("5b. after a restart the app does NOT ask again", st.get("setup") is False, st)
+        if not a.token:
+            check("5c. the pairing token survives the restart (phones stay paired)", read_token(box) == TOKEN)
 
         # 6. folder change from the phone page; OK must work even after a touch (touch mode)
         box.sh("am start -n " + ACT + " --ez pickfolder true")        # maintenance hook, not reachable from the phone/network

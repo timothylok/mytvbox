@@ -83,6 +83,7 @@ public class MainActivity extends Activity implements Server.Host {
     private boolean debugSingleFile = false;
     private boolean vocalOn = false;                 // false = karaoke (singer sings), true = original vocal
     private String currentSongId = "";
+    private String pairToken = "";           // secret in the QR code (see Pairing)
     private History history;                 // play history, last 30 days (history.jsonl)
     private volatile Storage storage;        // the Karaoke folder the user picked (null until then); ALL song files go through it
     private android.content.SharedPreferences prefs;
@@ -147,7 +148,10 @@ public class MainActivity extends Activity implements Server.Host {
         blp.setMargins(24, 0, 0, 130);
         root.addView(bannerView, blp);
         ip = localIp();
-        final String url = "http://" + ip + ":" + PORT;
+        android.content.SharedPreferences pp = getSharedPreferences("karaoke", MODE_PRIVATE);
+        pairToken = pp.getString("pair", null);
+        if (pairToken == null) { pairToken = Pairing.newToken(); pp.edit().putString("pair", pairToken).apply(); }   // made once, phones stay paired
+        final String url = Pairing.pairUrl(ip, PORT, pairToken);     // what the QR code opens: pairs the phone, no typing
         android.graphics.Bitmap bigQr = qr(url, 440), smallQr = qr(url, 220);
 
         idleBox = new LinearLayout(this);
@@ -166,7 +170,7 @@ public class MainActivity extends Activity implements Server.Host {
         qlp.setMargins(0, 24, 0, 24);
         idleBox.addView(qrBig, qlp);
         TextView idleUrl = new TextView(this);
-        idleUrl.setText(url);
+        idleUrl.setText("Scan the code with your phone's camera");
         idleUrl.setTextColor(Color.WHITE);
         idleUrl.setTextSize(36);
         idleUrl.setGravity(Gravity.CENTER);
@@ -300,7 +304,7 @@ public class MainActivity extends Activity implements Server.Host {
         queue = QueueManager.withFile(priv("state.txt"));
         history = new History(priv("history.jsonl"));
         loadFlips();
-        server = new Server(this, this, PORT);
+        server = new Server(this, this, PORT, pairToken);
         try { server.start(); } catch (Exception e) { libraryNote = "Web server failed: " + e.getMessage(); }
         try { KeepAliveService.start(this, "http://" + ip + ":" + PORT); } catch (Exception ignored) { }   // survive Home / other apps
         openStorage();
