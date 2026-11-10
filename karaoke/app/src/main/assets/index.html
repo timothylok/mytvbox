@@ -176,7 +176,6 @@ async function poll() {
 // ---- songs (browse + search) ----
 function songRow(s) {
   const title = el("div", { class: "t" }, s.title);
-  if (s.lrc) title.append(el("span", { class: "badge" }, "lyrics"));
   return el("div", { class: "item" },
     el("div", { class: "info" }, title, el("div", { class: "dim" }, (s.year ? s.year + " · " : "") + s.artist + " · " + s.language)),
     el("button", { class: "small", onclick: () => add(s, "end") }, "＋ Add"),
