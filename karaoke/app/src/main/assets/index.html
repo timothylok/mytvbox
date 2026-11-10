@@ -126,7 +126,7 @@ function drawQueue(st) {
   if (c) {
     root.append(el("div", { class: "card now" },
       el("div", { class: "dim" }, st.paused ? "Paused" : "Now playing"),
-      el("div", { class: "title" }, c.title),
+      el("div", { class: "title" }, c.title, c.lrc ? el("span", { class: "badge" }, "lyrics") : ""),
       el("div", { class: "dim" }, c.artist + (c.singer ? " · 🎤 " + c.singer : "")),
       el("div", { class: "bar" }, el("div", { id: "bar" })),
       el("div", { class: "dim", id: "time", style: "margin-bottom:10px" }, ""),
@@ -151,7 +151,7 @@ function drawQueue(st) {
       card.append(el("div", { class: "item" },
         el("div", { class: "n" }, String(i + 1)),
         el("div", { class: "info" },
-          el("div", { class: "t" }, it.title),
+          el("div", { class: "t" }, it.title, it.lrc ? el("span", { class: "badge" }, "lyrics") : ""),
           el("div", { class: "dim" }, it.artist + (it.singer ? " · 🎤 " + it.singer : ""))),
         el("button", { class: "small", title: "Move up", onclick: () => act("/api/queue/move", { id: it.id, dir: "up" }) }, "▲"),
         el("button", { class: "small", title: "Move down", onclick: () => act("/api/queue/move", { id: it.id, dir: "down" }) }, "▼"),
