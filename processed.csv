@@ -1167,3 +1167,4 @@
 2026-11-16 15:14:44,meta,D:\ai\Karaoke\crops.txt,/sdcard/Karaoke/crops.txt,ok,
 2026-11-16 15:14:44,rescan,,,skipped,app not running
 2026-11-16 15:14:44,sync,,,ok,"run finished: made 0, aligned 0, held 0, pushed 1 songs (7 MB), failed 0, box connected, rescan app not running (it scans at start), 7 min"
+2026-11-16 15:25:32,note,,,ok,Removed official YouTube TV (com.google.android.youtube.tv) from the box for user 0 (it had reappeared); SmartTube kept. Restore: pm install-existing com.google.android.youtube.tv
