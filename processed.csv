@@ -1168,3 +1168,713 @@
 2026-11-16 15:14:44,rescan,,,skipped,app not running
 2026-11-16 15:14:44,sync,,,ok,"run finished: made 0, aligned 0, held 0, pushed 1 songs (7 MB), failed 0, box connected, rescan app not running (it scans at start), 7 min"
 2026-11-16 15:25:32,note,,,ok,Removed official YouTube TV (com.google.android.youtube.tv) from the box for user 0 (it had reappeared); SmartTube kept. Restore: pm install-existing com.google.android.youtube.tv
+2026-11-17 03:00:02,sync,,,ok,run started
+2026-11-17 03:00:43,karaoke,D:\ai\GetVideo\Cantopop\Andy Lau\我年輕過 - 劉德華.mp3,D:\ai\Karaoke\Cantopop\Andy Lau\我年輕過 - 劉德華.mp3,ok,
+2026-11-17 03:01:10,karaoke,D:\ai\GetVideo\Cantopop\Arvin\Arvin 曾傲棐《愛與(不)被愛》 [Official MV].mp3,D:\ai\Karaoke\Cantopop\Arvin\Arvin 曾傲棐《愛與(不)被愛》 [Official MV].mp3,ok,
+2026-11-17 03:01:42,normalize,D:\ai\Karaoke\Cantopop\Cass Phang\彭羚 Cass Phang - 無人駕駛.mp3,D:\ai\Karaoke\Cantopop\Cass Phang\彭羚 Cass Phang - 無人駕駛.mp3,ok,"-30.5 LUFS -> gain +12.5 dB (target -18.0), done by make_karaoke"
+2026-11-17 03:01:42,karaoke,D:\ai\GetVideo\Cantopop\Cass Phang\彭羚 Cass Phang - 無人駕駛.mp3,D:\ai\Karaoke\Cantopop\Cass Phang\彭羚 Cass Phang - 無人駕駛.mp3,ok,
+2026-11-17 03:02:14,normalize,D:\ai\Karaoke\Cantopop\Janice M. Vidal\衛蘭 - 心亂如麻 MV.mp3,D:\ai\Karaoke\Cantopop\Janice M. Vidal\衛蘭 - 心亂如麻 MV.mp3,ok,"-20.1 LUFS -> gain +2.1 dB (target -18.0), done by make_karaoke"
+2026-11-17 03:02:14,karaoke,D:\ai\GetVideo\Cantopop\Janice M. Vidal\衛蘭 - 心亂如麻 MV.mp3,D:\ai\Karaoke\Cantopop\Janice M. Vidal\衛蘭 - 心亂如麻 MV.mp3,ok,
+2026-11-17 03:02:47,karaoke,D:\ai\GetVideo\Cantopop\Janice M. Vidal\衛蘭 Janice - 街燈晚餐 Official MV [Imagine] - 官方完整版.mp3,D:\ai\Karaoke\Cantopop\Janice M. Vidal\衛蘭 Janice - 街燈晚餐 Official MV [Imagine] - 官方完整版.mp3,ok,
+2026-11-17 03:03:24,normalize,D:\ai\Karaoke\Cantopop\Janice M. Vidal\衛蘭 Janice Vidal - 又~離家出走 Official Lyric MV.mp3,D:\ai\Karaoke\Cantopop\Janice M. Vidal\衛蘭 Janice Vidal - 又~離家出走 Official Lyric MV.mp3,ok,"-19.6 LUFS -> gain +1.6 dB (target -18.0), done by make_karaoke"
+2026-11-17 03:03:24,karaoke,D:\ai\GetVideo\Cantopop\Janice M. Vidal\衛蘭 Janice Vidal - 又~離家出走 Official Lyric MV.mp3,D:\ai\Karaoke\Cantopop\Janice M. Vidal\衛蘭 Janice Vidal - 又~離家出走 Official Lyric MV.mp3,ok,
+2026-11-17 03:03:54,karaoke,D:\ai\GetVideo\Cantopop\Nancy Kwai\Jeffrey Ngai 魏浚笙 X Nancy Kwai 歸綽嶢 - 你好就夠 Good Enough (Official Music Video).mp3,D:\ai\Karaoke\Cantopop\Nancy Kwai\Jeffrey Ngai 魏浚笙 X Nancy Kwai 歸綽嶢 - 你好就夠 Good Enough (Official Music Video).mp3,ok,
+2026-11-17 03:04:21,karaoke,D:\ai\GetVideo\Cantopop\Nancy Kwai\Nancy Kwai 歸綽嶢 - Let go (Official Music Video).mp3,D:\ai\Karaoke\Cantopop\Nancy Kwai\Nancy Kwai 歸綽嶢 - Let go (Official Music Video).mp3,ok,
+2026-11-17 03:04:50,karaoke,D:\ai\GetVideo\Cantopop\On Chan\陳健安 On Chan - 天下無敵 Tenkamuteki (Official Music Video).mp3,D:\ai\Karaoke\Cantopop\On Chan\陳健安 On Chan - 天下無敵 Tenkamuteki (Official Music Video).mp3,ok,
+2026-11-17 03:05:09,normalize,D:\ai\Karaoke\Mandarin\Ashe\囚笼（Prisoner Out）.mp3,D:\ai\Karaoke\Mandarin\Ashe\囚笼（Prisoner Out）.mp3,ok,"-20.1 LUFS -> gain +2.1 dB (target -18.0), done by make_karaoke"
+2026-11-17 03:05:09,karaoke,D:\ai\GetVideo\Mandarin\Ashe\囚笼（Prisoner Out）.mp3,D:\ai\Karaoke\Mandarin\Ashe\囚笼（Prisoner Out）.mp3,ok,
+2026-11-17 03:05:35,karaoke,D:\ai\GetVideo\Mandarin\Ayo97\感谢你曾来过.mp3,D:\ai\Karaoke\Mandarin\Ayo97\感谢你曾来过.mp3,ok,
+2026-11-17 03:06:03,normalize,D:\ai\Karaoke\Mandarin\Crowd Lu\盧廣仲 Crowd Lu 【幾分之幾 You Complete Me】 Official Music Video （花甲大人轉男孩電影主題曲）.mp3,D:\ai\Karaoke\Mandarin\Crowd Lu\盧廣仲 Crowd Lu 【幾分之幾 You Complete Me】 Official Music Video （花甲大人轉男孩電影主題曲）.mp3,ok,"-22.7 LUFS -> gain +4.7 dB (target -18.0), done by make_karaoke"
+2026-11-17 03:06:03,karaoke,D:\ai\GetVideo\Mandarin\Crowd Lu\盧廣仲 Crowd Lu 【幾分之幾 You Complete Me】 Official Music Video （花甲大人轉男孩電影主題曲）.mp3,D:\ai\Karaoke\Mandarin\Crowd Lu\盧廣仲 Crowd Lu 【幾分之幾 You Complete Me】 Official Music Video （花甲大人轉男孩電影主題曲）.mp3,ok,
+2026-11-17 03:06:40,normalize,D:\ai\Karaoke\Mandarin\Eric Chou\周興哲Eric Chou《你不屬於我 You Don't Belong to Me》Official Music Video - Netflix「比悲傷更悲傷的故事」影集版片尾曲.mp3,D:\ai\Karaoke\Mandarin\Eric Chou\周興哲Eric Chou《你不屬於我 You Don't Belong to Me》Official Music Video - Netflix「比悲傷更悲傷的故事」影集版片尾曲.mp3,ok,"-20.5 LUFS -> gain +2.5 dB (target -18.0), done by make_karaoke"
+2026-11-17 03:06:40,karaoke,D:\ai\GetVideo\Mandarin\Eric Chou\周興哲Eric Chou《你不屬於我 You Don't Belong to Me》Official Music Video - Netflix「比悲傷更悲傷的故事」影集版片尾曲.mp3,D:\ai\Karaoke\Mandarin\Eric Chou\周興哲Eric Chou《你不屬於我 You Don't Belong to Me》Official Music Video - Netflix「比悲傷更悲傷的故事」影集版片尾曲.mp3,ok,
+2026-11-17 03:07:13,karaoke,D:\ai\GetVideo\Mandarin\Eric Chou\周興哲Eric Chou《最後一堂課 Graduation》Official Music Video - 影集「媽，別鬧了！」片尾曲.mp3,D:\ai\Karaoke\Mandarin\Eric Chou\周興哲Eric Chou《最後一堂課 Graduation》Official Music Video - 影集「媽，別鬧了！」片尾曲.mp3,ok,
+2026-11-17 03:07:41,normalize,D:\ai\Karaoke\Mandarin\Feng Ze\Feng Ze 邱鋒澤 - 星海 Stardrift【動態歌詞】Official Lyrics MV.mp3,D:\ai\Karaoke\Mandarin\Feng Ze\Feng Ze 邱鋒澤 - 星海 Stardrift【動態歌詞】Official Lyrics MV.mp3,ok,"-16.4 LUFS -> gain -1.6 dB (target -18.0), done by make_karaoke"
+2026-11-17 03:07:41,karaoke,D:\ai\GetVideo\Mandarin\Feng Ze\Feng Ze 邱鋒澤 - 星海 Stardrift【動態歌詞】Official Lyrics MV.mp3,D:\ai\Karaoke\Mandarin\Feng Ze\Feng Ze 邱鋒澤 - 星海 Stardrift【動態歌詞】Official Lyrics MV.mp3,ok,
+2026-11-17 03:08:06,karaoke,D:\ai\GetVideo\Mandarin\Genie Zhuo\曹格 (Gary Chaw) & 卓文萱 (Genie Chuo) - 梁山伯与茱丽叶 (Romeo and Juliet) Color Coded Lyrics (CHN⧸PIN⧸ENG).mp3,D:\ai\Karaoke\Mandarin\Genie Zhuo\曹格 (Gary Chaw) & 卓文萱 (Genie Chuo) - 梁山伯与茱丽叶 (Romeo and Juliet) Color Coded Lyrics (CHN⧸PIN⧸ENG).mp3,ok,
+2026-11-17 03:08:28,karaoke,D:\ai\GetVideo\Mandarin\Jay Chou\Jay Chou 周杰倫【Aurora in July 七月的極光】Official Music Video.mp3,D:\ai\Karaoke\Mandarin\Jay Chou\Jay Chou 周杰倫【Aurora in July 七月的極光】Official Music Video.mp3,ok,
+2026-11-17 03:08:58,normalize,D:\ai\Karaoke\Mandarin\Jay Chou\周杰倫 Jay Chou【說好的幸福呢 The Promised Love】-Official Music Video.mp3,D:\ai\Karaoke\Mandarin\Jay Chou\周杰倫 Jay Chou【說好的幸福呢 The Promised Love】-Official Music Video.mp3,ok,"-24.6 LUFS -> gain +6.6 dB (target -18.0), done by make_karaoke"
+2026-11-17 03:08:58,karaoke,D:\ai\GetVideo\Mandarin\Jay Chou\周杰倫 Jay Chou【說好的幸福呢 The Promised Love】-Official Music Video.mp3,D:\ai\Karaoke\Mandarin\Jay Chou\周杰倫 Jay Chou【說好的幸福呢 The Promised Love】-Official Music Video.mp3,ok,
+2026-11-17 03:09:23,karaoke,D:\ai\GetVideo\Mandarin\Jay Chou\那天下雨了.mp3,D:\ai\Karaoke\Mandarin\Jay Chou\那天下雨了.mp3,ok,
+2026-11-17 03:09:45,karaoke,D:\ai\GetVideo\Mandarin\Jess Lee\李佳薇《一萬零一次沉溺》官方動態歌詞版MV｜騰訊音樂發行頻道.mp3,D:\ai\Karaoke\Mandarin\Jess Lee\李佳薇《一萬零一次沉溺》官方動態歌詞版MV｜騰訊音樂發行頻道.mp3,ok,
+2026-11-17 03:10:16,karaoke,D:\ai\GetVideo\Mandarin\Joker Xue\薛之謙 Joker Xue【我好像在哪見過你】Official Music Video.mp3,D:\ai\Karaoke\Mandarin\Joker Xue\薛之謙 Joker Xue【我好像在哪見過你】Official Music Video.mp3,ok,
+2026-11-17 03:10:48,normalize,D:\ai\Karaoke\Mandarin\Jordan Chan\【纯享】#陈小春 《#相依为命 》和应采儿再现名场面 有爱的氛围让人疯狂上头｜《声生不息·大湾区季》 Infinity And Beyond S4｜ MangoTV.mp3,D:\ai\Karaoke\Mandarin\Jordan Chan\【纯享】#陈小春 《#相依为命 》和应采儿再现名场面 有爱的氛围让人疯狂上头｜《声生不息·大湾区季》 Infinity And Beyond S4｜ MangoTV.mp3,ok,"-22.5 LUFS -> gain +4.5 dB (target -18.0), done by make_karaoke"
+2026-11-17 03:10:48,karaoke,D:\ai\GetVideo\Mandarin\Jordan Chan\【纯享】#陈小春 《#相依为命 》和应采儿再现名场面 有爱的氛围让人疯狂上头｜《声生不息·大湾区季》 Infinity And Beyond S4｜ MangoTV.mp3,D:\ai\Karaoke\Mandarin\Jordan Chan\【纯享】#陈小春 《#相依为命 》和应采儿再现名场面 有爱的氛围让人疯狂上头｜《声生不息·大湾区季》 Infinity And Beyond S4｜ MangoTV.mp3,ok,
+2026-11-17 03:11:21,normalize,D:\ai\Karaoke\Mandarin\Mayday\MAYDAY 五月天 [ 突然好想你 Suddenly missing you so bad ] Official Music Video.mp3,D:\ai\Karaoke\Mandarin\Mayday\MAYDAY 五月天 [ 突然好想你 Suddenly missing you so bad ] Official Music Video.mp3,ok,"-23.4 LUFS -> gain +5.4 dB (target -18.0), done by make_karaoke"
+2026-11-17 03:11:21,karaoke,D:\ai\GetVideo\Mandarin\Mayday\MAYDAY 五月天 [ 突然好想你 Suddenly missing you so bad ] Official Music Video.mp3,D:\ai\Karaoke\Mandarin\Mayday\MAYDAY 五月天 [ 突然好想你 Suddenly missing you so bad ] Official Music Video.mp3,ok,
+2026-11-17 03:11:44,karaoke,D:\ai\GetVideo\Mandarin\Patrick Brasca\派偉俊 Patrick Brasca【別戀 Move On】Official MV.mp3,D:\ai\Karaoke\Mandarin\Patrick Brasca\派偉俊 Patrick Brasca【別戀 Move On】Official MV.mp3,ok,
+2026-11-17 03:12:21,karaoke,D:\ai\GetVideo\Mandarin\Ren Ran\#MV  任然  《飞鸟和蝉》【官方MV Official Music Video】.mp3,D:\ai\Karaoke\Mandarin\Ren Ran\#MV  任然  《飞鸟和蝉》【官方MV Official Music Video】.mp3,ok,
+2026-11-17 03:12:58,karaoke,D:\ai\GetVideo\Mandarin\Rene Liu\Rene Liu 刘若英【 Afterwards 后来 Hou Lai】.mp3,D:\ai\Karaoke\Mandarin\Rene Liu\Rene Liu 刘若英【 Afterwards 后来 Hou Lai】.mp3,ok,
+2026-11-17 03:13:30,normalize,D:\ai\Karaoke\Mandarin\Various Artists\STYYG - Korea Varius Artists (Speed Drifters).mp3,D:\ai\Karaoke\Mandarin\Various Artists\STYYG - Korea Varius Artists (Speed Drifters).mp3,ok,"-16.1 LUFS -> gain -1.9 dB (target -18.0), done by make_karaoke"
+2026-11-17 03:13:30,karaoke,D:\ai\GetVideo\Mandarin\Various Artists\STYYG - Korea Varius Artists (Speed Drifters).mp3,D:\ai\Karaoke\Mandarin\Various Artists\STYYG - Korea Varius Artists (Speed Drifters).mp3,ok,
+2026-11-17 03:13:56,karaoke,D:\ai\GetVideo\Mandarin\Various Artists\王艳薇 - 离开我的依赖『我来不及道声不安，有点混乱有点缓慢。』【4k无损｜动态歌词 Lyrics】.mp3,D:\ai\Karaoke\Mandarin\Various Artists\王艳薇 - 离开我的依赖『我来不及道声不安，有点混乱有点缓慢。』【4k无损｜动态歌词 Lyrics】.mp3,ok,
+2026-11-17 03:14:26,normalize,D:\ai\Karaoke\Mandarin\Yanzi Sun\孫燕姿 Sun Yan-Zi - 第一天 First Day (official 官方完整版MV).mp3,D:\ai\Karaoke\Mandarin\Yanzi Sun\孫燕姿 Sun Yan-Zi - 第一天 First Day (official 官方完整版MV).mp3,ok,"-24.9 LUFS -> gain +6.9 dB (target -18.0), done by make_karaoke"
+2026-11-17 03:14:26,karaoke,D:\ai\GetVideo\Mandarin\Yanzi Sun\孫燕姿 Sun Yan-Zi - 第一天 First Day (official 官方完整版MV).mp3,D:\ai\Karaoke\Mandarin\Yanzi Sun\孫燕姿 Sun Yan-Zi - 第一天 First Day (official 官方完整版MV).mp3,ok,
+2026-11-17 03:14:53,karaoke,D:\ai\GetVideo\Mandarin\Yanzi Sun\孫燕姿 Sun Yanzi《日落》Afterwards Official Music Video.mp3,D:\ai\Karaoke\Mandarin\Yanzi Sun\孫燕姿 Sun Yanzi《日落》Afterwards Official Music Video.mp3,ok,
+2026-11-17 03:15:18,karaoke,D:\ai\GetVideo\Mandarin\Yu Dongran\于冬然 - 座位『你身邊的那位代替了我的座位，他的手捧著玫瑰承諾餘生都奉陪。』【動態歌詞 ｜ Pinyin Lyrics】【PENGUIN MUSIC】.mp3,D:\ai\Karaoke\Mandarin\Yu Dongran\于冬然 - 座位『你身邊的那位代替了我的座位，他的手捧著玫瑰承諾餘生都奉陪。』【動態歌詞 ｜ Pinyin Lyrics】【PENGUIN MUSIC】.mp3,ok,
+2026-11-17 03:15:52,normalize,D:\ai\Karaoke\JPop\ILLIT\ILLIT(아일릿) '체포하겠어 (You're Under Arrest)' (4K) ｜ STUDIO CHOOM ORIGINAL.mp3,D:\ai\Karaoke\JPop\ILLIT\ILLIT(아일릿) '체포하겠어 (You're Under Arrest)' (4K) ｜ STUDIO CHOOM ORIGINAL.mp3,ok,"-14.1 LUFS -> gain -3.9 dB (target -18.0), done by make_karaoke"
+2026-11-17 03:15:52,karaoke,D:\ai\GetVideo\JPop\ILLIT\ILLIT(아일릿) '체포하겠어 (You're Under Arrest)' (4K) ｜ STUDIO CHOOM ORIGINAL.mp3,D:\ai\Karaoke\JPop\ILLIT\ILLIT(아일릿) '체포하겠어 (You're Under Arrest)' (4K) ｜ STUDIO CHOOM ORIGINAL.mp3,ok,
+2026-11-17 03:16:13,normalize,D:\ai\Karaoke\JPop\Stray Kids\SUIATSU.mp3,D:\ai\Karaoke\JPop\Stray Kids\SUIATSU.mp3,ok,"-13.8 LUFS -> gain -4.2 dB (target -18.0), done by make_karaoke"
+2026-11-17 03:16:13,karaoke,D:\ai\GetVideo\JPop\Stray Kids\SUIATSU.mp3,D:\ai\Karaoke\JPop\Stray Kids\SUIATSU.mp3,ok,
+2026-11-17 03:16:34,normalize,D:\ai\Karaoke\JPop\back number\back number - 「瞬き」Music Video.mp3,D:\ai\Karaoke\JPop\back number\back number - 「瞬き」Music Video.mp3,ok,"-15.5 LUFS -> gain -2.5 dB (target -18.0), done by make_karaoke"
+2026-11-17 03:16:34,karaoke,D:\ai\GetVideo\JPop\back number\back number - 「瞬き」Music Video.mp3,D:\ai\Karaoke\JPop\back number\back number - 「瞬き」Music Video.mp3,ok,
+2026-11-17 03:17:13,normalize,D:\ai\Karaoke\JPop\back number\back number - クリスマスソング (full).mp3,D:\ai\Karaoke\JPop\back number\back number - クリスマスソング (full).mp3,ok,"-15.4 LUFS -> gain -2.6 dB (target -18.0), done by make_karaoke"
+2026-11-17 03:17:13,karaoke,D:\ai\GetVideo\JPop\back number\back number - クリスマスソング (full).mp3,D:\ai\Karaoke\JPop\back number\back number - クリスマスソング (full).mp3,ok,
+2026-11-17 03:17:43,normalize,D:\ai\Karaoke\KPop\BTS\BTS (방탄소년단) ‘Body to Body’ MV.mp3,D:\ai\Karaoke\KPop\BTS\BTS (방탄소년단) ‘Body to Body’ MV.mp3,ok,"-14.9 LUFS -> gain -3.1 dB (target -18.0), done by make_karaoke"
+2026-11-17 03:17:43,karaoke,D:\ai\GetVideo\KPop\BTS\BTS (방탄소년단) ‘Body to Body’ MV.mp3,D:\ai\Karaoke\KPop\BTS\BTS (방탄소년단) ‘Body to Body’ MV.mp3,ok,
+2026-11-17 03:18:08,normalize,D:\ai\Karaoke\KPop\CHAERYEONG\CHAERYEONG “Lovesick” M⧸V.mp3,D:\ai\Karaoke\KPop\CHAERYEONG\CHAERYEONG “Lovesick” M⧸V.mp3,ok,"-15.3 LUFS -> gain -2.7 dB (target -18.0), done by make_karaoke"
+2026-11-17 03:18:08,karaoke,D:\ai\GetVideo\KPop\CHAERYEONG\CHAERYEONG “Lovesick” M⧸V.mp3,D:\ai\Karaoke\KPop\CHAERYEONG\CHAERYEONG “Lovesick” M⧸V.mp3,ok,
+2026-11-17 03:18:32,normalize,D:\ai\Karaoke\KPop\CNBLUE\CNBLUE (씨엔블루) '달리기' Special Clip.mp3,D:\ai\Karaoke\KPop\CNBLUE\CNBLUE (씨엔블루) '달리기' Special Clip.mp3,ok,"-15.1 LUFS -> gain -2.9 dB (target -18.0), done by make_karaoke"
+2026-11-17 03:18:32,karaoke,D:\ai\GetVideo\KPop\CNBLUE\CNBLUE (씨엔블루) '달리기' Special Clip.mp3,D:\ai\Karaoke\KPop\CNBLUE\CNBLUE (씨엔블루) '달리기' Special Clip.mp3,ok,
+2026-11-17 03:18:55,normalize,"D:\ai\Karaoke\KPop\Crush\Crush, IU — seesaw (Feat. IU)｜繁體中文歌詞.mp3","D:\ai\Karaoke\KPop\Crush\Crush, IU — seesaw (Feat. IU)｜繁體中文歌詞.mp3",ok,"-16.0 LUFS -> gain -2.0 dB (target -18.0), done by make_karaoke"
+2026-11-17 03:18:55,karaoke,"D:\ai\GetVideo\KPop\Crush\Crush, IU — seesaw (Feat. IU)｜繁體中文歌詞.mp3","D:\ai\Karaoke\KPop\Crush\Crush, IU — seesaw (Feat. IU)｜繁體中文歌詞.mp3",ok,
+2026-11-17 03:19:22,karaoke,D:\ai\GetVideo\KPop\KYUHYUN\[MV] '약속' ｜ 규현 (KYUHYUN) EP [CONTINUE].mp3,D:\ai\Karaoke\KPop\KYUHYUN\[MV] '약속' ｜ 규현 (KYUHYUN) EP [CONTINUE].mp3,ok,
+2026-11-17 03:19:49,normalize,D:\ai\Karaoke\KPop\LNGSHOT\LNGSHOT - 'Masterpiece' Official Music Video.mp3,D:\ai\Karaoke\KPop\LNGSHOT\LNGSHOT - 'Masterpiece' Official Music Video.mp3,ok,"-14.5 LUFS -> gain -3.5 dB (target -18.0), done by make_karaoke"
+2026-11-17 03:19:49,karaoke,D:\ai\GetVideo\KPop\LNGSHOT\LNGSHOT - 'Masterpiece' Official Music Video.mp3,D:\ai\Karaoke\KPop\LNGSHOT\LNGSHOT - 'Masterpiece' Official Music Video.mp3,ok,
+2026-11-17 03:19:55,normalize,D:\ai\Karaoke\Cantopop\Cass Phang\彭羚 Cass Phang - 無人駕駛.mp3,D:\ai\Karaoke\Cantopop\Cass Phang\彭羚 Cass Phang - 無人駕駛.mp3,ok,-23.1 LUFS -> gain +5.1 dB (target -18.0)
+2026-11-17 03:20:29,quarantine,D:\ai\GetVideo\Cantopop\Theresa Fu\方力申Alex Fong x傅穎⧸傅寶誼Theresa Fu-自欺欺人+成年禮.lrc,,held,lyrics cover only 21% of the song (last line 3:35 of 16:42)
+2026-11-17 03:20:30,quarantine,D:\ai\GetVideo\Mandarin\Daniel Chan\陈晓东《心有独钟》江蘇衛視 不凡的改變 第4期 HD.lrc,,held,"lyrics run past the end of the song (last line 4:01, song 1:44): wrong version"
+2026-11-17 03:20:32,quarantine,D:\ai\GetVideo\Mandarin\Mayday\你不是真正的快樂.lrc,,held,"lyrics run past the end of the song (last line 4:33, song 3:37): wrong version"
+2026-11-17 03:20:33,quarantine,D:\ai\GetVideo\Mandarin\Yanzi Sun\孫燕姿 Sun Yan-Zi - 第一天 First Day (official 官方完整版MV).lrc,,held,"lyrics run past the end of the song (last line 89:28, song 4:14): wrong version"
+2026-11-17 03:20:34,quarantine,D:\ai\GetVideo\JPop\Kvi Baba\Kvi Baba ⧸ BPM feat. KREVA (Music Video).lrc,,held,lyric file has fewer than 3 timed lines
+2026-11-17 03:20:36,quarantine,"D:\ai\GetVideo\JPop\YAO\ありふれた世界の果てに (feat. Awich, CHICO CARLITO, ONE OK ROCK & Paledusk).lrc",,held,lyric file has fewer than 3 timed lines
+2026-11-17 03:20:36,quarantine,D:\ai\GetVideo\JPop\back number\back number - 「瞬き」Music Video.lrc,,held,"lyrics run past the end of the song (last line 4:56, song 2:40): wrong version"
+2026-11-17 03:20:39,quarantine,D:\ai\GetVideo\KPop\G-DRAGON\G-DRAGON - 삐딱하게(CROOKED) M⧸V.lrc,,held,"lyrics run past the end of the song (last line 4:09, song 3:45): wrong version"
+2026-11-17 03:20:40,quarantine,D:\ai\GetVideo\KPop\YESUNG\超好聽！藝聲感情豐沛演唱《墨紙》_《認識的哥哥》第364集_friDay影音韓綜線上看.lrc,,held,"lyrics run past the end of the song (last line 3:35, song 2:14): wrong version"
+2026-11-17 03:25:22,align,D:\ai\setupbox\tools\daily_sync\stage\s000.mp3,D:\ai\setupbox\tools\daily_sync\stage\s000.lrc,ok,"27 lines exact, 5 estimated; original in D:\ai\setupbox\tools\daily_sync\stage_orig"
+2026-11-17 03:30:23,align,D:\ai\setupbox\tools\daily_sync\stage\s001.mp3,D:\ai\setupbox\tools\daily_sync\stage\s001.lrc,ok,"11 lines exact, 26 estimated; original in D:\ai\setupbox\tools\daily_sync\stage_orig"
+2026-11-17 03:35:06,align,D:\ai\setupbox\tools\daily_sync\stage\s002.mp3,D:\ai\setupbox\tools\daily_sync\stage\s002.lrc,ok,"19 lines exact, 7 estimated; original in D:\ai\setupbox\tools\daily_sync\stage_orig"
+2026-11-17 03:38:53,align,D:\ai\setupbox\tools\daily_sync\stage\s003.mp3,D:\ai\setupbox\tools\daily_sync\stage\s003.lrc,ok,"32 lines exact, 13 estimated; original in D:\ai\setupbox\tools\daily_sync\stage_orig"
+2026-11-17 03:42:22,align,D:\ai\setupbox\tools\daily_sync\stage\s004.mp3,D:\ai\setupbox\tools\daily_sync\stage\s004.lrc,ok,"49 lines exact, 40 estimated; original in D:\ai\setupbox\tools\daily_sync\stage_orig"
+2026-11-17 03:45:53,align,D:\ai\setupbox\tools\daily_sync\stage\s005.mp3,D:\ai\setupbox\tools\daily_sync\stage\s005.lrc,ok,"0 lines exact, 73 estimated; original in D:\ai\setupbox\tools\daily_sync\stage_orig"
+2026-11-17 03:52:18,align,D:\ai\setupbox\tools\daily_sync\stage\s006.mp3,D:\ai\setupbox\tools\daily_sync\stage\s006.lrc,ok,"0 lines exact, 81 estimated; original in D:\ai\setupbox\tools\daily_sync\stage_orig"
+2026-11-17 03:56:36,align,D:\ai\setupbox\tools\daily_sync\stage\s007.mp3,D:\ai\setupbox\tools\daily_sync\stage\s007.lrc,ok,"0 lines exact, 82 estimated; original in D:\ai\setupbox\tools\daily_sync\stage_orig"
+2026-11-17 03:56:36,align,D:\ai\GetVideo\Cantopop\Andy Hui\心血 ｜ 許志安 Andy Hui ｜ 作詞：林振強     作曲：織田哲郎.mp3,D:\ai\Karaoke\Cantopop\Andy Hui\心血 ｜ 許志安 Andy Hui ｜ 作詞：林振強     作曲：織田哲郎.lrc,ok,"27 lines exact, 6 estimated (daily_sync; original kept in D:\ai\setupbox\tools\daily_sync\orig\Cantopop\Andy Hui)"
+2026-11-17 03:56:36,align,D:\ai\GetVideo\Cantopop\Andy Hui\許志安 Andy Hui - 男人最痛 (Official Music Video).mp3,D:\ai\Karaoke\Cantopop\Andy Hui\許志安 Andy Hui - 男人最痛 (Official Music Video).lrc,ok,"11 lines exact, 26 estimated (daily_sync; original kept in D:\ai\setupbox\tools\daily_sync\orig\Cantopop\Andy Hui)"
+2026-11-17 03:56:36,align,D:\ai\GetVideo\Cantopop\Andy Lau\《沒有翅膀的天使》復刻版 Music Video.mp3,D:\ai\Karaoke\Cantopop\Andy Lau\《沒有翅膀的天使》復刻版 Music Video.lrc,ok,"19 lines exact, 23 estimated (daily_sync; original kept in D:\ai\setupbox\tools\daily_sync\orig\Cantopop\Andy Lau)"
+2026-11-17 03:56:36,align,D:\ai\GetVideo\Cantopop\Anson Kong\愛應該怎麼辦.mp3,D:\ai\Karaoke\Cantopop\Anson Kong\愛應該怎麼辦.lrc,ok,"32 lines exact, 15 estimated (daily_sync; original kept in D:\ai\setupbox\tools\daily_sync\orig\Cantopop\Anson Kong)"
+2026-11-17 03:56:36,align,D:\ai\GetVideo\Cantopop\Anson Lo\251206-10 KINGDOM live 2025 《Take That》盧瀚霆 Anson Lo Focus Multi Fancam 4K.mp3,D:\ai\Karaoke\Cantopop\Anson Lo\251206-10 KINGDOM live 2025 《Take That》盧瀚霆 Anson Lo Focus Multi Fancam 4K.lrc,ok,"49 lines exact, 40 estimated (daily_sync; original kept in D:\ai\setupbox\tools\daily_sync\orig\Cantopop\Anson Lo)"
+2026-11-17 03:56:36,align,D:\ai\GetVideo\Cantopop\Anson Lo\Anson Lo 盧瀚霆 《Charisma》Official Music Video.mp3,D:\ai\Karaoke\Cantopop\Anson Lo\Anson Lo 盧瀚霆 《Charisma》Official Music Video.lrc,ok,"0 lines exact, 84 estimated (daily_sync; original kept in D:\ai\setupbox\tools\daily_sync\orig\Cantopop\Anson Lo)"
+2026-11-17 03:56:36,align,D:\ai\GetVideo\Cantopop\Anson Lo\Anson Lo 盧瀚霆 《Gimme Gimme》Official Music Video.mp3,D:\ai\Karaoke\Cantopop\Anson Lo\Anson Lo 盧瀚霆 《Gimme Gimme》Official Music Video.lrc,ok,"0 lines exact, 95 estimated (daily_sync; original kept in D:\ai\setupbox\tools\daily_sync\orig\Cantopop\Anson Lo)"
+2026-11-17 03:56:36,align,D:\ai\GetVideo\Cantopop\Anson Lo\Anson Lo 盧瀚霆 《Rude Boy》 - 《ANSON LO ”KINGDOM“ LIVE 2025》 【4K Multi-Angle】.mp3,D:\ai\Karaoke\Cantopop\Anson Lo\Anson Lo 盧瀚霆 《Rude Boy》 - 《ANSON LO ”KINGDOM“ LIVE 2025》 【4K Multi-Angle】.lrc,ok,"0 lines exact, 82 estimated (daily_sync; original kept in D:\ai\setupbox\tools\daily_sync\orig\Cantopop\Anson Lo)"
+2026-11-17 04:00:52,align,D:\ai\setupbox\tools\daily_sync\stage\s000.mp3,D:\ai\setupbox\tools\daily_sync\stage\s000.lrc,ok,"0 lines exact, 57 estimated; original in D:\ai\setupbox\tools\daily_sync\stage_orig"
+2026-11-17 04:04:58,align,D:\ai\setupbox\tools\daily_sync\stage\s001.mp3,D:\ai\setupbox\tools\daily_sync\stage\s001.lrc,ok,"24 lines exact, 3 estimated; original in D:\ai\setupbox\tools\daily_sync\stage_orig"
+2026-11-17 04:10:05,align,D:\ai\setupbox\tools\daily_sync\stage\s002.mp3,D:\ai\setupbox\tools\daily_sync\stage\s002.lrc,ok,"37 lines exact, 9 estimated; original in D:\ai\setupbox\tools\daily_sync\stage_orig"
+2026-11-17 04:14:07,align,D:\ai\setupbox\tools\daily_sync\stage\s003.mp3,D:\ai\setupbox\tools\daily_sync\stage\s003.lrc,ok,"42 lines exact, 2 estimated; original in D:\ai\setupbox\tools\daily_sync\stage_orig"
+2026-11-17 04:18:00,align,D:\ai\setupbox\tools\daily_sync\stage\s004.mp3,D:\ai\setupbox\tools\daily_sync\stage\s004.lrc,ok,"26 lines exact, 6 estimated; original in D:\ai\setupbox\tools\daily_sync\stage_orig"
+2026-11-17 04:23:45,align,D:\ai\setupbox\tools\daily_sync\stage\s005.mp3,D:\ai\setupbox\tools\daily_sync\stage\s005.lrc,ok,"0 lines exact, 23 estimated; original in D:\ai\setupbox\tools\daily_sync\stage_orig"
+2026-11-17 04:28:14,align,D:\ai\setupbox\tools\daily_sync\stage\s006.mp3,D:\ai\setupbox\tools\daily_sync\stage\s006.lrc,ok,"73 lines exact, 4 estimated; original in D:\ai\setupbox\tools\daily_sync\stage_orig"
+2026-11-17 04:32:15,align,D:\ai\setupbox\tools\daily_sync\stage\s007.mp3,D:\ai\setupbox\tools\daily_sync\stage\s007.lrc,ok,"39 lines exact, 2 estimated; original in D:\ai\setupbox\tools\daily_sync\stage_orig"
+2026-11-17 04:32:15,align,D:\ai\GetVideo\Cantopop\Anson Lo\Anson Lo 盧瀚霆 《goofy》Official Music Video.mp3,D:\ai\Karaoke\Cantopop\Anson Lo\Anson Lo 盧瀚霆 《goofy》Official Music Video.lrc,ok,"0 lines exact, 57 estimated (daily_sync; original kept in D:\ai\setupbox\tools\daily_sync\orig\Cantopop\Anson Lo)"
+2026-11-17 04:32:15,align,D:\ai\GetVideo\Cantopop\Anson Lo\Anson Lo 盧瀚霆 《午夜場》（Midnight Escape）Official Music Video.mp3,D:\ai\Karaoke\Cantopop\Anson Lo\Anson Lo 盧瀚霆 《午夜場》（Midnight Escape）Official Music Video.lrc,ok,"24 lines exact, 3 estimated (daily_sync; original kept in D:\ai\setupbox\tools\daily_sync\orig\Cantopop\Anson Lo)"
+2026-11-17 04:32:15,align,D:\ai\GetVideo\Cantopop\Anson Lo\Anson Lo 盧瀚霆 《最後一個降落傘》Official Music Video.mp3,D:\ai\Karaoke\Cantopop\Anson Lo\Anson Lo 盧瀚霆 《最後一個降落傘》Official Music Video.lrc,ok,"37 lines exact, 9 estimated (daily_sync; original kept in D:\ai\setupbox\tools\daily_sync\orig\Cantopop\Anson Lo)"
+2026-11-17 04:32:15,align,D:\ai\GetVideo\Cantopop\Anson Lo\我的支持型伴侶.mp3,D:\ai\Karaoke\Cantopop\Anson Lo\我的支持型伴侶.lrc,ok,"42 lines exact, 2 estimated (daily_sync; original kept in D:\ai\setupbox\tools\daily_sync\orig\Cantopop\Anson Lo)"
+2026-11-17 04:32:15,align,D:\ai\GetVideo\Cantopop\Anson Lo\盧瀚霆 Anson Lo 《本命》Official Lyric Video.mp3,D:\ai\Karaoke\Cantopop\Anson Lo\盧瀚霆 Anson Lo 《本命》Official Lyric Video.lrc,ok,"26 lines exact, 6 estimated (daily_sync; original kept in D:\ai\setupbox\tools\daily_sync\orig\Cantopop\Anson Lo)"
+2026-11-17 04:32:15,align,D:\ai\GetVideo\Cantopop\Arvin\Arvin 曾傲棐《愛與(不)被愛》 [Official MV].mp3,D:\ai\Karaoke\Cantopop\Arvin\Arvin 曾傲棐《愛與(不)被愛》 [Official MV].lrc,ok,"0 lines exact, 49 estimated (daily_sync; original kept in D:\ai\setupbox\tools\daily_sync\orig\Cantopop\Arvin)"
+2026-11-17 04:32:15,align,D:\ai\GetVideo\Cantopop\CY\CY 陳宗澤《急口令》Official MV.mp3,D:\ai\Karaoke\Cantopop\CY\CY 陳宗澤《急口令》Official MV.lrc,ok,"73 lines exact, 15 estimated (daily_sync; original kept in D:\ai\setupbox\tools\daily_sync\orig\Cantopop\CY)"
+2026-11-17 04:32:15,align,D:\ai\GetVideo\Cantopop\CY\CY 陳宗澤《顧客永遠是對的》Official MV.mp3,D:\ai\Karaoke\Cantopop\CY\CY 陳宗澤《顧客永遠是對的》Official MV.lrc,ok,"39 lines exact, 12 estimated (daily_sync; original kept in D:\ai\setupbox\tools\daily_sync\orig\Cantopop\CY)"
+2026-11-17 04:36:16,align,D:\ai\setupbox\tools\daily_sync\stage\s000.mp3,D:\ai\setupbox\tools\daily_sync\stage\s000.lrc,ok,"43 lines exact, 2 estimated; original in D:\ai\setupbox\tools\daily_sync\stage_orig"
+2026-11-17 04:40:29,align,D:\ai\setupbox\tools\daily_sync\stage\s001.mp3,D:\ai\setupbox\tools\daily_sync\stage\s001.lrc,ok,"42 lines exact, 4 estimated; original in D:\ai\setupbox\tools\daily_sync\stage_orig"
+2026-11-17 04:44:45,align,D:\ai\setupbox\tools\daily_sync\stage\s002.mp3,D:\ai\setupbox\tools\daily_sync\stage\s002.lrc,ok,"45 lines exact, 2 estimated; original in D:\ai\setupbox\tools\daily_sync\stage_orig"
+2026-11-17 04:49:41,align,D:\ai\setupbox\tools\daily_sync\stage\s003.mp3,D:\ai\setupbox\tools\daily_sync\stage\s003.lrc,ok,"43 lines exact, 4 estimated; original in D:\ai\setupbox\tools\daily_sync\stage_orig"
+2026-11-17 04:55:10,align,D:\ai\setupbox\tools\daily_sync\stage\s004.mp3,D:\ai\setupbox\tools\daily_sync\stage\s004.lrc,ok,"0 lines exact, 53 estimated; original in D:\ai\setupbox\tools\daily_sync\stage_orig"
+2026-11-17 04:59:41,align,D:\ai\setupbox\tools\daily_sync\stage\s005.mp3,D:\ai\setupbox\tools\daily_sync\stage\s005.lrc,ok,"34 lines exact, 8 estimated; original in D:\ai\setupbox\tools\daily_sync\stage_orig"
+2026-11-17 05:06:13,align,D:\ai\setupbox\tools\daily_sync\stage\s006.mp3,D:\ai\setupbox\tools\daily_sync\stage\s006.lrc,ok,"0 lines exact, 92 estimated; original in D:\ai\setupbox\tools\daily_sync\stage_orig"
+2026-11-17 05:10:36,align,D:\ai\setupbox\tools\daily_sync\stage\s007.mp3,D:\ai\setupbox\tools\daily_sync\stage\s007.lrc,ok,"34 lines exact, 11 estimated; original in D:\ai\setupbox\tools\daily_sync\stage_orig"
+2026-11-17 05:10:36,align,D:\ai\GetVideo\Cantopop\CY\別人的地獄.mp3,D:\ai\Karaoke\Cantopop\CY\別人的地獄.lrc,ok,"43 lines exact, 11 estimated (daily_sync; original kept in D:\ai\setupbox\tools\daily_sync\orig\Cantopop\CY)"
+2026-11-17 05:10:36,align,D:\ai\GetVideo\Cantopop\Candy\Candy 王家晴 《連名字你都說錯》（You Don’t Even Remember My Name）Official Music Video.mp3,D:\ai\Karaoke\Cantopop\Candy\Candy 王家晴 《連名字你都說錯》（You Don’t Even Remember My Name）Official Music Video.lrc,ok,"42 lines exact, 4 estimated (daily_sync; original kept in D:\ai\setupbox\tools\daily_sync\orig\Cantopop\Candy)"
+2026-11-17 05:10:36,align,D:\ai\GetVideo\Cantopop\Day\Day 許軼《你離開我的時候  神奇的事發生了》（Thank You For Leaving Me）Official Music Video.mp3,D:\ai\Karaoke\Cantopop\Day\Day 許軼《你離開我的時候  神奇的事發生了》（Thank You For Leaving Me）Official Music Video.lrc,ok,"45 lines exact, 2 estimated (daily_sync; original kept in D:\ai\setupbox\tools\daily_sync\orig\Cantopop\Day)"
+2026-11-17 05:10:36,align,D:\ai\GetVideo\Cantopop\Dear Jane\Dear Jane - 到底發生過什麼事 What Happened (Official Music Video).mp3,D:\ai\Karaoke\Cantopop\Dear Jane\Dear Jane - 到底發生過什麼事 What Happened (Official Music Video).lrc,ok,"43 lines exact, 13 estimated (daily_sync; original kept in D:\ai\setupbox\tools\daily_sync\orig\Cantopop\Dear Jane)"
+2026-11-17 05:10:36,align,D:\ai\GetVideo\Cantopop\Dear Jane\Dear Jane - 現實太少偶像劇 Reality Over Drama（Official Music Video）.mp3,D:\ai\Karaoke\Cantopop\Dear Jane\Dear Jane - 現實太少偶像劇 Reality Over Drama（Official Music Video）.lrc,ok,"0 lines exact, 61 estimated (daily_sync; original kept in D:\ai\setupbox\tools\daily_sync\orig\Cantopop\Dear Jane)"
+2026-11-17 05:10:36,align,D:\ai\GetVideo\Cantopop\EGG\𝐄𝐆𝐆黃詠霖《沒誰保佑》Music Video.mp3,D:\ai\Karaoke\Cantopop\EGG\𝐄𝐆𝐆黃詠霖《沒誰保佑》Music Video.lrc,ok,"34 lines exact, 8 estimated (daily_sync; original kept in D:\ai\setupbox\tools\daily_sync\orig\Cantopop\EGG)"
+2026-11-17 05:10:36,align,D:\ai\GetVideo\Cantopop\Edan\Edan 呂爵安 X Ryan 蔡俊彥《1206》Official Music Video.mp3,D:\ai\Karaoke\Cantopop\Edan\Edan 呂爵安 X Ryan 蔡俊彥《1206》Official Music Video.lrc,ok,"0 lines exact, 104 estimated (daily_sync; original kept in D:\ai\setupbox\tools\daily_sync\orig\Cantopop\Edan)"
+2026-11-17 05:10:36,align,D:\ai\GetVideo\Cantopop\Edan\Edan 呂爵安《壞人一個》（It's My Bad）Official Music Video.mp3,D:\ai\Karaoke\Cantopop\Edan\Edan 呂爵安《壞人一個》（It's My Bad）Official Music Video.lrc,ok,"34 lines exact, 11 estimated (daily_sync; original kept in D:\ai\setupbox\tools\daily_sync\orig\Cantopop\Edan)"
+2026-11-17 05:16:14,align,D:\ai\setupbox\tools\daily_sync\stage\s000.mp3,D:\ai\setupbox\tools\daily_sync\stage\s000.lrc,ok,"0 lines exact, 53 estimated; original in D:\ai\setupbox\tools\daily_sync\stage_orig"
+2026-11-17 05:20:10,align,D:\ai\setupbox\tools\daily_sync\stage\s001.mp3,D:\ai\setupbox\tools\daily_sync\stage\s001.lrc,ok,"0 lines exact, 90 estimated; original in D:\ai\setupbox\tools\daily_sync\stage_orig"
+2026-11-17 05:25:34,align,D:\ai\setupbox\tools\daily_sync\stage\s002.mp3,D:\ai\setupbox\tools\daily_sync\stage\s002.lrc,ok,"0 lines exact, 40 estimated; original in D:\ai\setupbox\tools\daily_sync\stage_orig"
+2026-11-17 05:31:01,align,D:\ai\setupbox\tools\daily_sync\stage\s003.mp3,D:\ai\setupbox\tools\daily_sync\stage\s003.lrc,ok,"0 lines exact, 43 estimated; original in D:\ai\setupbox\tools\daily_sync\stage_orig"
+2026-11-17 05:35:10,align,D:\ai\setupbox\tools\daily_sync\stage\s004.mp3,D:\ai\setupbox\tools\daily_sync\stage\s004.lrc,ok,"28 lines exact, 19 estimated; original in D:\ai\setupbox\tools\daily_sync\stage_orig"
+2026-11-17 05:39:42,align,D:\ai\setupbox\tools\daily_sync\stage\s005.mp3,D:\ai\setupbox\tools\daily_sync\stage\s005.lrc,ok,"40 lines exact, 9 estimated; original in D:\ai\setupbox\tools\daily_sync\stage_orig"
+2026-11-17 05:43:30,align,D:\ai\setupbox\tools\daily_sync\stage\s006.mp3,D:\ai\setupbox\tools\daily_sync\stage\s006.lrc,ok,"38 lines exact, 4 estimated; original in D:\ai\setupbox\tools\daily_sync\stage_orig"
+2026-11-17 05:48:30,align,D:\ai\setupbox\tools\daily_sync\stage\s007.mp3,D:\ai\setupbox\tools\daily_sync\stage\s007.lrc,ok,"0 lines exact, 30 estimated; original in D:\ai\setupbox\tools\daily_sync\stage_orig"
+2026-11-17 05:48:30,align,D:\ai\GetVideo\Cantopop\Edan\Edan 呂爵安《左手拖右手》（ Hand in Hand ） Official Music Video.mp3,D:\ai\Karaoke\Cantopop\Edan\Edan 呂爵安《左手拖右手》（ Hand in Hand ） Official Music Video.lrc,ok,"0 lines exact, 53 estimated (daily_sync; original kept in D:\ai\setupbox\tools\daily_sync\orig\Cantopop\Edan)"
+2026-11-17 05:48:30,align,D:\ai\GetVideo\Cantopop\Fatboy\姜濤Keung To & Fatboy - 獅虎流 Official Music Video.mp3,D:\ai\Karaoke\Cantopop\Fatboy\姜濤Keung To & Fatboy - 獅虎流 Official Music Video.lrc,ok,"0 lines exact, 109 estimated (daily_sync; original kept in D:\ai\setupbox\tools\daily_sync\orig\Cantopop\Fatboy)"
+2026-11-17 05:48:30,align,D:\ai\GetVideo\Cantopop\Frankie Chan\Frankie 陳瑞輝 《是日戀愛》（Loving u Leaving u）Official Music Video.mp3,D:\ai\Karaoke\Cantopop\Frankie Chan\Frankie 陳瑞輝 《是日戀愛》（Loving u Leaving u）Official Music Video.lrc,ok,"0 lines exact, 40 estimated (daily_sync; original kept in D:\ai\setupbox\tools\daily_sync\orig\Cantopop\Frankie Chan)"
+2026-11-17 05:48:30,align,D:\ai\GetVideo\Cantopop\George Au\《CHILL CLUB 推介榜》第13周冠軍歌George Au 歐鎮灝《出什麼風頭》🏆.mp3,D:\ai\Karaoke\Cantopop\George Au\《CHILL CLUB 推介榜》第13周冠軍歌George Au 歐鎮灝《出什麼風頭》🏆.lrc,ok,"0 lines exact, 43 estimated (daily_sync; original kept in D:\ai\setupbox\tools\daily_sync\orig\Cantopop\George Au)"
+2026-11-17 05:48:30,align,D:\ai\GetVideo\Cantopop\Gigi\炎明熹 Gigi Yim - 在搖搖板上相對的我們 Seesaw of Us ｜ Official Music Video.mp3,D:\ai\Karaoke\Cantopop\Gigi\炎明熹 Gigi Yim - 在搖搖板上相對的我們 Seesaw of Us ｜ Official Music Video.lrc,ok,"28 lines exact, 19 estimated (daily_sync; original kept in D:\ai\setupbox\tools\daily_sync\orig\Cantopop\Gigi)"
+2026-11-17 05:48:30,align,D:\ai\GetVideo\Cantopop\Goodnight Lillie\晚安莉莉《我看見今晚的月色很美，你呢？》 Tsuki ｜ Official Music Video.mp3,D:\ai\Karaoke\Cantopop\Goodnight Lillie\晚安莉莉《我看見今晚的月色很美，你呢？》 Tsuki ｜ Official Music Video.lrc,ok,"40 lines exact, 9 estimated (daily_sync; original kept in D:\ai\setupbox\tools\daily_sync\orig\Cantopop\Goodnight Lillie)"
+2026-11-17 05:48:30,align,D:\ai\GetVideo\Cantopop\Hins Cheung\張敬軒 Hins Cheung《放棄的界限》(Eight Days of Silence) [Lyric Video].mp3,D:\ai\Karaoke\Cantopop\Hins Cheung\張敬軒 Hins Cheung《放棄的界限》(Eight Days of Silence) [Lyric Video].lrc,ok,"38 lines exact, 4 estimated (daily_sync; original kept in D:\ai\setupbox\tools\daily_sync\orig\Cantopop\Hins Cheung)"
+2026-11-17 05:48:30,align,D:\ai\GetVideo\Cantopop\Ian Chan\Ian Chan 陳卓賢《 花邊細胞 》（ Gossip ）Official Music Video.mp3,D:\ai\Karaoke\Cantopop\Ian Chan\Ian Chan 陳卓賢《 花邊細胞 》（ Gossip ）Official Music Video.lrc,ok,"0 lines exact, 35 estimated (daily_sync; original kept in D:\ai\setupbox\tools\daily_sync\orig\Cantopop\Ian Chan)"
+2026-11-17 05:52:17,align,D:\ai\setupbox\tools\daily_sync\stage\s000.mp3,D:\ai\setupbox\tools\daily_sync\stage\s000.lrc,ok,"36 lines exact, 8 estimated; original in D:\ai\setupbox\tools\daily_sync\stage_orig"
+2026-11-17 05:56:37,align,D:\ai\setupbox\tools\daily_sync\stage\s001.mp3,D:\ai\setupbox\tools\daily_sync\stage\s001.lrc,ok,"26 lines exact, 7 estimated; original in D:\ai\setupbox\tools\daily_sync\stage_orig"
+2026-11-17 06:00:51,align,D:\ai\setupbox\tools\daily_sync\stage\s002.mp3,D:\ai\setupbox\tools\daily_sync\stage\s002.lrc,ok,"45 lines exact, 5 estimated; original in D:\ai\setupbox\tools\daily_sync\stage_orig"
+2026-11-17 06:04:25,align,D:\ai\setupbox\tools\daily_sync\stage\s003.mp3,D:\ai\setupbox\tools\daily_sync\stage\s003.lrc,ok,"15 lines exact, 5 estimated; original in D:\ai\setupbox\tools\daily_sync\stage_orig"
+2026-11-17 06:08:40,align,D:\ai\setupbox\tools\daily_sync\stage\s004.mp3,D:\ai\setupbox\tools\daily_sync\stage\s004.lrc,ok,"34 lines exact, 3 estimated; original in D:\ai\setupbox\tools\daily_sync\stage_orig"
+2026-11-17 06:12:40,align,D:\ai\setupbox\tools\daily_sync\stage\s005.mp3,D:\ai\setupbox\tools\daily_sync\stage\s005.lrc,ok,"33 lines exact, 3 estimated; original in D:\ai\setupbox\tools\daily_sync\stage_orig"
+2026-11-17 06:16:08,align,D:\ai\setupbox\tools\daily_sync\stage\s006.mp3,D:\ai\setupbox\tools\daily_sync\stage\s006.lrc,ok,"39 lines exact, 15 estimated; original in D:\ai\setupbox\tools\daily_sync\stage_orig"
+2026-11-17 06:19:48,align,D:\ai\setupbox\tools\daily_sync\stage\s007.mp3,D:\ai\setupbox\tools\daily_sync\stage\s007.lrc,ok,"27 lines exact, 7 estimated; original in D:\ai\setupbox\tools\daily_sync\stage_orig"
+2026-11-17 06:19:48,align,D:\ai\GetVideo\Cantopop\Ian Chan\Ian Chan 陳卓賢《Growth!》Official Music Video.mp3,D:\ai\Karaoke\Cantopop\Ian Chan\Ian Chan 陳卓賢《Growth!》Official Music Video.lrc,ok,"36 lines exact, 18 estimated (daily_sync; original kept in D:\ai\setupbox\tools\daily_sync\orig\Cantopop\Ian Chan)"
+2026-11-17 06:19:48,align,D:\ai\GetVideo\Cantopop\Ian Chan\Ian Chan 陳卓賢《傷口上灑辣椒醬》（Don't Rub Chilli Sauce Into The Wound）Official Music Video.mp3,D:\ai\Karaoke\Cantopop\Ian Chan\Ian Chan 陳卓賢《傷口上灑辣椒醬》（Don't Rub Chilli Sauce Into The Wound）Official Music Video.lrc,ok,"26 lines exact, 7 estimated (daily_sync; original kept in D:\ai\setupbox\tools\daily_sync\orig\Cantopop\Ian Chan)"
+2026-11-17 06:19:48,align,D:\ai\GetVideo\Cantopop\Ian Chan\Ian Chan 陳卓賢《四》Official Music Video.mp3,D:\ai\Karaoke\Cantopop\Ian Chan\Ian Chan 陳卓賢《四》Official Music Video.lrc,ok,"45 lines exact, 5 estimated (daily_sync; original kept in D:\ai\setupbox\tools\daily_sync\orig\Cantopop\Ian Chan)"
+2026-11-17 06:19:48,align,D:\ai\GetVideo\Cantopop\Ian Chan\Ian Chan 陳卓賢《在遠方的你》Official Music Video.mp3,D:\ai\Karaoke\Cantopop\Ian Chan\Ian Chan 陳卓賢《在遠方的你》Official Music Video.lrc,ok,"15 lines exact, 5 estimated (daily_sync; original kept in D:\ai\setupbox\tools\daily_sync\orig\Cantopop\Ian Chan)"
+2026-11-17 06:19:48,align,D:\ai\GetVideo\Cantopop\Ian Chan\Ian Chan 陳卓賢《無名指》（ Ring Finger ）Official Music Video.mp3,D:\ai\Karaoke\Cantopop\Ian Chan\Ian Chan 陳卓賢《無名指》（ Ring Finger ）Official Music Video.lrc,ok,"34 lines exact, 10 estimated (daily_sync; original kept in D:\ai\setupbox\tools\daily_sync\orig\Cantopop\Ian Chan)"
+2026-11-17 06:19:48,align,D:\ai\GetVideo\Cantopop\Ian Chan\Ian Chan 陳卓賢《無垢》（Satellite）Official Lyrics Video.mp3,D:\ai\Karaoke\Cantopop\Ian Chan\Ian Chan 陳卓賢《無垢》（Satellite）Official Lyrics Video.lrc,ok,"33 lines exact, 3 estimated (daily_sync; original kept in D:\ai\setupbox\tools\daily_sync\orig\Cantopop\Ian Chan)"
+2026-11-17 06:19:48,align,D:\ai\GetVideo\Cantopop\Ian Chan\Ian Chan 陳卓賢《遲眠劑》（Insomax）Official Lyrics Video.mp3,D:\ai\Karaoke\Cantopop\Ian Chan\Ian Chan 陳卓賢《遲眠劑》（Insomax）Official Lyrics Video.lrc,ok,"39 lines exact, 27 estimated (daily_sync; original kept in D:\ai\setupbox\tools\daily_sync\orig\Cantopop\Ian Chan)"
+2026-11-17 06:19:48,align,D:\ai\GetVideo\Cantopop\Ian Chan\Ian Chan 陳卓賢《那抹柔光，名為你》(The Light) Official Music Video.mp3,D:\ai\Karaoke\Cantopop\Ian Chan\Ian Chan 陳卓賢《那抹柔光，名為你》(The Light) Official Music Video.lrc,ok,"27 lines exact, 13 estimated (daily_sync; original kept in D:\ai\setupbox\tools\daily_sync\orig\Cantopop\Ian Chan)"
+2026-11-17 06:25:09,align,D:\ai\setupbox\tools\daily_sync\stage\s000.mp3,D:\ai\setupbox\tools\daily_sync\stage\s000.lrc,ok,"30 lines exact, 7 estimated; original in D:\ai\setupbox\tools\daily_sync\stage_orig"
+2026-11-17 06:29:08,align,D:\ai\setupbox\tools\daily_sync\stage\s001.mp3,D:\ai\setupbox\tools\daily_sync\stage\s001.lrc,ok,"32 lines exact, 5 estimated; original in D:\ai\setupbox\tools\daily_sync\stage_orig"
+2026-11-17 06:32:43,align,D:\ai\setupbox\tools\daily_sync\stage\s002.mp3,D:\ai\setupbox\tools\daily_sync\stage\s002.lrc,ok,"0 lines exact, 45 estimated; original in D:\ai\setupbox\tools\daily_sync\stage_orig"
+2026-11-17 06:37:39,align,D:\ai\setupbox\tools\daily_sync\stage\s003.mp3,D:\ai\setupbox\tools\daily_sync\stage\s003.lrc,ok,"2 lines exact, 47 estimated; original in D:\ai\setupbox\tools\daily_sync\stage_orig"
+2026-11-17 06:43:20,align,D:\ai\setupbox\tools\daily_sync\stage\s004.mp3,D:\ai\setupbox\tools\daily_sync\stage\s004.lrc,ok,"44 lines exact, 5 estimated; original in D:\ai\setupbox\tools\daily_sync\stage_orig"
+2026-11-17 06:48:46,align,D:\ai\setupbox\tools\daily_sync\stage\s005.mp3,D:\ai\setupbox\tools\daily_sync\stage\s005.lrc,ok,"0 lines exact, 47 estimated; original in D:\ai\setupbox\tools\daily_sync\stage_orig"
+2026-11-17 06:52:40,align,D:\ai\setupbox\tools\daily_sync\stage\s006.mp3,D:\ai\setupbox\tools\daily_sync\stage\s006.lrc,ok,"37 lines exact, 2 estimated; original in D:\ai\setupbox\tools\daily_sync\stage_orig"
+2026-11-17 06:57:26,align,D:\ai\setupbox\tools\daily_sync\stage\s007.mp3,D:\ai\setupbox\tools\daily_sync\stage\s007.lrc,ok,"32 lines exact, 9 estimated; original in D:\ai\setupbox\tools\daily_sync\stage_orig"
+2026-11-17 06:57:26,align,D:\ai\GetVideo\Cantopop\Ivy\Ivy 蘇雅琳《葬花辭》（The Flower Elegy）Official Music Video.mp3,D:\ai\Karaoke\Cantopop\Ivy\Ivy 蘇雅琳《葬花辭》（The Flower Elegy）Official Music Video.lrc,ok,"30 lines exact, 7 estimated (daily_sync; original kept in D:\ai\setupbox\tools\daily_sync\orig\Cantopop\Ivy)"
+2026-11-17 06:57:26,align,D:\ai\GetVideo\Cantopop\JW\JW² Love Song.mp3,D:\ai\Karaoke\Cantopop\JW\JW² Love Song.lrc,ok,"32 lines exact, 17 estimated (daily_sync; original kept in D:\ai\setupbox\tools\daily_sync\orig\Cantopop\JW)"
+2026-11-17 06:57:26,align,D:\ai\GetVideo\Cantopop\Janice M. Vidal\衛蘭  - 一場誤會 MV.mp3,D:\ai\Karaoke\Cantopop\Janice M. Vidal\衛蘭  - 一場誤會 MV.lrc,ok,"0 lines exact, 45 estimated (daily_sync; original kept in D:\ai\setupbox\tools\daily_sync\orig\Cantopop\Janice M. Vidal)"
+2026-11-17 06:57:26,align,D:\ai\GetVideo\Cantopop\Janice M. Vidal\衛蘭 - 心亂如麻 MV.mp3,D:\ai\Karaoke\Cantopop\Janice M. Vidal\衛蘭 - 心亂如麻 MV.lrc,ok,"2 lines exact, 50 estimated (daily_sync; original kept in D:\ai\setupbox\tools\daily_sync\orig\Cantopop\Janice M. Vidal)"
+2026-11-17 06:57:26,align,D:\ai\GetVideo\Cantopop\Janice M. Vidal\衛蘭 Janice - 街燈晚餐 Official MV [Imagine] - 官方完整版.mp3,D:\ai\Karaoke\Cantopop\Janice M. Vidal\衛蘭 Janice - 街燈晚餐 Official MV [Imagine] - 官方完整版.lrc,ok,"44 lines exact, 17 estimated (daily_sync; original kept in D:\ai\setupbox\tools\daily_sync\orig\Cantopop\Janice M. Vidal)"
+2026-11-17 06:57:26,align,D:\ai\GetVideo\Cantopop\Janice M. Vidal\衛蘭 Janice Vidal - 又~離家出走 Official Lyric MV.mp3,D:\ai\Karaoke\Cantopop\Janice M. Vidal\衛蘭 Janice Vidal - 又~離家出走 Official Lyric MV.lrc,ok,"0 lines exact, 50 estimated (daily_sync; original kept in D:\ai\setupbox\tools\daily_sync\orig\Cantopop\Janice M. Vidal)"
+2026-11-17 06:57:26,align,D:\ai\GetVideo\Cantopop\Jason Chan\陳柏宇 Jason Chan - 尚有愛的資格 Worthy to love ｜ Official Music Video.mp3,D:\ai\Karaoke\Cantopop\Jason Chan\陳柏宇 Jason Chan - 尚有愛的資格 Worthy to love ｜ Official Music Video.lrc,ok,"37 lines exact, 7 estimated (daily_sync; original kept in D:\ai\setupbox\tools\daily_sync\orig\Cantopop\Jason Chan)"
+2026-11-17 06:57:26,align,D:\ai\GetVideo\Cantopop\Jeffrey\Jeffrey Ngai 魏浚笙 - Textbook Romantics (Official Music Video).mp3,D:\ai\Karaoke\Cantopop\Jeffrey\Jeffrey Ngai 魏浚笙 - Textbook Romantics (Official Music Video).lrc,ok,"32 lines exact, 9 estimated (daily_sync; original kept in D:\ai\setupbox\tools\daily_sync\orig\Cantopop\Jeffrey)"
+2026-11-17 07:02:53,align,D:\ai\setupbox\tools\daily_sync\stage\s000.mp3,D:\ai\setupbox\tools\daily_sync\stage\s000.lrc,ok,"0 lines exact, 15 estimated; original in D:\ai\setupbox\tools\daily_sync\stage_orig"
+2026-11-17 07:09:04,align,D:\ai\setupbox\tools\daily_sync\stage\s001.mp3,D:\ai\setupbox\tools\daily_sync\stage\s001.lrc,ok,"0 lines exact, 30 estimated; original in D:\ai\setupbox\tools\daily_sync\stage_orig"
+2026-11-17 07:13:49,align,D:\ai\setupbox\tools\daily_sync\stage\s002.mp3,D:\ai\setupbox\tools\daily_sync\stage\s002.lrc,ok,"42 lines exact, 7 estimated; original in D:\ai\setupbox\tools\daily_sync\stage_orig"
+2026-11-17 07:18:39,align,D:\ai\setupbox\tools\daily_sync\stage\s003.mp3,D:\ai\setupbox\tools\daily_sync\stage\s003.lrc,ok,"0 lines exact, 37 estimated; original in D:\ai\setupbox\tools\daily_sync\stage_orig"
+2026-11-17 07:23:35,align,D:\ai\setupbox\tools\daily_sync\stage\s004.mp3,D:\ai\setupbox\tools\daily_sync\stage\s004.lrc,ok,"0 lines exact, 43 estimated; original in D:\ai\setupbox\tools\daily_sync\stage_orig"
+2026-11-17 07:27:44,align,D:\ai\setupbox\tools\daily_sync\stage\s005.mp3,D:\ai\setupbox\tools\daily_sync\stage\s005.lrc,ok,"0 lines exact, 58 estimated; original in D:\ai\setupbox\tools\daily_sync\stage_orig"
+2026-11-17 07:33:50,align,D:\ai\setupbox\tools\daily_sync\stage\s006.mp3,D:\ai\setupbox\tools\daily_sync\stage\s006.lrc,ok,"0 lines exact, 46 estimated; original in D:\ai\setupbox\tools\daily_sync\stage_orig"
+2026-11-17 07:38:12,align,D:\ai\setupbox\tools\daily_sync\stage\s007.mp3,D:\ai\setupbox\tools\daily_sync\stage\s007.lrc,ok,"0 lines exact, 49 estimated; original in D:\ai\setupbox\tools\daily_sync\stage_orig"
+2026-11-17 07:38:12,align,D:\ai\GetVideo\Cantopop\Jeffrey\Jeffrey Ngai 魏浚笙 - 《已出之物》Our thing (Official Music Video).mp3,D:\ai\Karaoke\Cantopop\Jeffrey\Jeffrey Ngai 魏浚笙 - 《已出之物》Our thing (Official Music Video).lrc,ok,"0 lines exact, 50 estimated (daily_sync; original kept in D:\ai\setupbox\tools\daily_sync\orig\Cantopop\Jeffrey)"
+2026-11-17 07:38:12,align,D:\ai\GetVideo\Cantopop\Jer\Jer Lau 柳應廷《魔笛》（The Magic Flute）Official Music Video.mp3,D:\ai\Karaoke\Cantopop\Jer\Jer Lau 柳應廷《魔笛》（The Magic Flute）Official Music Video.lrc,ok,"0 lines exact, 65 estimated (daily_sync; original kept in D:\ai\setupbox\tools\daily_sync\orig\Cantopop\Jer)"
+2026-11-17 07:38:12,align,D:\ai\GetVideo\Cantopop\Jeremy Lee\Jeremy 李駿傑《I Played Me Like A Fool》Official Music Video.mp3,D:\ai\Karaoke\Cantopop\Jeremy Lee\Jeremy 李駿傑《I Played Me Like A Fool》Official Music Video.lrc,ok,"42 lines exact, 12 estimated (daily_sync; original kept in D:\ai\setupbox\tools\daily_sync\orig\Cantopop\Jeremy Lee)"
+2026-11-17 07:38:12,align,D:\ai\GetVideo\Cantopop\Jessica\Jessica 陳苡臻 《潘朵拉盒子》 Official Music Video.mp3,D:\ai\Karaoke\Cantopop\Jessica\Jessica 陳苡臻 《潘朵拉盒子》 Official Music Video.lrc,ok,"0 lines exact, 37 estimated (daily_sync; original kept in D:\ai\setupbox\tools\daily_sync\orig\Cantopop\Jessica)"
+2026-11-17 07:38:12,align,D:\ai\GetVideo\Cantopop\Joey Yung\容祖兒 Joey Yung《陽光普照》(Bright Nights) [Official MV].mp3,D:\ai\Karaoke\Cantopop\Joey Yung\容祖兒 Joey Yung《陽光普照》(Bright Nights) [Official MV].lrc,ok,"0 lines exact, 43 estimated (daily_sync; original kept in D:\ai\setupbox\tools\daily_sync\orig\Cantopop\Joey Yung)"
+2026-11-17 07:38:12,align,D:\ai\GetVideo\Cantopop\Justin Lo\側田 Justin Lo  - 《美麗之最》Official MV.mp3,D:\ai\Karaoke\Cantopop\Justin Lo\側田 Justin Lo  - 《美麗之最》Official MV.lrc,ok,"0 lines exact, 58 estimated (daily_sync; original kept in D:\ai\setupbox\tools\daily_sync\orig\Cantopop\Justin Lo)"
+2026-11-17 07:38:12,align,D:\ai\GetVideo\Cantopop\Justin Lo\側田 Justin Lo -《命硬》 Official MV.mp3,D:\ai\Karaoke\Cantopop\Justin Lo\側田 Justin Lo -《命硬》 Official MV.lrc,ok,"0 lines exact, 46 estimated (daily_sync; original kept in D:\ai\setupbox\tools\daily_sync\orig\Cantopop\Justin Lo)"
+2026-11-17 07:38:12,align,D:\ai\GetVideo\Cantopop\Kaho Hung\洪嘉豪 Hung Kaho - 戒糖失敗 Sugarproof (Official Music Video).mp3,D:\ai\Karaoke\Cantopop\Kaho Hung\洪嘉豪 Hung Kaho - 戒糖失敗 Sugarproof (Official Music Video).lrc,ok,"0 lines exact, 49 estimated (daily_sync; original kept in D:\ai\setupbox\tools\daily_sync\orig\Cantopop\Kaho Hung)"
+2026-11-17 07:42:43,align,D:\ai\setupbox\tools\daily_sync\stage\s000.mp3,D:\ai\setupbox\tools\daily_sync\stage\s000.lrc,ok,"37 lines exact, 9 estimated; original in D:\ai\setupbox\tools\daily_sync\stage_orig"
+2026-11-17 07:46:11,align,D:\ai\setupbox\tools\daily_sync\stage\s001.mp3,D:\ai\setupbox\tools\daily_sync\stage\s001.lrc,ok,"63 lines exact, 10 estimated; original in D:\ai\setupbox\tools\daily_sync\stage_orig"
+2026-11-17 07:50:46,align,D:\ai\setupbox\tools\daily_sync\stage\s002.mp3,D:\ai\setupbox\tools\daily_sync\stage\s002.lrc,ok,"36 lines exact, 25 estimated; original in D:\ai\setupbox\tools\daily_sync\stage_orig"
+2026-11-17 07:55:26,align,D:\ai\setupbox\tools\daily_sync\stage\s003.mp3,D:\ai\setupbox\tools\daily_sync\stage\s003.lrc,ok,"0 lines exact, 78 estimated; original in D:\ai\setupbox\tools\daily_sync\stage_orig"
+2026-11-17 07:59:00,align,D:\ai\setupbox\tools\daily_sync\stage\s004.mp3,D:\ai\setupbox\tools\daily_sync\stage\s004.lrc,ok,"45 lines exact, 16 estimated; original in D:\ai\setupbox\tools\daily_sync\stage_orig"
+2026-11-17 08:03:00,align,D:\ai\setupbox\tools\daily_sync\stage\s005.mp3,D:\ai\setupbox\tools\daily_sync\stage\s005.lrc,ok,"37 lines exact, 3 estimated; original in D:\ai\setupbox\tools\daily_sync\stage_orig"
+2026-11-17 08:06:58,align,D:\ai\setupbox\tools\daily_sync\stage\s006.mp3,D:\ai\setupbox\tools\daily_sync\stage\s006.lrc,ok,"1 lines exact, 3 estimated; original in D:\ai\setupbox\tools\daily_sync\stage_orig"
+2026-11-17 08:11:51,align,D:\ai\setupbox\tools\daily_sync\stage\s007.mp3,D:\ai\setupbox\tools\daily_sync\stage\s007.lrc,ok,"40 lines exact, 7 estimated; original in D:\ai\setupbox\tools\daily_sync\stage_orig"
+2026-11-17 08:11:51,align,D:\ai\GetVideo\Cantopop\Kaho Hung\洪嘉豪 Hung Kaho - 黑玻璃 Tinted Windows (Official Music Video).mp3,D:\ai\Karaoke\Cantopop\Kaho Hung\洪嘉豪 Hung Kaho - 黑玻璃 Tinted Windows (Official Music Video).lrc,ok,"37 lines exact, 9 estimated (daily_sync; original kept in D:\ai\setupbox\tools\daily_sync\orig\Cantopop\Kaho Hung)"
+2026-11-17 08:11:51,align,D:\ai\GetVideo\Cantopop\Keung To\Better Man.mp3,D:\ai\Karaoke\Cantopop\Keung To\Better Man.lrc,ok,"63 lines exact, 10 estimated (daily_sync; original kept in D:\ai\setupbox\tools\daily_sync\orig\Cantopop\Keung To)"
+2026-11-17 08:11:51,align,D:\ai\GetVideo\Cantopop\Keung To\Keung To 姜濤 《Boulder》“LAVA” LIVE VERSION.mp3,D:\ai\Karaoke\Cantopop\Keung To\Keung To 姜濤 《Boulder》“LAVA” LIVE VERSION.lrc,ok,"36 lines exact, 25 estimated (daily_sync; original kept in D:\ai\setupbox\tools\daily_sync\orig\Cantopop\Keung To)"
+2026-11-17 08:11:51,align,D:\ai\GetVideo\Cantopop\Keung To\Keung To 姜濤 《On a SunnyDay》  Official Music Video.mp3,D:\ai\Karaoke\Cantopop\Keung To\Keung To 姜濤 《On a SunnyDay》  Official Music Video.lrc,ok,"0 lines exact, 78 estimated (daily_sync; original kept in D:\ai\setupbox\tools\daily_sync\orig\Cantopop\Keung To)"
+2026-11-17 08:11:51,align,D:\ai\GetVideo\Cantopop\Keung To\Keung To 姜濤 《白果》 (Ginkgo) Official Music Video.mp3,D:\ai\Karaoke\Cantopop\Keung To\Keung To 姜濤 《白果》 (Ginkgo) Official Music Video.lrc,ok,"45 lines exact, 16 estimated (daily_sync; original kept in D:\ai\setupbox\tools\daily_sync\orig\Cantopop\Keung To)"
+2026-11-17 08:11:51,align,D:\ai\GetVideo\Cantopop\Keung To\你要倔強.mp3,D:\ai\Karaoke\Cantopop\Keung To\你要倔強.lrc,ok,"37 lines exact, 3 estimated (daily_sync; original kept in D:\ai\setupbox\tools\daily_sync\orig\Cantopop\Keung To)"
+2026-11-17 08:11:51,align,D:\ai\GetVideo\Cantopop\Keung To\寂寞圓舞.mp3,D:\ai\Karaoke\Cantopop\Keung To\寂寞圓舞.lrc,ok,"1 lines exact, 35 estimated (daily_sync; original kept in D:\ai\setupbox\tools\daily_sync\orig\Cantopop\Keung To)"
+2026-11-17 08:11:51,align,D:\ai\GetVideo\Cantopop\Kiri T\Kiri T - 就算我錯漏百出 Not Perfect [Official Music Video].mp3,D:\ai\Karaoke\Cantopop\Kiri T\Kiri T - 就算我錯漏百出 Not Perfect [Official Music Video].lrc,ok,"40 lines exact, 7 estimated (daily_sync; original kept in D:\ai\setupbox\tools\daily_sync\orig\Cantopop\Kiri T)"
+2026-11-17 08:11:59,crop,D:\ai\GetVideo\EasonChan\Eason Chan\1874.mp4,D:\ai\Karaoke\crops.txt,ok,0:140:1920:800 in 1920x1080
+2026-11-17 08:12:01,crop,D:\ai\GetVideo\Cantopop\Anson Lo\251206-10 KINGDOM live 2025 《Take That》盧瀚霆 Anson Lo Focus Multi Fancam 4K.mp4,,ok,no bars
+2026-11-17 08:12:01,crop,D:\ai\GetVideo\Videos\Other\3-Year-Old Angelica Recreates Katy Perry's 'Roar' Music Video!.mp4,,ok,no bars
+2026-11-17 08:12:04,crop,D:\ai\GetVideo\Videos\Other\50 Cent - In Da Club (Official Music Video).mp4,D:\ai\Karaoke\crops.txt,ok,0:54:1920:972 in 1920x1080
+2026-11-17 08:12:06,crop,D:\ai\GetVideo\Videos\Other\Adele - Hello (Official Music Video).mp4,,ok,no bars
+2026-11-17 08:12:06,crop,D:\ai\GetVideo\Videos\Other\Adele - Rolling in the Deep (Official Music Video).mp4,,ok,no bars
+2026-11-17 08:12:08,crop,D:\ai\GetVideo\Videos\Other\Adele - Someone Like You (Official Music Video).mp4,D:\ai\Karaoke\crops.txt,ok,106:162:1710:756 in 1920x1080
+2026-11-17 08:12:11,crop,D:\ai\GetVideo\Videos\Other\Alan Walker - Faded.mp4,D:\ai\Karaoke\crops.txt,ok,0:132:1920:816 in 1920x1080
+2026-11-17 08:12:11,crop,D:\ai\GetVideo\Cantopop\Anson Lo\Anson Lo 盧瀚霆 《Charisma》Official Music Video.mp4,,ok,no bars
+2026-11-17 08:12:14,crop,D:\ai\GetVideo\Cantopop\Anson Lo\Anson Lo 盧瀚霆 《Gimme Gimme》Official Music Video.mp4,,ok,no bars
+2026-11-17 08:12:16,crop,D:\ai\GetVideo\Cantopop\Anson Lo\Anson Lo 盧瀚霆 《Rude Boy》 - 《ANSON LO ”KINGDOM“ LIVE 2025》 【4K Multi-Angle】.mp4,,ok,no bars
+2026-11-17 08:12:17,crop,D:\ai\GetVideo\Cantopop\Anson Lo\Anson Lo 盧瀚霆 《goofy》Official Music Video.mp4,,ok,no bars
+2026-11-17 08:12:19,crop,D:\ai\GetVideo\Cantopop\Anson Lo\Anson Lo 盧瀚霆 《午夜場》（Midnight Escape）Official Music Video.mp4,,ok,no bars
+2026-11-17 08:12:21,crop,D:\ai\GetVideo\Cantopop\Anson Lo\Anson Lo 盧瀚霆 《最後一個降落傘》Official Music Video.mp4,,ok,no bars
+2026-11-17 08:12:22,crop,D:\ai\GetVideo\Videos\Other\Ariana Grande ft. Nicki Minaj - Side To Side (Official Video) ft. Nicki Minaj.mp4,D:\ai\Karaoke\crops.txt,ok,0:138:1920:804 in 1920x1080
+2026-11-17 08:12:22,crop,D:\ai\GetVideo\Cantopop\Arvin\Arvin 曾傲棐《愛與(不)被愛》 [Official MV].mp4,,ok,no bars
+2026-11-17 08:12:24,crop,D:\ai\GetVideo\Videos\Other\Avicii - Wake Me Up (Radio Edit).mp4,D:\ai\Karaoke\crops.txt,ok,420:0:1080:1080 in 1920x1080
+2026-11-17 08:12:27,crop,D:\ai\GetVideo\Videos\Other\Ayumu Imazu - 結び [Lyric Video].mp4,,ok,no bars
+2026-11-17 08:12:27,crop,D:\ai\GetVideo\Videos\Other\BE：FIRST ⧸ 夢中 -Recording Video- (フジテレビ木曜劇場『波うららかに、めおと日和』主題歌).mp4,D:\ai\Karaoke\crops.txt,ok,126:80:1666:922 in 1920x1080
+2026-11-17 08:12:27,crop,D:\ai\GetVideo\Cantopop\Keung To\Better Man.mp4,,ok,no bars
+2026-11-17 08:12:32,crop,D:\ai\GetVideo\Videos\Other\Bruno Mars - Just The Way You Are (Official Music Video).mp4,,ok,no bars
+2026-11-17 08:12:32,crop,D:\ai\GetVideo\Videos\Other\Bruno Mars - That's What I Like (lyrics).mp4,,ok,no bars
+2026-11-17 08:12:33,crop,D:\ai\GetVideo\Videos\Other\Bruno Mars - The Lazy Song (Official Music Video).mp4,,ok,no bars
+2026-11-17 08:12:37,crop,D:\ai\GetVideo\Cantopop\CY\CY 陳宗澤《急口令》Official MV.mp4,D:\ai\Karaoke\crops.txt,ok,0:110:1920:860 in 1920x1080
+2026-11-17 08:12:37,crop,D:\ai\GetVideo\Cantopop\CY\CY 陳宗澤《顧客永遠是對的》Official MV.mp4,,ok,no bars
+2026-11-17 08:12:37,crop,"D:\ai\GetVideo\Videos\Other\Calvin Harris, Rihanna - This Is What You Came For (Official Video).mp4",,ok,no bars
+2026-11-17 08:12:42,crop,D:\ai\GetVideo\Cantopop\Candy\Candy 王家晴 《連名字你都說錯》（You Don’t Even Remember My Name）Official Music Video.mp4,,ok,no bars
+2026-11-17 08:12:42,crop,D:\ai\GetVideo\Videos\Other\Charlie Puth - We Don't Talk Anymore (feat. Selena Gomez) [Official Video].mp4,,ok,no bars
+2026-11-17 08:12:42,crop,D:\ai\GetVideo\Videos\Other\Christina Perri - A Thousand Years [Official Music Video].mp4,D:\ai\Karaoke\crops.txt,ok,0:134:1920:812 in 1920x1080
+2026-11-17 08:12:45,crop,D:\ai\GetVideo\Videos\Other\Clean Bandit - Rockabye (feat. Sean Paul & Anne-Marie) [Official Video].mp4,D:\ai\Karaoke\crops.txt,ok,0:136:1920:810 in 1920x1080
+2026-11-17 08:12:48,crop,D:\ai\GetVideo\Videos\Other\Coldplay - Hymn For The Weekend (Official Video).mp4,D:\ai\Karaoke\crops.txt,ok,0:140:1920:800 in 1920x1080
+2026-11-17 08:12:48,crop,D:\ai\GetVideo\Videos\Other\Coldplay - Paradise (Official Video).mp4,D:\ai\Karaoke\crops.txt,ok,0:132:1920:818 in 1920x1080
+2026-11-17 08:12:49,crop,D:\ai\GetVideo\Videos\Other\Coolio - Gangsta's Paradise (feat. L.V.) [Official Music Video].mp4,,ok,no bars
+2026-11-17 08:12:52,crop,D:\ai\GetVideo\Videos\Other\DJ Snake - Let Me Love You (Official Music Video) ft. Justin Bieber.mp4,D:\ai\Karaoke\crops.txt,ok,0:152:1920:776 in 1920x1080
+2026-11-17 08:12:54,crop,D:\ai\GetVideo\Videos\Other\DaBaby - POP DAT THANG.mp4,,ok,no bars
+2026-11-17 08:12:56,crop,D:\ai\GetVideo\Videos\Other\DaBaby - POP DAT THANG (David Guetta Mix).mp4,,ok,no bars
+2026-11-17 08:12:56,crop,D:\ai\GetVideo\Cantopop\Day\Day 許軼《你離開我的時候  神奇的事發生了》（Thank You For Leaving Me）Official Music Video.mp4,,ok,no bars
+2026-11-17 08:12:58,crop,D:\ai\GetVideo\Cantopop\Dear Jane\Dear Jane - 到底發生過什麼事 What Happened (Official Music Video).mp4,,ok,no bars
+2026-11-17 08:12:59,crop,D:\ai\GetVideo\Cantopop\Dear Jane\Dear Jane - 現實太少偶像劇 Reality Over Drama（Official Music Video）.mp4,,ok,no bars
+2026-11-17 08:13:00,crop,D:\ai\GetVideo\Videos\Other\Drake - Hotline Bling (Official Audio).mp4,D:\ai\Karaoke\crops.txt,ok,420:0:1080:1080 in 1920x1080
+2026-11-17 08:13:03,crop,D:\ai\GetVideo\Videos\Other\Dua Lipa - New Rules (Official Music Video).mp4,,ok,no bars
+2026-11-17 08:13:03,crop,D:\ai\GetVideo\Videos\Other\Eason陳奕迅 浮誇[HD].mp4,D:\ai\Karaoke\crops.txt,ok,0:12:854:456 in 854x480
+2026-11-17 08:13:03,crop,D:\ai\GetVideo\Videos\Other\Ed Sheeran - Shape of You (Official Music Video).mp4,D:\ai\Karaoke\crops.txt,ok,0:140:1920:800 in 1920x1080
+2026-11-17 08:13:04,crop,D:\ai\GetVideo\Cantopop\Edan\Edan 呂爵安 X Ryan 蔡俊彥《1206》Official Music Video.mp4,,ok,no bars
+2026-11-17 08:13:06,crop,D:\ai\GetVideo\Cantopop\Edan\Edan 呂爵安《壞人一個》（It's My Bad）Official Music Video.mp4,,ok,no bars
+2026-11-17 08:13:08,crop,D:\ai\GetVideo\Cantopop\Edan\Edan 呂爵安《左手拖右手》（ Hand in Hand ） Official Music Video.mp4,,ok,no bars
+2026-11-17 08:13:10,crop,D:\ai\GetVideo\Videos\Other\Ellie Goulding - Love Me Like You Do (Official Video).mp4,D:\ai\Karaoke\crops.txt,ok,0:142:1920:796 in 1920x1080
+2026-11-17 08:13:12,crop,D:\ai\GetVideo\Videos\Other\Fifth Harmony - Work from Home (Official Video) ft. Ty Dolla $ign.mp4,D:\ai\Karaoke\crops.txt,ok,0:44:1920:992 in 1920x1080
+2026-11-17 08:13:13,crop,D:\ai\GetVideo\Videos\Other\Fifth Harmony - Worth It (Official Video) ft. Kid Ink.mp4,,ok,no bars
+2026-11-17 08:13:15,crop,D:\ai\GetVideo\Cantopop\Frankie Chan\Frankie 陳瑞輝 《是日戀愛》（Loving u Leaving u）Official Music Video.mp4,D:\ai\Karaoke\crops.txt,ok,0:132:1920:816 in 1920x1080
+2026-11-17 08:13:16,crop,D:\ai\GetVideo\Videos\Other\French Montana - Unforgettable ft. Swae Lee.mp4,D:\ai\Karaoke\crops.txt,ok,0:138:1920:804 in 1920x1080
+2026-11-17 08:13:18,crop,D:\ai\GetVideo\Videos\Other\Gotye - Somebody That I Used To Know (feat. Kimbra) [Official Music Video].mp4,,ok,no bars
+2026-11-17 08:13:19,crop,D:\ai\GetVideo\Videos\Other\Guns N' Roses - November Rain.mp4,D:\ai\Karaoke\crops.txt,ok,270:0:1388:1080 in 1920x1080
+2026-11-17 08:13:19,crop,D:\ai\GetVideo\Videos\Other\Hey Jude.mp4,,ok,no bars
+2026-11-17 08:13:21,crop,D:\ai\GetVideo\Videos\Other\I Know.mp4,,ok,no bars
+2026-11-17 08:13:23,crop,D:\ai\GetVideo\Cantopop\Ian Chan\Ian Chan 陳卓賢《 花邊細胞 》（ Gossip ）Official Music Video.mp4,,ok,no bars
+2026-11-17 08:13:23,crop,D:\ai\GetVideo\Cantopop\Ian Chan\Ian Chan 陳卓賢《Growth!》Official Music Video.mp4,,ok,no bars
+2026-11-17 08:13:26,crop,D:\ai\GetVideo\Cantopop\Ian Chan\Ian Chan 陳卓賢《It's Ū》Official Lyrics Video.mp4,,ok,no bars
+2026-11-17 08:13:29,crop,D:\ai\GetVideo\Cantopop\Ian Chan\Ian Chan 陳卓賢《傷口上灑辣椒醬》（Don't Rub Chilli Sauce Into The Wound）Official Music Video.mp4,,ok,no bars
+2026-11-17 08:13:29,crop,D:\ai\GetVideo\Cantopop\Ian Chan\Ian Chan 陳卓賢《四》Official Music Video.mp4,,ok,no bars
+2026-11-17 08:13:32,crop,D:\ai\GetVideo\Cantopop\Ian Chan\Ian Chan 陳卓賢《在遠方的你》Official Music Video.mp4,,ok,no bars
+2026-11-17 08:13:32,crop,D:\ai\GetVideo\Cantopop\Ian Chan\Ian Chan 陳卓賢《無名指》（ Ring Finger ）Official Music Video.mp4,D:\ai\Karaoke\crops.txt,ok,0:132:1920:816 in 1920x1080
+2026-11-17 08:13:33,crop,D:\ai\GetVideo\Cantopop\Ian Chan\Ian Chan 陳卓賢《無垢》（Satellite）Official Lyrics Video.mp4,,ok,no bars
+2026-11-17 08:13:35,crop,D:\ai\GetVideo\Cantopop\Ian Chan\Ian Chan 陳卓賢《遲眠劑》（Insomax）Official Lyrics Video.mp4,,ok,no bars
+2026-11-17 08:13:37,crop,D:\ai\GetVideo\Cantopop\Ian Chan\Ian Chan 陳卓賢《那抹柔光，名為你》(The Light) Official Music Video.mp4,,ok,no bars
+2026-11-17 08:13:37,crop,D:\ai\GetVideo\Videos\Other\Imagine Dragons - Believer (Official Music Video).mp4,D:\ai\Karaoke\crops.txt,ok,0:108:1920:864 in 1920x1080
+2026-11-17 08:13:40,crop,D:\ai\GetVideo\Videos\Other\In The End [Official HD Music Video] - Linkin Park.mp4,,ok,no bars
+2026-11-17 08:13:41,crop,D:\ai\GetVideo\Cantopop\Ivy\Ivy 蘇雅琳《葬花辭》（The Flower Elegy）Official Music Video.mp4,,ok,no bars
+2026-11-17 08:13:42,crop,D:\ai\GetVideo\Cantopop\Jeffrey\Jeffrey Ngai 魏浚笙 - Textbook Romantics (Official Music Video).mp4,,ok,no bars
+2026-11-17 08:13:46,crop,D:\ai\GetVideo\Cantopop\Jeffrey\Jeffrey Ngai 魏浚笙 - 《已出之物》Our thing (Official Music Video).mp4,,ok,no bars
+2026-11-17 08:13:47,crop,D:\ai\GetVideo\Cantopop\Jer\Jer Lau 柳應廷《魔笛》（The Magic Flute）Official Music Video.mp4,,ok,no bars
+2026-11-17 08:13:47,crop,D:\ai\GetVideo\Cantopop\Jeremy Lee\Jeremy 李駿傑《I Played Me Like A Fool》Official Music Video.mp4,D:\ai\Karaoke\crops.txt,ok,0:60:1920:960 in 1920x1080
+2026-11-17 08:13:49,crop,D:\ai\GetVideo\Cantopop\Jessica\Jessica 陳苡臻 《潘朵拉盒子》 Official Music Video.mp4,,ok,no bars
+2026-11-17 08:13:50,crop,"D:\ai\GetVideo\Videos\Other\Jessie J, Ariana Grande, Nicki Minaj - Bang Bang (Official Audio).mp4",,ok,no bars
+2026-11-17 08:13:51,crop,D:\ai\GetVideo\Videos\Other\John Legend - All of Me (Official Video).mp4,D:\ai\Karaoke\crops.txt,ok,0:148:1920:784 in 1920x1080
+2026-11-17 08:13:58,crop,D:\ai\GetVideo\Videos\Other\Justin Bieber - 'Sorry' (American Music Awards) 2015 ｜ Official.mp4,,ok,no bars
+2026-11-17 08:13:58,crop,D:\ai\GetVideo\Videos\Other\Justin Bieber - Baby ft. Ludacris.mp4,D:\ai\Karaoke\crops.txt,ok,0:72:1920:936 in 1920x1080
+2026-11-17 08:13:58,crop,D:\ai\GetVideo\Videos\Other\Justin Bieber - What Do You Mean？ (PURPOSE ： The Movement) (Official Music Video).mp4,D:\ai\Karaoke\crops.txt,ok,0:34:1920:1012 in 1920x1080
+2026-11-17 08:14:00,crop,D:\ai\GetVideo\Videos\Other\Justin Timberlake - CAN'T STOP THE FEELING! (from DreamWorks Animation's ＂TROLLS＂) (Official Video).mp4,D:\ai\Karaoke\crops.txt,ok,240:0:1440:1080 in 1920x1080
+2026-11-17 08:14:02,crop,D:\ai\GetVideo\Videos\Other\KATSEYE (캣츠아이) ＂PINKY UP＂ Official MV.mp4,,ok,no bars
+2026-11-17 08:14:02,crop,D:\ai\GetVideo\Videos\Other\Kacey Musgraves - Mexico Honey (Official Music Video).mp4,,ok,no bars
+2026-11-17 08:14:02,crop,D:\ai\GetVideo\Videos\Other\Katy Perry   Dark Horse Official ft  Juicy _VEVO.mp4,,ok,no bars
+2026-11-17 08:14:05,crop,D:\ai\GetVideo\Cantopop\Keung To\Keung To 姜濤 《Boulder》“LAVA” LIVE VERSION.mp4,,ok,no bars
+2026-11-17 08:14:06,crop,D:\ai\GetVideo\Cantopop\Keung To\Keung To 姜濤 《On a SunnyDay》  Official Music Video.mp4,,ok,no bars
+2026-11-17 08:14:07,crop,D:\ai\GetVideo\Cantopop\Keung To\Keung To 姜濤 《白果》 (Ginkgo) Official Music Video.mp4,D:\ai\Karaoke\crops.txt,ok,0:60:1920:960 in 1920x1080
+2026-11-17 08:14:10,crop,D:\ai\GetVideo\Cantopop\Kiri T\Kiri T - 就算我錯漏百出 Not Perfect [Official Music Video].mp4,,ok,no bars
+2026-11-17 08:14:10,crop,D:\ai\GetVideo\Cantopop\Kiri T\Kiri T - 真的不是故意的 Not My Intention [Official Music Video].mp4,,ok,no bars
+2026-11-17 08:14:10,crop,D:\ai\GetVideo\EasonChan\Eason Chan\K歌之王.mp4,,ok,no bars
+2026-11-17 08:14:14,crop,"D:\ai\GetVideo\Videos\Other\LMFAO - Party Rock Anthem ft. Lauren Bennett, GoonRock.mp4",,ok,no bars
+2026-11-17 08:14:14,crop,D:\ai\GetVideo\Videos\Other\Lady Gaga - Bad Romance (Official Music Video).mp4,,ok,no bars
+2026-11-17 08:14:15,crop,"D:\ai\GetVideo\Videos\Other\Lady Gaga, Doechii - RUNWAY (Official Music Video).mp4",,ok,no bars
+2026-11-17 08:14:15,crop,D:\ai\GetVideo\EasonChan\Eason Chan\Lonely Christmas.mp4,,ok,no bars
+2026-11-17 08:14:17,crop,D:\ai\GetVideo\Videos\Other\Macklemore And Ryan Lewis - Thrift Shop (Feat. Wanz) (Super Clean Music Video).mp4,,ok,no bars
+2026-11-17 08:14:21,crop,D:\ai\GetVideo\Videos\Other\Major Lazer & DJ Snake - Lean On (feat. MØ) [Official 4K Music Video].mp4,D:\ai\Karaoke\crops.txt,ok,0:132:1920:816 in 1920x1080
+2026-11-17 08:14:21,crop,D:\ai\GetVideo\Videos\Other\Mark Ronson - Uptown Funk (Official Video) ft. Bruno Mars.mp4,,ok,no bars
+2026-11-17 08:14:22,crop,D:\ai\GetVideo\Videos\Other\Maroon 5 - Girls Like You ft. Cardi B (Official Music Video).mp4,,ok,no bars
+2026-11-17 08:14:25,crop,D:\ai\GetVideo\Videos\Other\Maroon 5 - Sugar (Official Music Video).mp4,,ok,no bars
+2026-11-17 08:14:25,crop,D:\ai\GetVideo\Videos\Other\Marshmello - Alone (Official Music Video).mp4,D:\ai\Karaoke\crops.txt,ok,0:140:1920:800 in 1920x1080
+2026-11-17 08:14:27,crop,"D:\ai\GetVideo\Videos\Other\Mayday五月天 [ 後來的我們 Here, After, Us ] Official Music Video.mp4",,ok,no bars
+2026-11-17 08:14:27,crop,D:\ai\GetVideo\Videos\Other\Michael Jackson - Billie Jean (Official Video).mp4,,ok,no bars
+2026-11-17 08:14:28,crop,D:\ai\GetVideo\Videos\Other\NIRVANA - Smells Like Teen Spirit (Remastered 2021) (HQ).mp4,D:\ai\Karaoke\crops.txt,ok,420:0:1080:1080 in 1920x1080
+2026-11-17 08:14:31,crop,D:\ai\GetVideo\Videos\Other\Numb (Official Music Video) [4K UPGRADE] – Linkin Park.mp4,D:\ai\Karaoke\crops.txt,ok,0:82:1920:916 in 1920x1080
+2026-11-17 08:14:31,crop,D:\ai\GetVideo\Videos\Other\Olivia Rodrigo - drop dead (Official Music Video).mp4,,ok,no bars
+2026-11-17 08:14:33,crop,D:\ai\GetVideo\Videos\Other\Olivia Rodrigo - stupid song (Official Music Video).mp4,,ok,no bars
+2026-11-17 08:14:34,crop,D:\ai\GetVideo\Videos\Other\OneRepublic - Counting Stars.mp4,D:\ai\Karaoke\crops.txt,ok,0:138:1920:804 in 1920x1080
+2026-11-17 08:14:35,crop,D:\ai\GetVideo\Videos\Other\P!nk - Just Give Me a Reason (Official Video) ft. Nate Ruess.mp4,D:\ai\Karaoke\crops.txt,ok,0:140:1920:800 in 1920x1080
+2026-11-17 08:14:38,crop,"D:\ai\GetVideo\Videos\Other\Post Malone, Swae Lee - Sunflower (Spider-Man： Into the Spider-Verse).mp4",D:\ai\Karaoke\crops.txt,ok,0:138:1920:806 in 1920x1080
+2026-11-17 08:14:39,crop,D:\ai\GetVideo\Videos\Other\Queen – Bohemian Rhapsody (Official Video Remastered).mp4,D:\ai\Karaoke\crops.txt,ok,278:0:1362:1080 in 1920x1080
+2026-11-17 08:14:39,crop,D:\ai\GetVideo\Videos\Other\ROLE MODEL - High Hopes 3000 (Official Music Video).mp4,,ok,no bars
+2026-11-17 08:14:43,crop,D:\ai\GetVideo\Videos\Other\ROSÉ & Bruno Mars - APT. (Official Music Video).mp4,,ok,no bars
+2026-11-17 08:14:43,crop,D:\ai\GetVideo\Videos\Other\Rag'n'Bone Man - Human (Official Video).mp4,D:\ai\Karaoke\crops.txt,ok,0:146:1920:788 in 1920x1080
+2026-11-17 08:14:44,crop,D:\ai\GetVideo\Videos\Other\Rihanna - Diamonds.mp4,D:\ai\Karaoke\crops.txt,ok,0:220:1920:640 in 1920x1080
+2026-11-17 08:14:46,crop,D:\ai\GetVideo\EasonChan\Eason Chan\Shall We Talk.mp4,,ok,no bars
+2026-11-17 08:14:48,crop,D:\ai\GetVideo\Videos\Other\Shawn Mendes - Treat You Better.mp4,D:\ai\Karaoke\crops.txt,ok,0:142:1920:796 in 1920x1080
+2026-11-17 08:14:48,crop,"D:\ai\GetVideo\Videos\Other\Shawn Mendes, Camila Cabello - Señorita.mp4",D:\ai\Karaoke\crops.txt,ok,0:60:1920:960 in 1920x1080
+2026-11-17 08:14:49,crop,D:\ai\GetVideo\Videos\Other\Sia - Cheap Thrills (Official Lyric Video) ft. Sean Paul.mp4,D:\ai\Karaoke\crops.txt,ok,260:28:1374:1024 in 1920x1080
+2026-11-17 08:14:54,crop,D:\ai\GetVideo\Videos\Other\TONES AND I - DANCE MONKEY (OFFICIAL VIDEO).mp4,,ok,no bars
+2026-11-17 08:14:54,crop,D:\ai\GetVideo\Videos\Other\Taylor Swift - Blank Space (Taylor's Version) (Music Video 4K).mp4,D:\ai\Karaoke\crops.txt,ok,0:136:1920:808 in 1920x1080
+2026-11-17 08:14:54,crop,D:\ai\GetVideo\Videos\Other\Taylor Swift - Shake It Off (Official Music Video).mp4,,ok,no bars
+2026-11-17 08:14:55,crop,D:\ai\GetVideo\Videos\Other\Taylor Swift-Shake It Off-English.mp4,D:\ai\Karaoke\crops.txt,ok,48:20:1614:1034 in 1920x1080
+2026-11-17 08:14:58,crop,D:\ai\GetVideo\Videos\Other\Teddy Swims - Mr. Know It All.mp4,,ok,no bars
+2026-11-17 08:14:59,crop,D:\ai\GetVideo\Videos\Other\The Beatles - Hey Jude (lyrics).mp4,,ok,no bars
+2026-11-17 08:14:59,crop,D:\ai\GetVideo\Videos\Other\The Chainsmokers & Coldplay - Something Just Like This (Official Lyric Video).mp4,,ok,no bars
+2026-11-17 08:15:02,crop,D:\ai\GetVideo\Videos\Other\The Chainsmokers - Closer (Official Video) ft. Halsey.mp4,D:\ai\Karaoke\crops.txt,ok,0:100:1920:880 in 1920x1080
+2026-11-17 08:15:05,crop,D:\ai\GetVideo\Videos\Other\The Chainsmokers - Don't Let Me Down (Official Video) ft. Daya.mp4,D:\ai\Karaoke\crops.txt,ok,0:140:1920:800 in 1920x1080
+2026-11-17 08:15:05,crop,D:\ai\GetVideo\Videos\Other\The Weeknd - Save Your Tears (Official Music Video).mp4,D:\ai\Karaoke\crops.txt,ok,0:138:1920:804 in 1920x1080
+2026-11-17 08:15:07,crop,D:\ai\GetVideo\Videos\Other\The Weeknd - Starboy ft. Daft Punk (Official Video) ft. Daft Punk.mp4,,ok,no bars
+2026-11-17 08:15:09,crop,D:\ai\GetVideo\Videos\Other\The Weeknd - The Hills.mp4,D:\ai\Karaoke\crops.txt,ok,0:22:1920:1036 in 1920x1080
+2026-11-17 08:15:09,crop,D:\ai\GetVideo\Videos\Other\Whitney Houston - I Will Always Love You (Official 4K Video).mp4,,ok,no bars
+2026-11-17 08:15:11,crop,D:\ai\GetVideo\Videos\Other\Wiz Khalifa - See You Again ft. Charlie Puth [Official Video] Furious 7 Soundtrack.mp4,,ok,no bars
+2026-11-17 08:15:13,crop,D:\ai\GetVideo\Videos\Other\YESUNG 예성 'Pedazos' MV.mp4,,ok,no bars
+2026-11-17 08:15:14,crop,D:\ai\GetVideo\Videos\Other\You're Wasting Your Money On Protein (NEW RESEARCH).mp4,,ok,no bars
+2026-11-17 08:15:15,crop,D:\ai\GetVideo\Videos\Other\ZAYN - Dusk Till Dawn (Official Video) ft. Sia.mp4,D:\ai\Karaoke\crops.txt,ok,0:146:1920:788 in 1920x1080
+2026-11-17 08:15:19,crop,D:\ai\GetVideo\Videos\Other\[原版伴奏] 陳奕迅 單車 (KTV 純音樂伴奏).mp4,D:\ai\Karaoke\crops.txt,ok,194:58:1692:810 in 1920x1080
+2026-11-17 08:15:19,crop,D:\ai\GetVideo\Videos\Other\a-ha - Take On Me (Official Video) [4K].mp4,,ok,no bars
+2026-11-17 08:15:22,crop,D:\ai\GetVideo\Videos\Other\mgk - FIX UR FACE (feat. Fred Durst) (Official Music Video).mp4,,ok,no bars
+2026-11-17 08:15:24,crop,D:\ai\GetVideo\Videos\Other\twenty one pilots： Heathens (from Suicide Squad： The Album) [OFFICIAL VIDEO].mp4,,ok,no bars
+2026-11-17 08:15:24,crop,D:\ai\GetVideo\Cantopop\George Au\《CHILL CLUB 推介榜》第13周冠軍歌George Au 歐鎮灝《出什麼風頭》🏆.mp4,D:\ai\Karaoke\crops.txt,ok,0:0:1920:1012 in 1920x1080
+2026-11-17 08:15:26,crop,D:\ai\GetVideo\Videos\Other\《人啊人》Homo Sapiens 陳奕迅 Eason Chan [Official MV].mp4,,ok,no bars
+2026-11-17 08:15:27,crop,D:\ai\GetVideo\Videos\Other\《塵大師》陳奕迅 Eason Chan [Official MV].mp4,D:\ai\Karaoke\crops.txt,ok,0:138:1920:804 in 1920x1080
+2026-11-17 08:15:28,crop,D:\ai\GetVideo\Videos\Other\《孤勇者》（《英雄聯盟：雙城之戰》動畫劇集中文主題曲）陳奕迅 Eason Chan [Official MV].mp4,D:\ai\Karaoke\crops.txt,ok,0:164:1920:830 in 1920x1080
+2026-11-17 08:15:29,crop,D:\ai\GetVideo\Videos\Other\《是但求其愛》陳奕迅 Eason Chan [Official MV].mp4,,ok,no bars
+2026-11-17 08:15:31,crop,D:\ai\GetVideo\Cantopop\Andy Lau\《沒有翅膀的天使》復刻版 Music Video.mp4,,ok,no bars
+2026-11-17 08:15:33,crop,D:\ai\GetVideo\Videos\Other\《盲婚啞嫁》陳奕迅 Eason Chan [Official MV].mp4,D:\ai\Karaoke\crops.txt,ok,0:140:1920:862 in 1920x1080
+2026-11-17 08:15:34,crop,D:\ai\GetVideo\Videos\Other\《社交恐懼癌》陳奕迅 Eason Chan [Official MV].mp4,D:\ai\Karaoke\crops.txt,ok,0:60:1920:1000 in 1920x1080
+2026-11-17 08:15:37,crop,D:\ai\GetVideo\Videos\Other\《空城記》Something Missing 陳奕迅 Eason Chan [Official MV].mp4,D:\ai\Karaoke\crops.txt,ok,150:0:1620:1080 in 1920x1080
+2026-11-17 08:15:38,crop,D:\ai\GetVideo\Videos\Other\《致明日的舞》A DANCE FOR TOMORROW 陳奕迅 Eason Chan [Official MV].mp4,,ok,no bars
+2026-11-17 08:15:38,crop,D:\ai\GetVideo\Videos\Other\《黃偉文 十年選》陳奕迅 - 反高潮 HD.mp4,D:\ai\Karaoke\crops.txt,ok,264:0:912:1080 in 1440x1080
+2026-11-17 08:15:38,crop,D:\ai\GetVideo\EasonChan\Eason Chan\一絲不掛.mp4,D:\ai\Karaoke\crops.txt,ok,0:52:480:270 in 480x360
+2026-11-17 08:15:39,crop,D:\ai\GetVideo\EasonChan\Eason Chan\七百年後.mp4,,ok,no bars
+2026-11-17 08:15:39,crop,D:\ai\GetVideo\EasonChan\Eason Chan\不來也不去.mp4,,ok,no bars
+2026-11-17 08:15:40,crop,D:\ai\GetVideo\EasonChan\Eason Chan\主旋律.mp4,,ok,no bars
+2026-11-17 08:15:40,crop,D:\ai\GetVideo\EasonChan\Eason Chan\人來人往.mp4,D:\ai\Karaoke\crops.txt,ok,134:104:514:274 in 656x480
+2026-11-17 08:15:41,crop,D:\ai\GetVideo\EasonChan\Eason Chan\人啊人.mp4,,ok,no bars
+2026-11-17 08:15:42,crop,D:\ai\GetVideo\EasonChan\Eason Chan\人車誌.mp4,,ok,no bars
+2026-11-17 08:15:42,crop,D:\ai\GetVideo\EasonChan\Eason Chan\今天只做一件事.mp4,D:\ai\Karaoke\crops.txt,ok,80:0:480:480 in 640x480
+2026-11-17 08:15:43,crop,D:\ai\GetVideo\EasonChan\Eason Chan\今日.mp4,D:\ai\Karaoke\crops.txt,ok,330:10:1530:1008 in 1920x1080
+2026-11-17 08:15:44,crop,D:\ai\GetVideo\EasonChan\Eason Chan\任我行.mp4,,ok,no bars
+2026-11-17 08:15:44,crop,D:\ai\GetVideo\Cantopop\Keung To\你要倔強.mp4,,ok,no bars
+2026-11-17 08:15:44,crop,D:\ai\GetVideo\Cantopop\Justin Lo\側田 Justin Lo  - 《美麗之最》Official MV.mp4,D:\ai\Karaoke\crops.txt,ok,10:70:624:350 in 640x480
+2026-11-17 08:15:44,crop,D:\ai\GetVideo\Cantopop\Justin Lo\側田 Justin Lo -《命硬》 Official MV.mp4,D:\ai\Karaoke\crops.txt,ok,6:26:344:206 in 352x262
+2026-11-17 08:15:45,crop,D:\ai\GetVideo\EasonChan\Eason Chan\六月飛霜.mp4,D:\ai\Karaoke\crops.txt,ok,18:58:412:230 in 448x336
+2026-11-17 08:15:46,crop,D:\ai\GetVideo\Cantopop\CY\別人的地獄.mp4,D:\ai\Karaoke\crops.txt,ok,92:0:988:1080 in 1080x1080
+2026-11-17 08:15:46,crop,D:\ai\GetVideo\EasonChan\Eason Chan\十面埋伏.mp4,,ok,no bars
+2026-11-17 08:15:47,crop,D:\ai\GetVideo\EasonChan\Eason Chan\反高潮.mp4,D:\ai\Karaoke\crops.txt,ok,264:0:912:1080 in 1440x1080
+2026-11-17 08:15:48,crop,D:\ai\GetVideo\EasonChan\Eason Chan\可以了.mp4,,ok,no bars
+2026-11-17 08:15:48,crop,D:\ai\GetVideo\EasonChan\Eason Chan\單車.mp4,D:\ai\Karaoke\crops.txt,ok,8:86:582:312 in 600x480
+2026-11-17 08:15:50,crop,D:\ai\GetVideo\EasonChan\Eason Chan\四季.mp4,,ok,no bars
+2026-11-17 08:15:50,crop,D:\ai\GetVideo\EasonChan\Eason Chan\塵大師.mp4,D:\ai\Karaoke\crops.txt,ok,0:138:1920:804 in 1920x1080
+2026-11-17 08:15:51,crop,D:\ai\GetVideo\EasonChan\Eason Chan\夕陽無限好.mp4,D:\ai\Karaoke\crops.txt,ok,14:0:1426:972 in 1440x1080
+2026-11-17 08:15:52,crop,D:\ai\GetVideo\EasonChan\Eason Chan\大開眼戒.mp4,D:\ai\Karaoke\crops.txt,ok,46:0:1874:1034 in 1920x1080
+2026-11-17 08:15:52,crop,D:\ai\GetVideo\EasonChan\Eason Chan\天下無雙.mp4,D:\ai\Karaoke\crops.txt,ok,0:30:318:190 in 320x238
+2026-11-17 08:15:52,crop,D:\ai\GetVideo\EasonChan\Eason Chan\天使的禮物.mp4,D:\ai\Karaoke\crops.txt,ok,56:2:534:478 in 656x480
+2026-11-17 08:15:52,crop,D:\ai\GetVideo\EasonChan\Eason Chan\太陽照常升起.mp4,D:\ai\Karaoke\crops.txt,ok,222:30:410:420 in 854x480
+2026-11-17 08:15:56,crop,D:\ai\GetVideo\Cantopop\Fatboy\姜濤Keung To & Fatboy - 獅虎流 Official Music Video.mp4,,ok,no bars
+2026-11-17 08:15:56,crop,D:\ai\GetVideo\EasonChan\Eason Chan\孤勇者.mp4,D:\ai\Karaoke\crops.txt,ok,0:164:1920:830 in 1920x1080
+2026-11-17 08:15:58,crop,D:\ai\GetVideo\Cantopop\Joey Yung\容祖兒 Joey Yung《等等等等》[Psychedelic Music Video].mp4,,ok,no bars
+2026-11-17 08:15:58,crop,D:\ai\GetVideo\Cantopop\Joey Yung\容祖兒 Joey Yung《陽光普照》(Bright Nights) [Official MV].mp4,,ok,no bars
+2026-11-17 08:15:59,crop,D:\ai\GetVideo\Cantopop\Keung To\寂寞圓舞.mp4,,ok,no bars
+2026-11-17 08:15:59,crop,D:\ai\GetVideo\EasonChan\Eason Chan\富士山下.mp4,D:\ai\Karaoke\crops.txt,ok,0:20:496:276 in 496x300
+2026-11-17 08:16:01,crop,D:\ai\GetVideo\EasonChan\Eason Chan\幸福摩天輪.mp4,D:\ai\Karaoke\crops.txt,ok,224:0:1634:1080 in 1920x1080
+2026-11-17 08:16:02,crop,D:\ai\GetVideo\Videos\Other\幸福摩天輪 - 陳奕迅.mp4,D:\ai\Karaoke\crops.txt,ok,0:0:1212:720 in 1280x720
+2026-11-17 08:16:02,crop,D:\ai\GetVideo\Cantopop\Hins Cheung\張敬軒 Hins Cheung《放棄的界限》(Eight Days of Silence) [Lyric Video].mp4,D:\ai\Karaoke\crops.txt,ok,0:112:1920:856 in 1920x1080
+2026-11-17 08:16:04,crop,D:\ai\GetVideo\Cantopop\Hins Cheung\張敬軒 Hins Cheung《靈魂相願》(Spectral Entanglement) [Official MV].mp4,,ok,no bars
+2026-11-17 08:16:05,crop,D:\ai\GetVideo\EasonChan\Eason Chan\心的距離.mp4,D:\ai\Karaoke\crops.txt,ok,0:66:640:374 in 640x480
+2026-11-17 08:16:05,crop,D:\ai\GetVideo\Cantopop\Andy Hui\心血 ｜ 許志安 Andy Hui ｜ 作詞：林振強     作曲：織田哲郎.mp4,D:\ai\Karaoke\crops.txt,ok,244:74:1426:938 in 1920x1080
+2026-11-17 08:16:05,crop,D:\ai\GetVideo\EasonChan\Eason Chan\忘記歌詞.mp4,D:\ai\Karaoke\crops.txt,ok,8:122:640:238 in 656x480
+2026-11-17 08:16:06,crop,D:\ai\GetVideo\EasonChan\Eason Chan\怕死.mp4,,ok,no bars
+2026-11-17 08:16:06,crop,D:\ai\GetVideo\EasonChan\Eason Chan\我們萬歲.mp4,,ok,no bars
+2026-11-17 08:16:07,crop,D:\ai\GetVideo\Cantopop\Andy Lau\我年輕過 - 劉德華.mp4,D:\ai\Karaoke\crops.txt,ok,0:132:1920:816 in 1920x1080
+2026-11-17 08:16:08,crop,D:\ai\GetVideo\EasonChan\Eason Chan\我的快樂時代.mp4,D:\ai\Karaoke\crops.txt,ok,300:274:682:238 in 1280x720
+2026-11-17 08:16:08,crop,D:\ai\GetVideo\EasonChan\Eason Chan\於心有愧.mp4,,ok,no bars
+2026-11-17 08:16:08,crop,D:\ai\GetVideo\EasonChan\Eason Chan\明年今日.mp4,,ok,no bars
+2026-11-17 08:16:09,crop,D:\ai\GetVideo\EasonChan\Eason Chan\是但求其愛.mp4,D:\ai\Karaoke\crops.txt,ok,0:132:1920:816 in 1920x1080
+2026-11-17 08:16:10,crop,D:\ai\GetVideo\Cantopop\Goodnight Lillie\晚安莉莉《我看見今晚的月色很美，你呢？》 Tsuki ｜ Official Music Video.mp4,,ok,no bars
+2026-11-17 08:16:10,crop,D:\ai\GetVideo\EasonChan\Eason Chan\最佳損友.mp4,D:\ai\Karaoke\crops.txt,ok,4:40:476:290 in 480x360
+2026-11-17 08:16:11,crop,D:\ai\GetVideo\EasonChan\Eason Chan\最後派對.mp4,D:\ai\Karaoke\crops.txt,ok,0:62:640:376 in 640x480
+2026-11-17 08:16:13,crop,D:\ai\GetVideo\Videos\Other\李佳薇 Jess Lee〈甲乙丙丁 Strangers〉Official Lyric Video.mp4,,ok,no bars
+2026-11-17 08:16:13,crop,D:\ai\GetVideo\Videos\Other\李聖傑 Sam Lee【手放開】Official Music Video.mp4,D:\ai\Karaoke\crops.txt,ok,0:46:638:392 in 640x480
+2026-11-17 08:16:13,crop,D:\ai\GetVideo\Cantopop\Andy Hui\歌與歌之間.mp4,,ok,no bars
+2026-11-17 08:16:13,crop,D:\ai\GetVideo\EasonChan\Eason Chan\歲月如歌.mp4,,ok,no bars
+2026-11-17 08:16:15,crop,D:\ai\GetVideo\EasonChan\Eason Chan\每一個明天.mp4,D:\ai\Karaoke\crops.txt,ok,330:42:1528:886 in 1920x1080
+2026-11-17 08:16:15,crop,D:\ai\GetVideo\EasonChan\Eason Chan\沙龍.mp4,,ok,no bars
+2026-11-17 08:16:16,crop,D:\ai\GetVideo\Cantopop\Kaho Hung\洪嘉豪 Hung Kaho - 戒糖失敗 Sugarproof (Official Music Video).mp4,,ok,no bars
+2026-11-17 08:16:17,crop,D:\ai\GetVideo\Cantopop\Kaho Hung\洪嘉豪 Hung Kaho - 穿波鞋的惡魔 The Devil Wears Sneakers (Official Music Video).mp4,,ok,no bars
+2026-11-17 08:16:18,crop,D:\ai\GetVideo\Cantopop\Kaho Hung\洪嘉豪 Hung Kaho - 黑玻璃 Tinted Windows (Official Music Video).mp4,,ok,no bars
+2026-11-17 08:16:18,crop,D:\ai\GetVideo\EasonChan\Eason Chan\浮誇.mp4,D:\ai\Karaoke\crops.txt,ok,0:34:384:220 in 384x288
+2026-11-17 08:16:19,crop,D:\ai\GetVideo\EasonChan\Eason Chan\淘汰(國).mp4,,ok,no bars
+2026-11-17 08:16:20,crop,D:\ai\GetVideo\EasonChan\Eason Chan\漸漸.mp4,,ok,no bars
+2026-11-17 08:16:21,crop,D:\ai\GetVideo\Cantopop\Gigi\炎明熹 Gigi Yim - 在搖搖板上相對的我們 Seesaw of Us ｜ Official Music Video.mp4,,ok,no bars
+2026-11-17 08:16:21,crop,D:\ai\GetVideo\EasonChan\Eason Chan\無人之境.mp4,D:\ai\Karaoke\crops.txt,ok,0:62:640:380 in 640x480
+2026-11-17 08:16:22,crop,D:\ai\GetVideo\EasonChan\Eason Chan\無條件.mp4,,ok,no bars
+2026-11-17 08:16:22,crop,D:\ai\GetVideo\Cantopop\Andy Hui\爛泥.mp4,,ok,no bars
+2026-11-17 08:16:22,crop,D:\ai\GetVideo\Videos\Other\王菲 Faye Wong - 季候風 Monsoon (Official Music Video).mp4,,ok,no bars
+2026-11-17 08:16:25,crop,D:\ai\GetVideo\Cantopop\Anson Lo\盧瀚霆 Anson Lo 《本命》Official Lyric Video.mp4,,ok,no bars
+2026-11-17 08:16:25,crop,D:\ai\GetVideo\EasonChan\Eason Chan\盲婚啞嫁.mp4,D:\ai\Karaoke\crops.txt,ok,0:140:1920:862 in 1920x1080
+2026-11-17 08:16:25,crop,D:\ai\GetVideo\EasonChan\Eason Chan\社交恐懼癌.mp4,D:\ai\Karaoke\crops.txt,ok,0:60:1920:1000 in 1920x1080
+2026-11-17 08:16:27,crop,D:\ai\GetVideo\EasonChan\Eason Chan\空城記.mp4,D:\ai\Karaoke\crops.txt,ok,150:0:1620:1080 in 1920x1080
+2026-11-17 08:16:29,crop,D:\ai\GetVideo\Videos\Other\米津玄師  Kenshi Yonezu - IRIS OUT.mp4,D:\ai\Karaoke\crops.txt,ok,0:138:1920:804 in 1920x1080
+2026-11-17 08:16:29,crop,D:\ai\GetVideo\EasonChan\Eason Chan\粵語殘片.mp4,,ok,no bars
+2026-11-17 08:16:30,crop,D:\ai\GetVideo\EasonChan\Eason Chan\致明日的舞.mp4,,ok,no bars
+2026-11-17 08:16:31,crop,D:\ai\GetVideo\EasonChan\Eason Chan\與我常在.mp4,D:\ai\Karaoke\crops.txt,ok,192:74:1540:934 in 1920x1080
+2026-11-17 08:16:31,crop,D:\ai\GetVideo\EasonChan\Eason Chan\苦瓜.mp4,D:\ai\Karaoke\crops.txt,ok,4:82:634:314 in 640x480
+2026-11-17 08:16:32,crop,D:\ai\GetVideo\Cantopop\Edan\萬幸 (電影《金多寶》片尾曲).mp4,,ok,no bars
+2026-11-17 08:16:32,crop,D:\ai\GetVideo\EasonChan\Eason Chan\落花流水.mp4,,ok,no bars
+2026-11-17 08:16:32,crop,D:\ai\GetVideo\EasonChan\Eason Chan\葡萄成熟時.mp4,D:\ai\Karaoke\crops.txt,ok,0:14:448:314 in 448x336
+2026-11-17 08:16:32,crop,D:\ai\GetVideo\Cantopop\Janice M. Vidal\衛蘭  - 一場誤會 MV.mp4,D:\ai\Karaoke\crops.txt,ok,2:76:652:364 in 656x480
+2026-11-17 08:16:32,crop,D:\ai\GetVideo\Cantopop\Janice M. Vidal\衛蘭 - 心亂如麻 MV.mp4,D:\ai\Karaoke\crops.txt,ok,0:90:594:330 in 600x480
+2026-11-17 08:16:33,crop,D:\ai\GetVideo\Cantopop\Janice M. Vidal\衛蘭 Janice - 街燈晚餐 Official MV [Imagine] - 官方完整版.mp4,,ok,no bars
+2026-11-17 08:16:34,crop,D:\ai\GetVideo\Cantopop\Janice M. Vidal\衛蘭 Janice Vidal - 又~離家出走 Official Lyric MV.mp4,,ok,no bars
+2026-11-17 08:16:34,crop,D:\ai\GetVideo\EasonChan\Eason Chan\裙下之臣.mp4,D:\ai\Karaoke\crops.txt,ok,0:20:480:292 in 480x316
+2026-11-17 08:16:34,crop,D:\ai\GetVideo\Videos\Other\裙下之臣--陳奕迅(from solidays disc1).mp4,D:\ai\Karaoke\crops.txt,ok,52:0:248:288 in 352x288
+2026-11-17 08:16:40,crop,D:\ai\GetVideo\Cantopop\Andy Hui\許志安 - 我的天我的歌.mp4,,ok,no bars
+2026-11-17 08:16:40,crop,D:\ai\GetVideo\Cantopop\Andy Hui\許志安 - 昨遲人 @ On and On 25週年演唱會 2011【1080P Live】.mp4,,ok,no bars
+2026-11-17 08:16:40,crop,D:\ai\GetVideo\Cantopop\Andy Hui\許志安 Andy Hui - 《信天翁》 Official MV.mp4,D:\ai\Karaoke\crops.txt,ok,0:132:1920:816 in 1920x1080
+2026-11-17 08:16:41,crop,D:\ai\GetVideo\Cantopop\Andy Hui\許志安 Andy Hui - 一步一生 [歌詞同步⧸粵拼字幕][Jyutping Lyrics].mp4,D:\ai\Karaoke\crops.txt,ok,0:0:1920:1016 in 1920x1080
+2026-11-17 08:16:42,crop,D:\ai\GetVideo\Cantopop\Andy Hui\許志安 Andy Hui - 男人最痛 (Official Music Video).mp4,D:\ai\Karaoke\crops.txt,ok,230:0:1628:1080 in 1920x1080
+2026-11-17 08:16:43,crop,D:\ai\GetVideo\EasonChan\Eason Chan\讓我留在你身邊.mp4,D:\ai\Karaoke\crops.txt,ok,0:76:1920:940 in 1920x1080
+2026-11-17 08:16:44,crop,D:\ai\GetVideo\EasonChan\Eason Chan\那一夜有沒有說.mp4,,ok,no bars
+2026-11-17 08:16:44,crop,D:\ai\GetVideo\EasonChan\Eason Chan\重口味.mp4,,ok,no bars
+2026-11-17 08:16:45,crop,D:\ai\GetVideo\EasonChan\Eason Chan\防不勝防.mp4,D:\ai\Karaoke\crops.txt,ok,2:0:1918:1026 in 1920x1080
+2026-11-17 08:16:46,crop,D:\ai\GetVideo\EasonChan\Eason Chan\阿牛.mp4,,ok,no bars
+2026-11-17 08:16:46,crop,D:\ai\GetVideo\EasonChan\Eason Chan\陀飛輪.mp4,,ok,no bars
+2026-11-17 08:16:47,crop,D:\ai\GetVideo\Videos\Other\陳奕迅  ｜ 十面埋伏 (高清音).mp4,,ok,no bars
+2026-11-17 08:16:47,crop,D:\ai\GetVideo\Videos\Other\陳奕迅 - 《六月飛霜》MV.mp4,D:\ai\Karaoke\crops.txt,ok,0:56:640:388 in 640x480
+2026-11-17 08:16:47,crop,D:\ai\GetVideo\Videos\Other\陳奕迅 - 《苦瓜》MV.mp4,,ok,no bars
+2026-11-17 08:16:48,crop,D:\ai\GetVideo\Videos\Other\陳奕迅 - 今天只做一件事.mp4,D:\ai\Karaoke\crops.txt,ok,80:0:480:480 in 640x480
+2026-11-17 08:16:49,crop,D:\ai\GetVideo\Videos\Other\陳奕迅 - 今日 HD.mp4,,ok,no bars
+2026-11-17 08:16:49,crop,D:\ai\GetVideo\Videos\Other\陳奕迅 - 太陽照常升起.mp4,D:\ai\Karaoke\crops.txt,ok,222:30:410:420 in 854x480
+2026-11-17 08:16:50,crop,D:\ai\GetVideo\Videos\Other\陳奕迅 - 富士山下.mp4,D:\ai\Karaoke\crops.txt,ok,2:56:1894:1002 in 1920x1080
+2026-11-17 08:16:51,crop,D:\ai\GetVideo\Videos\Other\陳奕迅 - 我的快樂時代 HD.mp4,D:\ai\Karaoke\crops.txt,ok,300:274:682:238 in 1280x720
+2026-11-17 08:16:52,crop,D:\ai\GetVideo\Videos\Other\陳奕迅 - 淘汰 HD.mp4,,ok,no bars
+2026-11-17 08:16:53,crop,D:\ai\GetVideo\Videos\Other\陳奕迅 - 粵語殘片 HD.mp4,D:\ai\Karaoke\crops.txt,ok,420:276:430:236 in 1280x720
+2026-11-17 08:16:53,crop,D:\ai\GetVideo\Videos\Other\陳奕迅 - 與我常在.mp4,D:\ai\Karaoke\crops.txt,ok,176:216:1742:676 in 1920x1080
+2026-11-17 08:16:54,crop,D:\ai\GetVideo\Videos\Other\陳奕迅 - 那一夜有沒有說.mp4,D:\ai\Karaoke\crops.txt,ok,140:0:360:480 in 640x480
+2026-11-17 08:16:57,crop,D:\ai\GetVideo\Videos\Other\陳奕迅 Eason Chan  《主旋律》MV首播!!!.mp4,,ok,no bars
+2026-11-17 08:16:57,crop,D:\ai\GetVideo\Videos\Other\陳奕迅 Eason Chan - 《四季》MV.mp4,,ok,no bars
+2026-11-17 08:16:57,crop,D:\ai\GetVideo\Videos\Other\陳奕迅 Eason Chan - 一絲不掛 (Official Music Video).mp4,D:\ai\Karaoke\crops.txt,ok,0:160:1440:806 in 1440x1080
+2026-11-17 08:16:58,crop,D:\ai\GetVideo\Videos\Other\陳奕迅 Eason Chan - 七百年後 (Official Music Video).mp4,,ok,no bars
+2026-11-17 08:17:02,crop,D:\ai\GetVideo\Videos\Other\陳奕迅 Eason Chan - 任我行 (Official Music Video).mp4,,ok,no bars
+2026-11-17 08:17:02,crop,D:\ai\GetVideo\Videos\Other\陳奕迅 Eason Chan - 每一個明天 (Official Music Video).mp4,D:\ai\Karaoke\crops.txt,ok,330:42:1528:886 in 1920x1080
+2026-11-17 08:17:02,crop,D:\ai\GetVideo\Videos\Other\陳奕迅 Eason Chan - 沙龍 (Official Music Video).mp4,,ok,no bars
+2026-11-17 08:17:03,crop,D:\ai\GetVideo\Videos\Other\陳奕迅 Eason Chan - 無人之境 (Official Music Video).mp4,D:\ai\Karaoke\crops.txt,ok,0:132:1440:864 in 1440x1080
+2026-11-17 08:17:07,crop,D:\ai\GetVideo\Videos\Other\陳奕迅 Eason Chan - 無條件 (Official Music Video).mp4,,ok,no bars
+2026-11-17 08:17:07,crop,D:\ai\GetVideo\Videos\Other\陳奕迅 Eason Chan - 重口味 (Official Music Video) (Full Version).mp4,,ok,no bars
+2026-11-17 08:17:07,crop,D:\ai\GetVideo\Videos\Other\陳奕迅 Eason Chan - 阿牛 Aa  Ngau.mp4,D:\ai\Karaoke\crops.txt,ok,420:0:1080:1080 in 1920x1080
+2026-11-17 08:17:08,crop,D:\ai\GetVideo\Videos\Other\陳奕迅 Eason Chan - 陀飛輪 (Official Music Video).mp4,D:\ai\Karaoke\crops.txt,ok,0:58:640:360 in 640x480
+2026-11-17 08:17:11,crop,D:\ai\GetVideo\Videos\Other\陳奕迅 Eason Chan - 黑洞 (Official Music Video).mp4,,ok,no bars
+2026-11-17 08:17:12,crop,D:\ai\GetVideo\Videos\Other\陳奕迅 Eason Chan 《可以了》 IT’S OVER  [Official MV].mp4,,ok,no bars
+2026-11-17 08:17:12,crop,D:\ai\GetVideo\Videos\Other\陳奕迅 Eason Chan《Shall We Talk》[Lyrics MV].mp4,D:\ai\Karaoke\crops.txt,ok,2:0:1918:1030 in 1920x1080
+2026-11-17 08:17:13,crop,D:\ai\GetVideo\Videos\Other\陳奕迅 Eason Chan《人來人往》[Official MV].mp4,D:\ai\Karaoke\crops.txt,ok,32:104:616:274 in 656x480
+2026-11-17 08:17:14,crop,D:\ai\GetVideo\Videos\Other\陳奕迅 Eason Chan《單車》[Official MV].mp4,D:\ai\Karaoke\crops.txt,ok,18:192:1312:704 in 1350x1080
+2026-11-17 08:17:14,crop,D:\ai\GetVideo\Videos\Other\陳奕迅 Eason Chan《忘記歌詞》Official 官方完整版 [首播] [MV].mp4,D:\ai\Karaoke\crops.txt,ok,8:122:640:238 in 656x480
+2026-11-17 08:17:14,crop,D:\ai\GetVideo\Videos\Other\陳奕迅 Eason Chan《明年今日》[Official MV].mp4,,ok,no bars
+2026-11-17 08:17:17,crop,D:\ai\GetVideo\Videos\Other\陳奕迅 Eason Chan《漸漸》AM I ME - eason and the duo band [Official MV].mp4,,ok,no bars
+2026-11-17 08:17:17,crop,D:\ai\GetVideo\Videos\Other\陳奕迅 Eason《我們萬歲》歌詞(lyrics).mp4,D:\ai\Karaoke\crops.txt,ok,72:0:1776:1080 in 1920x1080
+2026-11-17 08:17:17,crop,D:\ai\GetVideo\Videos\Other\陳奕迅 天下無雙.mp4,D:\ai\Karaoke\crops.txt,ok,0:30:318:190 in 320x238
+2026-11-17 08:17:17,crop,D:\ai\GetVideo\Videos\Other\陳奕迅 葡萄成熟時 MV.mp4,D:\ai\Karaoke\crops.txt,ok,0:14:448:314 in 448x336
+2026-11-17 08:17:20,crop,D:\ai\GetVideo\Videos\Other\陳奕迅 ｜ 1874 (高清音).mp4,,ok,no bars
+2026-11-17 08:17:20,crop,D:\ai\GetVideo\Videos\Other\陳奕迅 ｜ Lonely Christmas (高清音).mp4,,ok,no bars
+2026-11-17 08:17:20,crop,D:\ai\GetVideo\Videos\Other\陳奕迅Eason Chan-歲月如歌(衝上雲霄II MV).mp4,D:\ai\Karaoke\crops.txt,ok,0:90:1280:582 in 1280x720
+2026-11-17 08:17:22,crop,D:\ai\GetVideo\Videos\Other\陳奕迅Eason Chan《大開眼戒》[Lyrics MV].mp4,D:\ai\Karaoke\crops.txt,ok,2:0:1918:1034 in 1920x1080
+2026-11-17 08:17:23,crop,D:\ai\GetVideo\Videos\Other\陳奕迅Eason Chan《防不勝防》[Lyrics MV].mp4,,ok,no bars
+2026-11-17 08:17:24,crop,D:\ai\GetVideo\Cantopop\Jason Chan\陳柏宇 Jason Chan - 尚有愛的資格 Worthy to love ｜ Official Music Video.mp4,,ok,no bars
+2026-11-17 08:17:28,crop,D:\ai\GetVideo\Cantopop\Jason Chan\陳柏宇 Jason Chan - 快照 Ride Photos ｜ Official Music Video.mp4,D:\ai\Karaoke\crops.txt,ok,104:36:1604:1010 in 1920x1080
+2026-11-17 08:17:28,crop,D:\ai\GetVideo\Cantopop\Jason Chan\陳柏宇 Jason Chan - 旁若無人 No One's Watching ｜ Official Music Video.mp4,,ok,no bars
+2026-11-17 08:17:29,crop,D:\ai\GetVideo\Cantopop\Jason Chan\陳柏宇 Jason Chan - 舊酒新瓶 New Framework ｜ Official Music Video.mp4,,ok,no bars
+2026-11-17 08:17:31,crop,D:\ai\GetVideo\Cantopop\Jason Chan\陳柏宇 Jason Chan - 過後 Moved On ｜ Official Music Video.mp4,,ok,no bars
+2026-11-17 08:17:31,crop,D:\ai\GetVideo\EasonChan\Eason Chan\黃金時代.mp4,,ok,no bars
+2026-11-17 08:17:33,crop,D:\ai\GetVideo\EasonChan\Eason Chan\黑洞.mp4,,ok,no bars
+2026-11-17 08:17:34,crop,D:\ai\GetVideo\Videos\Other\대성(DAESUNG) 'Universe' Official MV.mp4,,ok,no bars
+2026-11-17 08:17:34,crop,D:\ai\GetVideo\Cantopop\EGG\𝐄𝐆𝐆黃詠霖《沒誰保佑》Music Video.mp4,,ok,no bars
+2026-11-17 08:24:07,lrc,D:\ai\Karaoke\Cantopop\Andy Hui\心血 ｜ 許志安 Andy Hui ｜ 作詞：林振強     作曲：織田哲郎.lrc,/sdcard/Karaoke/Cantopop/Andy Hui/心血 ｜ 許志安 Andy Hui ｜ 作詞：林振強     作曲：織田哲郎.lrc,ok,4141 bytes
+2026-11-17 08:24:09,push,D:\ai\Karaoke\Cantopop\Andy Hui\心血 ｜ 許志安 Andy Hui ｜ 作詞：林振強     作曲：織田哲郎.mp3,/sdcard/Karaoke/Cantopop/Andy Hui/心血 ｜ 許志安 Andy Hui ｜ 作詞：林振強     作曲：織田哲郎.mp3,ok,6237355 bytes
+2026-11-17 08:24:34,video,D:\ai\GetVideo\Cantopop\Andy Hui\心血 ｜ 許志安 Andy Hui ｜ 作詞：林振強     作曲：織田哲郎.mp4,/sdcard/Karaoke/Cantopop/Andy Hui/心血 ｜ 許志安 Andy Hui ｜ 作詞：林振強     作曲：織田哲郎.mp4,ok,168285733 bytes
+2026-11-17 08:24:35,lrc,D:\ai\Karaoke\Cantopop\Andy Hui\許志安 Andy Hui - 男人最痛 (Official Music Video).lrc,/sdcard/Karaoke/Cantopop/Andy Hui/許志安 Andy Hui - 男人最痛 (Official Music Video).lrc,ok,2313 bytes
+2026-11-17 08:24:36,push,D:\ai\Karaoke\Cantopop\Andy Hui\許志安 Andy Hui - 男人最痛 (Official Music Video).mp3,/sdcard/Karaoke/Cantopop/Andy Hui/許志安 Andy Hui - 男人最痛 (Official Music Video).mp3,ok,6862903 bytes
+2026-11-17 08:25:30,video,D:\ai\GetVideo\Cantopop\Andy Hui\許志安 Andy Hui - 男人最痛 (Official Music Video).mp4,/sdcard/Karaoke/Cantopop/Andy Hui/許志安 Andy Hui - 男人最痛 (Official Music Video).mp4,ok,338673343 bytes
+2026-11-17 08:25:30,lrc,D:\ai\Karaoke\Cantopop\Andy Lau\《沒有翅膀的天使》復刻版 Music Video.lrc,/sdcard/Karaoke/Cantopop/Andy Lau/《沒有翅膀的天使》復刻版 Music Video.lrc,ok,3249 bytes
+2026-11-17 08:25:31,push,D:\ai\Karaoke\Cantopop\Andy Lau\《沒有翅膀的天使》復刻版 Music Video.mp3,/sdcard/Karaoke/Cantopop/Andy Lau/《沒有翅膀的天使》復刻版 Music Video.mp3,ok,6368919 bytes
+2026-11-17 08:25:54,video,D:\ai\GetVideo\Cantopop\Andy Lau\《沒有翅膀的天使》復刻版 Music Video.mp4,/sdcard/Karaoke/Cantopop/Andy Lau/《沒有翅膀的天使》復刻版 Music Video.mp4,ok,147263728 bytes
+2026-11-17 08:25:55,lrc,D:\ai\Karaoke\Cantopop\Anson Kong\愛應該怎麼辦.lrc,/sdcard/Karaoke/Cantopop/Anson Kong/愛應該怎麼辦.lrc,ok,4913 bytes
+2026-11-17 08:25:56,push,D:\ai\Karaoke\Cantopop\Anson Kong\愛應該怎麼辦.mp3,/sdcard/Karaoke/Cantopop/Anson Kong/愛應該怎麼辦.mp3,ok,4956534 bytes
+2026-11-17 08:25:57,lrc,D:\ai\Karaoke\Cantopop\Anson Lo\251206-10 KINGDOM live 2025 《Take That》盧瀚霆 Anson Lo Focus Multi Fancam 4K.lrc,/sdcard/Karaoke/Cantopop/Anson Lo/251206-10 KINGDOM live 2025 《Take That》盧瀚霆 Anson Lo Focus Multi Fancam 4K.lrc,ok,7203 bytes
+2026-11-17 08:25:58,push,D:\ai\Karaoke\Cantopop\Anson Lo\251206-10 KINGDOM live 2025 《Take That》盧瀚霆 Anson Lo Focus Multi Fancam 4K.mp3,/sdcard/Karaoke/Cantopop/Anson Lo/251206-10 KINGDOM live 2025 《Take That》盧瀚霆 Anson Lo Focus Multi Fancam 4K.mp3,ok,4492190 bytes
+2026-11-17 08:27:02,video,D:\ai\GetVideo\Cantopop\Anson Lo\251206-10 KINGDOM live 2025 《Take That》盧瀚霆 Anson Lo Focus Multi Fancam 4K.mp4,/sdcard/Karaoke/Cantopop/Anson Lo/251206-10 KINGDOM live 2025 《Take That》盧瀚霆 Anson Lo Focus Multi Fancam 4K.mp4,ok,409229755 bytes
+2026-11-17 08:27:03,lrc,D:\ai\Karaoke\Cantopop\Anson Lo\Anson Lo 盧瀚霆 《Charisma》Official Music Video.lrc,/sdcard/Karaoke/Cantopop/Anson Lo/Anson Lo 盧瀚霆 《Charisma》Official Music Video.lrc,ok,2706 bytes
+2026-11-17 08:27:04,push,D:\ai\Karaoke\Cantopop\Anson Lo\Anson Lo 盧瀚霆 《Charisma》Official Music Video.mp3,/sdcard/Karaoke/Cantopop/Anson Lo/Anson Lo 盧瀚霆 《Charisma》Official Music Video.mp3,ok,4270467 bytes
+2026-11-17 08:27:26,video,D:\ai\GetVideo\Cantopop\Anson Lo\Anson Lo 盧瀚霆 《Charisma》Official Music Video.mp4,/sdcard/Karaoke/Cantopop/Anson Lo/Anson Lo 盧瀚霆 《Charisma》Official Music Video.mp4,ok,137634281 bytes
+2026-11-17 08:27:26,lrc,D:\ai\Karaoke\Cantopop\Anson Lo\Anson Lo 盧瀚霆 《Gimme Gimme》Official Music Video.lrc,/sdcard/Karaoke/Cantopop/Anson Lo/Anson Lo 盧瀚霆 《Gimme Gimme》Official Music Video.lrc,ok,3946 bytes
+2026-11-17 08:27:28,push,D:\ai\Karaoke\Cantopop\Anson Lo\Anson Lo 盧瀚霆 《Gimme Gimme》Official Music Video.mp3,/sdcard/Karaoke/Cantopop/Anson Lo/Anson Lo 盧瀚霆 《Gimme Gimme》Official Music Video.mp3,ok,6221158 bytes
+2026-11-17 08:28:04,video,D:\ai\GetVideo\Cantopop\Anson Lo\Anson Lo 盧瀚霆 《Gimme Gimme》Official Music Video.mp4,/sdcard/Karaoke/Cantopop/Anson Lo/Anson Lo 盧瀚霆 《Gimme Gimme》Official Music Video.mp4,ok,228768850 bytes
+2026-11-17 08:28:05,lrc,D:\ai\Karaoke\Cantopop\Anson Lo\Anson Lo 盧瀚霆 《Rude Boy》 - 《ANSON LO ”KINGDOM“ LIVE 2025》 【4K Multi-Angle】.lrc,/sdcard/Karaoke/Cantopop/Anson Lo/Anson Lo 盧瀚霆 《Rude Boy》 - 《ANSON LO ”KINGDOM“ LIVE 2025》 【4K Multi-Angle】.lrc,ok,3146 bytes
+2026-11-17 08:28:06,push,D:\ai\Karaoke\Cantopop\Anson Lo\Anson Lo 盧瀚霆 《Rude Boy》 - 《ANSON LO ”KINGDOM“ LIVE 2025》 【4K Multi-Angle】.mp3,/sdcard/Karaoke/Cantopop/Anson Lo/Anson Lo 盧瀚霆 《Rude Boy》 - 《ANSON LO ”KINGDOM“ LIVE 2025》 【4K Multi-Angle】.mp3,ok,5623649 bytes
+2026-11-17 08:29:16,video,D:\ai\GetVideo\Cantopop\Anson Lo\Anson Lo 盧瀚霆 《Rude Boy》 - 《ANSON LO ”KINGDOM“ LIVE 2025》 【4K Multi-Angle】.mp4,/sdcard/Karaoke/Cantopop/Anson Lo/Anson Lo 盧瀚霆 《Rude Boy》 - 《ANSON LO ”KINGDOM“ LIVE 2025》 【4K Multi-Angle】.mp4,ok,450256665 bytes
+2026-11-17 08:29:17,lrc,D:\ai\Karaoke\Cantopop\Anson Lo\Anson Lo 盧瀚霆 《goofy》Official Music Video.lrc,/sdcard/Karaoke/Cantopop/Anson Lo/Anson Lo 盧瀚霆 《goofy》Official Music Video.lrc,ok,2659 bytes
+2026-11-17 08:29:18,push,D:\ai\Karaoke\Cantopop\Anson Lo\Anson Lo 盧瀚霆 《goofy》Official Music Video.mp3,/sdcard/Karaoke/Cantopop/Anson Lo/Anson Lo 盧瀚霆 《goofy》Official Music Video.mp3,ok,4655063 bytes
+2026-11-17 08:29:48,video,D:\ai\GetVideo\Cantopop\Anson Lo\Anson Lo 盧瀚霆 《goofy》Official Music Video.mp4,/sdcard/Karaoke/Cantopop/Anson Lo/Anson Lo 盧瀚霆 《goofy》Official Music Video.mp4,ok,191074792 bytes
+2026-11-17 08:29:49,lrc,D:\ai\Karaoke\Cantopop\Anson Lo\Anson Lo 盧瀚霆 《午夜場》（Midnight Escape）Official Music Video.lrc,/sdcard/Karaoke/Cantopop/Anson Lo/Anson Lo 盧瀚霆 《午夜場》（Midnight Escape）Official Music Video.lrc,ok,4521 bytes
+2026-11-17 08:29:50,push,D:\ai\Karaoke\Cantopop\Anson Lo\Anson Lo 盧瀚霆 《午夜場》（Midnight Escape）Official Music Video.mp3,/sdcard/Karaoke/Cantopop/Anson Lo/Anson Lo 盧瀚霆 《午夜場》（Midnight Escape）Official Music Video.mp3,ok,5216666 bytes
+2026-11-17 08:30:08,video,D:\ai\GetVideo\Cantopop\Anson Lo\Anson Lo 盧瀚霆 《午夜場》（Midnight Escape）Official Music Video.mp4,/sdcard/Karaoke/Cantopop/Anson Lo/Anson Lo 盧瀚霆 《午夜場》（Midnight Escape）Official Music Video.mp4,ok,114723142 bytes
+2026-11-17 08:30:08,lrc,D:\ai\Karaoke\Cantopop\Anson Lo\Anson Lo 盧瀚霆 《最後一個降落傘》Official Music Video.lrc,/sdcard/Karaoke/Cantopop/Anson Lo/Anson Lo 盧瀚霆 《最後一個降落傘》Official Music Video.lrc,ok,6430 bytes
+2026-11-17 08:30:10,push,D:\ai\Karaoke\Cantopop\Anson Lo\Anson Lo 盧瀚霆 《最後一個降落傘》Official Music Video.mp3,/sdcard/Karaoke/Cantopop/Anson Lo/Anson Lo 盧瀚霆 《最後一個降落傘》Official Music Video.mp3,ok,6482532 bytes
+2026-11-17 08:30:34,video,D:\ai\GetVideo\Cantopop\Anson Lo\Anson Lo 盧瀚霆 《最後一個降落傘》Official Music Video.mp4,/sdcard/Karaoke/Cantopop/Anson Lo/Anson Lo 盧瀚霆 《最後一個降落傘》Official Music Video.mp4,ok,153541979 bytes
+2026-11-17 08:30:34,lrc,D:\ai\Karaoke\Cantopop\Anson Lo\我的支持型伴侶.lrc,/sdcard/Karaoke/Cantopop/Anson Lo/我的支持型伴侶.lrc,ok,6350 bytes
+2026-11-17 08:30:35,push,D:\ai\Karaoke\Cantopop\Anson Lo\我的支持型伴侶.mp3,/sdcard/Karaoke/Cantopop/Anson Lo/我的支持型伴侶.mp3,ok,5335282 bytes
+2026-11-17 08:30:36,lrc,D:\ai\Karaoke\Cantopop\Anson Lo\盧瀚霆 Anson Lo 《本命》Official Lyric Video.lrc,/sdcard/Karaoke/Cantopop/Anson Lo/盧瀚霆 Anson Lo 《本命》Official Lyric Video.lrc,ok,4105 bytes
+2026-11-17 08:30:37,push,D:\ai\Karaoke\Cantopop\Anson Lo\盧瀚霆 Anson Lo 《本命》Official Lyric Video.mp3,/sdcard/Karaoke/Cantopop/Anson Lo/盧瀚霆 Anson Lo 《本命》Official Lyric Video.mp3,ok,4969830 bytes
+2026-11-17 08:31:00,video,D:\ai\GetVideo\Cantopop\Anson Lo\盧瀚霆 Anson Lo 《本命》Official Lyric Video.mp4,/sdcard/Karaoke/Cantopop/Anson Lo/盧瀚霆 Anson Lo 《本命》Official Lyric Video.mp4,ok,148975782 bytes
+2026-11-17 08:31:01,lrc,D:\ai\Karaoke\Cantopop\Arvin\Arvin 曾傲棐《愛與(不)被愛》 [Official MV].lrc,/sdcard/Karaoke/Cantopop/Arvin/Arvin 曾傲棐《愛與(不)被愛》 [Official MV].lrc,ok,1787 bytes
+2026-11-17 08:31:02,push,D:\ai\Karaoke\Cantopop\Arvin\Arvin 曾傲棐《愛與(不)被愛》 [Official MV].mp3,/sdcard/Karaoke/Cantopop/Arvin/Arvin 曾傲棐《愛與(不)被愛》 [Official MV].mp3,ok,5387304 bytes
+2026-11-17 08:31:09,video,D:\ai\GetVideo\Cantopop\Arvin\Arvin 曾傲棐《愛與(不)被愛》 [Official MV].mp4,/sdcard/Karaoke/Cantopop/Arvin/Arvin 曾傲棐《愛與(不)被愛》 [Official MV].mp4,ok,42475013 bytes
+2026-11-17 08:31:09,lrc,D:\ai\Karaoke\Cantopop\CY\CY 陳宗澤《急口令》Official MV.lrc,/sdcard/Karaoke/Cantopop/CY/CY 陳宗澤《急口令》Official MV.lrc,ok,10281 bytes
+2026-11-17 08:31:10,push,D:\ai\Karaoke\Cantopop\CY\CY 陳宗澤《急口令》Official MV.mp3,/sdcard/Karaoke/Cantopop/CY/CY 陳宗澤《急口令》Official MV.mp3,ok,5647652 bytes
+2026-11-17 08:31:37,video,D:\ai\GetVideo\Cantopop\CY\CY 陳宗澤《急口令》Official MV.mp4,/sdcard/Karaoke/Cantopop/CY/CY 陳宗澤《急口令》Official MV.mp4,ok,169122978 bytes
+2026-11-17 08:31:38,lrc,D:\ai\Karaoke\Cantopop\CY\CY 陳宗澤《顧客永遠是對的》Official MV.lrc,/sdcard/Karaoke/Cantopop/CY/CY 陳宗澤《顧客永遠是對的》Official MV.lrc,ok,5186 bytes
+2026-11-17 08:31:39,push,D:\ai\Karaoke\Cantopop\CY\CY 陳宗澤《顧客永遠是對的》Official MV.mp3,/sdcard/Karaoke/Cantopop/CY/CY 陳宗澤《顧客永遠是對的》Official MV.mp3,ok,5327954 bytes
+2026-11-17 08:31:54,video,D:\ai\GetVideo\Cantopop\CY\CY 陳宗澤《顧客永遠是對的》Official MV.mp4,/sdcard/Karaoke/Cantopop/CY/CY 陳宗澤《顧客永遠是對的》Official MV.mp4,ok,89358431 bytes
+2026-11-17 08:31:55,lrc,D:\ai\Karaoke\Cantopop\CY\別人的地獄.lrc,/sdcard/Karaoke/Cantopop/CY/別人的地獄.lrc,ok,6403 bytes
+2026-11-17 08:31:56,push,D:\ai\Karaoke\Cantopop\CY\別人的地獄.mp3,/sdcard/Karaoke/Cantopop/CY/別人的地獄.mp3,ok,5675851 bytes
+2026-11-17 08:31:57,lrc,D:\ai\Karaoke\Cantopop\Candy\Candy 王家晴 《連名字你都說錯》（You Don’t Even Remember My Name）Official Music Video.lrc,/sdcard/Karaoke/Cantopop/Candy/Candy 王家晴 《連名字你都說錯》（You Don’t Even Remember My Name）Official Music Video.lrc,ok,6017 bytes
+2026-11-17 08:31:58,push,D:\ai\Karaoke\Cantopop\Candy\Candy 王家晴 《連名字你都說錯》（You Don’t Even Remember My Name）Official Music Video.mp3,/sdcard/Karaoke/Cantopop/Candy/Candy 王家晴 《連名字你都說錯》（You Don’t Even Remember My Name）Official Music Video.mp3,ok,5834904 bytes
+2026-11-17 08:32:19,video,D:\ai\GetVideo\Cantopop\Candy\Candy 王家晴 《連名字你都說錯》（You Don’t Even Remember My Name）Official Music Video.mp4,/sdcard/Karaoke/Cantopop/Candy/Candy 王家晴 《連名字你都說錯》（You Don’t Even Remember My Name）Official Music Video.mp4,ok,132516631 bytes
+2026-11-17 08:32:19,lrc,D:\ai\Karaoke\Cantopop\Day\Day 許軼《你離開我的時候  神奇的事發生了》（Thank You For Leaving Me）Official Music Video.lrc,/sdcard/Karaoke/Cantopop/Day/Day 許軼《你離開我的時候  神奇的事發生了》（Thank You For Leaving Me）Official Music Video.lrc,ok,5788 bytes
+2026-11-17 08:32:20,push,D:\ai\Karaoke\Cantopop\Day\Day 許軼《你離開我的時候  神奇的事發生了》（Thank You For Leaving Me）Official Music Video.mp3,/sdcard/Karaoke/Cantopop/Day/Day 許軼《你離開我的時候  神奇的事發生了》（Thank You For Leaving Me）Official Music Video.mp3,ok,5320832 bytes
+2026-11-17 08:32:29,video,D:\ai\GetVideo\Cantopop\Day\Day 許軼《你離開我的時候  神奇的事發生了》（Thank You For Leaving Me）Official Music Video.mp4,/sdcard/Karaoke/Cantopop/Day/Day 許軼《你離開我的時候  神奇的事發生了》（Thank You For Leaving Me）Official Music Video.mp4,ok,55970210 bytes
+2026-11-17 08:32:30,lrc,D:\ai\Karaoke\Cantopop\Dear Jane\Dear Jane - 到底發生過什麼事 What Happened (Official Music Video).lrc,/sdcard/Karaoke/Cantopop/Dear Jane/Dear Jane - 到底發生過什麼事 What Happened (Official Music Video).lrc,ok,6352 bytes
+2026-11-17 08:32:31,push,D:\ai\Karaoke\Cantopop\Dear Jane\Dear Jane - 到底發生過什麼事 What Happened (Official Music Video).mp3,/sdcard/Karaoke/Cantopop/Dear Jane/Dear Jane - 到底發生過什麼事 What Happened (Official Music Video).mp3,ok,6417095 bytes
+2026-11-17 08:32:46,video,D:\ai\GetVideo\Cantopop\Dear Jane\Dear Jane - 到底發生過什麼事 What Happened (Official Music Video).mp4,/sdcard/Karaoke/Cantopop/Dear Jane/Dear Jane - 到底發生過什麼事 What Happened (Official Music Video).mp4,ok,91167893 bytes
+2026-11-17 08:32:47,lrc,D:\ai\Karaoke\Cantopop\Dear Jane\Dear Jane - 現實太少偶像劇 Reality Over Drama（Official Music Video）.lrc,/sdcard/Karaoke/Cantopop/Dear Jane/Dear Jane - 現實太少偶像劇 Reality Over Drama（Official Music Video）.lrc,ok,2451 bytes
+2026-11-17 08:32:48,push,D:\ai\Karaoke\Cantopop\Dear Jane\Dear Jane - 現實太少偶像劇 Reality Over Drama（Official Music Video）.mp3,/sdcard/Karaoke/Cantopop/Dear Jane/Dear Jane - 現實太少偶像劇 Reality Over Drama（Official Music Video）.mp3,ok,7106766 bytes
+2026-11-17 08:33:04,video,D:\ai\GetVideo\Cantopop\Dear Jane\Dear Jane - 現實太少偶像劇 Reality Over Drama（Official Music Video）.mp4,/sdcard/Karaoke/Cantopop/Dear Jane/Dear Jane - 現實太少偶像劇 Reality Over Drama（Official Music Video）.mp4,ok,100104441 bytes
+2026-11-17 08:33:04,lrc,D:\ai\Karaoke\Cantopop\EGG\𝐄𝐆𝐆黃詠霖《沒誰保佑》Music Video.lrc,/sdcard/Karaoke/Cantopop/EGG/𝐄𝐆𝐆黃詠霖《沒誰保佑》Music Video.lrc,ok,5291 bytes
+2026-11-17 08:33:06,push,D:\ai\Karaoke\Cantopop\EGG\𝐄𝐆𝐆黃詠霖《沒誰保佑》Music Video.mp3,/sdcard/Karaoke/Cantopop/EGG/𝐄𝐆𝐆黃詠霖《沒誰保佑》Music Video.mp3,ok,5678014 bytes
+2026-11-17 08:33:30,video,D:\ai\GetVideo\Cantopop\EGG\𝐄𝐆𝐆黃詠霖《沒誰保佑》Music Video.mp4,/sdcard/Karaoke/Cantopop/EGG/𝐄𝐆𝐆黃詠霖《沒誰保佑》Music Video.mp4,ok,157516225 bytes
+2026-11-17 08:33:31,lrc,D:\ai\Karaoke\Cantopop\Edan\Edan 呂爵安 X Ryan 蔡俊彥《1206》Official Music Video.lrc,/sdcard/Karaoke/Cantopop/Edan/Edan 呂爵安 X Ryan 蔡俊彥《1206》Official Music Video.lrc,ok,3141 bytes
+2026-11-17 08:33:33,push,D:\ai\Karaoke\Cantopop\Edan\Edan 呂爵安 X Ryan 蔡俊彥《1206》Official Music Video.mp3,/sdcard/Karaoke/Cantopop/Edan/Edan 呂爵安 X Ryan 蔡俊彥《1206》Official Music Video.mp3,ok,8361678 bytes
+2026-11-17 08:34:01,video,D:\ai\GetVideo\Cantopop\Edan\Edan 呂爵安 X Ryan 蔡俊彥《1206》Official Music Video.mp4,/sdcard/Karaoke/Cantopop/Edan/Edan 呂爵安 X Ryan 蔡俊彥《1206》Official Music Video.mp4,ok,184453926 bytes
+2026-11-17 08:34:02,lrc,D:\ai\Karaoke\Cantopop\Edan\Edan 呂爵安《壞人一個》（It's My Bad）Official Music Video.lrc,/sdcard/Karaoke/Cantopop/Edan/Edan 呂爵安《壞人一個》（It's My Bad）Official Music Video.lrc,ok,5011 bytes
+2026-11-17 08:34:03,push,D:\ai\Karaoke\Cantopop\Edan\Edan 呂爵安《壞人一個》（It's My Bad）Official Music Video.mp3,/sdcard/Karaoke/Cantopop/Edan/Edan 呂爵安《壞人一個》（It's My Bad）Official Music Video.mp3,ok,5809235 bytes
+2026-11-17 08:34:17,video,D:\ai\GetVideo\Cantopop\Edan\Edan 呂爵安《壞人一個》（It's My Bad）Official Music Video.mp4,/sdcard/Karaoke/Cantopop/Edan/Edan 呂爵安《壞人一個》（It's My Bad）Official Music Video.mp4,ok,88402869 bytes
+2026-11-17 08:34:18,lrc,D:\ai\Karaoke\Cantopop\Edan\Edan 呂爵安《左手拖右手》（ Hand in Hand ） Official Music Video.lrc,/sdcard/Karaoke/Cantopop/Edan/Edan 呂爵安《左手拖右手》（ Hand in Hand ） Official Music Video.lrc,ok,2171 bytes
+2026-11-17 08:34:19,push,D:\ai\Karaoke\Cantopop\Edan\Edan 呂爵安《左手拖右手》（ Hand in Hand ） Official Music Video.mp3,/sdcard/Karaoke/Cantopop/Edan/Edan 呂爵安《左手拖右手》（ Hand in Hand ） Official Music Video.mp3,ok,8134693 bytes
+2026-11-17 08:34:49,video,D:\ai\GetVideo\Cantopop\Edan\Edan 呂爵安《左手拖右手》（ Hand in Hand ） Official Music Video.mp4,/sdcard/Karaoke/Cantopop/Edan/Edan 呂爵安《左手拖右手》（ Hand in Hand ） Official Music Video.mp4,ok,188835363 bytes
+2026-11-17 08:34:50,lrc,D:\ai\Karaoke\Cantopop\Fatboy\姜濤Keung To & Fatboy - 獅虎流 Official Music Video.lrc,/sdcard/Karaoke/Cantopop/Fatboy/姜濤Keung To & Fatboy - 獅虎流 Official Music Video.lrc,ok,3178 bytes
+2026-11-17 08:34:51,push,D:\ai\Karaoke\Cantopop\Fatboy\姜濤Keung To & Fatboy - 獅虎流 Official Music Video.mp3,/sdcard/Karaoke/Cantopop/Fatboy/姜濤Keung To & Fatboy - 獅虎流 Official Music Video.mp3,ok,5314204 bytes
+2026-11-17 08:35:14,video,D:\ai\GetVideo\Cantopop\Fatboy\姜濤Keung To & Fatboy - 獅虎流 Official Music Video.mp4,/sdcard/Karaoke/Cantopop/Fatboy/姜濤Keung To & Fatboy - 獅虎流 Official Music Video.mp4,ok,142236665 bytes
+2026-11-17 08:35:14,lrc,D:\ai\Karaoke\Cantopop\Frankie Chan\Frankie 陳瑞輝 《是日戀愛》（Loving u Leaving u）Official Music Video.lrc,/sdcard/Karaoke/Cantopop/Frankie Chan/Frankie 陳瑞輝 《是日戀愛》（Loving u Leaving u）Official Music Video.lrc,ok,1514 bytes
+2026-11-17 08:35:15,push,D:\ai\Karaoke\Cantopop\Frankie Chan\Frankie 陳瑞輝 《是日戀愛》（Loving u Leaving u）Official Music Video.mp3,/sdcard/Karaoke/Cantopop/Frankie Chan/Frankie 陳瑞輝 《是日戀愛》（Loving u Leaving u）Official Music Video.mp3,ok,7023336 bytes
+2026-11-17 08:35:37,video,D:\ai\GetVideo\Cantopop\Frankie Chan\Frankie 陳瑞輝 《是日戀愛》（Loving u Leaving u）Official Music Video.mp4,/sdcard/Karaoke/Cantopop/Frankie Chan/Frankie 陳瑞輝 《是日戀愛》（Loving u Leaving u）Official Music Video.mp4,ok,133716434 bytes
+2026-11-17 08:35:37,lrc,D:\ai\Karaoke\Cantopop\George Au\《CHILL CLUB 推介榜》第13周冠軍歌George Au 歐鎮灝《出什麼風頭》🏆.lrc,/sdcard/Karaoke/Cantopop/George Au/《CHILL CLUB 推介榜》第13周冠軍歌George Au 歐鎮灝《出什麼風頭》🏆.lrc,ok,1884 bytes
+2026-11-17 08:35:39,push,D:\ai\Karaoke\Cantopop\George Au\《CHILL CLUB 推介榜》第13周冠軍歌George Au 歐鎮灝《出什麼風頭》🏆.mp3,/sdcard/Karaoke/Cantopop/George Au/《CHILL CLUB 推介榜》第13周冠軍歌George Au 歐鎮灝《出什麼風頭》🏆.mp3,ok,6712355 bytes
+2026-11-17 08:36:01,video,D:\ai\GetVideo\Cantopop\George Au\《CHILL CLUB 推介榜》第13周冠軍歌George Au 歐鎮灝《出什麼風頭》🏆.mp4,/sdcard/Karaoke/Cantopop/George Au/《CHILL CLUB 推介榜》第13周冠軍歌George Au 歐鎮灝《出什麼風頭》🏆.mp4,ok,142406720 bytes
+2026-11-17 08:36:01,lrc,D:\ai\Karaoke\Cantopop\Gigi\炎明熹 Gigi Yim - 在搖搖板上相對的我們 Seesaw of Us ｜ Official Music Video.lrc,/sdcard/Karaoke/Cantopop/Gigi/炎明熹 Gigi Yim - 在搖搖板上相對的我們 Seesaw of Us ｜ Official Music Video.lrc,ok,4750 bytes
+2026-11-17 08:36:03,push,D:\ai\Karaoke\Cantopop\Gigi\炎明熹 Gigi Yim - 在搖搖板上相對的我們 Seesaw of Us ｜ Official Music Video.mp3,/sdcard/Karaoke/Cantopop/Gigi/炎明熹 Gigi Yim - 在搖搖板上相對的我們 Seesaw of Us ｜ Official Music Video.mp3,ok,4681162 bytes
+2026-11-17 08:36:15,video,D:\ai\GetVideo\Cantopop\Gigi\炎明熹 Gigi Yim - 在搖搖板上相對的我們 Seesaw of Us ｜ Official Music Video.mp4,/sdcard/Karaoke/Cantopop/Gigi/炎明熹 Gigi Yim - 在搖搖板上相對的我們 Seesaw of Us ｜ Official Music Video.mp4,ok,76712103 bytes
+2026-11-17 08:36:15,lrc,D:\ai\Karaoke\Cantopop\Goodnight Lillie\晚安莉莉《我看見今晚的月色很美，你呢？》 Tsuki ｜ Official Music Video.lrc,/sdcard/Karaoke/Cantopop/Goodnight Lillie/晚安莉莉《我看見今晚的月色很美，你呢？》 Tsuki ｜ Official Music Video.lrc,ok,5975 bytes
+2026-11-17 08:36:17,push,D:\ai\Karaoke\Cantopop\Goodnight Lillie\晚安莉莉《我看見今晚的月色很美，你呢？》 Tsuki ｜ Official Music Video.mp3,/sdcard/Karaoke/Cantopop/Goodnight Lillie/晚安莉莉《我看見今晚的月色很美，你呢？》 Tsuki ｜ Official Music Video.mp3,ok,6038356 bytes
+2026-11-17 08:36:37,video,D:\ai\GetVideo\Cantopop\Goodnight Lillie\晚安莉莉《我看見今晚的月色很美，你呢？》 Tsuki ｜ Official Music Video.mp4,/sdcard/Karaoke/Cantopop/Goodnight Lillie/晚安莉莉《我看見今晚的月色很美，你呢？》 Tsuki ｜ Official Music Video.mp4,ok,124524806 bytes
+2026-11-17 08:36:37,lrc,D:\ai\Karaoke\Cantopop\Hins Cheung\張敬軒 Hins Cheung《放棄的界限》(Eight Days of Silence) [Lyric Video].lrc,/sdcard/Karaoke/Cantopop/Hins Cheung/張敬軒 Hins Cheung《放棄的界限》(Eight Days of Silence) [Lyric Video].lrc,ok,5395 bytes
+2026-11-17 08:36:38,push,D:\ai\Karaoke\Cantopop\Hins Cheung\張敬軒 Hins Cheung《放棄的界限》(Eight Days of Silence) [Lyric Video].mp3,/sdcard/Karaoke/Cantopop/Hins Cheung/張敬軒 Hins Cheung《放棄的界限》(Eight Days of Silence) [Lyric Video].mp3,ok,5214783 bytes
+2026-11-17 08:37:04,video,D:\ai\GetVideo\Cantopop\Hins Cheung\張敬軒 Hins Cheung《放棄的界限》(Eight Days of Silence) [Lyric Video].mp4,/sdcard/Karaoke/Cantopop/Hins Cheung/張敬軒 Hins Cheung《放棄的界限》(Eight Days of Silence) [Lyric Video].mp4,ok,158579037 bytes
+2026-11-17 08:37:04,lrc,D:\ai\Karaoke\Cantopop\Ian Chan\Ian Chan 陳卓賢《 花邊細胞 》（ Gossip ）Official Music Video.lrc,/sdcard/Karaoke/Cantopop/Ian Chan/Ian Chan 陳卓賢《 花邊細胞 》（ Gossip ）Official Music Video.lrc,ok,1323 bytes
+2026-11-17 08:37:05,push,D:\ai\Karaoke\Cantopop\Ian Chan\Ian Chan 陳卓賢《 花邊細胞 》（ Gossip ）Official Music Video.mp3,/sdcard/Karaoke/Cantopop/Ian Chan/Ian Chan 陳卓賢《 花邊細胞 》（ Gossip ）Official Music Video.mp3,ok,4572852 bytes
+2026-11-17 08:37:23,video,D:\ai\GetVideo\Cantopop\Ian Chan\Ian Chan 陳卓賢《 花邊細胞 》（ Gossip ）Official Music Video.mp4,/sdcard/Karaoke/Cantopop/Ian Chan/Ian Chan 陳卓賢《 花邊細胞 》（ Gossip ）Official Music Video.mp4,ok,113798125 bytes
+2026-11-17 08:37:24,lrc,D:\ai\Karaoke\Cantopop\Ian Chan\Ian Chan 陳卓賢《Growth!》Official Music Video.lrc,/sdcard/Karaoke/Cantopop/Ian Chan/Ian Chan 陳卓賢《Growth!》Official Music Video.lrc,ok,3954 bytes
+2026-11-17 08:37:25,push,D:\ai\Karaoke\Cantopop\Ian Chan\Ian Chan 陳卓賢《Growth!》Official Music Video.mp3,/sdcard/Karaoke/Cantopop/Ian Chan/Ian Chan 陳卓賢《Growth!》Official Music Video.mp3,ok,5306489 bytes
+2026-11-17 08:37:38,video,D:\ai\GetVideo\Cantopop\Ian Chan\Ian Chan 陳卓賢《Growth!》Official Music Video.mp4,/sdcard/Karaoke/Cantopop/Ian Chan/Ian Chan 陳卓賢《Growth!》Official Music Video.mp4,ok,81002238 bytes
+2026-11-17 08:37:38,lrc,D:\ai\Karaoke\Cantopop\Ian Chan\Ian Chan 陳卓賢《傷口上灑辣椒醬》（Don't Rub Chilli Sauce Into The Wound）Official Music Video.lrc,/sdcard/Karaoke/Cantopop/Ian Chan/Ian Chan 陳卓賢《傷口上灑辣椒醬》（Don't Rub Chilli Sauce Into The Wound）Official Music Video.lrc,ok,5365 bytes
+2026-11-17 08:37:40,push,D:\ai\Karaoke\Cantopop\Ian Chan\Ian Chan 陳卓賢《傷口上灑辣椒醬》（Don't Rub Chilli Sauce Into The Wound）Official Music Video.mp3,/sdcard/Karaoke/Cantopop/Ian Chan/Ian Chan 陳卓賢《傷口上灑辣椒醬》（Don't Rub Chilli Sauce Into The Wound）Official Music Video.mp3,ok,5706475 bytes
+2026-11-17 08:37:57,video,D:\ai\GetVideo\Cantopop\Ian Chan\Ian Chan 陳卓賢《傷口上灑辣椒醬》（Don't Rub Chilli Sauce Into The Wound）Official Music Video.mp4,/sdcard/Karaoke/Cantopop/Ian Chan/Ian Chan 陳卓賢《傷口上灑辣椒醬》（Don't Rub Chilli Sauce Into The Wound）Official Music Video.mp4,ok,108238521 bytes
+2026-11-17 08:37:58,lrc,D:\ai\Karaoke\Cantopop\Ian Chan\Ian Chan 陳卓賢《四》Official Music Video.lrc,/sdcard/Karaoke/Cantopop/Ian Chan/Ian Chan 陳卓賢《四》Official Music Video.lrc,ok,5699 bytes
+2026-11-17 08:37:59,push,D:\ai\Karaoke\Cantopop\Ian Chan\Ian Chan 陳卓賢《四》Official Music Video.mp3,/sdcard/Karaoke/Cantopop/Ian Chan/Ian Chan 陳卓賢《四》Official Music Video.mp3,ok,5581813 bytes
+2026-11-17 08:38:04,video,D:\ai\GetVideo\Cantopop\Ian Chan\Ian Chan 陳卓賢《四》Official Music Video.mp4,/sdcard/Karaoke/Cantopop/Ian Chan/Ian Chan 陳卓賢《四》Official Music Video.mp4,ok,30565660 bytes
+2026-11-17 08:38:04,lrc,D:\ai\Karaoke\Cantopop\Ian Chan\Ian Chan 陳卓賢《在遠方的你》Official Music Video.lrc,/sdcard/Karaoke/Cantopop/Ian Chan/Ian Chan 陳卓賢《在遠方的你》Official Music Video.lrc,ok,2813 bytes
+2026-11-17 08:38:05,push,D:\ai\Karaoke\Cantopop\Ian Chan\Ian Chan 陳卓賢《在遠方的你》Official Music Video.mp3,/sdcard/Karaoke/Cantopop/Ian Chan/Ian Chan 陳卓賢《在遠方的你》Official Music Video.mp3,ok,4532137 bytes
+2026-11-17 08:38:24,video,D:\ai\GetVideo\Cantopop\Ian Chan\Ian Chan 陳卓賢《在遠方的你》Official Music Video.mp4,/sdcard/Karaoke/Cantopop/Ian Chan/Ian Chan 陳卓賢《在遠方的你》Official Music Video.mp4,ok,119459807 bytes
+2026-11-17 08:38:25,lrc,D:\ai\Karaoke\Cantopop\Ian Chan\Ian Chan 陳卓賢《無名指》（ Ring Finger ）Official Music Video.lrc,/sdcard/Karaoke/Cantopop/Ian Chan/Ian Chan 陳卓賢《無名指》（ Ring Finger ）Official Music Video.lrc,ok,5542 bytes
+2026-11-17 08:38:26,push,D:\ai\Karaoke\Cantopop\Ian Chan\Ian Chan 陳卓賢《無名指》（ Ring Finger ）Official Music Video.mp3,/sdcard/Karaoke/Cantopop/Ian Chan/Ian Chan 陳卓賢《無名指》（ Ring Finger ）Official Music Video.mp3,ok,6100793 bytes
+2026-11-17 08:38:53,video,D:\ai\GetVideo\Cantopop\Ian Chan\Ian Chan 陳卓賢《無名指》（ Ring Finger ）Official Music Video.mp4,/sdcard/Karaoke/Cantopop/Ian Chan/Ian Chan 陳卓賢《無名指》（ Ring Finger ）Official Music Video.mp4,ok,167958980 bytes
+2026-11-17 08:38:53,lrc,D:\ai\Karaoke\Cantopop\Ian Chan\Ian Chan 陳卓賢《無垢》（Satellite）Official Lyrics Video.lrc,/sdcard/Karaoke/Cantopop/Ian Chan/Ian Chan 陳卓賢《無垢》（Satellite）Official Lyrics Video.lrc,ok,4242 bytes
+2026-11-17 08:38:54,push,D:\ai\Karaoke\Cantopop\Ian Chan\Ian Chan 陳卓賢《無垢》（Satellite）Official Lyrics Video.mp3,/sdcard/Karaoke/Cantopop/Ian Chan/Ian Chan 陳卓賢《無垢》（Satellite）Official Lyrics Video.mp3,ok,5120005 bytes
+2026-11-17 08:38:55,lrc,D:\ai\Karaoke\Cantopop\Ian Chan\Ian Chan 陳卓賢《遲眠劑》（Insomax）Official Lyrics Video.lrc,/sdcard/Karaoke/Cantopop/Ian Chan/Ian Chan 陳卓賢《遲眠劑》（Insomax）Official Lyrics Video.lrc,ok,5498 bytes
+2026-11-17 08:38:56,push,D:\ai\Karaoke\Cantopop\Ian Chan\Ian Chan 陳卓賢《遲眠劑》（Insomax）Official Lyrics Video.mp3,/sdcard/Karaoke/Cantopop/Ian Chan/Ian Chan 陳卓賢《遲眠劑》（Insomax）Official Lyrics Video.mp3,ok,4641044 bytes
+2026-11-17 08:38:56,lrc,D:\ai\Karaoke\Cantopop\Ian Chan\Ian Chan 陳卓賢《那抹柔光，名為你》(The Light) Official Music Video.lrc,/sdcard/Karaoke/Cantopop/Ian Chan/Ian Chan 陳卓賢《那抹柔光，名為你》(The Light) Official Music Video.lrc,ok,4027 bytes
+2026-11-17 08:38:57,push,D:\ai\Karaoke\Cantopop\Ian Chan\Ian Chan 陳卓賢《那抹柔光，名為你》(The Light) Official Music Video.mp3,/sdcard/Karaoke/Cantopop/Ian Chan/Ian Chan 陳卓賢《那抹柔光，名為你》(The Light) Official Music Video.mp3,ok,4819288 bytes
+2026-11-17 08:39:30,video,D:\ai\GetVideo\Cantopop\Ian Chan\Ian Chan 陳卓賢《那抹柔光，名為你》(The Light) Official Music Video.mp4,/sdcard/Karaoke/Cantopop/Ian Chan/Ian Chan 陳卓賢《那抹柔光，名為你》(The Light) Official Music Video.mp4,ok,205269765 bytes
+2026-11-17 08:39:30,lrc,D:\ai\Karaoke\Cantopop\Ivy\Ivy 蘇雅琳《葬花辭》（The Flower Elegy）Official Music Video.lrc,/sdcard/Karaoke/Cantopop/Ivy/Ivy 蘇雅琳《葬花辭》（The Flower Elegy）Official Music Video.lrc,ok,5030 bytes
+2026-11-17 08:39:32,push,D:\ai\Karaoke\Cantopop\Ivy\Ivy 蘇雅琳《葬花辭》（The Flower Elegy）Official Music Video.mp3,/sdcard/Karaoke/Cantopop/Ivy/Ivy 蘇雅琳《葬花辭》（The Flower Elegy）Official Music Video.mp3,ok,6625617 bytes
+2026-11-17 08:39:48,video,D:\ai\GetVideo\Cantopop\Ivy\Ivy 蘇雅琳《葬花辭》（The Flower Elegy）Official Music Video.mp4,/sdcard/Karaoke/Cantopop/Ivy/Ivy 蘇雅琳《葬花辭》（The Flower Elegy）Official Music Video.mp4,ok,103288046 bytes
+2026-11-17 08:39:49,lrc,D:\ai\Karaoke\Cantopop\JW\JW² Love Song.lrc,/sdcard/Karaoke/Cantopop/JW/JW² Love Song.lrc,ok,4476 bytes
+2026-11-17 08:39:50,push,D:\ai\Karaoke\Cantopop\JW\JW² Love Song.mp3,/sdcard/Karaoke/Cantopop/JW/JW² Love Song.mp3,ok,5030756 bytes
+2026-11-17 08:39:50,lrc,D:\ai\Karaoke\Cantopop\Janice M. Vidal\衛蘭  - 一場誤會 MV.lrc,/sdcard/Karaoke/Cantopop/Janice M. Vidal/衛蘭  - 一場誤會 MV.lrc,ok,1659 bytes
+2026-11-17 08:39:51,push,D:\ai\Karaoke\Cantopop\Janice M. Vidal\衛蘭  - 一場誤會 MV.mp3,/sdcard/Karaoke/Cantopop/Janice M. Vidal/衛蘭  - 一場誤會 MV.mp3,ok,4927020 bytes
+2026-11-17 08:39:55,video,D:\ai\GetVideo\Cantopop\Janice M. Vidal\衛蘭  - 一場誤會 MV.mp4,/sdcard/Karaoke/Cantopop/Janice M. Vidal/衛蘭  - 一場誤會 MV.mp4,ok,20739646 bytes
+2026-11-17 08:39:55,lrc,D:\ai\Karaoke\Cantopop\Janice M. Vidal\衛蘭 - 心亂如麻 MV.lrc,/sdcard/Karaoke/Cantopop/Janice M. Vidal/衛蘭 - 心亂如麻 MV.lrc,ok,1755 bytes
+2026-11-17 08:39:57,push,D:\ai\Karaoke\Cantopop\Janice M. Vidal\衛蘭 - 心亂如麻 MV.mp3,/sdcard/Karaoke/Cantopop/Janice M. Vidal/衛蘭 - 心亂如麻 MV.mp3,ok,6438753 bytes
+2026-11-17 08:39:58,video,D:\ai\GetVideo\Cantopop\Janice M. Vidal\衛蘭 - 心亂如麻 MV.mp4,/sdcard/Karaoke/Cantopop/Janice M. Vidal/衛蘭 - 心亂如麻 MV.mp4,ok,8104401 bytes
+2026-11-17 08:39:59,lrc,D:\ai\Karaoke\Cantopop\Janice M. Vidal\衛蘭 Janice - 街燈晚餐 Official MV [Imagine] - 官方完整版.lrc,/sdcard/Karaoke/Cantopop/Janice M. Vidal/衛蘭 Janice - 街燈晚餐 Official MV [Imagine] - 官方完整版.lrc,ok,7234 bytes
+2026-11-17 08:40:00,push,D:\ai\Karaoke\Cantopop\Janice M. Vidal\衛蘭 Janice - 街燈晚餐 Official MV [Imagine] - 官方完整版.mp3,/sdcard/Karaoke/Cantopop/Janice M. Vidal/衛蘭 Janice - 街燈晚餐 Official MV [Imagine] - 官方完整版.mp3,ok,7764230 bytes
+2026-11-17 08:40:03,video,D:\ai\GetVideo\Cantopop\Janice M. Vidal\衛蘭 Janice - 街燈晚餐 Official MV [Imagine] - 官方完整版.mp4,/sdcard/Karaoke/Cantopop/Janice M. Vidal/衛蘭 Janice - 街燈晚餐 Official MV [Imagine] - 官方完整版.mp4,ok,19740319 bytes
+2026-11-17 08:40:04,lrc,D:\ai\Karaoke\Cantopop\Janice M. Vidal\衛蘭 Janice Vidal - 又~離家出走 Official Lyric MV.lrc,/sdcard/Karaoke/Cantopop/Janice M. Vidal/衛蘭 Janice Vidal - 又~離家出走 Official Lyric MV.lrc,ok,1785 bytes
+2026-11-17 08:40:05,push,D:\ai\Karaoke\Cantopop\Janice M. Vidal\衛蘭 Janice Vidal - 又~離家出走 Official Lyric MV.mp3,/sdcard/Karaoke/Cantopop/Janice M. Vidal/衛蘭 Janice Vidal - 又~離家出走 Official Lyric MV.mp3,ok,7433528 bytes
+2026-11-17 08:40:11,video,D:\ai\GetVideo\Cantopop\Janice M. Vidal\衛蘭 Janice Vidal - 又~離家出走 Official Lyric MV.mp4,/sdcard/Karaoke/Cantopop/Janice M. Vidal/衛蘭 Janice Vidal - 又~離家出走 Official Lyric MV.mp4,ok,37501017 bytes
+2026-11-17 08:40:12,lrc,D:\ai\Karaoke\Cantopop\Jason Chan\陳柏宇 Jason Chan - 尚有愛的資格 Worthy to love ｜ Official Music Video.lrc,/sdcard/Karaoke/Cantopop/Jason Chan/陳柏宇 Jason Chan - 尚有愛的資格 Worthy to love ｜ Official Music Video.lrc,ok,4782 bytes
+2026-11-17 08:40:13,push,D:\ai\Karaoke\Cantopop\Jason Chan\陳柏宇 Jason Chan - 尚有愛的資格 Worthy to love ｜ Official Music Video.mp3,/sdcard/Karaoke/Cantopop/Jason Chan/陳柏宇 Jason Chan - 尚有愛的資格 Worthy to love ｜ Official Music Video.mp3,ok,5383505 bytes
+2026-11-17 08:40:30,video,D:\ai\GetVideo\Cantopop\Jason Chan\陳柏宇 Jason Chan - 尚有愛的資格 Worthy to love ｜ Official Music Video.mp4,/sdcard/Karaoke/Cantopop/Jason Chan/陳柏宇 Jason Chan - 尚有愛的資格 Worthy to love ｜ Official Music Video.mp4,ok,109689202 bytes
+2026-11-17 08:40:31,lrc,D:\ai\Karaoke\Cantopop\Jeffrey\Jeffrey Ngai 魏浚笙 - Textbook Romantics (Official Music Video).lrc,/sdcard/Karaoke/Cantopop/Jeffrey/Jeffrey Ngai 魏浚笙 - Textbook Romantics (Official Music Video).lrc,ok,5128 bytes
+2026-11-17 08:40:32,push,D:\ai\Karaoke\Cantopop\Jeffrey\Jeffrey Ngai 魏浚笙 - Textbook Romantics (Official Music Video).mp3,/sdcard/Karaoke/Cantopop/Jeffrey/Jeffrey Ngai 魏浚笙 - Textbook Romantics (Official Music Video).mp3,ok,6585244 bytes
+2026-11-17 08:40:59,video,D:\ai\GetVideo\Cantopop\Jeffrey\Jeffrey Ngai 魏浚笙 - Textbook Romantics (Official Music Video).mp4,/sdcard/Karaoke/Cantopop/Jeffrey/Jeffrey Ngai 魏浚笙 - Textbook Romantics (Official Music Video).mp4,ok,171393862 bytes
+2026-11-17 08:41:00,lrc,D:\ai\Karaoke\Cantopop\Jeffrey\Jeffrey Ngai 魏浚笙 - 《已出之物》Our thing (Official Music Video).lrc,/sdcard/Karaoke/Cantopop/Jeffrey/Jeffrey Ngai 魏浚笙 - 《已出之物》Our thing (Official Music Video).lrc,ok,2594 bytes
+2026-11-17 08:41:01,push,D:\ai\Karaoke\Cantopop\Jeffrey\Jeffrey Ngai 魏浚笙 - 《已出之物》Our thing (Official Music Video).mp3,/sdcard/Karaoke/Cantopop/Jeffrey/Jeffrey Ngai 魏浚笙 - 《已出之物》Our thing (Official Music Video).mp3,ok,6057465 bytes
+2026-11-17 08:41:20,video,D:\ai\GetVideo\Cantopop\Jeffrey\Jeffrey Ngai 魏浚笙 - 《已出之物》Our thing (Official Music Video).mp4,/sdcard/Karaoke/Cantopop/Jeffrey/Jeffrey Ngai 魏浚笙 - 《已出之物》Our thing (Official Music Video).mp4,ok,119143222 bytes
+2026-11-17 08:41:21,lrc,D:\ai\Karaoke\Cantopop\Jer\Jer Lau 柳應廷《魔笛》（The Magic Flute）Official Music Video.lrc,/sdcard/Karaoke/Cantopop/Jer/Jer Lau 柳應廷《魔笛》（The Magic Flute）Official Music Video.lrc,ok,2486 bytes
+2026-11-17 08:41:22,push,D:\ai\Karaoke\Cantopop\Jer\Jer Lau 柳應廷《魔笛》（The Magic Flute）Official Music Video.mp3,/sdcard/Karaoke/Cantopop/Jer/Jer Lau 柳應廷《魔笛》（The Magic Flute）Official Music Video.mp3,ok,5834905 bytes
+2026-11-17 08:41:45,video,D:\ai\GetVideo\Cantopop\Jer\Jer Lau 柳應廷《魔笛》（The Magic Flute）Official Music Video.mp4,/sdcard/Karaoke/Cantopop/Jer/Jer Lau 柳應廷《魔笛》（The Magic Flute）Official Music Video.mp4,ok,145868032 bytes
+2026-11-17 08:41:46,lrc,D:\ai\Karaoke\Cantopop\Jeremy Lee\Jeremy 李駿傑《I Played Me Like A Fool》Official Music Video.lrc,/sdcard/Karaoke/Cantopop/Jeremy Lee/Jeremy 李駿傑《I Played Me Like A Fool》Official Music Video.lrc,ok,5598 bytes
+2026-11-17 08:41:47,push,D:\ai\Karaoke\Cantopop\Jeremy Lee\Jeremy 李駿傑《I Played Me Like A Fool》Official Music Video.mp3,/sdcard/Karaoke/Cantopop/Jeremy Lee/Jeremy 李駿傑《I Played Me Like A Fool》Official Music Video.mp3,ok,4849076 bytes
+2026-11-17 08:42:06,video,D:\ai\GetVideo\Cantopop\Jeremy Lee\Jeremy 李駿傑《I Played Me Like A Fool》Official Music Video.mp4,/sdcard/Karaoke/Cantopop/Jeremy Lee/Jeremy 李駿傑《I Played Me Like A Fool》Official Music Video.mp4,ok,118849175 bytes
+2026-11-17 08:42:06,lrc,D:\ai\Karaoke\Cantopop\Jessica\Jessica 陳苡臻 《潘朵拉盒子》 Official Music Video.lrc,/sdcard/Karaoke/Cantopop/Jessica/Jessica 陳苡臻 《潘朵拉盒子》 Official Music Video.lrc,ok,1829 bytes
+2026-11-17 08:42:08,push,D:\ai\Karaoke\Cantopop\Jessica\Jessica 陳苡臻 《潘朵拉盒子》 Official Music Video.mp3,/sdcard/Karaoke/Cantopop/Jessica/Jessica 陳苡臻 《潘朵拉盒子》 Official Music Video.mp3,ok,6125031 bytes
+2026-11-17 08:42:20,video,D:\ai\GetVideo\Cantopop\Jessica\Jessica 陳苡臻 《潘朵拉盒子》 Official Music Video.mp4,/sdcard/Karaoke/Cantopop/Jessica/Jessica 陳苡臻 《潘朵拉盒子》 Official Music Video.mp4,ok,80704429 bytes
+2026-11-17 08:42:21,lrc,D:\ai\Karaoke\Cantopop\Joey Yung\容祖兒 Joey Yung《陽光普照》(Bright Nights) [Official MV].lrc,/sdcard/Karaoke/Cantopop/Joey Yung/容祖兒 Joey Yung《陽光普照》(Bright Nights) [Official MV].lrc,ok,1759 bytes
+2026-11-17 08:42:22,push,D:\ai\Karaoke\Cantopop\Joey Yung\容祖兒 Joey Yung《陽光普照》(Bright Nights) [Official MV].mp3,/sdcard/Karaoke/Cantopop/Joey Yung/容祖兒 Joey Yung《陽光普照》(Bright Nights) [Official MV].mp3,ok,4808036 bytes
+2026-11-17 08:42:37,video,D:\ai\GetVideo\Cantopop\Joey Yung\容祖兒 Joey Yung《陽光普照》(Bright Nights) [Official MV].mp4,/sdcard/Karaoke/Cantopop/Joey Yung/容祖兒 Joey Yung《陽光普照》(Bright Nights) [Official MV].mp4,ok,92880767 bytes
+2026-11-17 08:42:37,lrc,D:\ai\Karaoke\Cantopop\Justin Lo\側田 Justin Lo  - 《美麗之最》Official MV.lrc,/sdcard/Karaoke/Cantopop/Justin Lo/側田 Justin Lo  - 《美麗之最》Official MV.lrc,ok,1956 bytes
+2026-11-17 08:42:38,push,D:\ai\Karaoke\Cantopop\Justin Lo\側田 Justin Lo  - 《美麗之最》Official MV.mp3,/sdcard/Karaoke/Cantopop/Justin Lo/側田 Justin Lo  - 《美麗之最》Official MV.mp3,ok,5452668 bytes
+2026-11-17 08:42:43,video,D:\ai\GetVideo\Cantopop\Justin Lo\側田 Justin Lo  - 《美麗之最》Official MV.mp4,/sdcard/Karaoke/Cantopop/Justin Lo/側田 Justin Lo  - 《美麗之最》Official MV.mp4,ok,28967853 bytes
+2026-11-17 08:42:44,lrc,D:\ai\Karaoke\Cantopop\Justin Lo\側田 Justin Lo -《命硬》 Official MV.lrc,/sdcard/Karaoke/Cantopop/Justin Lo/側田 Justin Lo -《命硬》 Official MV.lrc,ok,1506 bytes
+2026-11-17 08:42:45,push,D:\ai\Karaoke\Cantopop\Justin Lo\側田 Justin Lo -《命硬》 Official MV.mp3,/sdcard/Karaoke/Cantopop/Justin Lo/側田 Justin Lo -《命硬》 Official MV.mp3,ok,6980512 bytes
+2026-11-17 08:42:46,video,D:\ai\GetVideo\Cantopop\Justin Lo\側田 Justin Lo -《命硬》 Official MV.mp4,/sdcard/Karaoke/Cantopop/Justin Lo/側田 Justin Lo -《命硬》 Official MV.mp4,ok,7593916 bytes
+2026-11-17 08:42:47,lrc,D:\ai\Karaoke\Cantopop\Kaho Hung\洪嘉豪 Hung Kaho - 戒糖失敗 Sugarproof (Official Music Video).lrc,/sdcard/Karaoke/Cantopop/Kaho Hung/洪嘉豪 Hung Kaho - 戒糖失敗 Sugarproof (Official Music Video).lrc,ok,2041 bytes
+2026-11-17 08:42:48,push,D:\ai\Karaoke\Cantopop\Kaho Hung\洪嘉豪 Hung Kaho - 戒糖失敗 Sugarproof (Official Music Video).mp3,/sdcard/Karaoke/Cantopop/Kaho Hung/洪嘉豪 Hung Kaho - 戒糖失敗 Sugarproof (Official Music Video).mp3,ok,6055629 bytes
+2026-11-17 08:43:01,video,D:\ai\GetVideo\Cantopop\Kaho Hung\洪嘉豪 Hung Kaho - 戒糖失敗 Sugarproof (Official Music Video).mp4,/sdcard/Karaoke/Cantopop/Kaho Hung/洪嘉豪 Hung Kaho - 戒糖失敗 Sugarproof (Official Music Video).mp4,ok,77558718 bytes
+2026-11-17 08:43:01,lrc,D:\ai\Karaoke\Cantopop\Kaho Hung\洪嘉豪 Hung Kaho - 黑玻璃 Tinted Windows (Official Music Video).lrc,/sdcard/Karaoke/Cantopop/Kaho Hung/洪嘉豪 Hung Kaho - 黑玻璃 Tinted Windows (Official Music Video).lrc,ok,5383 bytes
+2026-11-17 08:43:02,push,D:\ai\Karaoke\Cantopop\Kaho Hung\洪嘉豪 Hung Kaho - 黑玻璃 Tinted Windows (Official Music Video).mp3,/sdcard/Karaoke/Cantopop/Kaho Hung/洪嘉豪 Hung Kaho - 黑玻璃 Tinted Windows (Official Music Video).mp3,ok,6703417 bytes
+2026-11-17 08:43:19,video,D:\ai\GetVideo\Cantopop\Kaho Hung\洪嘉豪 Hung Kaho - 黑玻璃 Tinted Windows (Official Music Video).mp4,/sdcard/Karaoke/Cantopop/Kaho Hung/洪嘉豪 Hung Kaho - 黑玻璃 Tinted Windows (Official Music Video).mp4,ok,101826681 bytes
+2026-11-17 08:43:19,lrc,D:\ai\Karaoke\Cantopop\Keung To\Better Man.lrc,/sdcard/Karaoke/Cantopop/Keung To/Better Man.lrc,ok,7271 bytes
+2026-11-17 08:43:20,push,D:\ai\Karaoke\Cantopop\Keung To\Better Man.mp3,/sdcard/Karaoke/Cantopop/Keung To/Better Man.mp3,ok,5096615 bytes
+2026-11-17 08:43:21,lrc,D:\ai\Karaoke\Cantopop\Keung To\Keung To 姜濤 《Boulder》“LAVA” LIVE VERSION.lrc,/sdcard/Karaoke/Cantopop/Keung To/Keung To 姜濤 《Boulder》“LAVA” LIVE VERSION.lrc,ok,5003 bytes
+2026-11-17 08:43:22,push,D:\ai\Karaoke\Cantopop\Keung To\Keung To 姜濤 《Boulder》“LAVA” LIVE VERSION.mp3,/sdcard/Karaoke/Cantopop/Keung To/Keung To 姜濤 《Boulder》“LAVA” LIVE VERSION.mp3,ok,5979539 bytes
+2026-11-17 08:44:07,video,D:\ai\GetVideo\Cantopop\Keung To\Keung To 姜濤 《Boulder》“LAVA” LIVE VERSION.mp4,/sdcard/Karaoke/Cantopop/Keung To/Keung To 姜濤 《Boulder》“LAVA” LIVE VERSION.mp4,ok,281444072 bytes
+2026-11-17 08:44:07,lrc,D:\ai\Karaoke\Cantopop\Keung To\Keung To 姜濤 《On a SunnyDay》  Official Music Video.lrc,/sdcard/Karaoke/Cantopop/Keung To/Keung To 姜濤 《On a SunnyDay》  Official Music Video.lrc,ok,2873 bytes
+2026-11-17 08:44:09,push,D:\ai\Karaoke\Cantopop\Keung To\Keung To 姜濤 《On a SunnyDay》  Official Music Video.mp3,/sdcard/Karaoke/Cantopop/Keung To/Keung To 姜濤 《On a SunnyDay》  Official Music Video.mp3,ok,6564942 bytes
+2026-11-17 08:44:27,video,D:\ai\GetVideo\Cantopop\Keung To\Keung To 姜濤 《On a SunnyDay》  Official Music Video.mp4,/sdcard/Karaoke/Cantopop/Keung To/Keung To 姜濤 《On a SunnyDay》  Official Music Video.mp4,ok,117733706 bytes
+2026-11-17 08:44:28,lrc,D:\ai\Karaoke\Cantopop\Keung To\Keung To 姜濤 《白果》 (Ginkgo) Official Music Video.lrc,/sdcard/Karaoke/Cantopop/Keung To/Keung To 姜濤 《白果》 (Ginkgo) Official Music Video.lrc,ok,6856 bytes
+2026-11-17 08:44:29,push,D:\ai\Karaoke\Cantopop\Keung To\Keung To 姜濤 《白果》 (Ginkgo) Official Music Video.mp3,/sdcard/Karaoke/Cantopop/Keung To/Keung To 姜濤 《白果》 (Ginkgo) Official Music Video.mp3,ok,5208055 bytes
+2026-11-17 08:44:47,video,D:\ai\GetVideo\Cantopop\Keung To\Keung To 姜濤 《白果》 (Ginkgo) Official Music Video.mp4,/sdcard/Karaoke/Cantopop/Keung To/Keung To 姜濤 《白果》 (Ginkgo) Official Music Video.mp4,ok,113723607 bytes
+2026-11-17 08:44:47,lrc,D:\ai\Karaoke\Cantopop\Keung To\你要倔強.lrc,/sdcard/Karaoke/Cantopop/Keung To/你要倔強.lrc,ok,6157 bytes
+2026-11-17 08:44:49,push,D:\ai\Karaoke\Cantopop\Keung To\你要倔強.mp3,/sdcard/Karaoke/Cantopop/Keung To/你要倔強.mp3,ok,5756337 bytes
+2026-11-17 08:44:49,lrc,D:\ai\Karaoke\Cantopop\Keung To\寂寞圓舞.lrc,/sdcard/Karaoke/Cantopop/Keung To/寂寞圓舞.lrc,ok,1925 bytes
+2026-11-17 08:44:50,push,D:\ai\Karaoke\Cantopop\Keung To\寂寞圓舞.mp3,/sdcard/Karaoke/Cantopop/Keung To/寂寞圓舞.mp3,ok,5370814 bytes
+2026-11-17 08:44:51,lrc,D:\ai\Karaoke\Cantopop\Kiri T\Kiri T - 就算我錯漏百出 Not Perfect [Official Music Video].lrc,/sdcard/Karaoke/Cantopop/Kiri T/Kiri T - 就算我錯漏百出 Not Perfect [Official Music Video].lrc,ok,5574 bytes
+2026-11-17 08:44:52,push,D:\ai\Karaoke\Cantopop\Kiri T\Kiri T - 就算我錯漏百出 Not Perfect [Official Music Video].mp3,/sdcard/Karaoke/Cantopop/Kiri T/Kiri T - 就算我錯漏百出 Not Perfect [Official Music Video].mp3,ok,5395695 bytes
+2026-11-17 08:45:13,video,D:\ai\GetVideo\Cantopop\Kiri T\Kiri T - 就算我錯漏百出 Not Perfect [Official Music Video].mp4,/sdcard/Karaoke/Cantopop/Kiri T/Kiri T - 就算我錯漏百出 Not Perfect [Official Music Video].mp4,ok,130506697 bytes
+2026-11-17 08:45:16,video,D:\ai\GetVideo\Videos\Other\陳奕迅 Eason Chan - 七百年後 (Official Music Video).mp4,/sdcard/Karaoke/Cantopop/Eason Chan/陳奕迅 Eason Chan - 七百年後 (Official Music Video).mp4,ok,19209024 bytes
+2026-11-17 08:45:19,video,D:\ai\GetVideo\EasonChan\Eason Chan\不來也不去.mp4,/sdcard/Karaoke/Cantopop/Eason Chan/不來也不去.mp4,ok,10946512 bytes
+2026-11-17 08:45:46,video,D:\ai\GetVideo\Videos\Other\陳奕迅 Eason Chan  《主旋律》MV首播!!!.mp4,/sdcard/Karaoke/Cantopop/Eason Chan/陳奕迅 Eason Chan  《主旋律》MV首播!!!.mp4,ok,170271573 bytes
+2026-11-17 08:45:48,video,D:\ai\GetVideo\Videos\Other\陳奕迅 Eason Chan《人來人往》[Official MV].mp4,/sdcard/Karaoke/Cantopop/Eason Chan/陳奕迅 Eason Chan《人來人往》[Official MV].mp4,ok,12640790 bytes
+2026-11-17 08:46:17,video,D:\ai\GetVideo\Videos\Other\《人啊人》Homo Sapiens 陳奕迅 Eason Chan [Official MV].mp4,/sdcard/Karaoke/Cantopop/Eason Chan/《人啊人》Homo Sapiens 陳奕迅 Eason Chan [Official MV].mp4,ok,180920301 bytes
+2026-11-17 08:46:21,video,D:\ai\GetVideo\EasonChan\Eason Chan\人車誌.mp4,/sdcard/Karaoke/Cantopop/Eason Chan/陳奕迅 - 人車誌 320Kbps Eason Chan.mp4,ok,15391705 bytes
+2026-11-17 08:46:26,video,D:\ai\GetVideo\Videos\Other\陳奕迅 - 《六月飛霜》MV.mp4,/sdcard/Karaoke/Cantopop/Eason Chan/陳奕迅 - 《六月飛霜》MV.mp4,ok,31029052 bytes
+2026-11-17 08:47:02,video,D:\ai\GetVideo\Videos\Other\陳奕迅 Eason Chan 《可以了》 IT’S OVER  [Official MV].mp4,/sdcard/Karaoke/Cantopop/Eason Chan/陳奕迅 Eason Chan 《可以了》 IT’S OVER  [Official MV].mp4,ok,228083646 bytes
+2026-11-17 08:47:20,video,D:\ai\GetVideo\Videos\Other\陳奕迅 Eason Chan - 《四季》MV.mp4,/sdcard/Karaoke/Cantopop/Eason Chan/陳奕迅 Eason Chan - 《四季》MV.mp4,ok,107964754 bytes
+2026-11-17 08:47:37,video,D:\ai\GetVideo\Videos\Other\《塵大師》陳奕迅 Eason Chan [Official MV].mp4,/sdcard/Karaoke/Cantopop/Eason Chan/《塵大師》陳奕迅 Eason Chan [Official MV].mp4,ok,101184086 bytes
+2026-11-17 08:47:52,video,D:\ai\GetVideo\EasonChan\Eason Chan\夕陽無限好.mp4,/sdcard/Karaoke/Cantopop/Eason Chan/夕陽無限好.mp4,ok,87865055 bytes
+2026-11-17 08:47:55,video,D:\ai\GetVideo\Videos\Other\陳奕迅Eason Chan《大開眼戒》[Lyrics MV].mp4,/sdcard/Karaoke/Cantopop/Eason Chan/陳奕迅Eason Chan《大開眼戒》[Lyrics MV].mp4,ok,15687604 bytes
+2026-11-17 08:47:58,video,D:\ai\GetVideo\Videos\Other\陳奕迅 天下無雙.mp4,/sdcard/Karaoke/Cantopop/Eason Chan/陳奕迅 天下無雙.mp4,ok,22328739 bytes
+2026-11-17 08:48:18,video,D:\ai\GetVideo\Videos\Other\《孤勇者》（《英雄聯盟：雙城之戰》動畫劇集中文主題曲）陳奕迅 Eason Chan [Official MV].mp4,/sdcard/Karaoke/Cantopop/Eason Chan/《孤勇者》（《英雄聯盟：雙城之戰》動畫劇集中文主題曲）陳奕迅 Eason Chan [Official MV].mp4,ok,122278923 bytes
+2026-11-17 08:48:24,video,D:\ai\GetVideo\Videos\Other\陳奕迅 Eason Chan《忘記歌詞》Official 官方完整版 [首播] [MV].mp4,/sdcard/Karaoke/Cantopop/Eason Chan/陳奕迅 Eason Chan《忘記歌詞》Official 官方完整版 [首播] [MV].mp4,ok,37975427 bytes
+2026-11-17 08:48:27,video,D:\ai\GetVideo\Videos\Other\陳奕迅 Eason Chan《明年今日》[Official MV].mp4,/sdcard/Karaoke/Cantopop/Eason Chan/陳奕迅 Eason Chan《明年今日》[Official MV].mp4,ok,11768814 bytes
+2026-11-17 08:48:28,video,D:\ai\GetVideo\EasonChan\Eason Chan\最佳損友.mp4,/sdcard/Karaoke/Cantopop/Eason Chan/最佳損友.mp4,ok,6996355 bytes
+2026-11-17 08:48:31,video,D:\ai\GetVideo\EasonChan\Eason Chan\最後派對.mp4,/sdcard/Karaoke/Cantopop/Eason Chan/最後派對.mp4,ok,15079830 bytes
+2026-11-17 08:48:34,video,D:\ai\GetVideo\Videos\Other\陳奕迅 Eason Chan - 沙龍 (Official Music Video).mp4,/sdcard/Karaoke/Cantopop/Eason Chan/陳奕迅 Eason Chan - 沙龍 (Official Music Video).mp4,ok,17851748 bytes
+2026-11-17 08:49:53,video,D:\ai\GetVideo\Videos\Other\陳奕迅 - 淘汰 HD.mp4,/sdcard/Karaoke/Cantopop/Eason Chan/陳奕迅 - 淘汰 HD.mp4,ok,184732911 bytes
+2026-11-17 08:50:09,video,D:\ai\GetVideo\Videos\Other\陳奕迅 Eason Chan《漸漸》AM I ME - eason and the duo band [Official MV].mp4,/sdcard/Karaoke/Cantopop/Eason Chan/陳奕迅 Eason Chan《漸漸》AM I ME - eason and the duo band [Official MV].mp4,ok,96604651 bytes
+2026-11-17 08:50:22,video,D:\ai\GetVideo\Videos\Other\陳奕迅 Eason Chan - 無人之境 (Official Music Video).mp4,/sdcard/Karaoke/Cantopop/Eason Chan/陳奕迅 Eason Chan - 無人之境 (Official Music Video).mp4,ok,77290934 bytes
+2026-11-17 08:50:35,video,D:\ai\GetVideo\Videos\Other\《盲婚啞嫁》陳奕迅 Eason Chan [Official MV].mp4,/sdcard/Karaoke/Cantopop/Eason Chan/《盲婚啞嫁》陳奕迅 Eason Chan [Official MV].mp4,ok,81482625 bytes
+2026-11-17 08:50:42,video,D:\ai\GetVideo\Videos\Other\陳奕迅 - 《苦瓜》MV.mp4,/sdcard/Karaoke/Cantopop/Eason Chan/陳奕迅 - 《苦瓜》MV.mp4,ok,41362837 bytes
+2026-11-17 08:50:44,video,D:\ai\GetVideo\Videos\Other\陳奕迅 葡萄成熟時 MV.mp4,/sdcard/Karaoke/Cantopop/Eason Chan/陳奕迅 葡萄成熟時 MV.mp4,ok,11002787 bytes
+2026-11-17 08:51:14,video,D:\ai\GetVideo\Videos\Other\陳奕迅 Eason Chan - 重口味 (Official Music Video) (Full Version).mp4,/sdcard/Karaoke/Cantopop/Eason Chan/陳奕迅 Eason Chan - 重口味 (Official Music Video) (Full Version).mp4,ok,182935802 bytes
+2026-11-17 08:51:15,video,D:\ai\GetVideo\Videos\Other\陳奕迅Eason Chan《防不勝防》[Lyrics MV].mp4,/sdcard/Karaoke/Cantopop/Eason Chan/陳奕迅Eason Chan《防不勝防》[Lyrics MV].mp4,ok,8170734 bytes
+2026-11-17 08:51:21,video,D:\ai\GetVideo\Videos\Other\陳奕迅 Eason Chan - 陀飛輪 (Official Music Video).mp4,/sdcard/Karaoke/Cantopop/Eason Chan/陳奕迅 Eason Chan - 陀飛輪 (Official Music Video).mp4,ok,31584788 bytes
+2026-11-17 08:51:36,video,D:\ai\GetVideo\EasonChan\Eason Chan\黃金時代.mp4,/sdcard/Karaoke/Cantopop/Eason Chan/黃金時代.mp4,ok,89552569 bytes
+2026-11-17 08:52:21,video,D:\ai\GetVideo\Videos\Other\陳奕迅 Eason Chan - 黑洞 (Official Music Video).mp4,/sdcard/Karaoke/Cantopop/Eason Chan/陳奕迅 Eason Chan - 黑洞 (Official Music Video).mp4,ok,285083355 bytes
+2026-11-17 08:52:22,meta,D:\ai\Karaoke\crops.txt,/sdcard/Karaoke/crops.txt,ok,
+2026-11-17 08:52:22,meta,D:\ai\Karaoke\static_videos.txt,/sdcard/Karaoke/static_videos.txt,ok,
+2026-11-17 08:52:52,rescan,,,ok,songCount 59 -> 123
+2026-11-17 08:52:52,sync,,,ok,"run finished: made 41, aligned 64, held 9, pushed 94 songs (9956 MB), failed 0, box connected, rescan ok (59 -> 123 songs), 353 min; ATTENTION: HELD Cantopop/Theresa Fu/方力申Alex Fong x傅穎⧸傅寶誼Theresa Fu-自欺欺人+成年禮: lyrics cover only 21% of the song (last line 3:35 of 16:42) | HELD Mandarin/Daniel Chan/陈晓东《心有独钟》江蘇衛視 不凡的改變 第4期 HD: lyrics run past the end of the song (last line 4:01, song 1:44): wrong version | HELD Mandarin/Mayday/你不是真正的快樂: lyrics run past the end of the song (last line 4:33, song 3:37): wrong version | HELD Mandarin/Yanzi Sun/孫燕姿 Sun Yan-Zi - 第一天 First Day (official 官方完整版MV): lyrics run past the end of the song (last line 89:28, song 4:14): wrong version | HELD JPop/Kvi Baba/Kvi Baba ⧸ BPM feat. KREVA (Music Video): lyric file has fewer than 3 timed lines | HELD JPop/YAO/ありふれた世界の果てに (feat. Awich, CHICO CARLITO, ONE OK ROCK & Paledusk): lyric file has fewer than 3 timed lines | HELD JPop/back number/back number - 「瞬き」Music Video: lyrics run past the end of the song (last line 4:56, song 2:40): wrong version | HELD KPop/G-DRAGON/G-DRAGON - 삐딱하게(CROOKED) M⧸V: lyrics run past the end of the song (last line 4:09, song 3:45): wrong version | HELD KPop/YESUNG/超好聽！藝聲感情豐沛演唱《墨紙》_《認識的哥哥》第364集_friDay影音韓綜線上看: lyrics run past the end of the song (last line 3:35, song 2:14): wrong version | Cantopop/Anson Lo/Anson Lo 盧瀚霆 《Charisma》Official Music Video: no line could be timed exactly (84 estimated); check it on the TV | Cantopop/Anson Lo/Anson Lo 盧瀚霆 《Gimme Gimme》Official Music Video: no line could be timed exactly (95 estimated); check it on the TV | Cantopop/Anson Lo/Anson Lo 盧瀚霆 《Rude Boy》 - 《ANSON LO ”KINGDOM“ LIVE 2025》 【4K Multi-Angle】: no line could be timed exactly (82 estimated); check it on the TV | Cantopop/Anson Lo/Anson Lo 盧瀚霆 《goofy》Official Music Video: no line could be timed exactly (57 estimated); check it on the TV | Cantopop/Arvin/Arvin 曾傲棐《愛與(不)被愛》 [Official MV]: no line could be timed exactly (49 estimated); check it on the TV | Cantopop/Dear Jane/Dear Jane - 現實太少偶像劇 Reality Over Drama（Official Music Video）: no line could be timed exactly (61 estimated); check it on the TV | Cantopop/Edan/Edan 呂爵安 X Ryan 蔡俊彥《1206》Official Music Video: no line could be timed exactly (104 estimated); check it on the TV | Cantopop/Edan/Edan 呂爵安《左手拖右手》（ Hand in Hand ） Official Music Video: no line could be timed exactly (53 estimated); check it on the TV | Cantopop/Fatboy/姜濤Keung To & Fatboy - 獅虎流 Official Music Video: no line could be timed exactly (109 estimated); check it on the TV | Cantopop/Frankie Chan/Frankie 陳瑞輝 《是日戀愛》（Loving u Leaving u）Official Music Video: no line could be timed exactly (40 estimated); check it on the TV | Cantopop/George Au/《CHILL CLUB 推介榜》第13周冠軍歌George Au 歐鎮灝《出什麼風頭》🏆: no line could be timed exactly (43 estimated); check it on the TV | Cantopop/Ian Chan/Ian Chan 陳卓賢《 花邊細胞 》（ Gossip ）Official Music Video: no line could be timed exactly (35 estimated); check it on the TV | Cantopop/Janice M. Vidal/衛蘭  - 一場誤會 MV: no line could be timed exactly (45 estimated); check it on the TV | Cantopop/Janice M. Vidal/衛蘭 Janice Vidal - 又~離家出走 Official Lyric MV: no line could be timed exactly (50 estimated); check it on the TV | Cantopop/Jeffrey/Jeffrey Ngai 魏浚笙 - 《已出之物》Our thing (Official Music Video): no line could be timed exactly (50 estimated); check it on the TV | Cantopop/Jer/Jer Lau 柳應廷《魔笛》（The Magic Flute）Official Music Video: no line could be timed exactly (65 estimated); check it on the TV | Cantopop/Jessica/Jessica 陳苡臻 《潘朵拉盒子》 Official Music Video: no line could be timed exactly (37 estimated); check it on the TV | Cantopop/Joey Yung/容祖兒 Joey Yung《陽光普照》(Bright Nights) [Official MV]: no line could be timed exactly (43 estimated); check it on the TV | Cantopop/Justin Lo/側田 Justin Lo  - 《美麗之最》Official MV: no line could be timed exactly (58 estimated); check it on the TV | Cantopop/Justin Lo/側田 Justin Lo -《命硬》 Official MV: no line could be timed exactly (46 estimated); check it on the TV | Cantopop/Kaho Hung/洪嘉豪 Hung Kaho - 戒糖失敗 Sugarproof (Official Music Video): no line could be timed exactly (49 estimated); check it on the TV | Cantopop/Keung To/Keung To 姜濤 《On a SunnyDay》  Official Music Video: no line could be timed exactly (78 estimated); check it on the TV | processing time limit reached: 183 songs left to align for the next nights"

@@ -657,7 +657,7 @@ def meta_refresh(cand, new_vid):
         dirs = sorted({os.path.dirname(s.video) for s in new_vid})
         sub([py, os.path.join(HERE, "detect_crops.py")] + dirs, 3600, "detect_crops")
         sub([py, os.path.join(HERE, "find_static_videos.py")], 3600, "find_static_videos")
-    for artist in sorted({s.artist for s, _ in cand}):
+    for artist in sorted({s.artist for s in cand}):
         sub([py, os.path.join(HERE, "make_titles.py"), "--artist", artist], 600, "make_titles " + artist)
     sub([py, os.path.join(HERE, "make_years.py")], 1800, "make_years")
 
