@@ -18,7 +18,7 @@ import argparse, os, shutil, subprocess, sys, tempfile, time
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
-from ledger import log
+from ledger import log, mapped
 from normalize_karaoke import measure, apply_gain
 DEFAULT_PY = os.path.join(HERE, "..", "demucs-venv", "Scripts", "python.exe")
 ADB = os.path.join(HERE, "..", "sdk", "platform-tools", "adb.exe")
@@ -72,8 +72,9 @@ def main():
     a = ap.parse_args()
 
     songs = find_songs(a.library, a.only)
+    renamed = mapped()      # sources already made under another (long) name: never redo them
     todo = [(l, ar, p) for l, ar, p in songs
-            if not os.path.exists(os.path.join(a.out, l, ar, os.path.basename(p)))]
+            if p.lower() not in renamed and not os.path.exists(os.path.join(a.out, l, ar, os.path.basename(p)))]
     if a.limit:
         todo = todo[:a.limit]
     print(f"{len(songs)} songs found, {len(todo)} to process (output: {a.out})")

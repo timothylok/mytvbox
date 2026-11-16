@@ -29,7 +29,7 @@ public class KeepAliveService extends Service {
         Notification.Builder b;
         if (Build.VERSION.SDK_INT >= 26) {
             NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-            nm.createNotificationChannel(new NotificationChannel(CHANNEL, "Karaoke", NotificationManager.IMPORTANCE_LOW));
+            nm.createNotificationChannel(new NotificationChannel(CHANNEL, "K歌之王", NotificationManager.IMPORTANCE_LOW));
             b = new Notification.Builder(this, CHANNEL);
         } else {
             b = new Notification.Builder(this);

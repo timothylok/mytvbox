@@ -7,7 +7,7 @@
     <uses-feature android:name="android.software.leanback" android:required="false" />
     <uses-feature android:name="android.hardware.touchscreen" android:required="false" />
     <application
-        android:label="Karaoke"
+        android:label="K歌之王"
         android:icon="@drawable/ic_launcher"
         android:theme="@android:style/Theme.DeviceDefault.NoActionBar"
         android:allowBackup="false"

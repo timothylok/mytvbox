@@ -83,6 +83,17 @@ Lesson: check that the `.lrc` length fits the mp3 and that the first aligned lin
 
 **Gotchas:** in Git Bash with `MSYS_NO_PATHCONV=1`, give adb.exe `D:/...` paths, not `/d/...`; `align_folder.py` takes ~4 min per song (use the background option); folder names like `Gareth.T` have no trailing dot.
 
+## Daily sync job (2026-11-16)
+
+`tools/scripts/daily_sync.py`, Task Scheduler task **Karaoke Daily Sync** (03:00, hidden through `daily_sync_hidden.vbs`, 8 h limit, no overlap).
+Pipeline per song: make_karaoke (Demucs + normalize) -> align (Whisper language by library: zh/ja/ko/en; originals kept in `tools/daily_sync/orig`) -> quarantine check
+-> push lrc, mp3, mp4 (`.part` + rename + size check) -> crops/titles/years/static txt -> POST `/api/rescan`. Only processed-lyric songs are pushed; the push waits for an idle TV.
+Logs/state: `logs/daily_sync.log`, `logs/last_run.json`, `logs/daily_sync_state.json` (held songs, failure counters; `--list-held / --hold / --release`), every step in `processed.csv`
+(steps push, lrc, video, meta, quarantine, rescan, sync). `--dry-run` shows the plan. Quarantine = lyrics longer than the song or covering < 40 %; held songs release when the `.lrc` changes.
+Held by hand: BlackGuy + 7 Eason Chan songs. `make_karaoke.py` now skips sources with a ledger `map` row (Eason Chan would otherwise be re-made under clean names).
+The ~235 plain-lrc songs (incl. 88 K/J-pop) align over several nights; K/J-pop alignment quality is untested. First nightly run will also push ~31 Eason Chan videos (~1.5 GB).
+Not yet done: first unattended 03:00 run (check `logs/last_run.json` in the morning). The app was renamed to **K歌之王** (label, notification channel, idle title) 2026-11-16.
+
 ## Outstanding tasks
 
 0. **USB drive repaired 2026-11-10** (`chkdsk F: /f` fixed the exFAT bitmap/directory damage, 0 bad sectors, all 609 mp3s read OK, stale .part files deleted). It is NOT on the box now: the box runs from internal storage with only the Eason Chan set (movies deleted). Next: decide whether to put the drive back, and finish the video copy FROM THE PC with the drive plugged into the PC (`copy_videos.py` pushes via adb - needs rewriting to copy to F:\Karaoke directly), skipping `static_videos.txt` songs.

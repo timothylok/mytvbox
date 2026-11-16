@@ -166,7 +166,7 @@ public class MainActivity extends Activity implements Server.Host {
         idleBox.setGravity(Gravity.CENTER);
         idleBox.setBackgroundColor(0xFF101418);
         TextView idleTitle = new TextView(this);
-        idleTitle.setText("Karaoke");
+        idleTitle.setText("K歌之王");
         idleTitle.setTextColor(0xFFFFE23B);
         idleTitle.setTextSize(64);
         idleTitle.setGravity(Gravity.CENTER);

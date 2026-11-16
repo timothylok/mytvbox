@@ -1089,3 +1089,81 @@
 2026-11-14 13:16:56,crop,D:\ai\GetVideo\Cantopop\Gareth.T\gareth.t -  緊急聯絡人 (official video).mp4,,ok,no bars
 2026-11-14 13:16:57,crop,D:\ai\GetVideo\Cantopop\Gareth.T\gareth.t - 淺粉紅 pale pink (official video).mp4,,ok,no bars
 2026-11-14 13:16:57,crop,D:\ai\GetVideo\Cantopop\Gareth.T\gareth.t - 用背脊唱情歌 (official video).mp4,,ok,no bars
+2026-11-16 15:06:57,quarantine,Cantopop/BlackGuy/跳舞街,,held,"lyric file does not fit the audio (held since 2026-11-10/16); needs a matching .lrc, then it is released automatically (by hand)"
+2026-11-16 15:06:57,quarantine,Cantopop/Eason Chan/陳奕迅 Eason Chan - 任我行 (Official Music Video),,held,"lyric file does not fit the audio (held since 2026-11-10/16); needs a matching .lrc, then it is released automatically (by hand)"
+2026-11-16 15:06:58,quarantine,Cantopop/Eason Chan/陳奕迅 Eason Chan《單車》[Official MV],,held,"lyric file does not fit the audio (held since 2026-11-10/16); needs a matching .lrc, then it is released automatically (by hand)"
+2026-11-16 15:06:58,quarantine,Cantopop/Eason Chan/幸福摩天輪 - 陳奕迅,,held,"lyric file does not fit the audio (held since 2026-11-10/16); needs a matching .lrc, then it is released automatically (by hand)"
+2026-11-16 15:06:58,quarantine,Cantopop/Eason Chan/《是但求其愛》陳奕迅 Eason Chan [Official MV],,held,"lyric file does not fit the audio (held since 2026-11-10/16); needs a matching .lrc, then it is released automatically (by hand)"
+2026-11-16 15:06:58,quarantine,Cantopop/Eason Chan/陳奕迅 Eason Chan - 每一個明天 (Official Music Video),,held,"lyric file does not fit the audio (held since 2026-11-10/16); needs a matching .lrc, then it is released automatically (by hand)"
+2026-11-16 15:06:59,quarantine,Cantopop/Eason Chan/陳奕迅 Eason Chan - 無條件 (Official Music Video),,held,"lyric file does not fit the audio (held since 2026-11-10/16); needs a matching .lrc, then it is released automatically (by hand)"
+2026-11-16 15:06:59,quarantine,Cantopop/Eason Chan/《致明日的舞》A DANCE FOR TOMORROW 陳奕迅 Eason Chan [Official MV],,held,"lyric file does not fit the audio (held since 2026-11-10/16); needs a matching .lrc, then it is released automatically (by hand)"
+2026-11-16 15:07:39,sync,,,ok,run started
+2026-11-16 15:07:42,crop,D:\ai\GetVideo\EasonChan\Eason Chan\1874.mp4,D:\ai\Karaoke\crops.txt,ok,0:140:1920:800 in 1920x1080
+2026-11-16 15:07:42,crop,D:\ai\GetVideo\EasonChan\Eason Chan\K歌之王.mp4,,ok,no bars
+2026-11-16 15:07:42,crop,D:\ai\GetVideo\EasonChan\Eason Chan\Lonely Christmas.mp4,,ok,no bars
+2026-11-16 15:07:43,crop,D:\ai\GetVideo\EasonChan\Eason Chan\Shall We Talk.mp4,,ok,no bars
+2026-11-16 15:07:43,crop,D:\ai\GetVideo\EasonChan\Eason Chan\一絲不掛.mp4,D:\ai\Karaoke\crops.txt,ok,0:52:480:270 in 480x360
+2026-11-16 15:07:43,crop,D:\ai\GetVideo\EasonChan\Eason Chan\七百年後.mp4,,ok,no bars
+2026-11-16 15:07:43,crop,D:\ai\GetVideo\EasonChan\Eason Chan\不來也不去.mp4,,ok,no bars
+2026-11-16 15:07:44,crop,D:\ai\GetVideo\EasonChan\Eason Chan\主旋律.mp4,,ok,no bars
+2026-11-16 15:07:44,crop,D:\ai\GetVideo\EasonChan\Eason Chan\人來人往.mp4,D:\ai\Karaoke\crops.txt,ok,134:104:514:274 in 656x480
+2026-11-16 15:07:45,crop,D:\ai\GetVideo\EasonChan\Eason Chan\人啊人.mp4,,ok,no bars
+2026-11-16 15:07:46,crop,D:\ai\GetVideo\EasonChan\Eason Chan\人車誌.mp4,,ok,no bars
+2026-11-16 15:07:46,crop,D:\ai\GetVideo\EasonChan\Eason Chan\今天只做一件事.mp4,D:\ai\Karaoke\crops.txt,ok,80:0:480:480 in 640x480
+2026-11-16 15:07:47,crop,D:\ai\GetVideo\EasonChan\Eason Chan\今日.mp4,D:\ai\Karaoke\crops.txt,ok,330:10:1530:1008 in 1920x1080
+2026-11-16 15:07:48,crop,D:\ai\GetVideo\EasonChan\Eason Chan\任我行.mp4,,ok,no bars
+2026-11-16 15:07:48,crop,D:\ai\GetVideo\EasonChan\Eason Chan\六月飛霜.mp4,D:\ai\Karaoke\crops.txt,ok,18:58:412:230 in 448x336
+2026-11-16 15:07:48,crop,D:\ai\GetVideo\EasonChan\Eason Chan\十面埋伏.mp4,,ok,no bars
+2026-11-16 15:07:49,crop,D:\ai\GetVideo\EasonChan\Eason Chan\反高潮.mp4,D:\ai\Karaoke\crops.txt,ok,264:0:912:1080 in 1440x1080
+2026-11-16 15:07:50,crop,D:\ai\GetVideo\EasonChan\Eason Chan\可以了.mp4,,ok,no bars
+2026-11-16 15:07:50,crop,D:\ai\GetVideo\EasonChan\Eason Chan\單車.mp4,D:\ai\Karaoke\crops.txt,ok,8:86:582:312 in 600x480
+2026-11-16 15:07:52,crop,D:\ai\GetVideo\EasonChan\Eason Chan\四季.mp4,,ok,no bars
+2026-11-16 15:07:53,crop,D:\ai\GetVideo\EasonChan\Eason Chan\塵大師.mp4,D:\ai\Karaoke\crops.txt,ok,0:138:1920:804 in 1920x1080
+2026-11-16 15:07:54,crop,D:\ai\GetVideo\EasonChan\Eason Chan\夕陽無限好.mp4,D:\ai\Karaoke\crops.txt,ok,14:0:1426:972 in 1440x1080
+2026-11-16 15:07:55,crop,D:\ai\GetVideo\EasonChan\Eason Chan\大開眼戒.mp4,D:\ai\Karaoke\crops.txt,ok,46:0:1874:1034 in 1920x1080
+2026-11-16 15:07:55,crop,D:\ai\GetVideo\EasonChan\Eason Chan\天下無雙.mp4,D:\ai\Karaoke\crops.txt,ok,0:30:318:190 in 320x238
+2026-11-16 15:07:55,crop,D:\ai\GetVideo\EasonChan\Eason Chan\天使的禮物.mp4,D:\ai\Karaoke\crops.txt,ok,56:2:534:478 in 656x480
+2026-11-16 15:07:55,crop,D:\ai\GetVideo\EasonChan\Eason Chan\太陽照常升起.mp4,D:\ai\Karaoke\crops.txt,ok,222:30:410:420 in 854x480
+2026-11-16 15:07:57,crop,D:\ai\GetVideo\EasonChan\Eason Chan\孤勇者.mp4,D:\ai\Karaoke\crops.txt,ok,0:164:1920:830 in 1920x1080
+2026-11-16 15:07:57,crop,D:\ai\GetVideo\EasonChan\Eason Chan\富士山下.mp4,D:\ai\Karaoke\crops.txt,ok,0:20:496:276 in 496x300
+2026-11-16 15:07:57,crop,D:\ai\GetVideo\EasonChan\Eason Chan\幸福摩天輪.mp4,D:\ai\Karaoke\crops.txt,ok,224:0:1634:1080 in 1920x1080
+2026-11-16 15:07:57,crop,D:\ai\GetVideo\EasonChan\Eason Chan\心的距離.mp4,D:\ai\Karaoke\crops.txt,ok,0:66:640:374 in 640x480
+2026-11-16 15:07:58,crop,D:\ai\GetVideo\EasonChan\Eason Chan\忘記歌詞.mp4,D:\ai\Karaoke\crops.txt,ok,8:122:640:238 in 656x480
+2026-11-16 15:07:59,crop,D:\ai\GetVideo\EasonChan\Eason Chan\怕死.mp4,,ok,no bars
+2026-11-16 15:07:59,crop,D:\ai\GetVideo\EasonChan\Eason Chan\我們萬歲.mp4,,ok,no bars
+2026-11-16 15:07:59,crop,D:\ai\GetVideo\EasonChan\Eason Chan\我的快樂時代.mp4,D:\ai\Karaoke\crops.txt,ok,300:274:682:238 in 1280x720
+2026-11-16 15:08:00,crop,D:\ai\GetVideo\EasonChan\Eason Chan\於心有愧.mp4,,ok,no bars
+2026-11-16 15:08:00,crop,D:\ai\GetVideo\EasonChan\Eason Chan\明年今日.mp4,,ok,no bars
+2026-11-16 15:08:01,crop,D:\ai\GetVideo\EasonChan\Eason Chan\是但求其愛.mp4,D:\ai\Karaoke\crops.txt,ok,0:132:1920:816 in 1920x1080
+2026-11-16 15:08:01,crop,D:\ai\GetVideo\EasonChan\Eason Chan\最佳損友.mp4,D:\ai\Karaoke\crops.txt,ok,4:40:476:290 in 480x360
+2026-11-16 15:08:01,crop,D:\ai\GetVideo\EasonChan\Eason Chan\最後派對.mp4,D:\ai\Karaoke\crops.txt,ok,0:62:640:376 in 640x480
+2026-11-16 15:08:02,crop,D:\ai\GetVideo\EasonChan\Eason Chan\歲月如歌.mp4,,ok,no bars
+2026-11-16 15:08:03,crop,D:\ai\GetVideo\EasonChan\Eason Chan\每一個明天.mp4,D:\ai\Karaoke\crops.txt,ok,330:42:1528:886 in 1920x1080
+2026-11-16 15:08:03,crop,D:\ai\GetVideo\EasonChan\Eason Chan\沙龍.mp4,,ok,no bars
+2026-11-16 15:08:03,crop,D:\ai\GetVideo\EasonChan\Eason Chan\浮誇.mp4,D:\ai\Karaoke\crops.txt,ok,0:34:384:220 in 384x288
+2026-11-16 15:08:04,crop,D:\ai\GetVideo\EasonChan\Eason Chan\淘汰(國).mp4,,ok,no bars
+2026-11-16 15:08:05,crop,D:\ai\GetVideo\EasonChan\Eason Chan\漸漸.mp4,,ok,no bars
+2026-11-16 15:08:05,crop,D:\ai\GetVideo\EasonChan\Eason Chan\無人之境.mp4,D:\ai\Karaoke\crops.txt,ok,0:62:640:380 in 640x480
+2026-11-16 15:08:07,crop,D:\ai\GetVideo\EasonChan\Eason Chan\無條件.mp4,,ok,no bars
+2026-11-16 15:08:07,crop,D:\ai\GetVideo\EasonChan\Eason Chan\盲婚啞嫁.mp4,D:\ai\Karaoke\crops.txt,ok,0:140:1920:862 in 1920x1080
+2026-11-16 15:08:08,crop,D:\ai\GetVideo\EasonChan\Eason Chan\社交恐懼癌.mp4,D:\ai\Karaoke\crops.txt,ok,0:60:1920:1000 in 1920x1080
+2026-11-16 15:08:09,crop,D:\ai\GetVideo\EasonChan\Eason Chan\空城記.mp4,D:\ai\Karaoke\crops.txt,ok,150:0:1620:1080 in 1920x1080
+2026-11-16 15:08:10,crop,D:\ai\GetVideo\EasonChan\Eason Chan\粵語殘片.mp4,,ok,no bars
+2026-11-16 15:08:10,crop,D:\ai\GetVideo\EasonChan\Eason Chan\致明日的舞.mp4,,ok,no bars
+2026-11-16 15:08:12,crop,D:\ai\GetVideo\EasonChan\Eason Chan\與我常在.mp4,D:\ai\Karaoke\crops.txt,ok,192:74:1540:934 in 1920x1080
+2026-11-16 15:08:12,crop,D:\ai\GetVideo\EasonChan\Eason Chan\苦瓜.mp4,D:\ai\Karaoke\crops.txt,ok,4:82:634:314 in 640x480
+2026-11-16 15:08:12,crop,D:\ai\GetVideo\EasonChan\Eason Chan\落花流水.mp4,,ok,no bars
+2026-11-16 15:08:12,crop,D:\ai\GetVideo\EasonChan\Eason Chan\葡萄成熟時.mp4,D:\ai\Karaoke\crops.txt,ok,0:14:448:314 in 448x336
+2026-11-16 15:08:12,crop,D:\ai\GetVideo\EasonChan\Eason Chan\裙下之臣.mp4,D:\ai\Karaoke\crops.txt,ok,0:20:480:292 in 480x316
+2026-11-16 15:08:14,crop,D:\ai\GetVideo\EasonChan\Eason Chan\讓我留在你身邊.mp4,D:\ai\Karaoke\crops.txt,ok,0:76:1920:940 in 1920x1080
+2026-11-16 15:08:14,crop,D:\ai\GetVideo\EasonChan\Eason Chan\那一夜有沒有說.mp4,,ok,no bars
+2026-11-16 15:08:14,crop,D:\ai\GetVideo\EasonChan\Eason Chan\重口味.mp4,,ok,no bars
+2026-11-16 15:08:16,crop,D:\ai\GetVideo\EasonChan\Eason Chan\防不勝防.mp4,D:\ai\Karaoke\crops.txt,ok,2:0:1918:1026 in 1920x1080
+2026-11-16 15:08:16,crop,D:\ai\GetVideo\EasonChan\Eason Chan\阿牛.mp4,,ok,no bars
+2026-11-16 15:08:16,crop,D:\ai\GetVideo\EasonChan\Eason Chan\陀飛輪.mp4,,ok,no bars
+2026-11-16 15:08:18,crop,D:\ai\GetVideo\EasonChan\Eason Chan\黃金時代.mp4,,ok,no bars
+2026-11-16 15:08:19,crop,D:\ai\GetVideo\EasonChan\Eason Chan\黑洞.mp4,,ok,no bars
+2026-11-16 15:14:43,video,D:\ai\GetVideo\EasonChan\Eason Chan\K歌之王.mp4,/sdcard/Karaoke/Cantopop/Eason Chan/K歌之王.mp4,ok,7059806 bytes
+2026-11-16 15:14:44,meta,D:\ai\Karaoke\crops.txt,/sdcard/Karaoke/crops.txt,ok,
+2026-11-16 15:14:44,rescan,,,skipped,app not running
+2026-11-16 15:14:44,sync,,,ok,"run finished: made 0, aligned 0, held 0, pushed 1 songs (7 MB), failed 0, box connected, rescan app not running (it scans at start), 7 min"
