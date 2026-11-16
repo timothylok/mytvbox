@@ -2429,3 +2429,4 @@
 2026-11-17 10:13:10,meta,D:\ai\Karaoke\crops.txt,/sdcard/Karaoke/crops.txt,ok,
 2026-11-17 10:13:40,rescan,,,ok,songCount 123 -> 123
 2026-11-17 10:13:40,sync,,,ok,"run finished: made 0, aligned 0, held 0, pushed 0 songs (0 MB), failed 0, box connected, rescan ok (123 -> 123 songs), 0 min"
+2026-11-17 11:55:22,rename,Cantopop/Andy Hui/心血,ok,"shortened title to 心血 in GetVideo, Karaoke, box, crops/titles",
