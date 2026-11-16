@@ -79,7 +79,7 @@ Lesson: check that the `.lrc` length fits the mp3 and that the first aligned lin
 
 **YouTube on the box:** official YouTube TV shows "YouTube is not supported on this device" (uncertified 32-bit Allwinner box, Play services 15.1; the factory 2.07.02 shows the same). Fixed by installing **SmartTube 32.71 stable armeabi-v7a** (`org.smarttube.stable`, from github.com/yuliskov/SmartTube releases), removing YouTube TV for user 0 (`pm uninstall --user 0`; restore with `pm install-existing com.google.android.youtube.tv`), and pointing the launcher tile in `/sdcard/Launcher/config.json` at SmartTube. Backups: `tools/apk_backup/` (YouTube 5.30.340), `tools/config.pre_smarttube.json`, APK in `tools/apk_dl/`. SmartTube works without sign-in (home feed verified by screenshot; no video played yet).
 
-**Git:** nothing committed this session (make_karaoke.py change, tools/ outputs). Commit only when asked.
+**Git:** committed and pushed 2026-11-16 as 8de7290 (daily_sync job, app rename, make_karaoke BlackGuy mapping + map-row skip). BlackGuy is now HELD in the daily job (see "Daily sync job").
 
 **Gotchas:** in Git Bash with `MSYS_NO_PATHCONV=1`, give adb.exe `D:/...` paths, not `/d/...`; `align_folder.py` takes ~4 min per song (use the background option); folder names like `Gareth.T` have no trailing dot.
 
@@ -92,7 +92,10 @@ Logs/state: `logs/daily_sync.log`, `logs/last_run.json`, `logs/daily_sync_state.
 (steps push, lrc, video, meta, quarantine, rescan, sync). `--dry-run` shows the plan. Quarantine = lyrics longer than the song or covering < 40 %; held songs release when the `.lrc` changes.
 Held by hand: BlackGuy + 7 Eason Chan songs. `make_karaoke.py` now skips sources with a ledger `map` row (Eason Chan would otherwise be re-made under clean names).
 The ~235 plain-lrc songs (incl. 88 K/J-pop) align over several nights; K/J-pop alignment quality is untested. First nightly run will also push ~31 Eason Chan videos (~1.5 GB).
-Not yet done: first unattended 03:00 run (check `logs/last_run.json` in the morning). The app was renamed to **K歌之王** (label, notification channel, idle title) 2026-11-16.
+The task runs **whether or not the user is logged on** (S4U, no stored password): registered/updated by an ADMIN run of `tools/scripts/register_daily_sync_task.ps1` (it probes that the background session sees ffmpeg, python and adb first).
+Not yet done / untested: the first unattended 03:00 run (check `logs/last_run.json`, `logs/daily_sync.log` and the last `sync` rows of `processed.csv` in the morning), Rescan after a push (the app was not running during the test push), ko/ja/en alignment quality.
+Held songs so far: BlackGuy + 7 Eason Chan (by hand) + 7 caught by the length check (Theresa Fu, Daniel Chan, Mayday 你不是真正的快樂, Kvi Baba, YAO ありふれた世界の果てに, G-DRAGON CROOKED, YESUNG 墨紙): need matching `.lrc` files from the user (they release themselves when the file changes).
+The app was renamed to **K歌之王** (label, notification channel, idle title) 2026-11-16 and installed on the box (debug build). Installing + launching restored the saved queue and started a song: check `/api/state` after installs.
 
 ## Outstanding tasks
 
