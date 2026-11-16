@@ -1075,3 +1075,17 @@
 2026-11-10 20:49:13,years,D:\ai\GetVideo\Mandarin\Zhou Shen\周深9.06新歌《再一次見面》正式上線！🎉🎉🎉.mp3,D:\ai\Karaoke\years.txt,ok,Zhou Shen/周深9.06新歌《再一次見面》正式上線！🎉🎉🎉 -> 2026
 2026-11-10 20:49:13,years,D:\ai\GetVideo\Mandarin\Zhou Shen\大梦归（电视剧《兰香如故》主题曲）.mp3,D:\ai\Karaoke\years.txt,ok,Zhou Shen/大梦归（电视剧《兰香如故》主题曲） -> 2026
 2026-11-10 20:58:50,note,,,ok,years.txt: 人啊人 = 2022 (hand edit by the user)
+2026-11-14 12:04:43,normalize,D:\ai\Karaoke\Cantopop\BlackGuy\跳舞街.mp3,D:\ai\Karaoke\Cantopop\BlackGuy\跳舞街.mp3,ok,"-21.5 LUFS -> gain +3.5 dB (target -18.0), done by make_karaoke"
+2026-11-14 12:04:43,karaoke,D:\ai\GetVideo\BlackGuy\BlackGuy\跳舞街.mp3,D:\ai\Karaoke\Cantopop\BlackGuy\跳舞街.mp3,ok,
+2026-11-14 12:07:14,align,D:\ai\Karaoke\Cantopop\BlackGuy\跳舞街.mp3,D:\ai\Karaoke\Cantopop\BlackGuy\跳舞街.lrc,ok,"45 lines exact, 13 estimated; original in D:\ai\setupbox\tools\align_out\orig"
+2026-11-14 12:10:33,align,D:\ai\Karaoke\Cantopop\BlackGuy\跳舞街.mp3,D:\ai\Karaoke\Cantopop\BlackGuy\跳舞街.lrc,ok,"44 lines exact, 19 estimated; original in D:\ai\setupbox\tools\align_out\orig"
+2026-11-14 12:46:35,align,D:\ai\Karaoke\Mandarin\JJ Lin\林俊傑 JJ Lin《我對緣分小心翼翼 Careful with Fate》Official Music Video.mp3,D:\ai\Karaoke\Mandarin\JJ Lin\林俊傑 JJ Lin《我對緣分小心翼翼 Careful with Fate》Official Music Video.lrc,ok,"21 lines exact, 32 estimated; original in D:\ai\setupbox\tools\align_out\orig"
+2026-11-14 12:50:50,align,D:\ai\Karaoke\Mandarin\JJ Lin\林俊傑 JJ Lin【小酒窩 Dimples】（合唱：蔡卓妍 A-Sa）官方完整版 MV.mp3,D:\ai\Karaoke\Mandarin\JJ Lin\林俊傑 JJ Lin【小酒窩 Dimples】（合唱：蔡卓妍 A-Sa）官方完整版 MV.lrc,ok,"0 lines exact, 34 estimated; original in D:\ai\setupbox\tools\align_out\orig"
+2026-11-14 12:57:49,crop,D:\ai\GetVideo\Mandarin\JJ Lin\林俊傑 JJ Lin《我對緣分小心翼翼 Careful with Fate》Official Music Video.mp4,D:\ai\Karaoke\crops.txt,ok,0:142:1920:796 in 1920x1080
+2026-11-14 12:57:49,crop,D:\ai\GetVideo\Mandarin\JJ Lin\林俊傑 JJ Lin【小酒窩 Dimples】（合唱：蔡卓妍 A-Sa）官方完整版 MV.mp4,D:\ai\Karaoke\crops.txt,ok,18:58:606:374 in 640x480
+2026-11-14 13:02:37,align,D:\ai\Karaoke\Cantopop\Gareth.T\gareth.t -  緊急聯絡人 (official video).mp3,D:\ai\Karaoke\Cantopop\Gareth.T\gareth.t -  緊急聯絡人 (official video).lrc,ok,"39 lines exact, 5 estimated; original in D:\ai\setupbox\tools\align_out\orig"
+2026-11-14 13:06:21,align,D:\ai\Karaoke\Cantopop\Gareth.T\gareth.t - 淺粉紅 pale pink (official video).mp3,D:\ai\Karaoke\Cantopop\Gareth.T\gareth.t - 淺粉紅 pale pink (official video).lrc,ok,"27 lines exact, 3 estimated; original in D:\ai\setupbox\tools\align_out\orig"
+2026-11-14 13:10:40,align,D:\ai\Karaoke\Cantopop\Gareth.T\gareth.t - 用背脊唱情歌 (official video).mp3,D:\ai\Karaoke\Cantopop\Gareth.T\gareth.t - 用背脊唱情歌 (official video).lrc,ok,"26 lines exact, 10 estimated; original in D:\ai\setupbox\tools\align_out\orig"
+2026-11-14 13:16:56,crop,D:\ai\GetVideo\Cantopop\Gareth.T\gareth.t -  緊急聯絡人 (official video).mp4,,ok,no bars
+2026-11-14 13:16:57,crop,D:\ai\GetVideo\Cantopop\Gareth.T\gareth.t - 淺粉紅 pale pink (official video).mp4,,ok,no bars
+2026-11-14 13:16:57,crop,D:\ai\GetVideo\Cantopop\Gareth.T\gareth.t - 用背脊唱情歌 (official video).mp4,,ok,no bars

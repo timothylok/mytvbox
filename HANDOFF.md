@@ -67,6 +67,22 @@ backgrounds (Bing removed); target SDK 35 + R8 release build verified; cleartext
 **Rules that matter** (full text in `CLAUDE.md`): test before commit/push; only copy songs to the box that have processed lyrics AND are loudness-normalized; commit/push only when asked;
 never test on the box while someone is singing (the guests use it from their phones; check `/api/state` with the pairing cookie, see the pairing section; a failed check must NOT count as idle).
 
+## Session 2026-11-14 to 11-16 (after the START HERE state above)
+
+**Songs added to the box** (mp3 + aligned lrc + mp4, normalized; pushed to `/sdcard/Karaoke/<Language>/<Artist>/`, plus `crops/titles/years/static_videos.txt`; the app needs a Rescan; not yet checked on the TV):
+- `Mandarin/JJ Lin`: 我對緣分小心翼翼 (21 lines exact / 32 estimated), 小酒窩 (all 34 lines estimated: alignment matched none). Crops added for both videos.
+- `Cantopop/Gareth.T`: 緊急聯絡人 (39/5), 淺粉紅 (27/3), 用背脊唱情歌 (26/10). No bars, no static videos. No years yet in `years.txt`.
+- Box now has ~59 songs.
+
+**Not pushed: BlackGuy 跳舞街** (`D:\ai\GetVideo\BlackGuy`): the `.lrc` is for a 3:37 version, the mp4 is 2:15, so the alignment crammed 15 lines at the end (small and medium Whisper agree). Needs an `.lrc` that matches the 2:15 cut. The karaoke mp3 is made (`D:\ai\Karaoke\Cantopop\BlackGuy`, its `.lrc` there is the bad aligned one; original in `tools/align_out/orig/`). Uncommitted: `make_karaoke.py` now maps `BlackGuy` -> Cantopop (it expects `GetVideo/<lib>/<artist>/*.mp3`, so the files sit in `GetVideo/BlackGuy/BlackGuy/`; the source folder had only mp4 + lrc, the mp3 was extracted with ffmpeg).
+Lesson: check that the `.lrc` length fits the mp3 and that the first aligned line is near the original's time; `clean_aligned.py` does not catch a wrong-version lyric file.
+
+**YouTube on the box:** official YouTube TV shows "YouTube is not supported on this device" (uncertified 32-bit Allwinner box, Play services 15.1; the factory 2.07.02 shows the same). Fixed by installing **SmartTube 32.71 stable armeabi-v7a** (`org.smarttube.stable`, from github.com/yuliskov/SmartTube releases), removing YouTube TV for user 0 (`pm uninstall --user 0`; restore with `pm install-existing com.google.android.youtube.tv`), and pointing the launcher tile in `/sdcard/Launcher/config.json` at SmartTube. Backups: `tools/apk_backup/` (YouTube 5.30.340), `tools/config.pre_smarttube.json`, APK in `tools/apk_dl/`. SmartTube works without sign-in (home feed verified by screenshot; no video played yet).
+
+**Git:** nothing committed this session (make_karaoke.py change, tools/ outputs). Commit only when asked.
+
+**Gotchas:** in Git Bash with `MSYS_NO_PATHCONV=1`, give adb.exe `D:/...` paths, not `/d/...`; `align_folder.py` takes ~4 min per song (use the background option); folder names like `Gareth.T` have no trailing dot.
+
 ## Outstanding tasks
 
 0. **USB drive repaired 2026-11-10** (`chkdsk F: /f` fixed the exFAT bitmap/directory damage, 0 bad sectors, all 609 mp3s read OK, stale .part files deleted). It is NOT on the box now: the box runs from internal storage with only the Eason Chan set (movies deleted). Next: decide whether to put the drive back, and finish the video copy FROM THE PC with the drive plugged into the PC (`copy_videos.py` pushes via adb - needs rewriting to copy to F:\Karaoke directly), skipping `static_videos.txt` songs.

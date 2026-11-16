@@ -26,7 +26,7 @@ ADB = os.path.join(HERE, "..", "sdk", "platform-tools", "adb.exe")
 # library folder under GetVideo -> language folder on the karaoke drive
 LANGUAGE = {
     "Cantopop": "Cantopop", "Beyond": "Cantopop", "EasonChan": "Cantopop",
-    "Mandarin": "Mandarin", "JPop": "JPop", "KPop": "KPop",
+    "BlackGuy": "Cantopop", "Mandarin": "Mandarin", "JPop": "JPop", "KPop": "KPop",
     "EnglishPop": "English", "TheWeeknd": "English", "Timlok": "Other",
 }
 
