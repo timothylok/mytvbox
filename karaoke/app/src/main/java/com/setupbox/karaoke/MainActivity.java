@@ -134,10 +134,12 @@ public class MainActivity extends Activity implements Server.Host {
         dimView.setVisibility(android.view.View.GONE);
         root.addView(dimView, new FrameLayout.LayoutParams(-1, -1));
         lyricsView = new TextView(this);
-        lyricsView.setGravity(Gravity.CENTER);
-        lyricsView.setPadding(60, 0, 60, 160);
+        lyricsView.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.BOTTOM);
+        lyricsView.setPadding(60, 0, 60, 84);                  // just clear of the status bar (~75 px) at the bottom
         lyricsView.setShadowLayer(10f, 0f, 0f, Color.BLACK);
-        root.addView(lyricsView, new FrameLayout.LayoutParams(-1, -1, Gravity.CENTER));
+        // the lyrics live in the lower half of the screen (the picture keeps the upper half)
+        FrameLayout.LayoutParams lyp = new FrameLayout.LayoutParams(-1, getResources().getDisplayMetrics().heightPixels / 2, Gravity.BOTTOM);
+        root.addView(lyricsView, lyp);
         countdownView = new TextView(this);                    // the 3-2-1 dots before the singing starts
         countdownView.setGravity(Gravity.CENTER);
         countdownView.setTextSize(64);
@@ -919,20 +921,15 @@ public class MainActivity extends Activity implements Server.Host {
         }
         int ci = i >= 0 ? lrc.currentChar(i, pos) : -1;   // real word times if the .lrc has them, else the estimate
         int cd = Math.max(0, lastCount), next = cdNext;       // 3-2-1 countdown dots before a long instrumental gap
-        int key = i * 1000 + ci + cd * 10000000;
+        // a line that has been sung goes off the screen at once (only the line being sung and the ones still to come stay)
+        boolean over = i >= 0 && !lrc.lines.get(i).text.isEmpty() && pos >= lrc.endOf(i) + 300;
+        int key = i * 1000 + ci + cd * 10000000 + (over ? 500000000 : 0);
         if (key == lastLine) return;
         lastLine = key;
 
         android.text.SpannableStringBuilder sb = new android.text.SpannableStringBuilder();
         if (cd > 0 && next >= 0) {
-            // [last sung line, dim] [the dots, in the big "current" slot] [the next three lines, dim]
-            if (i >= 0 && !lrc.lines.get(i).text.isEmpty()) {
-                String prev = lrc.lines.get(i).text;
-                int ps = sb.length();
-                sb.append(prev).append("\n\n");
-                sb.setSpan(new android.text.style.AbsoluteSizeSpan(40, false), ps, ps + prev.length(), 0);
-                sb.setSpan(new android.text.style.ForegroundColorSpan(0x99FFFFFF), ps, ps + prev.length(), 0);
-            }
+            // [the dots, in the big "current" slot] [the next lines, dim]; the line just sung is already gone
             int ds = sb.length();
             for (int d = 0; d < 3; d++) {
                 int st = sb.length();
@@ -941,7 +938,7 @@ public class MainActivity extends Activity implements Server.Host {
             }
             sb.setSpan(new android.text.style.AbsoluteSizeSpan(64, false), ds, sb.length(), 0);
             sb.append("\n\n");
-            for (int k = next; k <= Math.min(lrc.lines.size() - 1, next + 2); k++) {
+            for (int k = next; k <= Math.min(lrc.lines.size() - 1, next + 1); k++) {
                 String t = lrc.lines.get(k).text;
                 if (t.isEmpty()) t = " ";
                 int st = sb.length();
@@ -949,10 +946,12 @@ public class MainActivity extends Activity implements Server.Host {
                 sb.setSpan(new android.text.style.AbsoluteSizeSpan(40, false), st, st + t.length(), 0);
                 sb.setSpan(new android.text.style.ForegroundColorSpan(0x99FFFFFF), st, st + t.length(), 0);
             }
+            trimTrailingBreaks(sb);
             lyricsView.setText(sb);
             return;
         }
-        for (int k = Math.max(0, i - 1); k <= Math.min(lrc.lines.size() - 1, i + 3); k++) {
+        int first = over ? i + 1 : Math.max(0, i);              // only two lines on screen: the one being sung and the next
+        for (int k = first; k <= Math.min(lrc.lines.size() - 1, first + 1); k++) {
             String t = lrc.lines.get(k).text;
             if (t.isEmpty()) t = " ";
             int st = sb.length();
@@ -974,7 +973,15 @@ public class MainActivity extends Activity implements Server.Host {
                 rank++;
             }
         }
+        trimTrailingBreaks(sb);
         lyricsView.setText(sb);
+    }
+
+    /** The block is bottom-aligned, so the blank lines after the last lyric line must go. */
+    private static void trimTrailingBreaks(android.text.SpannableStringBuilder sb) {
+        int n = sb.length();
+        while (n > 0 && sb.charAt(n - 1) == '\n') n--;
+        if (n < sb.length()) sb.delete(n, sb.length());
     }
 
     private final Runnable tick = new Runnable() {
