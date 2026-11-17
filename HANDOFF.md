@@ -61,7 +61,7 @@ backgrounds (Bing removed); target SDK 35 + R8 release build verified; cleartext
    that does not fit the audio: alignment kept 0 lines). Need matching `.lrc` files from the user -> `align_folder.py` -> normalize -> push (rule 2 in CLAUDE.md).
 2. The other ~586 songs (all artists) have mp3s normalized and titles/years but NO processed lyrics and no videos checked: they are not on the box. Do the pipeline per CLAUDE.md rule 2
    when the user supplies lyrics. 270 songs still have no year (user is tagging the source mp3s; re-run `make_years.py`, push `years.txt`).
-3. Optional polish: remove the "lyrics" label from the Queue / Now-playing cards too (removed from Browse/Search only); `JPop/YAO/YAO - For Okinawa` karaoke mp3 is silent (regenerate).
+3. Optional polish: remove the "lyrics" label from the Queue / Now-playing cards too (removed from Browse/Search only); `JPop/YAO/YAO - For Okinawa` karaoke mp3 is silent (regenerate). (The lyric-file read is now off the main thread, 2026-11-18.)
 4. Google Play: see the Play sections below (open: Android 13+ notification dialog, USB-drive picker test, second device, upload signing key, final package name, privacy policy / Data safety).
 
 **Rules that matter** (full text in `CLAUDE.md`): test before commit/push; only copy songs to the box that have processed lyrics AND are loudness-normalized; commit/push only when asked;
@@ -112,6 +112,17 @@ The app was renamed to **K歌之王** (label, notification channel, idle title) 
 **Nightly run 2026-11-18:** started 03:00 and was still aligning at 06:45 (184 songs to align, ~8 per batch, ~5.5 h cap); no errors; the fixed `meta_refresh` had not run yet. Check `logs/last_run.json`, `logs/daily_sync.log`, last `sync` rows of `processed.csv` for the final result, push count and whether metadata refresh works.
 **Still open:** ~180 songs to align (a few more nights), held songs (BlackGuy, 7 Eason Chan, 14 length-check holds) need matching `.lrc`; static videos IVE 04. CRUMBS / 06. Glow Motion not on the box; check the banner-off look and new crops on the TV over time.
 **Gotchas:** don't install the app while a song is paused/playing without asking (it restarts the song); `check_centering.py`-style checks must tolerate dark vignette videos (noisy motion bounds).
+
+## Session 2026-11-18 - latest state
+
+- **Nightly run 2026-11-18** (03:00-09:03, 364 min): made 6 karaoke mp3s, aligned 64, pushed 64 songs (7.4 GB), 0 failed, 0 held; box rescan 123 -> 187 songs. ~120 songs still to align (a few more nights).
+  11 songs got no exactly-timed line (MIRROR BRO!, Marf, Mike, Panther Chan, REGENT, Serrini x2, Tse Nga Yi, Cheng Huan, DIOR, ...): estimated lyrics only, check on the TV.
+  `meta_refresh` (the `TypeError` of 2026-11-17) showed no new error, but no success line either: confirm on the next run that pushes songs. Not yet watched on the TV: the 64 new songs.
+- **BlackGuy removed**: `GetVideo/BlackGuy` and `Karaoke/Cantopop/BlackGuy` deleted (not recoverable; needs a new source + a lyric file that fits the 2:15 cut if wanted again), mentions removed from `daily_sync.py` / `make_karaoke.py`, hold entry released. 15 other holds remain (7 Eason Chan, 8 caught by the length check): `daily_sync.py --list-held`.
+- **App**: the lyric file is read and parsed on a background thread (`loadLyricsAsync` in `MainActivity.java`; playback starts first, lyrics appear a few ms later; a bad file is logged and skipped). Tested on the box: build, install while idle, lyrics visible on the TV, no crash/ANR in logcat, JVM release tests pass. Not tested: damaged `.lrc`, very fast skips.
+- **Commits pushed**: 50aaa30 (script cleanup), d78b447 + 9b49811 (ledger rows), 1326b6d (background lyrics).
+- Box was switched off by the user at the end of the session; the nightly push waits for it to be on (the backlog is pushed on the next night it is connected).
+- **Polish still open**: "lyrics" label on the Queue / Now-playing cards; silent `JPop/YAO/YAO - For Okinawa` mp3 (regenerate with Demucs).
 
 ## Outstanding tasks
 
