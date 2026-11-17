@@ -62,6 +62,20 @@ public class LrcTest {
         Lrc o = Lrc.parse("[offset:+500]\n[00:10.00]<00:10.00>a<00:10.50>b<00:11.00>");
         check("offset applies everywhere (positive = earlier, per the LRC spec)", o.lines.get(0).ms == 9500 && o.lines.get(0).charMs[1] == 10000 && o.lines.get(0).endMs == 10500);
 
+        // "(合)" / "（男）" only say who sings: they are dropped, with their word times, and never shown
+        Lrc t1 = Lrc.parse("[00:10.00](合)\t飛 我伴你飛\n[00:20.00]（男）你好(女)我好\n[00:30.00](合)\n[00:40.00]未閉合(男 你好");
+        check("turn markers: plain line", t1.lines.get(0).text.equals("飛 我伴你飛") && t1.lines.get(1).text.equals("你好我好"));
+        check("turn markers: still shown, flagged so they are never highlighted",
+                t1.lines.get(0).shown.startsWith("(合)") && t1.lines.get(0).turn != null && t1.lines.get(0).turn[0] && t1.lines.get(0).turn[2]
+                && !t1.lines.get(0).turn[t1.lines.get(0).shown.length() - 1] && t1.lines.get(1).shown.equals("（男）你好(女)我好")
+                && Lrc.parse("[00:01.00]普通").lines.get(0).turn == null);
+        check("turn markers: marker-only line is empty", t1.lines.get(2).text.isEmpty());
+        check("turn markers: unclosed bracket kept", t1.lines.get(3).text.equals("未閉合(男 你好"));
+        Lrc t2 = Lrc.parse("[00:10.00]<00:10.00>(<00:10.10>合<00:10.20>)<00:10.30>飛<00:10.80>我<00:11.30>");
+        check("turn markers: timed line keeps the right times", t2.lines.get(0).text.equals("飛我") && t2.lines.get(0).charMs.length == 2
+                && t2.lines.get(0).shown.equals("(合)飛我") && t2.lines.get(0).turn[1]
+                && t2.lines.get(0).charMs[0] == 10300 && t2.lines.get(0).charMs[1] == 10800 && t2.lines.get(0).endMs == 11300);
+
         System.out.println(failures == 0 ? "\nALL PASSED" : "\n" + failures + " FAILED");
         System.exit(failures == 0 ? 0 : 1);
     }

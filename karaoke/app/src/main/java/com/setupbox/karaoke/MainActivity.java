@@ -939,8 +939,7 @@ public class MainActivity extends Activity implements Server.Host {
             sb.setSpan(new android.text.style.AbsoluteSizeSpan(64, false), ds, sb.length(), 0);
             sb.append("\n\n");
             for (int k = next; k <= Math.min(lrc.lines.size() - 1, next + 1); k++) {
-                String t = lrc.lines.get(k).text;
-                if (t.isEmpty()) t = " ";
+                String t = shownText(lrc.lines.get(k));
                 int st = sb.length();
                 sb.append(t).append("\n\n");
                 sb.setSpan(new android.text.style.AbsoluteSizeSpan(40, false), st, st + t.length(), 0);
@@ -952,8 +951,8 @@ public class MainActivity extends Activity implements Server.Host {
         }
         int first = over ? i + 1 : Math.max(0, i);              // only two lines on screen: the one being sung and the next
         for (int k = first; k <= Math.min(lrc.lines.size() - 1, first + 1); k++) {
-            String t = lrc.lines.get(k).text;
-            if (t.isEmpty()) t = " ";
+            Lrc.Line ln = lrc.lines.get(k);
+            String t = shownText(ln);
             int st = sb.length();
             sb.append(t).append("\n\n");
             boolean cur = k == i;
@@ -963,7 +962,9 @@ public class MainActivity extends Activity implements Server.Host {
                 continue;
             }
             int rank = 0;
+            boolean[] turn = ln.text.isEmpty() ? null : ln.turn;     // "(合)" markers: shown as plain text, never highlighted
             for (int j = 0; j < t.length(); j++) {
+                if (turn != null && j < turn.length && turn[j]) { sb.setSpan(new android.text.style.ForegroundColorSpan(0xFFDDDDDD), st + j, st + j + 1, 0); continue; }
                 if (Character.isWhitespace(t.charAt(j))) { sb.setSpan(new android.text.style.ForegroundColorSpan(0xFFFFFFFF), st + j, st + j + 1, 0); continue; }
                 int color = rank < ci ? 0xFFFFE23B            // already sung: yellow
                         : rank == ci ? 0xFFFF7A3B             // being sung now: orange + underline
@@ -975,6 +976,11 @@ public class MainActivity extends Activity implements Server.Host {
         }
         trimTrailingBreaks(sb);
         lyricsView.setText(sb);
+    }
+
+    /** What a lyric line looks like on screen: its text with the singer-turn markers; a line with nothing to sing stays blank. */
+    private static String shownText(Lrc.Line l) {
+        return l.text.isEmpty() || l.shown.isEmpty() ? " " : l.shown;
     }
 
     /** The block is bottom-aligned, so the blank lines after the last lyric line must go. */

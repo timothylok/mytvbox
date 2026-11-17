@@ -23,7 +23,13 @@ public final class Lrc {
         public final String text;
         public final long[] charMs;    // start time per character of text, or null if the line has no word timing
         public final long endMs;       // explicit end of the line (trailing tag), or -1 if unknown
-        Line(long ms, String text, long[] charMs, long endMs) { this.ms = ms; this.text = text; this.charMs = charMs; this.endMs = endMs; }
+        /** The line as shown on screen: like text, but with the "(合)" style singer-turn markers still in it. */
+        public final String shown;
+        /** Per character of {@link #shown}: true = part of a singer-turn marker (shown, never highlighted); null = none. */
+        public final boolean[] turn;
+        Line(long ms, String text, long[] charMs, long endMs, String shown, boolean[] turn) {
+            this.ms = ms; this.text = text; this.charMs = charMs; this.endMs = endMs; this.shown = shown; this.turn = turn;
+        }
     }
 
     private static final Pattern TAG = Pattern.compile("\\[(\\d{1,3}):(\\d{1,2})(?:[.:](\\d{1,3}))?\\]");
@@ -65,12 +71,44 @@ public final class Lrc {
             long first = times.get(0);
             for (long t : times) {
                 Line line = makeLine(t, body, t - first);
-                lrc.lines.add(new Line(line.ms + offset, line.text, shift(line.charMs, offset), line.endMs < 0 ? -1 : line.endMs + offset));
+                lrc.lines.add(new Line(line.ms + offset, line.text, shift(line.charMs, offset), line.endMs < 0 ? -1 : line.endMs + offset, line.shown, line.turn));
             }
         }
         Collections.sort(lrc.lines, new Comparator<Line>() {
             @Override public int compare(Line a, Line b) { return Long.compare(a.ms, b.ms); } });
         return lrc;
+    }
+
+    /**
+     * Marks everything inside round brackets, brackets included ( ) and full-width （ ）, plus the blank space right
+     * after the closing bracket: these only say whose turn it is to sing, they are not lyrics. A bracket that is never closed is kept.
+     */
+    static boolean[] turnMask(CharSequence s) {
+        boolean[] gone = new boolean[s.length()];
+        int i = 0;
+        while (i < s.length()) {
+            char c = s.charAt(i);
+            if (c == '(' || c == '（') {
+                int j = i + 1;
+                while (j < s.length() && s.charAt(j) != ')' && s.charAt(j) != '）') j++;
+                if (j < s.length()) {
+                    int e = j + 1;
+                    while (e < s.length() && Character.isWhitespace(s.charAt(e))) e++;
+                    for (int k = i; k < e; k++) gone[k] = true;
+                    i = e;
+                    continue;
+                }
+            }
+            i++;
+        }
+        return gone;
+    }
+
+    static String stripTurns(String s) {
+        boolean[] gone = turnMask(s);
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < s.length(); i++) if (!gone[i]) sb.append(s.charAt(i));
+        return sb.toString();
     }
 
     private static long[] shift(long[] a, long by) {
@@ -83,7 +121,7 @@ public final class Lrc {
     /** Builds one line; {@code delta} moves the word times when the same text is repeated at a later time. */
     private static Line makeLine(long lineMs, String body, long delta) {
         Matcher w = WORD.matcher(body);
-        if (!w.find()) return new Line(lineMs, body.trim(), null, -1);
+        if (!w.find()) return make(lineMs, body.trim(), stripTurns(body).trim(), null, -1);
         w.reset();
 
         List<Long> pieceTime = new ArrayList<>();
@@ -120,13 +158,28 @@ public final class Lrc {
             }
             text.append(p);
         }
+        // "(合)" "（男）" etc. only say who sings: the timed text (and highlighting) leaves them out, the shown text keeps them
+        String shownAll = text.toString().trim();
+        boolean[] gone = turnMask(text);
+        StringBuilder kept = new StringBuilder();
+        List<Long> cm2 = new ArrayList<>();
+        for (int i = 0; i < text.length(); i++) if (!gone[i]) { kept.append(text.charAt(i)); cm2.add(cm.get(i)); }
+        text = kept;
+        cm = cm2;
         // trim like plain lines do, keeping the time array in step
         int a = 0, b = text.length();
         while (a < b && Character.isWhitespace(text.charAt(a))) a++;
         while (b > a && Character.isWhitespace(text.charAt(b - 1))) b--;
         long[] arr = new long[b - a];
         for (int i = a; i < b; i++) arr[i - a] = cm.get(i);
-        return new Line(lineMs, text.substring(a, b), arr.length == 0 ? null : arr, endMs);
+        return make(lineMs, shownAll, text.substring(a, b), arr.length == 0 ? null : arr, endMs);
+    }
+
+    private static Line make(long ms, String shown, String text, long[] charMs, long endMs) {
+        boolean[] mask = turnMask(shown);
+        boolean any = false;
+        for (boolean m : mask) any |= m;
+        return new Line(ms, text, charMs, endMs, shown, any ? mask : null);
     }
 
     /** When line {@code idx} is over: its end tag, else a little after its last word, else an estimate from its length. */

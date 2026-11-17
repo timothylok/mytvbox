@@ -23,6 +23,24 @@ def parse_lrc(path):
     return out
 
 
+TURN = re.compile(r"[(（][^)）]*[)）]\s*")
+
+
+def strip_turns(text):
+    """Drop "(合)" / "（男）" style markers (round brackets, ASCII or full-width, with their content): they only say
+    whose turn it is to sing, so they are not aligned. They stay in the output .lrc text (shown, never highlighted)."""
+    return TURN.sub("", text).strip()
+
+
+def turn_markers(text):
+    """-> [(number of lyric characters before the marker, marker text)] for every marker in the line."""
+    out, done = [], 0
+    for m in TURN.finditer(text):
+        before = len(re.sub(r"\s", "", TURN.sub("", text[:m.start()])))
+        out.append((before, m.group(0).strip()))
+    return out
+
+
 def stamp(sec, bracket):
     sec = max(0.0, sec)
     m = int(sec // 60)
@@ -42,7 +60,7 @@ def main():
     a = ap.parse_args()
 
     lines = parse_lrc(a.lrc)
-    sung = [(i, t) for i, (_, t) in enumerate(lines) if t]
+    sung = [(i, strip_turns(t)) for i, (_, t) in enumerate(lines) if strip_turns(t)]
     if not sung:
         sys.exit("no lyric lines found in " + a.lrc)
 
@@ -58,9 +76,10 @@ def main():
     si = 0
     matched = 0
     for i, (t0, text) in enumerate(lines):
-        if not text or si >= len(sung) or sung[si][0] != i or si >= len(segs):
+        clean = strip_turns(text)
+        if not clean or si >= len(sung) or sung[si][0] != i or si >= len(segs):
             out_lines.append(stamp(t0, True) + text)
-            if text:
+            if clean:
                 si += 1
             continue
         seg = segs[si]
@@ -68,14 +87,20 @@ def main():
         words = [w for w in seg.words if w.word.strip()]
         # the aligned words must spell the same text as the lyric line, otherwise leave the line alone
         spelled = "".join(w.word.strip() for w in words)
-        if spelled.replace(" ", "") != text.replace(" ", "") or not words:
+        if spelled.replace(" ", "") != clean.replace(" ", "") or not words:
             out_lines.append(stamp(t0, True) + text)
             print(f"  kept as-is (text mismatch): {text}", file=sys.stderr)
             continue
         parts = [stamp(min(t0, words[0].start), True)]
+        marks = turn_markers(text)          # "(合)" etc: kept in the text so they show, but they carry no time (no highlight)
+        cum = 0
         for w in words:
+            while marks and marks[0][0] <= cum:
+                parts.append(marks.pop(0)[1] + " ")
             parts.append(stamp(w.start, False) + w.word.strip())
+            cum += len(re.sub(r"\s", "", w.word))
         parts.append(stamp(words[-1].end, False))
+        parts.extend(m[1] for m in marks)
         out_lines.append("".join(parts))
         matched += 1
     open(a.out, "w", encoding="utf-8").write("\n".join(out_lines) + "\n")
