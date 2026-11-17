@@ -42,8 +42,13 @@ def clean_text(text, tolerance=2.0, min_per_char=0.07):
                 gaps.append(sec(w.group(1), w.group(2)) - t0)
     gaps.sort()
     shift = gaps[len(gaps) // 2] if gaps else 0.0
-    if abs(shift) > 5:
+    if abs(shift) > 15:
         shift = 0.0          # a huge "shift" means the alignment itself is off; judge against the file's own times
+    elif abs(shift) > 5:
+        # a big shift is only believed when most lines agree on it (a lyric file that is a constant 6 s early)
+        agree = sum(1 for g in gaps if abs(g - shift) <= tolerance)
+        if agree < 0.6 * len(gaps):
+            shift = 0.0
     out, kept, dropped = [], 0, 0
     for idx, (raw, m, t0) in enumerate(rows):
         if not m or "<" not in m.group(3):
