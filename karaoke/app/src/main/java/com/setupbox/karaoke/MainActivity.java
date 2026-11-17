@@ -679,6 +679,8 @@ public class MainActivity extends Activity implements Server.Host {
                         if (a != null) nowMs = Math.max(1000L, (long) (Double.parseDouble(a.trim()) * 1000L));
                         if (b != null) nextMs = Math.max(1000L, (long) (Double.parseDouble(b.trim()) * 1000L));
                     } catch (NumberFormatException ignored) { }
+                    String bn = p.getProperty("banner");    // banner=off hides the "Now singing" / "Next up" banners
+                    if (bn != null) banners = !bn.trim().equalsIgnoreCase("off");
                 } catch (Exception ignored) { }     // no file or bad value: keep the current setting (default 5 minutes)
             }
         }).start();
@@ -792,6 +794,7 @@ public class MainActivity extends Activity implements Server.Host {
     /** prefix + title + suffix on ONE line: the title is cut with "..." if it would not fit left of the small QR code. */
     // the bottom-right label shows Now for now_seconds, then Next for next_seconds, and so on (config.properties, defaults 8 and 4)
     private volatile long nowMs = 8000, nextMs = 4000;
+    private volatile boolean banners = true;
     private static final float NOW_MAX_FRACTION = 0.48f;    // the bottom-right Now line may use at most this share of the width
 
     private String fitLine(String prefix, String title, String suffix, float widthFraction) {
@@ -917,7 +920,7 @@ public class MainActivity extends Activity implements Server.Host {
     /** "Now singing" for the first 6 s of a song, "Next up" for the last 15 s. */
     private void updateBanner() {
         String text = null;
-        if (!debugSingleFile && (cPlaying || cPaused)) {
+        if (banners && !debugSingleFile && (cPlaying || cPaused)) {
             QueueManager.Item cur = queue.current();
             java.util.List<QueueManager.Item> up = queue.upcoming();
             if (cur != null && cPos < 6000) text = "Now singing:  " + describe(cur);

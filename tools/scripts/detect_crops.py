@@ -14,6 +14,7 @@ usage:  detect_crops.py DIR [DIR ...]  [--out D:\\ai\\Karaoke\\crops.txt] [--min
 Existing lines for videos that are not in DIR are kept; lines for scanned videos are replaced. Logs to processed.csv.
 """
 import argparse, os, re, subprocess, sys
+import numpy as np
 from concurrent.futures import ThreadPoolExecutor
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -33,6 +34,47 @@ def probe(path):
         return w, h, float(lines[1].split(",")[-1])
     except Exception:
         return None
+
+
+def motion_bounds(path, W, H, dur, n=24, sw=480):
+    """Columns/rows of the picture that change over time (x1, x2, y1, y2 in pixels) - a static logo in a bar does not."""
+    sh = int(round(H * sw / W / 2)) * 2
+    r = subprocess.run(["ffmpeg", "-v", "error", "-ss", "2", "-i", path, "-vf",
+                        "fps=%f,scale=%d:%d,format=gray" % (n / max(dur - 4, 1), sw, sh), "-frames:v", str(n), "-f", "rawvideo", "-"],
+                       capture_output=True)
+    a = np.frombuffer(r.stdout, dtype=np.uint8)
+    k = len(a) // (sw * sh)
+    if k < 6:
+        return None
+    sd = a[: k * sw * sh].reshape(k, sh, sw).astype(np.float32).std(axis=0)
+
+    def span(v):
+        idx = np.where(v > max(2.5, 0.2 * np.percentile(v, 90)))[0]
+        return (int(idx[0]), int(idx[-1]) + 1) if len(idx) else None
+    c, rr = span(sd.mean(axis=0)), span(sd.mean(axis=1))
+    if not c or not rr:
+        return None
+    return round(c[0] * W / sw), round(c[1] * W / sw), round(rr[0] * H / sh), round(rr[1] * H / sh)
+
+
+def refine(path, W, H, dur, box, tol=0.02, keep=0.7):
+    """Trim the cropdetect box where a static strip (a logo or text inside a black bar) was counted as picture.
+    Only trims, never grows. Ignored when the moving area is under `keep` of the box in either direction (dark, vignetted or
+    mostly still videos give a noisy answer there, so the cropdetect box stays)."""
+    x1, y1, x2, y2 = box[0], box[1], box[0] + box[2], box[1] + box[3]
+    mb = motion_bounds(path, W, H, dur)
+    if not mb:
+        return box
+    mx1, mx2, my1, my2 = mb
+    nx1, nx2, ny1, ny2 = max(x1, mx1), min(x2, mx2), max(y1, my1), min(y2, my2)
+    if (nx2 - nx1) < keep * (x2 - x1) or (ny2 - ny1) < keep * (y2 - y1):
+        return box
+    if nx1 - x1 <= tol * W: nx1 = x1
+    if x2 - nx2 <= tol * W: nx2 = x2
+    if ny1 - y1 <= tol * H: ny1 = y1
+    if y2 - ny2 <= tol * H: ny2 = y2
+    nx1, ny1 = nx1 - nx1 % 2, ny1 - ny1 % 2
+    return (nx1, ny1, nx2 - nx1, ny2 - ny1)
 
 
 def detect(path, min_pct):
@@ -58,6 +100,7 @@ def detect(path, min_pct):
     x1, y1 = x1 - x1 % 2, y1 - y1 % 2
     x2, y2 = min(W, x2 + x2 % 2), min(H, y2 + y2 % 2)
     w, h = x2 - x1, y2 - y1
+    x1, y1, w, h = refine(path, W, H, dur, (x1, y1, w, h))
     # only worth it when a bar is at least min_pct of that dimension
     if (W - w) * 100.0 / W < min_pct and (H - h) * 100.0 / H < min_pct:
         return W, H, None
