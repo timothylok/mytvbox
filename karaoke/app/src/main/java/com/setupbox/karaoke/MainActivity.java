@@ -40,7 +40,7 @@ public class MainActivity extends Activity implements Server.Host {
 
     private ExoPlayer player;
     private final VocalProcessor vocal = new VocalProcessor();
-    private TextView status, statusBar, lyricsView, idleInfo;
+    private TextView status, statusBar, nowView, lyricsView, idleInfo;
     private LinearLayout idleBox;
     private ImageView qrSmall, backdropView;
     private FrameLayout rootView, videoBand;
@@ -212,6 +212,14 @@ public class MainActivity extends Activity implements Server.Host {
         statusBar.setTextSize(24);
         statusBar.setPadding(24, 12, 24, 12);
         root.addView(statusBar, new FrameLayout.LayoutParams(-2, -2, Gravity.BOTTOM | Gravity.START));
+        nowView = new TextView(this);                          // "Now: song (artist) Singer: x", bottom-right, level with the status bar
+        nowView.setTextColor(Color.WHITE);
+        nowView.setBackgroundColor(0x99000000);
+        nowView.setTextSize(24);
+        nowView.setPadding(24, 12, 24, 12);
+        nowView.setSingleLine(true);
+        nowView.setGravity(Gravity.END);
+        root.addView(nowView, new FrameLayout.LayoutParams(-2, -2, Gravity.BOTTOM | Gravity.END));
 
         sleepView = new FrameLayout(this);                     // sleep mode: black, with a dim QR + clock that drift around
         sleepView.setBackgroundColor(0xFF000000);
@@ -666,6 +674,11 @@ public class MainActivity extends Activity implements Server.Host {
                     p.load(new java.io.StringReader(t));
                     String v = p.getProperty("sleep_minutes");
                     if (v != null) sleepMs = Math.max(0L, (long) (Double.parseDouble(v.trim()) * 60000L));
+                    try {   // how long the bottom-right label shows Now / Next (seconds, at least 1)
+                        String a = p.getProperty("now_seconds"), b = p.getProperty("next_seconds");
+                        if (a != null) nowMs = Math.max(1000L, (long) (Double.parseDouble(a.trim()) * 1000L));
+                        if (b != null) nextMs = Math.max(1000L, (long) (Double.parseDouble(b.trim()) * 1000L));
+                    } catch (NumberFormatException ignored) { }
                 } catch (Exception ignored) { }     // no file or bad value: keep the current setting (default 5 minutes)
             }
         }).start();
@@ -777,8 +790,13 @@ public class MainActivity extends Activity implements Server.Host {
     }
 
     /** prefix + title + suffix on ONE line: the title is cut with "..." if it would not fit left of the small QR code. */
-    private String fitLine(String prefix, String title, String suffix) {
-        int maxPx = getResources().getDisplayMetrics().widthPixels - 48 /* padding */ - 24 - 200 /* QR + gap */;
+    // the bottom-right label shows Now for now_seconds, then Next for next_seconds, and so on (config.properties, defaults 8 and 4)
+    private volatile long nowMs = 8000, nextMs = 4000;
+    private static final float NOW_MAX_FRACTION = 0.48f;    // the bottom-right Now line may use at most this share of the width
+
+    private String fitLine(String prefix, String title, String suffix, float widthFraction) {
+        int maxPx = widthFraction >= 1f ? getResources().getDisplayMetrics().widthPixels - 48 /* padding */ - 24 - 200 /* QR + gap */
+                : Math.round(getResources().getDisplayMetrics().widthPixels * widthFraction) - 48;
         android.graphics.Paint paint = status.getPaint();
         String full = prefix + title + suffix;
         if (paint.measureText(full) <= maxPx) return full;
@@ -797,6 +815,7 @@ public class MainActivity extends Activity implements Server.Host {
                     : lib.songs.size() + " songs  -  scan the code to pick one";
             idleInfo.setText(info);
             status.setVisibility(android.view.View.INVISIBLE);
+            nowView.setVisibility(android.view.View.INVISIBLE);
             statusBar.setVisibility(android.view.View.INVISIBLE);
             return;
         }
@@ -804,23 +823,28 @@ public class MainActivity extends Activity implements Server.Host {
         String st = player.getPlaybackState() == Player.STATE_BUFFERING ? "Buffering" : (cPaused ? "Paused" : "Playing");
         String time = fmt(cPos) + (cDur > 0 ? " / " + fmt(cDur) : "");
         StringBuilder sb = new StringBuilder();
+        String nowText = "";
         if (!debugSingleFile) {
             QueueManager.Item cur = queue.current();
             java.util.List<QueueManager.Item> up = queue.upcoming();
-            sb.append(fitLine("Now: ", cur == null ? "-" : titleOf(cur, true), ""));
-            if (!up.isEmpty())
-                sb.append('\n').append(fitLine("Next: ", titleOf(up.get(0), false),
-                        up.size() > 1 ? "  (+" + (up.size() - 1) + " more)" : ""));
+            // one label, bottom-right: "Now: ..." for 5 s, then (if a song is queued) "Next: ..." for 5 s, and so on
+            boolean showNext = !up.isEmpty() && System.currentTimeMillis() % (nowMs + nextMs) >= nowMs;
+            nowText = showNext
+                    ? fitLine("Next: ", titleOf(up.get(0), false), up.size() > 1 ? "  (+" + (up.size() - 1) + " more)" : "", NOW_MAX_FRACTION)
+                    : fitLine("Now: ", cur == null ? "-" : titleOf(cur, true), "", NOW_MAX_FRACTION);
         }
-        status.setVisibility(sb.length() > 0 ? android.view.View.VISIBLE : android.view.View.INVISIBLE);
-        status.setText(sb.toString());
-        sb.setLength(0);
+        status.setVisibility(android.view.View.INVISIBLE);       // the old top-left Now/Next bar is gone
+        status.setText("");
         sb.append(st).append("  |  ").append(vocalOn ? "VOCAL ON" : "KARAOKE").append("  |  ").append(time);
         if (lrc != null) sb.append("  |  Lyrics ").append(lyricOffsetMs >= 0 ? "+" : "-").append(String.format("%.1fs", Math.abs(lyricOffsetMs) / 1000.0));
         if (System.currentTimeMillis() < hintUntil) {
             sb.append("\nOK: pause   hold OK / Menu: vocal   Left/Right: seek or skip   Up/Down: lyrics later/earlier");
         }
         statusBar.setText(sb.toString());
+        // the key-help hint makes the status bar long for a few seconds: the Now line steps aside so the two never touch
+        boolean showNow = !nowText.isEmpty() && System.currentTimeMillis() >= hintUntil;
+        nowView.setVisibility(showNow ? android.view.View.VISIBLE : android.view.View.INVISIBLE);
+        if (showNow && !nowText.contentEquals(nowView.getText())) nowView.setText(nowText);
     }
 
     /** QR code for the phone address (dark modules on white, with a quiet zone). */
@@ -839,8 +863,8 @@ public class MainActivity extends Activity implements Server.Host {
     }
 
     /** Sizes the video surface to the video's true shape, centred and as large as fits the screen (no cropping, no stretching). */
-    // share of the screen height kept free above / below the video (Now+Next lines ~11%, status bar ~7% of 1080p)
-    private static final float VIDEO_TOP_MARGIN = 0.11f, VIDEO_BOTTOM_MARGIN = 0.07f;
+    // share of the screen height kept free above / below the video (a thin top margin, status bar ~7% of 1080p)
+    private static final float VIDEO_TOP_MARGIN = 0.03f, VIDEO_BOTTOM_MARGIN = 0.07f;
 
     private void fitVideo(androidx.media3.common.VideoSize vs) {
         if (vs.width == 0 || vs.height == 0) return;
@@ -848,7 +872,7 @@ public class MainActivity extends Activity implements Server.Host {
         if (rw == 0 || rh == 0) { android.util.DisplayMetrics m = getResources().getDisplayMetrics(); rw = m.widthPixels; rh = m.heightPixels; }
         float par = vs.pixelWidthHeightRatio;
         // Every video is fitted (never cropped, except for burned-in black bars from crops.txt) into the same band:
-        // centred, with a small margin on top for the Now/Next lines and at the bottom for the status bar.
+        // centred, with a small margin on top (the QR code may overlap the picture: it is drawn above it) and at the bottom for the status bar.
         int top = Math.round(rh * VIDEO_TOP_MARGIN), bottom = Math.round(rh * VIDEO_BOTTOM_MARGIN);
         int bh = rh - top - bottom;
         int cx = 0, cy = 0, cw = vs.width, ch = vs.height;
