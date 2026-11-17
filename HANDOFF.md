@@ -97,6 +97,22 @@ Not yet done / untested: the first unattended 03:00 run (check `logs/last_run.js
 Held songs so far: BlackGuy + 7 Eason Chan (by hand) + 7 caught by the length check (Theresa Fu, Daniel Chan, Mayday 你不是真正的快樂, Kvi Baba, YAO ありふれた世界の果てに, G-DRAGON CROOKED, YESUNG 墨紙): need matching `.lrc` files from the user (they release themselves when the file changes).
 The app was renamed to **K歌之王** (label, notification channel, idle title) 2026-11-16 and installed on the box (debug build). Installing + launching restored the saved queue and started a song: check `/api/state` after installs.
 
+## Session 2026-11-17 (TV layout, lyrics, crops) - latest state
+
+**Commits pushed:** edaa959 ... 0beacd5, 5d062be (banner switch, detect_crops), 6dab49e (ledger rows of 7 realigned lyrics).
+**App (K歌之王, installed on the box):**
+- Lyrics sit in the lower half, two lines only, a sung line vanishes right after it is sung. Text inside ( ) / （ ） (singer turns like (合)) is shown in grey but never aligned or highlighted
+  (`Lrc.java` turnMask, `align_lyrics.py` strip_turns/turn_markers; test `karaoke/tests/LrcTest.java`).
+- The old top "Next" bar is gone. The bottom-right label alternates "Now:" (8 s) / "Next:" (4 s); the QR code is always on top of the video. Video is centered using `crops.txt`.
+- `/sdcard/Karaoke/config.properties` (re-read every 30 s): `sleep_minutes`, `now_seconds`, `next_seconds`, `banner=off` (hides the "Now singing"/"Next up" banners; currently OFF on the box). Local copy `D:/ai/Karaoke\config.properties`.
+- Phone page: Rescan is an icon chip, 40 px buttons, aligned with the language chips.
+**Lyrics tools:** `clean_aligned.py` accepts a consistent 5-15 s lyric offset (needs 60 % of lines to agree). 男人最痛 fixed that way.
+25-song re-alignment (medium model) finished: 7 improved and were pushed (Rude Boy, 獅虎流, 花邊細胞, 一場誤會, 魔笛, 美麗之最, 戒糖失敗); the other 18 stay estimated (most match 0 lines: backing vocals or lyric text differs from the singing). Not watched on the TV yet.
+**Video crops:** `detect_crops.py` now trims static logos/text inside black bars (motion bounds, only shrinks, ignored when the moving area is < 70 % of the box). Dry run over 116 videos: 98 identical, 12 changes applied to `D:/ai/Karaoke\crops.txt` and pushed; kept the old crop for 單車 and 人來人往 (dark pictures); 幸福摩天輪 and 每一個明天 fixed by hand (not on the box yet). `crops.txt` and `config.properties` live outside git (box + D:/ai/Karaoke).
+**Nightly run 2026-11-18:** started 03:00 and was still aligning at 06:45 (184 songs to align, ~8 per batch, ~5.5 h cap); no errors; the fixed `meta_refresh` had not run yet. Check `logs/last_run.json`, `logs/daily_sync.log`, last `sync` rows of `processed.csv` for the final result, push count and whether metadata refresh works.
+**Still open:** ~180 songs to align (a few more nights), held songs (BlackGuy, 7 Eason Chan, 14 length-check holds) need matching `.lrc`; static videos IVE 04. CRUMBS / 06. Glow Motion not on the box; check the banner-off look and new crops on the TV over time.
+**Gotchas:** don't install the app while a song is paused/playing without asking (it restarts the song); `check_centering.py`-style checks must tolerate dark vignette videos (noisy motion bounds).
+
 ## Outstanding tasks
 
 0. **USB drive repaired 2026-11-10** (`chkdsk F: /f` fixed the exFAT bitmap/directory damage, 0 bad sectors, all 609 mp3s read OK, stale .part files deleted). It is NOT on the box now: the box runs from internal storage with only the Eason Chan set (movies deleted). Next: decide whether to put the drive back, and finish the video copy FROM THE PC with the drive plugged into the PC (`copy_videos.py` pushes via adb - needs rewriting to copy to F:\Karaoke directly), skipping `static_videos.txt` songs.
