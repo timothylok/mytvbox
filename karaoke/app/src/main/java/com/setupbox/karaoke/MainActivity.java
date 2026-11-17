@@ -546,12 +546,38 @@ public class MainActivity extends Activity implements Server.Host {
             if (s == null || st == null || s.audioH.isEmpty()) continue;     // song gone from the list: skip it
             currentSongId = s.id;
             vocalOn = false;
-            String lrcText = s.lrcH.isEmpty() ? null : Storage.readText(st, s.lrcH);
             String vstem = s.video.isEmpty() ? "" : s.video.substring(s.video.lastIndexOf('/') + 1).replaceFirst("\\.[^.]+$", "");
-            startFile(st.uri(s.audioH), s.videoH.isEmpty() ? null : st.uri(s.videoH), lrcText, vstem, s.file.toLowerCase().endsWith(".mp4"));
+            startFile(st.uri(s.audioH), s.videoH.isEmpty() ? null : st.uri(s.videoH), null, vstem, s.file.toLowerCase().endsWith(".mp4"));
+            loadLyricsAsync(st, s.id, s.lrcH);
             if (history != null) history.started(System.currentTimeMillis(), s.id, s.title, s.artist, s.language, it.singer);
             return;
         }
+    }
+
+    /** Reads and parses the lyric file off the main thread; the lyrics appear as soon as they are ready (a few ms normally). */
+    private void loadLyricsAsync(final Storage st, final String songId, final String handle) {
+        if (handle.isEmpty()) return;
+        new Thread(new Runnable() {
+            @Override public void run() {
+                Lrc parsed = null;
+                try {
+                    String text = Storage.readText(st, handle);
+                    if (text != null) parsed = Lrc.parse(text);
+                } catch (Exception e) {
+                    android.util.Log.w("Karaoke", "lyrics not loaded: " + e);   // a broken lyric file must not stop the song
+                }
+                final Lrc result = parsed;
+                if (result == null) return;
+                runOnUiThread(new Runnable() {
+                    @Override public void run() {
+                        if (!songId.equals(currentSongId)) return;      // the song changed meanwhile
+                        lrc = result;
+                        lastLine = -2;
+                        lastCount = -1;
+                    }
+                });
+            }
+        }, "lyrics-loader").start();
     }
 
     private void stopPlayback() {
