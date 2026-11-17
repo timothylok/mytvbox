@@ -133,7 +133,7 @@ def duration(path):
 
 
 def lrc_problem(lrc, dur):
-    """Why this lyric file cannot belong to this song, or None. The BlackGuy lesson: a 3:37 lyric file on a 2:15 cut."""
+    """Why this lyric file cannot belong to this song, or None. Example: a 3:37 lyric file on a 2:15 cut."""
     try:
         times = [int(m.group(1)) * 60 + float(m.group(2)) for m in
                  (LINE.match(l) for l in open(lrc, encoding="utf-8-sig", errors="replace")) if m]
