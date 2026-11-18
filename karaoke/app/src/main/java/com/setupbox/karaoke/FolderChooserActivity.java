@@ -198,7 +198,7 @@ public class FolderChooserActivity extends Activity {
     }
 
     private static String gb(long bytes) {
-        double g = bytes / 1e9;
+        double g = bytes / 1073741824.0;      // GiB, the same unit as the launcher's storage bar
         return g >= 10 ? Math.round(g) + " GB" : String.format(java.util.Locale.US, "%.1f GB", g);
     }
 }
