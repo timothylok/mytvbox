@@ -40,6 +40,10 @@ un_tests.py --ui` (see `karaoke/release-tests/README.md`; the box must be idle: 
    chooser, so code must fall back, see `useAppFolder()`); never trust reported storage size (`df -h /data`); scripts and tests must take the
    device as a parameter (`--device`), not hard-code an address.
 
+6. **Keep `usermanual.md` current.** Any change to what the user sees or does (remote keys, screens, menus, settings, storage / USB behaviour,
+   phone page, launcher) updates `usermanual.md` in the same piece of work, before the commit. A hook (`.claude/hooks/manual_reminder.py`, set up in
+   `.claude/settings.json`) reminds you once per session when app / launcher sources are edited.
+
 ## Working notes
 
 - `adb` is not on PATH: `D:\ai\setupbox\tools\sdk\platform-tools\adb.exe` (box at 192.168.3.79:5555). Git Bash needs `MSYS_NO_PATHCONV=1`.
