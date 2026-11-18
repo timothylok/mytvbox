@@ -11,7 +11,7 @@ it is not held by daily_sync (logs\daily_sync_state.json), the mp3 comes from D:
 D:\ai\GetVideo) is copied only when it is a real video (not in static_videos.txt). Also copies titles.txt, years.txt, crops.txt, static_videos.txt.
 Files are written as .part and renamed after a size check; same-size files are skipped, so it can be re-run. Every copy is logged in processed.csv.
 """
-import argparse, json, os, re, shutil, sys
+import argparse, hashlib, json, os, re, shutil, sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from ledger import log  # noqa: E402
@@ -28,8 +28,18 @@ def processed_lrc(p):
         return False
 
 
+def md5_of(path):
+    h = hashlib.md5()
+    with open(path, "rb") as fh:
+        for chunk in iter(lambda: fh.read(8 * 1024 * 1024), b""):
+            h.update(chunk)
+    return h.hexdigest()
+
+
 def copy_safe(src, dst):
-    """Copy via .part + rename + size check. Returns 'copied', 'same' or raises."""
+    """Copy via .part + rename + size AND checksum check. Returns 'copied', 'same' or raises.
+    (A copy on a flaky USB drive once kept the right size but wrong bytes: the TV then failed to play the video.
+    Note: the read-back right after the copy may come from the PC's file cache; run --verify later for a true on-disk check.)"""
     size = os.path.getsize(src)
     if os.path.isfile(dst) and os.path.getsize(dst) == size:
         return "same"
@@ -39,6 +49,9 @@ def copy_safe(src, dst):
     if os.path.getsize(tmp) != size:
         os.remove(tmp)
         raise OSError("size mismatch after copy: " + dst)
+    if md5_of(tmp) != md5_of(src):
+        os.remove(tmp)
+        raise OSError("checksum mismatch after copy: " + dst)
     os.replace(tmp, dst)
     return "copied"
 
@@ -52,6 +65,11 @@ def main():
     ap.add_argument("--library", default=r"D:\ai\GetVideo")
     ap.add_argument("--state", default=r"D:\ai\setupbox\logs\daily_sync_state.json")
     ap.add_argument("--dry-run", action="store_true")
+    ap.add_argument("--limit", type=int, help="copy / verify only this many songs (a test run)")
+    ap.add_argument("--include", help="with --limit: comma-separated text; songs whose Language/Artist/Title contains any of them are taken first")
+    ap.add_argument("--verify", action="store_true",
+                    help="compare every file already on the drive with its source by MD5; with --dry-run only report the bad ones, "
+                         "otherwise delete the bad ones so the copy below replaces them")
     a = ap.parse_args()
     if not a.like and not a.all:
         ap.error("give --like <old tree> or --all")
@@ -109,6 +127,13 @@ def main():
                 vid = videos.get(stem) if stem not in static else None
                 songs.append((lang, artist, stem, os.path.join(adir, f), lrc, vid))
 
+    if a.limit:
+        words = [w.strip().lower() for w in (a.include or "").split(",") if w.strip()]
+        first = [s for s in songs if any(w in ("%s/%s/%s" % (s[0], s[1], s[2])).lower() for w in words)]
+        rest = [s for s in songs if s not in first and s[5]]             # fill up with songs that have a video
+        songs = (first + rest)[:a.limit]
+        print("test run: %d songs (%d chosen by --include)" % (len(songs), min(len(first), a.limit)))
+
     total = sum(os.path.getsize(s[3]) + os.path.getsize(s[4]) + (os.path.getsize(s[5]) if s[5] else 0) for s in songs)
     print("songs to copy: %d (%d with a video), %.2f GB | skipped: %s" % (len(songs), sum(1 for s in songs if s[5]), total / 1e9, skipped))
     if os.path.isdir(os.path.splitdrive(a.dest)[0] + "\\"):
@@ -117,6 +142,32 @@ def main():
         if free < total * 1.02 + 1e8:
             print("NOT ENOUGH SPACE")
             return 2
+    if a.verify:
+        bad, checked = [], 0
+        for lang, artist, stem, mp3, lrc, vid in songs:
+            base = os.path.join(a.dest, lang, artist, stem)
+            for step, src, ext in (("push", mp3, ".mp3"), ("lrc", lrc, ".lrc"), ("video", vid, ".mp4")):
+                dst = base + ext
+                if not src or not os.path.isfile(dst):
+                    continue
+                checked += 1
+                why = None
+                if os.path.getsize(dst) != os.path.getsize(src):
+                    why = "size differs"
+                elif md5_of(dst) != md5_of(src):
+                    why = "checksum differs"
+                if why:
+                    bad.append((dst, why))
+                    print("BAD (%s): %s" % (why, dst), flush=True)
+                if checked % 50 == 0:
+                    print("  verified %d files, %d bad so far" % (checked, len(bad)), flush=True)
+        print("verify: %d files checked, %d bad" % (checked, len(bad)))
+        for dst, why in bad:
+            log("verify", dst, "", "bad", "usb library verify: %s" % why)
+        if a.dry_run:
+            return 0 if not bad else 3
+        for dst, why in bad:
+            os.remove(dst)                       # the copy loop below puts a fresh, hash-checked file there
     if a.dry_run:
         for lang, artist, stem, mp3, lrc, vid in songs[:15]:
             print("  %s/%s/%s%s" % (lang, artist, stem[:60], "  [+video]" if vid else ""))
