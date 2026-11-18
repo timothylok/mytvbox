@@ -33,6 +33,13 @@ un_tests.py --ui` (see `karaoke/release-tests/README.md`; the box must be idle: 
    anything that blocks that (raw /sdcard paths, bundled songs, unlicensed images, new open endpoints); see the Google Play
    section in `HANDOFF.md`.
 
+5. **All code must work on both Android 10 (API 29) and Android 16 (API 36).** The two test devices are the Android 10 box (192.168.3.79:5555)
+   and the Android 16 `Google_TV` box (wireless debugging, `adb mdns services` for the port). Before a change is called done, build it and check it
+   on both (or say which one could not be checked and why). Rules of thumb learned so far: size text from the screen (height or dp-scale), never
+   raw-px spans or the density alone; guard APIs by `Build.VERSION.SDK_INT`; never assume a system app exists (the Google TV image has no folder
+   chooser, so code must fall back, see `useAppFolder()`); never trust reported storage size (`df -h /data`); scripts and tests must take the
+   device as a parameter (`--device`), not hard-code an address.
+
 ## Working notes
 
 - `adb` is not on PATH: `D:\ai\setupbox\tools\sdk\platform-tools\adb.exe` (box at 192.168.3.79:5555). Git Bash needs `MSYS_NO_PATHCONV=1`.
