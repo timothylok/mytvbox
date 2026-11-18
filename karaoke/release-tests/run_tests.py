@@ -52,6 +52,13 @@ def main():
     if rc == 0:
         rc = run([os.path.join(JAVA, "bin", "java"), "-Dfile.encoding=UTF-8", "-cp", out, "BrowseModelTest"])
     ok = ok and rc == 0
+    print("== shift_line_starts_test (pipeline, Python)")
+    ok = run([sys.executable, "-X", "utf8", "-I", os.path.join(HERE, "shift_line_starts_test.py")]) == 0 and ok
+    print("== LrcTest (JVM)")
+    rc = run([os.path.join(JAVA, "bin", "javac"), "-encoding", "UTF-8", "-d", out, os.path.join(SRC, "Lrc.java"), os.path.join(KARAOKE, "tests", "LrcTest.java")])
+    if rc == 0:
+        rc = run([os.path.join(JAVA, "bin", "java"), "-Dfile.encoding=UTF-8", "-cp", out, "LrcTest"])
+    ok = ok and rc == 0
     print("== AppFoldersTest (JVM)")
     rc = run([os.path.join(JAVA, "bin", "javac"), "-encoding", "UTF-8", "-d", out, os.path.join(SRC, "AppFolders.java"), os.path.join(HERE, "AppFoldersTest.java")])
     if rc == 0:

@@ -76,7 +76,53 @@ public final class Lrc {
         }
         Collections.sort(lrc.lines, new Comparator<Line>() {
             @Override public int compare(Line a, Line b) { return Long.compare(a.ms, b.ms); } });
+        alignStartsToWords(lrc.lines);
         return lrc;
+    }
+
+    private static final long BIG_GAP_MS = 3000, LEAD_MS = 1000;   // 1-3 s early is normal and harmless
+
+    /**
+     * Some lyric files are timed for another cut of the video: the word times are right but every line time is early (seconds to 15 s),
+     * so a line would be "current" (and the previous one cut off) long before it is sung. When the median gap between a line's time and
+     * its first word is over 3 s, each timed line starts 1 s before its first word (never before the end of the line before it) and the
+     * lines without word times, from the first timed line on, move by the same median gap. Files whose line times already sit next to
+     * their words are left alone. Same rule as {@code shift_line_starts} in tools/scripts/clean_aligned.py (which fixes the files themselves).
+     */
+    static void alignStartsToWords(List<Line> lines) {
+        List<Long> gaps = new ArrayList<>();
+        int firstTimed = -1;
+        for (int i = 0; i < lines.size(); i++) {
+            Line l = lines.get(i);
+            if (l.charMs != null && l.charMs.length > 0) {
+                gaps.add(l.charMs[0] - l.ms);
+                if (firstTimed < 0) firstTimed = i;
+            }
+        }
+        if (gaps.isEmpty()) return;
+        Collections.sort(gaps);
+        long shift = gaps.get(gaps.size() / 2);
+        if (shift <= BIG_GAP_MS) return;
+        long firstTimedMs = lines.get(firstTimed).ms;
+        long[] news = new long[lines.size()];
+        long prevEnd = 0;
+        for (int i = 0; i < lines.size(); i++) {
+            Line l = lines.get(i);
+            if (l.charMs != null && l.charMs.length > 0) {
+                long first = l.charMs[0];
+                news[i] = Math.min(first, Math.max(first - LEAD_MS, prevEnd));
+                prevEnd = l.endMs >= 0 ? l.endMs : l.charMs[l.charMs.length - 1];
+            } else if (l.ms >= firstTimedMs) {
+                news[i] = l.ms + shift;
+            } else {
+                news[i] = l.ms;                                  // title / credit lines before the first sung line
+            }
+        }
+        for (int i = lines.size() - 2; i >= 0; i--) news[i] = Math.min(news[i], news[i + 1]);   // keep the file order
+        for (int i = 0; i < lines.size(); i++) {
+            Line l = lines.get(i);
+            if (news[i] != l.ms) lines.set(i, new Line(news[i], l.text, l.charMs, l.endMs, l.shown, l.turn));
+        }
     }
 
     /**

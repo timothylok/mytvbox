@@ -76,6 +76,27 @@ public class LrcTest {
                 && t2.lines.get(0).shown.equals("(合)飛我") && t2.lines.get(0).turn[1]
                 && t2.lines.get(0).charMs[0] == 10300 && t2.lines.get(0).charMs[1] == 10800 && t2.lines.get(0).endMs == 11300);
 
+        // a lyric file whose line times are ~8.5 s early (timed for another cut): lines start 1 s before their first word
+        Lrc sh = Lrc.parse("[00:00.00]作詞:某某\n[00:15.00]<00:24.00>誰<00:24.50>於<00:25.00>街<00:26.00>\n"
+                + "[00:19.00]\n[00:19.20]<00:28.00>去<00:28.50>坐<00:29.00>巴<00:30.00>\n[00:24.00]估計行\n"
+                + "[00:30.00]<00:38.00>最<00:38.50>後<00:39.00>\n");
+        check("early line times: line 1 starts 1 s before its first word", sh.lines.get(1).ms == 23000);
+        check("early line times: line 1 is the current line while it is sung (25 s); it used to be line 3 from 19.2 s", sh.indexAt(25000) == 1 && sh.indexAt(26500) == 1);
+        check("early line times: line 3 starts before its first word", sh.lines.get(3).ms == 27000);
+        check("early line times: header line before the first sung line stays", sh.lines.get(0).ms == 0);
+        check("early line times: a line without word times moves by the median gap (24 s + 8.8 s = 32.8 s)", sh.lines.get(4).ms == 32800);
+        boolean ordered = true;
+        for (int i = 1; i < sh.lines.size(); i++) ordered &= sh.lines.get(i).ms >= sh.lines.get(i - 1).ms;
+        check("early line times: lines stay in time order (the blank line never lands after the next line)", ordered && sh.lines.get(2).ms <= sh.lines.get(3).ms);
+        check("early line times: word times are untouched", sh.lines.get(1).charMs[0] == 24000 && sh.lines.get(3).charMs[2] == 29000);
+        Lrc ok = Lrc.parse("[00:10.00]<00:10.40>我<00:10.90>唱<00:11.30>\n[00:15.00]<00:15.20>得<00:15.60>好<00:16.00>\n");
+        check("normal file (line time just before the word): unchanged", ok.lines.get(0).ms == 10000 && ok.lines.get(1).ms == 15000);
+        Lrc once = Lrc.parse("[00:15.00]<00:24.00>誰<00:24.50>於<00:25.00>\n[00:29.00]<00:37.00>撐<00:37.50>傘<00:38.00>\n");
+        long a0 = once.lines.get(0).ms, a1 = once.lines.get(1).ms;
+        check("early line times: 2-line example", a0 == 23000 && a1 == 36000);
+        Lrc plainOnly = Lrc.parse("[00:10.00]我唱得好\n[00:20.00]约定至死\n");
+        check("a plain file (no word times) is never shifted", plainOnly.lines.get(0).ms == 10000 && plainOnly.lines.get(1).ms == 20000);
+
         System.out.println(failures == 0 ? "\nALL PASSED" : "\n" + failures + " FAILED");
         System.exit(failures == 0 ? 0 : 1);
     }
