@@ -6,9 +6,10 @@ The first time the app starts it shows **"Choose your Karaoke folder"**.
 
 1. Press **OK** on the remote.
    - On a box that has a system folder chooser (for example the Android 10 box) it opens, starting in `Karaoke`. Choose the folder that holds your song folders, for example **Internal storage > Karaoke** (the one that contains `Cantopop`, `English`, ...). Pick `Karaoke` itself, not the whole storage. Confirm with **Allow access to 'Karaoke'**, then **Allow**.
-   - On a box **without** a system chooser (the Google TV box, Android 16) the app opens its **own chooser**: first the list of storages (internal, and a USB drive when one is plugged in, each with its free space), then the folders inside. Use Up / Down / OK; **Back** goes up one level.
+   - On a box **without** a system chooser (the Google TV box, Android 16) the app opens its **own chooser**: first the list of storages (internal, and a USB drive or SD card when one is plugged in, each with its free space), then the folders inside. Use Up / Down / OK; **Back** goes up one level.
    - If the box offers no chooser at all, the app falls back to its **own folder** on the box (the app tells you where it is) and you copy the songs there.
-2. A **USB drive** works on the Google TV box. Plug it in before choosing; the app's folder on the drive is `Android/data/com.superghosttim.karaokeking/files`. Do **not** unplug or eject the drive while a song is playing: Android stops the app when its drive disappears (it restarts with your queue, but the song is lost). On boxes with a slow stick or one that disconnects, prefer the box's own storage.
+2. A **USB drive or SD card** works on the Google TV box. Plug it in before choosing; the app's folder on it is `Android/data/com.superghosttim.karaokeking/files`. Do **not** unplug or eject it while a song is playing: Android stops the app when its drive disappears (it restarts with your queue, but the song is lost). On boxes with a slow stick or one that disconnects, prefer the box's own storage.
+   **Songs that skip or stop early** usually mean the drive is failing: files with the right size but damaged contents. Copy the songs again and compare checksums, or use another drive (an SD card in the box's reader worked well). The PC script `tools\scripts\build_usb_library.py --verify` finds such files.
    **Warning:** songs kept in the app's own folder (including `Android/data/.../files` on a USB drive) are **deleted when the app is uninstalled**, and also when it is reinstalled with a different signing key. Keep your master copy on the PC (or anywhere else), and do not uninstall the app to "fix" a problem unless you can copy the songs back.
 3. To change the location later, open the TV **Settings** (Menu while nothing is playing) and use **Song location**.
 
@@ -78,7 +79,7 @@ Inside the song browser, Up / Down / OK / hold OK / Back work as described in se
 
 ## 7. The launcher (home screen)
 
-The box starts in the custom launcher (the Google TV launcher can be restored with `tools/scripts/home_launcher.py`). Its panels scale to the screen size. The storage panel shows the **USB drive's** free space when one is plugged in, otherwise the box's internal storage (real numbers, not the size printed on the package).
+The box starts in the custom launcher (the Google TV launcher can be restored with `tools/scripts/home_launcher.py`). Its panels scale to the screen size. The storage panel shows the **USB drive's or SD card's** free space when one is plugged in, otherwise the box's internal storage (real numbers, not the size printed on the package).
 
 ## 8. Your Karaoke folder
 

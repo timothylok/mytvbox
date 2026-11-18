@@ -132,6 +132,16 @@ The app was renamed to **K歌之王** (label, notification channel, idle title) 
 - Box was switched off by the user at the end of the session; the nightly push waits for it to be on (the backlog is pushed on the next night it is connected).
 - **Polish still open**: "lyrics" label on the Queue / Now-playing cards; silent `JPop/YAO/YAO - For Okinawa` mp3 (regenerate with Demucs).
 
+## SD card is now the library carrier (2026-11-18, late)
+
+- **The WDC 2.5" USB drive (`A6D0-F59E`) is failing and retired.** It kept the right file SIZE but wrong bytes (ExoPlayer `ParserException: Invalid NAL length`, Windows disk events 153/7, SMART read errors), so songs skipped before finishing. Size-only checks were not enough: verify with MD5.
+- **Library now on a 128 GB FAT32 SD card, volume `85F8-1509`** (label "NIKON D5600"), in the box's reader, same app folder path `/storage/85F8-1509/Android/data/com.superghosttim.karaokeking/files/Karaoke`. Filled on the PC (152 songs, 397 files copied, 0 failed, MD5-checked each), then hashed ON the TV: 427/427 files match the PC (`verify_on_tv.py`-style `md5sum` over adb). App lists 152 songs; 3 songs not in the earlier test played past 30 s; the earlier 10-song full-play run played every song to the end, 0 player errors. FAT32 4 GB file limit: biggest file is 652 MB.
+- **`daily_sync.py` now targets the SD card** (`TARGETS["google"]["usb_uuid"] = "85F8-1509"`, commit 9110577). It already md5-checks each file after pushing. Not yet seen: the first unattended 03:00 push to the card (large backlog of make/align/push songs); check `logs/last_run.json`, `logs/daily_sync.log` and the `sync` rows of `processed.csv`. The job needs `KARAOKE_TOKEN` if the box ever runs a release build (`run-as` only works on debug).
+- **`build_usb_library.py`** (commit 2a740c6): MD5 check after each copy, `--limit N`, `--include "a,b"`, `--verify` (hash existing files, delete bad ones so a rerun recopies; with `--dry-run` only reports). Use `--dest "<drive>:\Android\data\com.superghosttim.karaokeking\files\Karaoke" --all`. Copy on the PC for a full fill; the nightly job adds new songs over the network.
+- **Launcher**: the Camera tile is hidden via `/sdcard/Launcher/config.json` `"hidden": ["com.android.camera2"]` (backup `tools\config.pre_hide_camera.json`).
+- **Never uninstall the app while the library is in its app folder** (it deletes the songs; this wiped 144 songs on 2026-11-18). Debug builds are signed with the upload key, so `adb install -r` works both ways.
+- Still open: Android 10 box not reinstalled/checked (rule 5); back up `D:\ai\keys\` off the PC; Play listing items (privacy-policy placeholders and hosting, banner 1280x720, TV screenshots, first-run help, licences screen); scratch files in `tools\` that can go (`realign_one*`, `realign_work`, `usb_rebuild.log`, `usb_verify.log`, `full_play.log`, `sd_fill.log`, `sd_verify.log`).
+
 ## Google TV box (added 2026-11-18)
 
 Second box `Google_TV`: Android 16, armeabi-v7a, adb over wireless debugging (`adb mdns services`; port changes, was 192.168.3.97:2025). The Android 10 box is 192.168.3.79:5555.
