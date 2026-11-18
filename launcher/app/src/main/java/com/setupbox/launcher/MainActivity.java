@@ -723,21 +723,64 @@ public class MainActivity extends Activity {
 
     // ===================================================================== storage
 
+    private boolean storageBusy;
+
+    /**
+     * Storage bar. Some TV boxes report a made-up size through the Android framework (the Google_TV box says 128 GB for a 3.7 GB
+     * partition), so the real size is read with the native `df` first (it asks the kernel); StatFs is the fallback. Runs off the main thread.
+     */
     private void updateStorage() {
-        try {
-            android.os.StatFs st = new android.os.StatFs(android.os.Environment.getDataDirectory().getPath());
-            double free = st.getAvailableBytes() / 1073741824.0;
-            double total = st.getTotalBytes() / 1073741824.0;
-            boolean low = total > 0 && (free / total) < lowFraction;
-            storageBar.usedFrac = total > 0 ? (float) (1.0 - free / total) : 0f;
-            storageBar.fillColor = low ? COL_LOW : COL_OK;
-            storageBar.invalidate();
-            storageView.setTextColor(low ? COL_LOW : COL_DIM);
-            storageView.setText(String.format(Locale.US, "%.1f GB free of %.0f GB%s",
-                    free, total, low ? "  • low space" : ""));
-        } catch (Exception e) {
-            storageView.setText("");
+        if (storageBusy) return;
+        storageBusy = true;
+        new Thread(() -> {
+            double[] gb = null;
+            try {
+                gb = nativeStorageGb("/data");
+            } catch (Exception e) {
+                android.util.Log.w("Launcher", "df failed: " + e);
+            }
+            double framework = -1;
+            try {
+                android.os.StatFs st = new android.os.StatFs(android.os.Environment.getDataDirectory().getPath());
+                framework = st.getTotalBytes() / 1073741824.0;
+                if (gb == null) gb = new double[]{st.getAvailableBytes() / 1073741824.0, framework};
+            } catch (Exception e) {
+                android.util.Log.w("Launcher", "StatFs failed: " + e);
+            }
+            if (gb != null && framework > 0 && Math.abs(framework - gb[1]) > Math.max(1.0, gb[1] * 0.1)) {
+                android.util.Log.i("Launcher", String.format(Locale.US, "storage: kernel says %.1f GB, framework says %.0f GB (using the kernel's)", gb[1], framework));
+            }
+            final double[] r = gb;
+            runOnUiThread(() -> {
+                storageBusy = false;
+                if (r == null) { storageView.setText(""); return; }
+                double free = r[0], total = r[1];
+                boolean low = total > 0 && (free / total) < lowFraction;
+                storageBar.usedFrac = total > 0 ? (float) (1.0 - free / total) : 0f;
+                storageBar.fillColor = low ? COL_LOW : COL_OK;
+                storageBar.invalidate();
+                storageView.setTextColor(low ? COL_LOW : COL_DIM);
+                storageView.setText(String.format(Locale.US, total < 10 ? "%.1f GB free of %.1f GB%s" : "%.1f GB free of %.0f GB%s",
+                        free, total, low ? "  • low space" : ""));
+            });
+        }, "storage").start();
+    }
+
+    /** {free GB, total GB} of the filesystem holding path, from `df -k` (kernel numbers); null if df is unusable. */
+    private static double[] nativeStorageGb(String path) throws Exception {
+        Process p = new ProcessBuilder("df", "-k", path).redirectErrorStream(true).start();
+        String last = null;
+        try (java.io.BufferedReader br = new java.io.BufferedReader(new java.io.InputStreamReader(p.getInputStream(), "UTF-8"))) {
+            for (String ln; (ln = br.readLine()) != null; ) if (!ln.trim().isEmpty()) last = ln;
+        } finally {
+            p.destroy();
         }
+        if (last == null) return null;
+        String[] t = last.trim().split("\\s+");            // Filesystem 1K-blocks Used Available Use% Mounted-on
+        if (t.length < 4) return null;
+        double totalKb = Double.parseDouble(t[1]), availKb = Double.parseDouble(t[3]);
+        if (!(totalKb > 0) || availKb < 0 || availKb > totalKb) return null;
+        return new double[]{availKb / 1048576.0, totalKb / 1048576.0};
     }
 
     // ===================================================================== weather
