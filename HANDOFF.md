@@ -10,7 +10,7 @@ Box: Android TV box 192.168.3.79 (open ADB on :5555). PC: Windows, GTX 1650 4 GB
 **Launcher** (`launcher/`, package `com.setupbox.launcher`) - the box's home screen. Karaoke is pinned third in
 `/sdcard/Launcher/config.json` (backup of the old config: `tools/config.backup.json`).
 
-**Karaoke app** (`karaoke/`, package `com.setupbox.karaoke`, Java + Media3 ExoPlayer + NanoHTTPD + ZXing):
+**Karaoke app** (`karaoke/`, app id `com.superghosttim.karaokeking` (source package `com.setupbox.karaoke`), Java + Media3 ExoPlayer + NanoHTTPD + ZXing):
 - Plays a queue; guests use a phone web page (QR code on the TV, `http://192.168.3.79:8080`).
 - Phone page: Queue / Browse / Search tabs; add (end / next), remove, move up / down / top, shuffle, clear,
   pause / resume / skip / restart, vocal on/off, flip channels, singer name per song, Rescan button.
@@ -128,7 +128,7 @@ The app was renamed to **K歌之王** (label, notification channel, idle title) 
 
 Second box `Google_TV`: Android 16, armeabi-v7a, adb over wireless debugging (`adb mdns services`; port changes, was 192.168.3.97:2025). The Android 10 box is 192.168.3.79:5555.
 - **Storage is NOT 128 GB** (Android/launcher report 128 GB): `df` shows the data partition is ~3.7 GB with ~2 GB free. Do not push the library here; only 2 test songs (心血, 男人最痛 + video) are on it.
-- **No folder chooser** (no DocumentsUI): the app detects this at start-up (manifest `<queries>`, `chooserAvailable()`) and uses its own folder `/sdcard/Android/data/com.setupbox.karaoke/files/Karaoke` (`useAppFolder()`; no permission needed, fill it with `adb push`). Test: `python karaokeelease-testspp_folder_device_test.py --device <ip:port>` (non-destructive, 13 checks pass). `folder_picker_ui_test.py` cannot run on this box.
+- **No folder chooser** (no DocumentsUI): the app detects this at start-up (manifest `<queries>`, `chooserAvailable()`) and uses its own folder `/sdcard/Android/data/com.superghosttim.karaokeking/files/Karaoke` (`useAppFolder()`; no permission needed, fill it with `adb push`). Test: `python karaokeelease-testspp_folder_device_test.py --device <ip:port>` (non-destructive, 13 checks pass). `folder_picker_ui_test.py` cannot run on this box.
 - **In-app song-location chooser (2026-11-18):** on a device with no system chooser, TV Settings (Menu key / hold OK while idle) has a **Song location** button -> `FolderChooserActivity` (D-pad list: storage = internal / each USB drive or SD card, then folders; "Use this folder", "+ New folder Karaoke"; Back goes up / cancels). It only offers the app's own folders (`getExternalFilesDirs`), so it needs no permission and works on Android 10 and 16 and stays Play-compatible; browsing arbitrary public folders would need all-files access (restricted by Play), so it is NOT offered. The choice is kept in prefs `appfolder_path` and re-validated with `AppFolders.isAllowed` (JVM test `AppFoldersTest`, 20 checks). `/api/state` has `songFolder` in this mode. Device test steps 12-16 drive it with the remote keys. Not tested: USB drive / SD card volumes (none available), the Android 10 box.
 - **Lyric rendering on Android 16:** `AbsoluteSizeSpan` px + `setText(sb)` ignored size and colour spans (no highlight, 14sp text). Fixed: base size on the view from the screen height (`heightPixels * 0.07`), `RelativeSizeSpan(0.68)` for dim lines, `BufferType.SPANNABLE`. Bottom status bars are 18sp with one fixed height (36 dp) so left and right line up.
 - **Launcher is the home app on this box:** the HOME key starts Google's `launcherx` by explicit component, so `tools/scripts/home_launcher.py ours|google --device <ip:port>` disables/enables it (reversible, nothing uninstalled) and sets the home role. The launcher needs `pm grant` of READ/WRITE_EXTERNAL_STORAGE and `/sdcard/Launcher/config.json` (pinned: Karaoke, YouTube, Netflix, Settings). Layout now scales from the real screen (designed for 1280x720 dp, `uiScale()`), so panels no longer overflow; weather shows after the first fetch (~15 s on a fresh install).
@@ -215,7 +215,7 @@ All song-folder access now goes through `Storage` (`SafStorage` = the folder the
   OK opens the system chooser (starts in /sdcard/Karaoke); a non-`primary:` folder is rejected with a message. The grant is
   persisted (`takePersistableUriPermission`); the choice is in SharedPreferences `karaoke`/`tree`. The remote's OK key works on that
   screen whatever has focus (regression: it did nothing in touch mode). The phone page has NO folder feature (user's decision);
-  only `adb shell am start -n com.setupbox.karaoke/.MainActivity --ez pickfolder true` re-asks (maintenance/test hook).
+  only `adb shell am start -n com.superghosttim.karaokeking/com.setupbox.karaoke.MainActivity --ez pickfolder true` re-asks (maintenance/test hook).
 - The user's folder is read-only for the app: songs, `.lrc`, `titles.txt`, `static_videos.txt`, `crops.txt`, `config.properties` are read
   from it. The app's own files (queue `state.txt`, `history.jsonl`, `flips.txt`, `lyric_offsets.properties` (now keyed by song id),
   `index.json` cache) are in private storage (`getFilesDir()`); migrated once from /sdcard/Karaoke on first start. Photos folder:
@@ -245,7 +245,7 @@ USB drive in the picker (rejection + speed) needs the drive plugged into the box
 
 The app is built for one box today. Before it is "production grade" for Google Play, plan and work through this list
 (check current Play policy at the time; requirements change every year). Today: `targetSdk 29`, `minSdk 21`,
-`compileSdk 34`, `requestLegacyExternalStorage`, cleartext HTTP, APK debug builds, package `com.setupbox.karaoke`.
+`compileSdk 34`, `requestLegacyExternalStorage`, cleartext HTTP, APK debug builds, package `com.superghosttim.karaokeking` (renamed 2026-11-18).
 
 **Blockers (Play will reject the app or it will not work on other devices)**
 1. **Target SDK**: Play requires a recent target API (API 35+ by late 2026). Raising it from 29 breaks today's file access
@@ -316,7 +316,7 @@ The QR code on the TV opens `http://ip:8080/?k=TOKEN`; the server answers 303 + 
 works with no typing. Without the cookie every page/API call gets 401 ("scan the QR code on the TV"). The token (12 chars, `Pairing.java`) is made once and kept in the app's
 SharedPreferences (`pair`), so phones stay paired across restarts and updates. A phone that has not paired yet (e.g. after this update) must scan the code once.
 The idle screen no longer prints the address (typing it would not work). Scripts/curl need the cookie:
-`T=$(adb shell run-as com.setupbox.karaoke cat shared_prefs/karaoke.xml | grep -oE 'pair">[a-z0-9]+' | cut -d'>' -f2)` then `curl -b karaoke_k=$T http://192.168.3.79:8080/api/state`
+`T=$(adb shell run-as com.superghosttim.karaokeking cat shared_prefs/karaoke.xml | grep -oE 'pair">[a-z0-9]+' | cut -d'>' -f2)` then `curl -b karaoke_k=$T http://192.168.3.79:8080/api/state`
 (debug build only; the release-tests do this, `--token` for a release build). TV settings: Menu key (or hold OK) while nothing plays opens a Settings screen; "Reset phone pairing" (two OK presses) makes a new token + QR code, all phones must rescan (done 2026-11-10, release-tested).
 
 ## Gotchas learned
@@ -325,7 +325,7 @@ The idle screen no longer prints the address (typing it would not work). Scripts
 - ADB from Git Bash: set `MSYS_NO_PATHCONV=1`, and give `adb push/pull` Windows paths (`D:\\...`); `/d/...` paths fail.
 - Do not write Java/regex with backslashes through a bash heredoc or `python - <<EOF` replace: backslashes get collapsed.
   Use the Write / Edit tools for source files.
-- Starting the app: `adb shell am start -n com.setupbox.karaoke/.MainActivity` (add `--es path /file.mp3` to play one
+- Starting the app: `adb shell am start -n com.superghosttim.karaokeking/com.setupbox.karaoke.MainActivity` (add `--es path /file.mp3` to play one
   file with no queue). Build: `JAVA_HOME=C:\Program Files\Java\jdk-20 ANDROID_HOME=D:\ai\setupbox\tools\sdk
   tools\gradle-8.7\bin\gradle.bat assembleDebug` in `karaoke/`, then `adb install -r`.
 - A lone `.mp4` on the drive (no same-name mp3) shows up as a song of its own with the original vocals. That's why

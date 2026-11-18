@@ -21,8 +21,8 @@ usage:  python folder_picker_ui_test.py [--adb PATH] [--device 192.168.3.79:5555
 """
 import argparse, json, os, re, subprocess, sys, tempfile, time, urllib.request
 
-PKG = "com.setupbox.karaoke"
-ACT = PKG + "/.MainActivity"
+PKG = "com.superghosttim.karaokeking"
+ACT = PKG + "/com.setupbox.karaoke.MainActivity"      # the class keeps its source package; only the app id changed
 HERE = os.path.dirname(os.path.abspath(__file__))
 DEFAULT_ADB = os.path.join(HERE, "..", "..", "tools", "sdk", "platform-tools", "adb.exe")
 PRIVATE = ["history.jsonl", "state.txt", "flips.txt", "lyric_offsets.properties"]

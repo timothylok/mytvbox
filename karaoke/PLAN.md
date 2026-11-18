@@ -12,7 +12,7 @@ for running jobs and outstanding tasks.
 - Control from a phone browser via QR code (page served by the box on :8080). No PIN; everyone can edit everything.
 - Features: queue (add end/next, remove, move up/down/top, shuffle, clear), vocal on/off, pause/resume/skip/restart,
   search + browse by language/artist, singer name per song, rescan button.
-- Separate app `com.setupbox.karaoke` with a pinned tile in the launcher; a foreground service keeps it alive when the user
+- Separate app `com.superghosttim.karaokeking` with a pinned tile in the launcher; a foreground service keeps it alive when the user
   presses Home.
 
 ## Architecture

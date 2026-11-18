@@ -3,7 +3,7 @@ android {
     namespace 'com.setupbox.karaoke'
     compileSdk 35
     defaultConfig {
-        applicationId 'com.setupbox.karaoke'
+        applicationId 'com.superghosttim.karaokeking'
         minSdk 21
         targetSdk 35          // Play needs a recent target; the box (Android 10 / API 29) still runs it, minSdk stays 21
         versionCode 1
