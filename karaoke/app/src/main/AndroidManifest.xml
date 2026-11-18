@@ -13,6 +13,7 @@
     <application
         android:label="K歌之王"
         android:icon="@drawable/ic_launcher"
+        android:banner="@drawable/banner"
         android:theme="@android:style/Theme.DeviceDefault.NoActionBar"
         android:allowBackup="false"
         android:usesCleartextTraffic="false">
