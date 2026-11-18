@@ -91,7 +91,9 @@ public class MainActivity extends Activity implements Server.Host {
     private FrameLayout setupView;           // first-run screen: choose the Karaoke folder
     private TextView setupText;
     private android.widget.Button setupButton;
-    private volatile boolean setupShown;     // read by the web server thread
+    private File appFolder;                  // set when the app's own folder is used because the device has no folder chooser
+    private boolean pickerMissing;          // the last pickFolder() found no chooser app on this device
+    private volatile boolean setupShown;    // read by the web server thread
     private FrameLayout menuView;            // TV settings: reset phone pairing (Menu key / hold OK while nothing plays)
     private android.widget.Button menuReset, menuClose;
     private TextView menuText;
@@ -137,6 +139,9 @@ public class MainActivity extends Activity implements Server.Host {
         lyricsView.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.BOTTOM);
         lyricsView.setPadding(60, 0, 60, 84);                  // just clear of the status bar (~75 px) at the bottom
         lyricsView.setShadowLayer(10f, 0f, 0f, Color.BLACK);
+        // Sizes follow the screen height (not the density or the Android version): 7 % for the line being sung, 68 % of that for the others.
+        lyricsView.setTextSize(android.util.TypedValue.COMPLEX_UNIT_PX, Math.max(40f, getResources().getDisplayMetrics().heightPixels * 0.07f));
+        lyricsView.setTextColor(Color.WHITE);
         // the lyrics live in the lower half of the screen (the picture keeps the upper half)
         FrameLayout.LayoutParams lyp = new FrameLayout.LayoutParams(-1, getResources().getDisplayMetrics().heightPixels / 2, Gravity.BOTTOM);
         root.addView(lyricsView, lyp);
@@ -209,17 +214,20 @@ public class MainActivity extends Activity implements Server.Host {
         statusBar = new TextView(this);                        // "Playing | KARAOKE | time" line, bottom-left
         statusBar.setTextColor(Color.WHITE);
         statusBar.setBackgroundColor(0x99000000);
-        statusBar.setTextSize(24);
+        statusBar.setTextSize(18);
         statusBar.setPadding(24, 12, 24, 12);
-        root.addView(statusBar, new FrameLayout.LayoutParams(-2, -2, Gravity.BOTTOM | Gravity.START));
+        statusBar.setSingleLine(true);
+        statusBar.setGravity(Gravity.CENTER_VERTICAL);
+        final int barH = Math.round(getResources().getDisplayMetrics().density * 36);   // both bottom bars: one fixed height, so they line up
+        root.addView(statusBar, new FrameLayout.LayoutParams(-2, barH, Gravity.BOTTOM | Gravity.START));
         nowView = new TextView(this);                          // "Now: song (artist) Singer: x", bottom-right, level with the status bar
         nowView.setTextColor(Color.WHITE);
         nowView.setBackgroundColor(0x99000000);
-        nowView.setTextSize(24);
+        nowView.setTextSize(18);
         nowView.setPadding(24, 12, 24, 12);
         nowView.setSingleLine(true);
-        nowView.setGravity(Gravity.END);
-        root.addView(nowView, new FrameLayout.LayoutParams(-2, -2, Gravity.BOTTOM | Gravity.END));
+        nowView.setGravity(Gravity.END | Gravity.CENTER_VERTICAL);
+        root.addView(nowView, new FrameLayout.LayoutParams(-2, barH, Gravity.BOTTOM | Gravity.END));
 
         sleepView = new FrameLayout(this);                     // sleep mode: black, with a dim QR + clock that drift around
         sleepView.setBackgroundColor(0xFF000000);
@@ -417,6 +425,7 @@ public class MainActivity extends Activity implements Server.Host {
                 if (p.getUri().equals(tree) && p.isReadPermission()) granted = true;
             }
             if (granted && SafStorage.isInternal(tree)) {
+                appFolder = null;
                 storage = new SafStorage(this, tree);
                 Library cached = Library.load(storage, priv("index.json"));     // show the list from the last scan at once
                 if (cached != null && !cached.songs.isEmpty()) { lib = cached; libraryNote = ""; }
@@ -426,7 +435,31 @@ public class MainActivity extends Activity implements Server.Host {
                 return;
             }
         }
+        if (saved == null && (prefs.getBoolean("appfolder", false) || !chooserAvailable())) { useAppFolder(); return; }
         showSetup(saved == null ? "" : "The Karaoke folder is not available any more.\n\n");
+    }
+
+    private boolean chooserAvailable() {
+        try { return new android.content.Intent(android.content.Intent.ACTION_OPEN_DOCUMENT_TREE).resolveActivity(getPackageManager()) != null; }
+        catch (Exception e) { return true; }       // unsure: let the button try
+    }
+
+    /**
+     * Fallback for devices with no folder chooser: songs live in the app's own folder (Android/data/<package>/files/Karaoke on the
+     * internal storage). It needs no permission and works under the current target SDK; copy songs there from a PC (adb push / file transfer).
+     */
+    private void useAppFolder() {
+        File base = getExternalFilesDir(null);
+        File dir = new File(base == null ? getFilesDir() : base, "Karaoke");
+        if (!dir.isDirectory() && !dir.mkdirs()) android.util.Log.w("Karaoke", "cannot create " + dir);
+        prefs.edit().putBoolean("appfolder", true).apply();
+        appFolder = dir;
+        storage = new FileStorage(dir);
+        Library cached = Library.load(storage, priv("index.json"));
+        if (cached != null && !cached.songs.isEmpty()) { lib = cached; libraryNote = ""; }
+        setupView.setVisibility(android.view.View.GONE);
+        setupShown = false;
+        rescan();
     }
 
     private void showSetup(String problem) {
@@ -452,14 +485,23 @@ public class MainActivity extends Activity implements Server.Host {
             i.putExtra(android.provider.DocumentsContract.EXTRA_INITIAL_URI,
                     android.provider.DocumentsContract.buildDocumentUri("com.android.externalstorage.documents", "primary:Karaoke"));
         }
-        try { startActivityForResult(i, REQ_PICK); }
-        catch (Exception e) { showSetup("This device has no folder chooser.\n\n"); }
+        try { startActivityForResult(i, REQ_PICK); android.util.Log.i("Karaoke", "folder chooser started"); }
+        catch (Exception e) {
+            android.util.Log.w("Karaoke", "no folder chooser: " + e);
+            pickerMissing = true;       // Android also reports a cancel right after this; it must not replace the next screen
+            useAppFolder();
+        }
     }
 
     @Override protected void onActivityResult(int req, int result, android.content.Intent data) {
         super.onActivityResult(req, result, data);
         if (req != REQ_PICK) return;
-        if (result != RESULT_OK || data == null || data.getData() == null) { showSetup(""); return; }
+        if (pickerMissing) { pickerMissing = false; return; }
+        if (result != RESULT_OK || data == null || data.getData() == null) {
+            android.util.Log.w("Karaoke", "folder chooser returned result=" + result + " data=" + data);
+            showSetup(result == RESULT_OK ? "" : "No folder was chosen (the chooser closed without a folder).\n\n");
+            return;
+        }
         android.net.Uri tree = data.getData();
         if (!SafStorage.isInternal(tree)) {
             showSetup("That folder is on a USB drive or SD card.\nPlease copy your songs to the box's internal storage and choose that folder.\n\n");
@@ -518,7 +560,9 @@ public class MainActivity extends Activity implements Server.Host {
                         if (st != storage) return;              // the user picked another folder meanwhile
                         crops = cropsText == null ? new java.util.HashMap<String, int[]>() : Crops.parse(cropsText);
                         lib = l;
-                        libraryNote = l.songs.isEmpty() ? "No songs found in the chosen folder. Choose the folder that holds the language folders (for example Cantopop)." : "";
+                        libraryNote = !l.songs.isEmpty() ? ""
+                                : appFolder != null ? "No songs yet. This device has no folder chooser: copy your songs (language folders such as Cantopop) to " + appFolder.getPath()
+                                : "No songs found in the chosen folder. Choose the folder that holds the language folders (for example Cantopop).";
                         l.save(priv("index.json"));
                         kick();
                     }
@@ -989,17 +1033,17 @@ public class MainActivity extends Activity implements Server.Host {
                 sb.append("●  ");
                 sb.setSpan(new android.text.style.ForegroundColorSpan(d < cd ? 0xFFFFE23B : 0x44FFFFFF), st, st + 1, 0);
             }
-            sb.setSpan(new android.text.style.AbsoluteSizeSpan(64, false), ds, sb.length(), 0);
+            
             sb.append("\n\n");
             for (int k = next; k <= Math.min(lrc.lines.size() - 1, next + 1); k++) {
                 String t = shownText(lrc.lines.get(k));
                 int st = sb.length();
                 sb.append(t).append("\n\n");
-                sb.setSpan(new android.text.style.AbsoluteSizeSpan(40, false), st, st + t.length(), 0);
+                sb.setSpan(new android.text.style.RelativeSizeSpan(0.68f), st, st + t.length(), 0);
                 sb.setSpan(new android.text.style.ForegroundColorSpan(0x99FFFFFF), st, st + t.length(), 0);
             }
             trimTrailingBreaks(sb);
-            lyricsView.setText(sb);
+            lyricsView.setText(sb, TextView.BufferType.SPANNABLE);
             return;
         }
         int first = over ? i + 1 : Math.max(0, i);              // only two lines on screen: the one being sung and the next
@@ -1009,7 +1053,7 @@ public class MainActivity extends Activity implements Server.Host {
             int st = sb.length();
             sb.append(t).append("\n\n");
             boolean cur = k == i;
-            sb.setSpan(new android.text.style.AbsoluteSizeSpan(cur ? 64 : 40, false), st, st + t.length(), 0);
+            if (!cur) sb.setSpan(new android.text.style.RelativeSizeSpan(0.68f), st, st + t.length(), 0);
             if (!cur) {
                 sb.setSpan(new android.text.style.ForegroundColorSpan(0x99FFFFFF), st, st + t.length(), 0);
                 continue;
@@ -1028,7 +1072,7 @@ public class MainActivity extends Activity implements Server.Host {
             }
         }
         trimTrailingBreaks(sb);
-        lyricsView.setText(sb);
+        lyricsView.setText(sb, TextView.BufferType.SPANNABLE);
     }
 
     /** What a lyric line looks like on screen: its text with the singer-turn markers; a line with nothing to sing stays blank. */

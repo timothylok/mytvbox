@@ -124,6 +124,16 @@ The app was renamed to **K歌之王** (label, notification channel, idle title) 
 - Box was switched off by the user at the end of the session; the nightly push waits for it to be on (the backlog is pushed on the next night it is connected).
 - **Polish still open**: "lyrics" label on the Queue / Now-playing cards; silent `JPop/YAO/YAO - For Okinawa` mp3 (regenerate with Demucs).
 
+## Google TV box (added 2026-11-18)
+
+Second box `Google_TV`: Android 16, armeabi-v7a, adb over wireless debugging (`adb mdns services`; port changes, was 192.168.3.97:2025). The Android 10 box is 192.168.3.79:5555.
+- **Storage is NOT 128 GB** (Android/launcher report 128 GB): `df` shows the data partition is ~3.7 GB with ~2 GB free. Do not push the library here; only 2 test songs (心血, 男人最痛 + video) are on it.
+- **No folder chooser** (no DocumentsUI): the app detects this at start-up (manifest `<queries>`, `chooserAvailable()`) and uses its own folder `/sdcard/Android/data/com.setupbox.karaoke/files/Karaoke` (`useAppFolder()`; no permission needed, fill it with `adb push`). Test: `python karaokeelease-testspp_folder_device_test.py --device <ip:port>` (non-destructive, 13 checks pass). `folder_picker_ui_test.py` cannot run on this box.
+- **Lyric rendering on Android 16:** `AbsoluteSizeSpan` px + `setText(sb)` ignored size and colour spans (no highlight, 14sp text). Fixed: base size on the view from the screen height (`heightPixels * 0.07`), `RelativeSizeSpan(0.68)` for dim lines, `BufferType.SPANNABLE`. Bottom status bars are 18sp with one fixed height (36 dp) so left and right line up.
+- **Launcher is the home app on this box:** the HOME key starts Google's `launcherx` by explicit component, so `tools/scripts/home_launcher.py ours|google --device <ip:port>` disables/enables it (reversible, nothing uninstalled) and sets the home role. The launcher needs `pm grant` of READ/WRITE_EXTERNAL_STORAGE and `/sdcard/Launcher/config.json` (pinned: Karaoke, YouTube, Netflix, Settings). Layout now scales from the real screen (designed for 1280x720 dp, `uiScale()`), so panels no longer overflow; weather shows after the first fetch (~15 s on a fresh install).
+- Not tested: the new fonts / launcher scaling on the Android 10 box; Android 13+ notification dialog; USB drive picker.
+- Also today: lyric file is read and parsed off the main thread (1326b6d); BlackGuy removed (folders, script mentions, hold); nightly run 03:00-09:03 pushed 64 songs, 187 songs on the Android 10 box, `meta_refresh` fix still unconfirmed.
+
 ## Outstanding tasks
 
 0. **USB drive repaired 2026-11-10** (`chkdsk F: /f` fixed the exFAT bitmap/directory damage, 0 bad sectors, all 609 mp3s read OK, stale .part files deleted). It is NOT on the box now: the box runs from internal storage with only the Eason Chan set (movies deleted). Next: decide whether to put the drive back, and finish the video copy FROM THE PC with the drive plugged into the PC (`copy_videos.py` pushes via adb - needs rewriting to copy to F:\Karaoke directly), skipping `static_videos.txt` songs.

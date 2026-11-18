@@ -112,8 +112,29 @@ public class MainActivity extends Activity {
         boolean power; // the built-in Power tile
     }
 
+    /**
+     * The layout is designed for a 1280x720 dp screen. On screens with fewer dp (e.g. 1080p at density 320 = 960x540 dp) or
+     * more, everything (dp sizes and text) is scaled by one factor, so the panels never overflow and nothing wraps; it depends only
+     * on the real screen, not on the Android version or the box. Clamped so a odd display cannot make the page tiny or huge.
+     */
+    private float uiK = -1f;
+
+    private float uiScale() {
+        if (uiK < 0f) {
+            android.util.DisplayMetrics dm = getResources().getDisplayMetrics();
+            float wDp = dm.widthPixels / dm.density, hDp = dm.heightPixels / dm.density;
+            uiK = Math.max(0.55f, Math.min(1.6f, Math.min(wDp / 1280f, hDp / 720f)));
+        }
+        return uiK;
+    }
+
     private int dp(int v) {
-        return Math.round(v * getResources().getDisplayMetrics().density);
+        return Math.round(v * getResources().getDisplayMetrics().density * uiScale());
+    }
+
+    /** Text size in the same scaled units (the system font scale is ignored on purpose: the layout is fixed). */
+    private void ts(TextView t, float size) {
+        t.setTextSize(android.util.TypedValue.COMPLEX_UNIT_DIP, size * uiScale());
     }
 
     private SharedPreferences prefs() {
@@ -122,7 +143,7 @@ public class MainActivity extends Activity {
 
     private TextView text(int sizeSp, int color) {
         TextView t = new TextView(this);
-        t.setTextSize(sizeSp);
+        ts(t, sizeSp);
         t.setTextColor(color);
         return t;
     }
@@ -276,7 +297,7 @@ public class MainActivity extends Activity {
         clock.setFormat12Hour("h:mm a");
         clock.setFormat24Hour("HH:mm");
         clock.setTextColor(Color.WHITE);
-        clock.setTextSize(56);
+        ts(clock, 56);
         LinearLayout second = new LinearLayout(this);
         second.setOrientation(LinearLayout.VERTICAL);
         second.setPadding(dp(22), 0, 0, dp(10));
@@ -288,7 +309,7 @@ public class MainActivity extends Activity {
         secClock.setFormat12Hour("h:mm a");
         secClock.setFormat24Hour("HH:mm");
         secClock.setTextColor(Color.parseColor("#C9D3EE"));
-        secClock.setTextSize(24);
+        ts(secClock, 24);
         second.addView(secLabel);
         second.addView(secClock);
         clockRow.addView(clock);
@@ -298,7 +319,7 @@ public class MainActivity extends Activity {
         date.setFormat12Hour("EEEE, d MMMM yyyy");
         date.setFormat24Hour("EEEE, d MMMM yyyy");
         date.setTextColor(COL_SUB);
-        date.setTextSize(20);
+        ts(date, 20);
 
         storageBar = new StorageBar(this);
         LinearLayout.LayoutParams blp = new LinearLayout.LayoutParams(dp(360), dp(8));
@@ -488,13 +509,13 @@ public class MainActivity extends Activity {
         sClock.setFormat12Hour("h:mm a");
         sClock.setFormat24Hour("HH:mm");
         sClock.setTextColor(Color.WHITE);
-        sClock.setTextSize(54);
+        ts(sClock, 54);
         sClock.setShadowLayer(8, 0, 2, Color.BLACK);
         TextClock sDate = new TextClock(this);
         sDate.setFormat12Hour("EEEE, d MMMM");
         sDate.setFormat24Hour("EEEE, d MMMM");
         sDate.setTextColor(Color.WHITE);
-        sDate.setTextSize(20);
+        ts(sDate, 20);
         sDate.setShadowLayer(6, 0, 2, Color.BLACK);
         saverCaption = text(14, Color.parseColor("#DDDDDD"));
         saverCaption.setShadowLayer(6, 0, 2, Color.BLACK);
@@ -734,9 +755,9 @@ public class MainActivity extends Activity {
                 j.getJSONObject("current");
                 prefs().edit().putString("json", j.toString()).apply();
                 wxLast = System.currentTimeMillis();
-                runOnUiThread(() -> { try { applyWeather(j); } catch (Exception ignored) { } });
-            } catch (Exception ignored) {
-                // keep last reading
+                runOnUiThread(() -> { try { applyWeather(j); } catch (Exception e) { android.util.Log.w("Launcher", "weather not shown: " + e); } });
+            } catch (Exception e) {
+                android.util.Log.w("Launcher", "weather fetch failed: " + e);      // keep the last reading
             } finally {
                 wxBusy = false;
             }
