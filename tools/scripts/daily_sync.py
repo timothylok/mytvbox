@@ -1,6 +1,6 @@
 """Daily GetVideo -> karaoke -> TV box sync (run by Task Scheduler at 03:00 through daily_sync_hidden.vbs).
 
-TARGET (--target, default "google"): the Google_TV box. Its songs live on the USB DRIVE (volume A6D0-F59E) in the app's own folder
+TARGET (--target, default "google"): the Google_TV box. Its songs live on the SD CARD (volume 85F8-1509; the old USB drive A6D0-F59E is failing and retired) in the app's own folder
 /storage/A6D0-F59E/Android/data/<app id>/files/Karaoke. The box's wireless-debugging port changes after a reboot, so it is looked up
 by its mDNS name (`adb mdns services`) every run, with the last good address as a fallback. No USB drive mounted = nothing is pushed
 (the box's own storage is only ~3.8 GB). The app must have that folder selected (TV Settings > Song location), otherwise the run reports
@@ -51,7 +51,7 @@ KARAOKE = r"D:\ai\Karaoke"
 PKG = "com.superghosttim.karaokeking"
 TARGETS = {
     # addr = last known adb address; mdns = the box's wireless-debugging name (its serial); usb_uuid = the drive that holds the songs
-    "google": {"addr": "192.168.3.97:2025", "mdns": "adb-1e5517831b69e12c", "usb_uuid": "A6D0-F59E"},
+    "google": {"addr": "192.168.3.97:2025", "mdns": "adb-1e5517831b69e12c", "usb_uuid": "85F8-1509"},   # SD card (the old WDC USB drive A6D0-F59E is failing: do not use)
     "old": {"addr": "192.168.3.79:5555", "mdns": None, "usb_uuid": None},
 }
 ADDR_FILE = os.path.join(LOGDIR, "box_address.json")
