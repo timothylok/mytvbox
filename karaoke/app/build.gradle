@@ -1,16 +1,36 @@
 plugins { id 'com.android.application' }
 android {
     namespace 'com.setupbox.karaoke'
-    compileSdk 35
+    compileSdk 36
     defaultConfig {
         applicationId 'com.superghosttim.karaokeking'
         minSdk 21
-        targetSdk 35          // Play needs a recent target; the box (Android 10 / API 29) still runs it, minSdk stays 21
+        targetSdk 36          // Play needs API 36 for new apps/updates from 2026-08-31; Android 10 (API 29) boxes still run it, minSdk stays 21
         versionCode 1
         versionName '1.0'
     }
+    // Upload key for Google Play: karaoke/keystore.properties (git-ignored; storeFile, storePassword, keyAlias, keyPassword). Without it the release build stays unsigned.
+    def keyProps = new Properties()
+    def keyFile = rootProject.file('keystore.properties')
+    if (keyFile.exists()) keyFile.withInputStream { keyProps.load(it) }
+    signingConfigs {
+        if (keyFile.exists()) {
+            release {
+                storeFile file(keyProps['storeFile'])
+                storePassword keyProps['storePassword']
+                keyAlias keyProps['keyAlias']
+                keyPassword keyProps['keyPassword']
+            }
+        }
+    }
     buildTypes {
+        debug {
+            // Same key as release when it exists: a debug build can then be installed over a release build (adb install -r) without
+            // an uninstall, which would delete the song library kept in the app's own folder on the USB drive.
+            if (keyFile.exists()) signingConfig signingConfigs.release
+        }
         release {
+            if (keyFile.exists()) signingConfig signingConfigs.release
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'

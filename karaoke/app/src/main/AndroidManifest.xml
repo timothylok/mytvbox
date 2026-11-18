@@ -16,6 +16,7 @@
         android:banner="@drawable/banner"
         android:theme="@android:style/Theme.DeviceDefault.NoActionBar"
         android:allowBackup="false"
+        android:enableOnBackInvokedCallback="false"
         android:usesCleartextTraffic="false">
         <activity
             android:name=".FolderChooserActivity"
