@@ -87,6 +87,20 @@ public class MainActivity extends Activity implements Server.Host {
     private String pairToken = "";           // secret in the QR code (see Pairing)
     private History history;                 // play history, last 30 days (history.jsonl)
     private final Prefetcher prefetcher = new Prefetcher();   // warms the next queued song while the current one plays
+    // on-TV song browser (an overlay, so playback keeps going behind it): language -> artist -> song
+    private FrameLayout browseView;
+    private TextView browseTitle, browseHint, browseToast;
+    private android.widget.ListView browseList;
+    private android.widget.ArrayAdapter<String> browseAdapter;
+    private final java.util.List<String> browseLabels = new java.util.ArrayList<>();
+    private final java.util.List<String> browseValues = new java.util.ArrayList<>();    // language / artist / song id of each row ("" = a message row)
+    private volatile boolean browseShown;
+    private int browseLevel;                                   // 0 = languages, 1 = artists, 2 = songs
+    private String browseLang = "", browseArtist = "";
+    private boolean browseCenterDown, browseLong, wokeKey;
+    private final Runnable hideBrowseToast = new Runnable() {
+        @Override public void run() { if (browseToast != null) browseToast.setVisibility(android.view.View.GONE); }
+    };
     private long lastWarmCheck;
     private volatile Storage storage;        // the Karaoke folder the user picked (null until then); ALL song files go through it
     private android.content.SharedPreferences prefs;
@@ -323,6 +337,7 @@ public class MainActivity extends Activity implements Server.Host {
         mc.topMargin = 24;
         menuBox.addView(menuClose, mc);
         menuView.addView(menuBox, new FrameLayout.LayoutParams(-2, -2, Gravity.CENTER));
+        buildBrowse(root);
         root.addView(menuView, new FrameLayout.LayoutParams(-1, -1));
         setContentView(root);
 
@@ -392,6 +407,184 @@ public class MainActivity extends Activity implements Server.Host {
     }
 
     // ---------- TV settings: reset phone pairing ----------
+
+    // ---------- on-TV song browser ----------
+
+    /** Builds the (hidden) overlay. Sizes follow the screen height, so it reads the same on any TV. */
+    private void buildBrowse(FrameLayout root) {
+        final float px = Math.max(26f, getResources().getDisplayMetrics().heightPixels * 0.036f);
+        browseView = new FrameLayout(this);
+        browseView.setBackgroundColor(0xF2101418);
+        browseView.setVisibility(android.view.View.GONE);
+        LinearLayout box = new LinearLayout(this);
+        box.setOrientation(LinearLayout.VERTICAL);
+        int pad = Math.round(px * 1.4f);
+        box.setPadding(pad, Math.round(px * 0.9f), pad, Math.round(px * 0.6f));
+        browseTitle = new TextView(this);
+        browseTitle.setTextColor(Color.WHITE);
+        browseTitle.setTextSize(android.util.TypedValue.COMPLEX_UNIT_PX, px * 1.3f);
+        browseHint = new TextView(this);
+        browseHint.setTextColor(0xFFB8C2D6);
+        browseHint.setTextSize(android.util.TypedValue.COMPLEX_UNIT_PX, px * 0.76f);
+        browseHint.setPadding(0, Math.round(px * 0.25f), 0, Math.round(px * 0.45f));
+        browseList = new android.widget.ListView(this);
+        browseList.setDivider(new android.graphics.drawable.ColorDrawable(0x22FFFFFF));
+        browseList.setDividerHeight(1);
+        browseList.setSelector(new android.graphics.drawable.ColorDrawable(0x55FFFFFF));
+        browseList.setItemsCanFocus(false);
+        browseList.setFocusable(true);
+        browseList.setFocusableInTouchMode(true);
+        browseAdapter = new android.widget.ArrayAdapter<String>(this, 0, browseLabels) {
+            @Override public android.view.View getView(int pos, android.view.View v, android.view.ViewGroup parent) {
+                TextView t = v instanceof TextView ? (TextView) v : new TextView(MainActivity.this);
+                t.setTextColor(Color.WHITE);
+                t.setTextSize(android.util.TypedValue.COMPLEX_UNIT_PX, px);
+                t.setSingleLine(true);
+                t.setEllipsize(android.text.TextUtils.TruncateAt.END);
+                t.setPadding(Math.round(px * 0.5f), Math.round(px * 0.42f), Math.round(px * 0.5f), Math.round(px * 0.42f));
+                t.setText(getItem(pos));
+                return t;
+            }
+        };
+        browseList.setAdapter(browseAdapter);
+        browseToast = new TextView(this);
+        browseToast.setTextColor(0xFFFFE23B);
+        browseToast.setBackgroundColor(0xCC000000);
+        browseToast.setTextSize(android.util.TypedValue.COMPLEX_UNIT_PX, px * 0.9f);
+        browseToast.setPadding(Math.round(px * 0.6f), Math.round(px * 0.3f), Math.round(px * 0.6f), Math.round(px * 0.3f));
+        browseToast.setSingleLine(true);
+        browseToast.setEllipsize(android.text.TextUtils.TruncateAt.END);
+        browseToast.setVisibility(android.view.View.GONE);
+        box.addView(browseTitle, new LinearLayout.LayoutParams(-1, -2));
+        box.addView(browseHint, new LinearLayout.LayoutParams(-1, -2));
+        box.addView(browseList, new LinearLayout.LayoutParams(-1, 0, 1f));
+        browseView.addView(box, new FrameLayout.LayoutParams(-1, -1));
+        FrameLayout.LayoutParams tl = new FrameLayout.LayoutParams(-2, -2, Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL);
+        tl.bottomMargin = Math.round(px * 1.2f);
+        browseView.addView(browseToast, tl);
+        root.addView(browseView, new FrameLayout.LayoutParams(-1, -1));
+    }
+
+    private java.util.List<BrowseModel.Entry> browseEntries() {
+        java.util.List<BrowseModel.Entry> all = new java.util.ArrayList<>();
+        for (Library.Song s : lib.songs) {
+            if (s.audioH == null || s.audioH.isEmpty()) continue;           // nothing to play
+            all.add(new BrowseModel.Entry(s.id, s.language, s.artist, s.title, s.year));
+        }
+        return all;
+    }
+
+    private java.util.Set<String> queuedIds() {
+        java.util.Set<String> ids = new java.util.HashSet<>();
+        QueueManager.Item cur = queue.current();
+        if (cur != null) ids.add(cur.songId);
+        for (QueueManager.Item it : queue.upcoming()) ids.add(it.songId);
+        return ids;
+    }
+
+    private void showBrowse() {
+        if (browseShown || setupShown || menuShown || debugSingleFile || storage == null || queue == null) return;
+        browseLevel = 0;
+        browseLang = "";
+        browseArtist = "";
+        browseShown = true;
+        browseView.setVisibility(android.view.View.VISIBLE);
+        browseToast.setVisibility(android.view.View.GONE);
+        browseRebuild(0);
+    }
+
+    private void hideBrowse() {
+        browseShown = false;
+        browseCenterDown = false;
+        browseLong = false;
+        browseView.setVisibility(android.view.View.GONE);
+    }
+
+    /** Fills the list for the current level; keepPos = the row to select afterwards. */
+    private void browseRebuild(int keepPos) {
+        java.util.List<BrowseModel.Entry> all = browseEntries();
+        browseLabels.clear();
+        browseValues.clear();
+        int queued = queue.upcoming().size() + (queue.current() != null ? 1 : 0);
+        String where;
+        if (browseLevel == 0) {
+            where = "Choose a song";
+            for (BrowseModel.Row r : BrowseModel.languages(all)) { browseLabels.add(BrowseModel.label(r)); browseValues.add(r.value); }
+        } else if (browseLevel == 1) {
+            where = browseLang.isEmpty() ? "(unknown)" : browseLang;
+            for (BrowseModel.Row r : BrowseModel.artists(all, browseLang)) { browseLabels.add(BrowseModel.label(r)); browseValues.add(r.value); }
+        } else {
+            where = browseArtist.isEmpty() ? "(unknown)" : browseArtist;
+            java.util.Set<String> inQueue = queuedIds();
+            for (BrowseModel.Entry e : BrowseModel.songs(all, browseLang, browseArtist)) { browseLabels.add(BrowseModel.songLabel(e, inQueue.contains(e.id))); browseValues.add(e.id); }
+        }
+        if (browseLabels.isEmpty()) {
+            browseLabels.add(all.isEmpty() ? "No songs yet. Copy your songs to the song folder." : "(nothing here)");
+            browseValues.add("");
+        }
+        browseTitle.setText(where);
+        browseHint.setText((browseLevel == 2 ? "OK: add to the queue    hold OK: play next    Back: back" : "OK: open    Back: " + (browseLevel == 0 ? "close" : "back"))
+                + "    |    " + (queued == 0 ? "queue is empty" : queued + " in the queue"));
+        browseAdapter.notifyDataSetChanged();
+        browseList.requestFocus();
+        browseList.setSelection(Math.max(0, Math.min(keepPos, browseLabels.size() - 1)));
+    }
+
+    private void browseBack() {
+        if (browseLevel == 0) { hideBrowse(); return; }
+        String from = browseLevel == 2 ? browseArtist : browseLang;
+        browseLevel--;
+        browseRebuild(0);
+        for (int i = 0; i < browseValues.size(); i++) if (browseValues.get(i).equals(from)) { browseList.setSelection(i); break; }     // land on the row we came from
+    }
+
+    private void browseNotice(String text) {
+        browseToast.setText(text);
+        browseToast.setVisibility(android.view.View.VISIBLE);
+        ui.removeCallbacks(hideBrowseToast);
+        ui.postDelayed(hideBrowseToast, 2500);
+    }
+
+    /** OK on the selected row: open a language / artist, or put the song in the queue (next = play it after the current song). */
+    private void browseActivate(boolean next) {
+        int pos = browseList.getSelectedItemPosition();
+        if (pos < 0 || pos >= browseValues.size()) return;
+        String v = browseValues.get(pos);
+        if (v.isEmpty()) return;
+        if (browseLevel == 0) { browseLang = v; browseLevel = 1; browseRebuild(0); return; }
+        if (browseLevel == 1) { browseArtist = v; browseLevel = 2; browseRebuild(0); return; }
+        Library.Song s = lib.byId(v);
+        if (s == null || s.audioH.isEmpty()) return;
+        boolean wasIdle = !(cPlaying || cPaused) && queue.current() == null && queue.upcoming().isEmpty();
+        queue.add(s.id, "", next);
+        kick();                                                  // starts playing when nothing was
+        if (wasIdle) { hideBrowse(); return; }                   // the first song: go and watch it
+        browseNotice((next ? "Playing next:  " : "Added:  ") + s.title);
+        browseRebuild(pos);
+    }
+
+    @Override public boolean dispatchKeyEvent(KeyEvent e) {
+        if (!browseShown) return super.dispatchKeyEvent(e);
+        int k = e.getKeyCode();
+        if (k == KeyEvent.KEYCODE_BACK) {                        // act on key-up; the down event must not reach the activity (it would close the app)
+            if (e.getAction() == KeyEvent.ACTION_UP && !touch()) browseBack(); else touch();
+            return true;
+        }
+        if (k == KeyEvent.KEYCODE_DPAD_CENTER || k == KeyEvent.KEYCODE_ENTER || k == KeyEvent.KEYCODE_BUTTON_A) {
+            if (touch()) return true;                            // the key that wakes the screen does nothing else
+            if (e.getAction() == KeyEvent.ACTION_DOWN) {
+                if (e.getRepeatCount() == 0) { browseCenterDown = true; browseLong = false; }
+                else if (browseCenterDown && !browseLong && e.getEventTime() - e.getDownTime() >= 600) { browseLong = true; browseActivate(true); }
+            } else if (e.getAction() == KeyEvent.ACTION_UP) {
+                if (browseCenterDown && !browseLong) browseActivate(false);
+                browseCenterDown = false;
+                browseLong = false;
+            }
+            return true;
+        }
+        touch();
+        return super.dispatchKeyEvent(e);                        // Up / Down: the list moves
+    }
 
     private void showMenu() {
         if (setupShown || menuShown) return;
@@ -900,6 +1093,7 @@ public class MainActivity extends Activity implements Server.Host {
             o.put("posMs", cPos).put("durMs", cDur);
             o.put("vocalOn", vocalOn).put("flipped", flipped.contains(currentSongId));
             o.put("menu", menuShown);
+            o.put("browse", browseShown);                          // the on-TV song browser is open
             if (appFolder != null) o.put("songFolder", appFolder.getPath());
             o.put("setup", setupShown);                            // the TV is asking for the Karaoke folder
             if (setupShown) o.put("setupText", setupMsg);
@@ -959,7 +1153,7 @@ public class MainActivity extends Activity implements Server.Host {
         qrSmall.setVisibility(active && !debugSingleFile ? android.view.View.VISIBLE : android.view.View.GONE);
         if (idle) {
             String info = !libraryNote.isEmpty() ? libraryNote
-                    : lib.songs.size() + " songs  -  scan the code to pick one";
+                    : lib.songs.size() + " songs  -  press OK to choose one here, or scan the code with your phone";
             idleInfo.setText(info);
             status.setVisibility(android.view.View.INVISIBLE);
             nowView.setVisibility(android.view.View.INVISIBLE);
@@ -985,7 +1179,7 @@ public class MainActivity extends Activity implements Server.Host {
         sb.append(st).append("  |  ").append(vocalOn ? "VOCAL ON" : "KARAOKE").append("  |  ").append(time);
         if (lrc != null) sb.append("  |  Lyrics ").append(lyricOffsetMs >= 0 ? "+" : "-").append(String.format("%.1fs", Math.abs(lyricOffsetMs) / 1000.0));
         if (System.currentTimeMillis() < hintUntil) {
-            sb.append("\nOK: pause   hold OK / Menu: vocal   Left/Right: seek or skip   Up/Down: lyrics later/earlier");
+            sb.append("\nOK: pause   hold OK / Menu: vocal   Left/Right: seek or skip   Up/Down: lyrics later/earlier   Back: songs");
         }
         statusBar.setText(sb.toString());
         // the key-help hint makes the status bar long for a few seconds: the Now line steps aside so the two never touch
@@ -1195,7 +1389,7 @@ public class MainActivity extends Activity implements Server.Host {
     }
 
     @Override public boolean onKeyDown(int k, KeyEvent e) {
-        if (touch()) return true;                        // the key that wakes the screen does nothing else
+        if (touch()) { wokeKey = true; return true; }    // the key that wakes the screen does nothing else (not even its key-up)
         if (setupView.getVisibility() == android.view.View.VISIBLE) {      // folder screen: OK always opens the chooser, whatever has focus
             if (k == KeyEvent.KEYCODE_DPAD_CENTER || k == KeyEvent.KEYCODE_ENTER || k == KeyEvent.KEYCODE_BUTTON_A) { pickFolder(); return true; }
             return super.onKeyDown(k, e);
@@ -1209,6 +1403,7 @@ public class MainActivity extends Activity implements Server.Host {
             }
             return super.onKeyDown(k, e);
         }
+        if (k == KeyEvent.KEYCODE_BACK && (cPlaying || cPaused) && !debugSingleFile) return true;      // Back while a song plays opens the song list (on key-up)
         if (k == KeyEvent.KEYCODE_MENU && idleNow()) { showMenu(); return true; }
         if (player == null) return super.onKeyDown(k, e);
         hintUntil = System.currentTimeMillis() + 6000;
@@ -1237,8 +1432,15 @@ public class MainActivity extends Activity implements Server.Host {
     }
 
     @Override public boolean onKeyUp(int k, KeyEvent e) {
+        if (wokeKey) { wokeKey = false; return true; }
+        if (k == KeyEvent.KEYCODE_BACK && !browseShown && !menuShown && !setupShown && (cPlaying || cPaused) && !debugSingleFile) {
+            showBrowse();
+            return true;
+        }
         if ((k == KeyEvent.KEYCODE_DPAD_CENTER || k == KeyEvent.KEYCODE_ENTER) && player != null) {
-            if (!longPressed) togglePause();
+            if (!longPressed && !menuShown && !setupShown && !browseShown) {
+                if (idleNow()) showBrowse(); else togglePause();       // OK on the idle screen: choose a song here
+            }
             longPressed = false;
             return true;
         }

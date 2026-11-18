@@ -47,6 +47,11 @@ def main():
     if rc == 0:
         rc = run([os.path.join(JAVA, "bin", "java"), "-Dfile.encoding=UTF-8", "-cp", out, "PrefetcherTest"])
     ok = ok and rc == 0
+    print("== BrowseModelTest (JVM)")
+    rc = run([os.path.join(JAVA, "bin", "javac"), "-encoding", "UTF-8", "-d", out, os.path.join(SRC, "BrowseModel.java"), os.path.join(HERE, "BrowseModelTest.java")])
+    if rc == 0:
+        rc = run([os.path.join(JAVA, "bin", "java"), "-Dfile.encoding=UTF-8", "-cp", out, "BrowseModelTest"])
+    ok = ok and rc == 0
     print("== AppFoldersTest (JVM)")
     rc = run([os.path.join(JAVA, "bin", "javac"), "-encoding", "UTF-8", "-d", out, os.path.join(SRC, "AppFolders.java"), os.path.join(HERE, "AppFoldersTest.java")])
     if rc == 0:
