@@ -734,10 +734,19 @@ public class MainActivity extends Activity {
         storageBusy = true;
         new Thread(() -> {
             double[] gb = null;
-            try {
-                gb = nativeStorageGb("/data");
+            boolean usb = false;
+            try {                                            // a USB drive / SD card wins (that is where the songs live); the internal storage is the fallback
+                double[] ext = StorageInfo.largestExternal(dfText(null));
+                if (ext != null) { gb = ext; usb = true; }
             } catch (Exception e) {
-                android.util.Log.w("Launcher", "df failed: " + e);
+                android.util.Log.w("Launcher", "df (volumes) failed: " + e);
+            }
+            if (gb == null) {
+                try {
+                    gb = nativeStorageGb("/data");
+                } catch (Exception e) {
+                    android.util.Log.w("Launcher", "df failed: " + e);
+                }
             }
             double framework = -1;
             try {
@@ -747,10 +756,11 @@ public class MainActivity extends Activity {
             } catch (Exception e) {
                 android.util.Log.w("Launcher", "StatFs failed: " + e);
             }
-            if (gb != null && framework > 0 && Math.abs(framework - gb[1]) > Math.max(1.0, gb[1] * 0.1)) {
+            if (!usb && gb != null && framework > 0 && Math.abs(framework - gb[1]) > Math.max(1.0, gb[1] * 0.1)) {
                 android.util.Log.i("Launcher", String.format(Locale.US, "storage: kernel says %.1f GB, framework says %.0f GB (using the kernel's)", gb[1], framework));
             }
             final double[] r = gb;
+            final boolean shownUsb = usb;
             runOnUiThread(() -> {
                 storageBusy = false;
                 if (r == null) { storageView.setText(""); return; }
@@ -760,10 +770,26 @@ public class MainActivity extends Activity {
                 storageBar.fillColor = low ? COL_LOW : COL_OK;
                 storageBar.invalidate();
                 storageView.setTextColor(low ? COL_LOW : COL_DIM);
-                storageView.setText(String.format(Locale.US, total < 10 ? "%.1f GB free of %.1f GB%s" : "%.1f GB free of %.0f GB%s",
-                        free, total, low ? "  • low space" : ""));
+                storageView.setText(String.format(Locale.US, total < 10 ? "%s%.1f GB free of %.1f GB%s" : "%s%.1f GB free of %.0f GB%s",
+                        shownUsb ? "USB " : "", free, total, low ? "  • low space" : ""));
             });
         }, "storage").start();
+    }
+
+    /** The whole output of `df -k path` (all filesystems when path is null). */
+    private static String dfText(String path) throws Exception {
+        java.util.List<String> cmd = new java.util.ArrayList<>();
+        cmd.add("df");
+        cmd.add("-k");
+        if (path != null) cmd.add(path);
+        Process p = new ProcessBuilder(cmd).redirectErrorStream(true).start();
+        StringBuilder sb = new StringBuilder();
+        try (java.io.BufferedReader br = new java.io.BufferedReader(new java.io.InputStreamReader(p.getInputStream(), "UTF-8"))) {
+            for (String ln; (ln = br.readLine()) != null; ) sb.append(ln).append('\n');
+        } finally {
+            p.destroy();
+        }
+        return sb.toString();
     }
 
     /** {free GB, total GB} of the filesystem holding path, from `df -k` (kernel numbers); null if df is unusable. */
