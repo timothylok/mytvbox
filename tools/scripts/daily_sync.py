@@ -1,5 +1,11 @@
 """Daily GetVideo -> karaoke -> TV box sync (run by Task Scheduler at 03:00 through daily_sync_hidden.vbs).
 
+TARGET (--target, default "google"): the Google_TV box. Its songs live on the USB DRIVE (volume A6D0-F59E) in the app's own folder
+/storage/A6D0-F59E/Android/data/<app id>/files/Karaoke. The box's wireless-debugging port changes after a reboot, so it is looked up
+by its mDNS name (`adb mdns services`) every run, with the last good address as a fallback. No USB drive mounted = nothing is pushed
+(the box's own storage is only ~3.8 GB). The app must have that folder selected (TV Settings > Song location), otherwise the run reports
+it. "--target old" = the Android 10 box (192.168.3.79:5555, internal /sdcard/Karaoke).
+
 Same logic as the manual process (CLAUDE.md rule 2), one song at a time, every step logged to processed.csv:
   A  make_karaoke.py   Demucs L/R mp3 + loudness normalize for sources that have no karaoke mp3 yet
      align             lyrics timed to the vocals (align_folder.py + clean_aligned.py) for songs whose .lrc is still plain
@@ -42,10 +48,19 @@ SUBLOG = os.path.join(LOGDIR, "daily_sync_sub.log")
 WORK = os.path.join(TOOLS, "daily_sync")          # staging + backups of original lyric files
 GETVIDEO = r"D:\ai\GetVideo"
 KARAOKE = r"D:\ai\Karaoke"
-BOX = "192.168.3.79:5555"
-BOX_HOST = "192.168.3.79"
-BOX_ROOT = "/sdcard/Karaoke"
 PKG = "com.superghosttim.karaokeking"
+TARGETS = {
+    # addr = last known adb address; mdns = the box's wireless-debugging name (its serial); usb_uuid = the drive that holds the songs
+    "google": {"addr": "192.168.3.97:2025", "mdns": "adb-1e5517831b69e12c", "usb_uuid": "A6D0-F59E"},
+    "old": {"addr": "192.168.3.79:5555", "mdns": None, "usb_uuid": None},
+}
+ADDR_FILE = os.path.join(LOGDIR, "box_address.json")
+TARGET = "google"
+BOX = TARGETS["google"]["addr"]
+BOX_HOST = BOX.split(":")[0]
+USB_UUID = TARGETS["google"]["usb_uuid"]
+BOX_VOL = "/storage/" + USB_UUID                     # the volume that holds the songs (df is asked about it)
+BOX_ROOT = "%s/Android/data/%s/files/Karaoke" % (BOX_VOL, PKG)
 LANGCODE = {"Cantopop": "zh", "Mandarin": "zh", "JPop": "ja", "KPop": "ko", "English": "en", "Other": "zh"}   # Whisper language per library
 META = ("crops.txt", "titles.txt", "years.txt", "static_videos.txt")
 NOWIN = 0x08000000                                  # CREATE_NO_WINDOW: children never open a console
@@ -411,7 +426,60 @@ def align_batch(batch, st, language):
 
 
 # ------------------------------------------------------------------ box
+def use_target(name):
+    global TARGET, BOX, BOX_HOST, USB_UUID, BOX_VOL, BOX_ROOT
+    t = TARGETS[name]
+    TARGET, BOX, BOX_HOST, USB_UUID = name, t["addr"], t["addr"].split(":")[0], t["usb_uuid"]
+    if USB_UUID:
+        BOX_VOL = "/storage/" + USB_UUID
+        BOX_ROOT = "%s/Android/data/%s/files/Karaoke" % (BOX_VOL, PKG)
+    else:
+        BOX_VOL, BOX_ROOT = "/sdcard", "/sdcard/Karaoke"
+
+
+def find_box_address():
+    """The wireless-debugging port changes after a reboot: look the box up by its mDNS name, else use the last good / configured address."""
+    name = TARGETS[TARGET].get("mdns")
+    if not name:
+        return BOX
+    try:
+        r = subprocess.run([ADB, "mdns", "services"], capture_output=True, text=True, timeout=25, creationflags=NOWIN,
+                           encoding="utf-8", errors="replace")
+        for ln in r.stdout.splitlines():
+            parts = ln.split()
+            if len(parts) >= 3 and parts[0].startswith(name) and parts[1].startswith("_adb") and "pairing" not in parts[1] \
+                    and re.fullmatch(r"\d+\.\d+\.\d+\.\d+:\d+", parts[2]):
+                return parts[2]
+    except Exception as e:
+        lg.warning("adb mdns services: %s", e)
+    try:
+        with open(ADDR_FILE, encoding="utf-8") as fh:
+            last = json.load(fh).get(TARGET)
+            if last:
+                return last
+    except (OSError, ValueError):
+        pass
+    return BOX
+
+
+def ensure_root(create=True):
+    """True when the song folder can be used: for the USB target the drive must be mounted; the folder is created when missing."""
+    if USB_UUID:
+        rc, out = adb(["shell", "[ -d /storage/%s ] && echo yes || echo no" % USB_UUID], 20)
+        if rc != 0 or "yes" not in out:
+            return False
+    if create:
+        adb(["shell", "mkdir -p " + q(BOX_ROOT)], 30)
+    rc, out = adb(["shell", "[ -d %s ] && echo yes || echo no" % q(BOX_ROOT)], 20)
+    return rc == 0 and "yes" in out
+
+
 def connect():
+    global BOX, BOX_HOST
+    addr = find_box_address()
+    if addr != BOX:
+        lg.info("box address %s -> %s", BOX, addr)
+        BOX, BOX_HOST = addr, addr.split(":")[0]
     for i in range(3):
         try:
             subprocess.run([ADB, "connect", BOX], capture_output=True, timeout=25, creationflags=NOWIN)
@@ -419,6 +487,16 @@ def connect():
             lg.warning("adb connect: %s", e)
         rc, out = adb(["shell", "echo ok"], 20)
         if rc == 0 and "ok" in out:
+            try:                                             # remember the address that worked (the fallback of find_box_address)
+                last = {}
+                if os.path.isfile(ADDR_FILE):
+                    last = json.load(open(ADDR_FILE, encoding="utf-8"))
+                if last.get(TARGET) != BOX:
+                    last[TARGET] = BOX
+                    with open(ADDR_FILE, "w", encoding="utf-8") as fh:
+                        json.dump(last, fh)
+            except (OSError, ValueError):
+                pass
             return True
         lg.warning("box not reachable (try %d): %s", i + 1, out.strip()[:100])
         time.sleep(20)
@@ -497,7 +575,7 @@ def remote_list():
 
 
 def free_bytes():
-    rc, out = adb(["shell", "df /sdcard | tail -1"], 30)
+    rc, out = adb(["shell", "df %s | tail -1" % q(BOX_VOL)], 30)
     try:
         return int(out.split()[3]) * 1024
     except Exception:
@@ -551,6 +629,11 @@ def phase_b_to_e(songs, st, a):
         log("sync", BOX, "", "skipped", "box unreachable")
         return
     summary["box"] = "connected"
+    if not ensure_root(create=not a.dry_run):
+        summary["box"] = "usb drive not mounted"
+        attention("the song folder %s is not available (USB drive %s not plugged in / not mounted): nothing pushed; will retry tomorrow" % (BOX_ROOT, USB_UUID))
+        log("sync", BOX, "", "skipped", "song folder / USB drive not available")
+        return
     rem = remote_list()
     if rem is None:
         attention("cannot list the box's Karaoke folder; push skipped")
@@ -698,6 +781,13 @@ def rescan():
             log("rescan", "", "", "skipped", "app not running")
             return
         tok = token()
+        if tok and USB_UUID:
+            try:
+                sf = api("/api/state", tok).get("songFolder")
+                if sf != BOX_ROOT:
+                    attention("the app reads %r, not %s: choose it in TV Settings > Song location, or the pushed songs will not show" % (sf, BOX_ROOT))
+            except Exception as e:
+                lg.warning("could not check the app's song folder: %s", e)
         before = api("/api/state", tok).get("songCount")
         if not ok:
             summary["rescan"] = "skipped: TV busy"
@@ -720,6 +810,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--dry-run", action="store_true")
     ap.add_argument("--only")
+    ap.add_argument("--target", choices=sorted(TARGETS), default="google", help="google = Google_TV box, songs on its USB drive (default); old = Android 10 box")
     ap.add_argument("--no-process", action="store_true")
     ap.add_argument("--no-push", action="store_true")
     ap.add_argument("--max-hours", type=float, default=5.0, help="stop starting new Demucs/alignment work after this long")
@@ -728,6 +819,7 @@ def main():
     ap.add_argument("--hold", nargs=2, metavar=("KEY", "REASON"))
     ap.add_argument("--release", metavar="KEY")
     a = ap.parse_args()
+    use_target(a.target)
     sys.stdout.reconfigure(encoding="utf-8")
     setup_logging(console=sys.stdout.isatty())
 
