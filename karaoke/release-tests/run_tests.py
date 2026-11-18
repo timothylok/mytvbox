@@ -41,6 +41,12 @@ def main():
     if rc == 0:
         rc = run([os.path.join(JAVA, "bin", "java"), "-Dfile.encoding=UTF-8", "-cp", out, "PairingTest"])
     ok = ok and rc == 0
+    print("== PrefetcherTest (JVM)")
+    rc = run([os.path.join(JAVA, "bin", "javac"), "-encoding", "UTF-8", "-d", out, os.path.join(SRC, "Storage.java"), os.path.join(SRC, "FileStorage.java"),
+              os.path.join(SRC, "Lrc.java"), os.path.join(SRC, "Prefetcher.java"), os.path.join(HERE, "PrefetcherTest.java")])
+    if rc == 0:
+        rc = run([os.path.join(JAVA, "bin", "java"), "-Dfile.encoding=UTF-8", "-cp", out, "PrefetcherTest"])
+    ok = ok and rc == 0
     print("== AppFoldersTest (JVM)")
     rc = run([os.path.join(JAVA, "bin", "javac"), "-encoding", "UTF-8", "-d", out, os.path.join(SRC, "AppFolders.java"), os.path.join(HERE, "AppFoldersTest.java")])
     if rc == 0:

@@ -86,6 +86,8 @@ public class MainActivity extends Activity implements Server.Host {
     private String currentSongId = "";
     private String pairToken = "";           // secret in the QR code (see Pairing)
     private History history;                 // play history, last 30 days (history.jsonl)
+    private final Prefetcher prefetcher = new Prefetcher();   // warms the next queued song while the current one plays
+    private long lastWarmCheck;
     private volatile Storage storage;        // the Karaoke folder the user picked (null until then); ALL song files go through it
     private android.content.SharedPreferences prefs;
     private FrameLayout setupView;           // first-run screen: choose the Karaoke folder
@@ -152,7 +154,7 @@ public class MainActivity extends Activity implements Server.Host {
         FrameLayout.LayoutParams clp = new FrameLayout.LayoutParams(-1, -2, Gravity.CENTER_HORIZONTAL | Gravity.TOP);
         clp.setMargins(0, 280, 0, 0);
         root.addView(countdownView, clp);
-        bannerView = new TextView(this);                       // "Now singing" / "Next up" banner
+        bannerView = new TextView(this);                       // "Next up" banner
         bannerView.setTextColor(Color.WHITE);
         bannerView.setBackgroundColor(0xB3101418);
         bannerView.setTextSize(30);
@@ -439,6 +441,7 @@ public class MainActivity extends Activity implements Server.Host {
             }
             if (granted && SafStorage.isInternal(tree)) {
                 appFolder = null;
+                prefetcher.cancel();
                 storage = new SafStorage(this, tree);
                 Library cached = Library.load(storage, priv("index.json"));     // show the list from the last scan at once
                 if (cached != null && !cached.songs.isEmpty()) { lib = cached; libraryNote = ""; }
@@ -491,6 +494,7 @@ public class MainActivity extends Activity implements Server.Host {
         if (!dir.isDirectory() && !dir.mkdirs()) android.util.Log.w("Karaoke", "cannot create " + dir);
         prefs.edit().putBoolean("appfolder", true).apply();
         appFolder = dir;
+        prefetcher.cancel();                                    // handles of the old folder are meaningless now
         storage = new FileStorage(dir);
         Library cached = Library.load(storage, priv("index.json"));
         if (cached != null && !cached.songs.isEmpty()) { lib = cached; libraryNote = ""; }
@@ -640,7 +644,16 @@ public class MainActivity extends Activity implements Server.Host {
             vocalOn = false;
             String vstem = s.video.isEmpty() ? "" : s.video.substring(s.video.lastIndexOf('/') + 1).replaceFirst("\\.[^.]+$", "");
             startFile(st.uri(s.audioH), s.videoH.isEmpty() ? null : st.uri(s.videoH), null, vstem, s.file.toLowerCase().endsWith(".mp4"));
-            loadLyricsAsync(st, s.id, s.lrcH);
+            Prefetcher.Result pre = prefetcher.take(s.id);
+            if (pre != null && pre.lrc != null) {                 // warmed while the previous song played: lyrics are ready, no read, no parse
+                lrc = pre.lrc;
+                lastLine = -2;
+                lastCount = -1;
+                android.util.Log.d("Karaoke", "prefetch hit: " + (pre.bytes / 1024) + " KB warmed in " + pre.ms + " ms");
+            } else {
+                android.util.Log.d("Karaoke", "prefetch miss");
+                loadLyricsAsync(st, s.id, s.lrcH);
+            }
             if (history != null) history.started(System.currentTimeMillis(), s.id, s.title, s.artist, s.language, it.singer);
             return;
         }
@@ -1036,14 +1049,12 @@ public class MainActivity extends Activity implements Server.Host {
         return it.singer.isEmpty() ? t : it.singer + " - " + t;
     }
 
-    /** "Now singing" for the first 6 s of a song, "Next up" for the last 15 s. */
+    /** "Next up" for the last 15 s of a song. (The "Now singing" banner was removed: the bottom bars already show the song and the singer.) */
     private void updateBanner() {
         String text = null;
         if (banners && !debugSingleFile && (cPlaying || cPaused)) {
-            QueueManager.Item cur = queue.current();
             java.util.List<QueueManager.Item> up = queue.upcoming();
-            if (cur != null && cPos < 6000) text = "Now singing:  " + describe(cur);
-            else if (!up.isEmpty() && cDur > 25000 && cDur - cPos <= 15000) text = "Next up:  " + describe(up.get(0));
+            if (!up.isEmpty() && cDur > 25000 && cDur - cPos <= 15000) text = "Next up:  " + describe(up.get(0));
         }
         if (text == null) { if (bannerView.getVisibility() != android.view.View.GONE) bannerView.setVisibility(android.view.View.GONE); return; }
         if (!text.contentEquals(bannerView.getText())) bannerView.setText(text);
@@ -1136,10 +1147,23 @@ public class MainActivity extends Activity implements Server.Host {
         if (n < sb.length()) sb.delete(n, sb.length());
     }
 
+    /** While a song plays (after its first seconds), reads the start of the next queued song so its start is fast; checked every 2 s. */
+    private void warmNextSong(long now) {
+        if (now - lastWarmCheck < 2000) return;
+        lastWarmCheck = now;
+        if (!cPlaying || cPos < 8000 || storage == null || queue == null || debugSingleFile) return;
+        java.util.List<QueueManager.Item> up = queue.upcoming();
+        if (up.isEmpty()) return;
+        Library.Song s = lib.byId(up.get(0).songId);
+        if (s == null || s.audioH.isEmpty() || s.id.equals(prefetcher.wantedId())) return;
+        prefetcher.request(storage, s.id, s.audioH, s.videoH, s.lrcH);
+    }
+
     private final Runnable tick = new Runnable() {
         @Override public void run() {
             refresh(); showLyrics(); updateBanner(); sleepTick();
             long now = System.currentTimeMillis();
+            warmNextSong(now);
             if (history != null && now - lastPrune > 3600000L) { lastPrune = now; history.prune(now); }   // housekeeping: drop entries older than 30 days
             ui.postDelayed(this, 250);
         }
@@ -1262,6 +1286,7 @@ public class MainActivity extends Activity implements Server.Host {
         ui.removeCallbacksAndMessages(null);
         if (server != null) server.stop();
         if (!debugSingleFile) KeepAliveService.stop(this);
+        prefetcher.cancel();
         if (player != null) player.release();
     }
 }
