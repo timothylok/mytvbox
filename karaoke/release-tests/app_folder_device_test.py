@@ -172,6 +172,57 @@ def main():
         time.sleep(2)
         st = state(base, token, wait=5)
         check("9. the OK key on the TV does not bring up a setup screen", st.get("setup") is False, st)
+
+        # 12-17. the in-app song-location chooser (Settings > Song location), driven with the remote's keys
+        def key(k, wait=1.2):
+            box.sh("input keyevent " + k)
+            time.sleep(wait)
+
+        def top():
+            out = box.sh("dumpsys activity activities | grep -E 'mResumedActivity|topResumedActivity'")
+            return "chooser" if "FolderChooserActivity" in out else ("main" if PKG + "/" in out else out.strip()[:80])
+
+        def sf():
+            return state(base, token, wait=8).get("songFolder")
+
+        original = sf()
+        check("12. the app reports its song folder", bool(original), original)
+        if original:
+            key("KEYCODE_MENU", 2)
+            check("12b. the TV settings open", state(base, token, wait=5).get("menu") is True)
+            key("KEYCODE_DPAD_DOWN")
+            key("KEYCODE_DPAD_CENTER", 3)
+            check("13. Settings > Song location opens the chooser", top() == "chooser", top())
+            key("KEYCODE_DPAD_DOWN")                       # row 2: ".. (up)"
+            key("KEYCODE_DPAD_CENTER", 2)                  # now in the folder above
+            key("KEYCODE_DPAD_UP")                         # row 1: "[ Use this folder ]"
+            key("KEYCODE_DPAD_CENTER", 4)
+            st = state(base, token, wait=10, until=lambda s: s.get("songFolder") != original)
+            parent = original.rsplit("/", 1)[0]
+            check("14. 'Use this folder' one level up is applied", st.get("songFolder") == parent and top() == "main", (st.get("songFolder"), top()))
+            code, _ = http(base, "/api/state", "")
+            check("14b. the phone API still needs the pairing token (401)", code == 401, code)
+
+            # 15. cancel with Back changes nothing
+            key("KEYCODE_MENU", 2)
+            key("KEYCODE_DPAD_DOWN")
+            key("KEYCODE_DPAD_CENTER", 3)
+            for _ in range(4):                             # Back: up to the storage top, to the storage list, then cancel
+                if top() != "chooser":
+                    break
+                key("KEYCODE_BACK", 1.5)
+            check("15. Back out of the chooser cancels and keeps the folder", top() == "main" and sf() == parent, (top(), sf()))
+
+            # 16. put the original folder back: open, go down into 'Karaoke/' (rows: use, other storage, Karaoke/), use it
+            key("KEYCODE_MENU", 2)
+            key("KEYCODE_DPAD_DOWN")
+            key("KEYCODE_DPAD_CENTER", 3)
+            key("KEYCODE_DPAD_DOWN")
+            key("KEYCODE_DPAD_DOWN")
+            key("KEYCODE_DPAD_CENTER", 2)                  # into Karaoke
+            key("KEYCODE_DPAD_CENTER", 4)                  # first row: use this folder
+            st = state(base, token, wait=10, until=lambda s: s.get("songFolder") == original)
+            check("16. the original song folder is restored", st.get("songFolder") == original and top() == "main", (st.get("songFolder"), top()))
     finally:
         box.sh("rm -rf '%s'" % (folder + "/ZZ Fallback Test"))
         http(base, "/api/rescan", token, "POST", b"")

@@ -95,13 +95,13 @@ public class MainActivity extends Activity implements Server.Host {
     private boolean pickerMissing;          // the last pickFolder() found no chooser app on this device
     private volatile boolean setupShown;    // read by the web server thread
     private FrameLayout menuView;            // TV settings: reset phone pairing (Menu key / hold OK while nothing plays)
-    private android.widget.Button menuReset, menuClose;
+    private android.widget.Button menuReset, menuClose, menuLocation;
     private TextView menuText;
     private volatile boolean menuShown;
     private boolean resetArmed = false;
     private ImageView qrBigView, sleepQrView;
     private volatile String setupMsg = "";
-    private static final int REQ_PICK = 41;
+    private static final int REQ_PICK = 41, REQ_LOC = 42;
     /** The app's own files (queue, history, flips, offsets, index cache) live in private storage, never in the user's folder. */
     private File priv(String name) { return new File(getFilesDir(), name); }
     private long lastPrune = 0;
@@ -291,6 +291,16 @@ public class MainActivity extends Activity implements Server.Host {
         LinearLayout.LayoutParams mb = new LinearLayout.LayoutParams(-2, -2);
         mb.topMargin = 40;
         menuBox.addView(menuReset, mb);
+        menuLocation = new android.widget.Button(this);        // only shown on devices with no system folder chooser
+        menuLocation.setText("Song location");
+        menuLocation.setTextSize(26);
+        menuLocation.setFocusableInTouchMode(true);
+        menuLocation.setOnClickListener(new android.view.View.OnClickListener() {
+            @Override public void onClick(android.view.View v) { chooseLocation(); }
+        });
+        LinearLayout.LayoutParams ml = new LinearLayout.LayoutParams(-2, -2);
+        ml.topMargin = 24;
+        menuBox.addView(menuLocation, ml);
         menuClose = new android.widget.Button(this);
         menuClose.setText("Close");
         menuClose.setTextSize(26);
@@ -377,6 +387,9 @@ public class MainActivity extends Activity implements Server.Host {
         resetArmed = false;
         menuText.setText("Settings\n\nReset phone pairing makes a new QR code. Phones that scanned the old code stop working until they scan the new one.");
         menuReset.setText("Reset phone pairing");
+        boolean loc = appFolder != null;
+        menuLocation.setVisibility(loc ? android.view.View.VISIBLE : android.view.View.GONE);
+        if (loc) menuText.setText(menuText.getText() + "\n\nSong folder: " + appFolder.getPath());
         menuShown = true;
         menuView.setVisibility(android.view.View.VISIBLE);
         menuReset.requestFocus();
@@ -439,6 +452,24 @@ public class MainActivity extends Activity implements Server.Host {
         showSetup(saved == null ? "" : "The Karaoke folder is not available any more.\n\n");
     }
 
+    /** The app's own folders: internal storage and each USB drive / SD card (no permission needed on Android 10 or 16). */
+    private java.util.List<File> appRoots() {
+        java.util.List<File> out = new java.util.ArrayList<>();
+        File[] ds = getExternalFilesDirs(null);
+        if (ds != null) for (File f : ds) if (f != null) out.add(f);
+        if (out.isEmpty()) out.add(getFilesDir());
+        return out;
+    }
+
+    /** Settings > Song location: the in-app chooser (only reachable when the device has no system folder chooser). */
+    private void chooseLocation() {
+        hideMenu();
+        android.content.Intent i = new android.content.Intent(this, FolderChooserActivity.class);
+        if (appFolder != null) i.putExtra(FolderChooserActivity.EXTRA_CURRENT, appFolder.getPath());
+        try { startActivityForResult(i, REQ_LOC); }
+        catch (Exception e) { android.util.Log.w("Karaoke", "song location chooser failed: " + e); }
+    }
+
     private boolean chooserAvailable() {
         try { return new android.content.Intent(android.content.Intent.ACTION_OPEN_DOCUMENT_TREE).resolveActivity(getPackageManager()) != null; }
         catch (Exception e) { return true; }       // unsure: let the button try
@@ -451,6 +482,12 @@ public class MainActivity extends Activity implements Server.Host {
     private void useAppFolder() {
         File base = getExternalFilesDir(null);
         File dir = new File(base == null ? getFilesDir() : base, "Karaoke");
+        String savedPath = prefs.getString("appfolder_path", null);
+        if (savedPath != null) {                                // the user chose a location in the in-app chooser (re-checked: it must still be inside the app's folders)
+            File f = new File(savedPath);
+            if (f.isDirectory() && AppFolders.isAllowed(appRoots(), f)) dir = f;
+            else android.util.Log.w("Karaoke", "saved song location is gone or not allowed: " + savedPath);
+        }
         if (!dir.isDirectory() && !dir.mkdirs()) android.util.Log.w("Karaoke", "cannot create " + dir);
         prefs.edit().putBoolean("appfolder", true).apply();
         appFolder = dir;
@@ -495,6 +532,17 @@ public class MainActivity extends Activity implements Server.Host {
 
     @Override protected void onActivityResult(int req, int result, android.content.Intent data) {
         super.onActivityResult(req, result, data);
+        if (req == REQ_LOC) {
+            String path = result == RESULT_OK && data != null ? data.getStringExtra(FolderChooserActivity.EXTRA_PATH) : null;
+            if (path == null) return;                                       // cancelled: nothing changes
+            File f = new File(path);
+            if (!f.isDirectory() || !AppFolders.isAllowed(appRoots(), f)) { android.util.Log.w("Karaoke", "rejected song location " + path); return; }
+            prefs.edit().putString("appfolder_path", f.getAbsolutePath()).apply();
+            priv("index.json").delete();                                    // the list belongs to the old folder
+            lib = Library.empty();
+            useAppFolder();
+            return;
+        }
         if (req != REQ_PICK) return;
         if (pickerMissing) { pickerMissing = false; return; }
         if (result != RESULT_OK || data == null || data.getData() == null) {
@@ -827,6 +875,7 @@ public class MainActivity extends Activity implements Server.Host {
             o.put("posMs", cPos).put("durMs", cDur);
             o.put("vocalOn", vocalOn).put("flipped", flipped.contains(currentSongId));
             o.put("menu", menuShown);
+            if (appFolder != null) o.put("songFolder", appFolder.getPath());
             o.put("setup", setupShown);                            // the TV is asking for the Karaoke folder
             if (setupShown) o.put("setupText", setupMsg);
         } catch (Exception ignored) { }
@@ -1119,7 +1168,7 @@ public class MainActivity extends Activity implements Server.Host {
             if (k == KeyEvent.KEYCODE_BACK) { hideMenu(); return true; }
             if (k == KeyEvent.KEYCODE_DPAD_CENTER || k == KeyEvent.KEYCODE_ENTER || k == KeyEvent.KEYCODE_BUTTON_A) {
                 android.view.View f = getCurrentFocus();
-                (f == menuClose ? menuClose : menuReset).performClick();
+                (f == menuClose ? menuClose : f == menuLocation && menuLocation.getVisibility() == android.view.View.VISIBLE ? menuLocation : menuReset).performClick();
                 return true;
             }
             return super.onKeyDown(k, e);

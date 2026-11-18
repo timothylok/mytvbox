@@ -17,6 +17,10 @@
         android:allowBackup="false"
         android:usesCleartextTraffic="false">
         <activity
+            android:name=".FolderChooserActivity"
+            android:exported="false"
+            android:screenOrientation="landscape" />
+        <activity
             android:name=".MainActivity"
             android:exported="true"
             android:launchMode="singleTask"

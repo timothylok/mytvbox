@@ -41,6 +41,11 @@ def main():
     if rc == 0:
         rc = run([os.path.join(JAVA, "bin", "java"), "-Dfile.encoding=UTF-8", "-cp", out, "PairingTest"])
     ok = ok and rc == 0
+    print("== AppFoldersTest (JVM)")
+    rc = run([os.path.join(JAVA, "bin", "javac"), "-encoding", "UTF-8", "-d", out, os.path.join(SRC, "AppFolders.java"), os.path.join(HERE, "AppFoldersTest.java")])
+    if rc == 0:
+        rc = run([os.path.join(JAVA, "bin", "java"), "-Dfile.encoding=UTF-8", "-cp", out, "AppFoldersTest"])
+    ok = ok and rc == 0
     if "--ui" in sys.argv:
         print("== folder_picker_ui_test (device)")
         extra = [a for a in sys.argv[1:] if a != "--ui"]
