@@ -83,7 +83,7 @@ Lesson: check that the `.lrc` length fits the mp3 and that the first aligned lin
 
 **Gotchas:** in Git Bash with `MSYS_NO_PATHCONV=1`, give adb.exe `D:/...` paths, not `/d/...`; `align_folder.py` takes ~4 min per song (use the background option); folder names like `Gareth.T` have no trailing dot.
 
-## Daily sync job (2026-11-16)
+## Daily sync job (2026-11-16; retargeted to the Google TV's USB drive 2026-11-18)
 
 `tools/scripts/daily_sync.py`, Task Scheduler task **Karaoke Daily Sync** (03:00, hidden through `daily_sync_hidden.vbs`, 8 h limit, no overlap).
 Pipeline per song: make_karaoke (Demucs + normalize) -> align (Whisper language by library: zh/ja/ko/en; originals kept in `tools/daily_sync/orig`) -> quarantine check
@@ -96,6 +96,14 @@ The task runs **whether or not the user is logged on** (S4U, no stored password)
 Not yet done / untested: the first unattended 03:00 run (check `logs/last_run.json`, `logs/daily_sync.log` and the last `sync` rows of `processed.csv` in the morning), Rescan after a push (the app was not running during the test push), ko/ja/en alignment quality.
 Held songs so far: BlackGuy + 7 Eason Chan (by hand) + 7 caught by the length check (Theresa Fu, Daniel Chan, Mayday 你不是真正的快樂, Kvi Baba, YAO ありふれた世界の果てに, G-DRAGON CROOKED, YESUNG 墨紙): need matching `.lrc` files from the user (they release themselves when the file changes).
 The app was renamed to **K歌之王** (label, notification channel, idle title) 2026-11-16 and installed on the box (debug build). Installing + launching restored the saved queue and started a song: check `/api/state` after installs.
+
+**Target changed 2026-11-18 (commit 2e70a02): the job now pushes to the GOOGLE TV's USB DRIVE, no longer to the Android 10 box.** (The pipeline text above still applies; only the box side changed. Everything the text says about `192.168.3.79` / `/sdcard/Karaoke` is now the `--target old` setting.)
+- `--target google` (default) = Google_TV box. Songs go to `/storage/A6D0-F59E/Android/data/com.superghosttim.karaokeking/files/Karaoke` (the app's own folder on the USB volume; `A6D0-F59E` is the drive's volume serial). `--target old` = the Android 10 box (`192.168.3.79:5555`, `/sdcard/Karaoke`); it needs the new app installed first (see the TODO below).
+- The box's wireless-debugging PORT changes after a reboot, so every run looks the box up by its mDNS name (`adb mdns services`, name `adb-1e5517831b69e12c`) and falls back to the last good address in `logs/box_address.json`, then to `192.168.3.97:2025`. The addresses and the drive's volume serial are in the `TARGETS` table at the top of `daily_sync.py` (change them there if the box or the drive is replaced).
+- The drive must be plugged in: if `/storage/A6D0-F59E` is missing the push is skipped (`box` = `usb drive not mounted` in `logs/last_run.json`, an ATTENTION line, exit 0, retried the next night); it never falls back to the box's own storage (only ~3.8 GB). Free space is checked on the drive (`df` of the volume). Wireless debugging must stay ON for the 03:00 run to connect; if the box is off or the setting was switched off the run skips the push (`box unreachable`).
+- The app must have that folder selected (TV Settings > Song location > USB drive > `Karaoke/` > Use this folder, done on 2026-11-18). After a push the job compares `/api/state` `songFolder` with the target folder and reports an ATTENTION line if they differ (the pushed songs would not show). Idle gate, `.part` + rename + size check, quarantine, ledger rows and the rescan work as before.
+- Dry run on 2026-11-18 (`python tools\scripts\daily_sync.py --dry-run`, exit 0): found the box, saw the drive, plan = 46 songs to push (the library on the drive has 144), plus the usual make/align work. NOT yet tested: a live push to the USB drive through the job (try `daily_sync.py --only <text of one song>` first) and the first unattended 03:00 run on the new target (check `logs/last_run.json`, `logs/daily_sync.log` and the last `sync` rows of `processed.csv` in the morning). The Task Scheduler entry did not need changing (it runs `daily_sync_hidden.vbs`, default target = google).
+- `tools/scripts/build_usb_library.py` builds / extends the same USB folder by hand (it applies the same rules: processed lyrics, normalized mp3, real videos, held songs skipped).
 
 ## Session 2026-11-17 (TV layout, lyrics, crops) - latest state
 

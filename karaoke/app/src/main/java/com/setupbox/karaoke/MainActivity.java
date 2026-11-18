@@ -241,12 +241,21 @@ public class MainActivity extends Activity implements Server.Host {
         sleepQrView = sleepQr;
         sleepQr.setImageBitmap(smallQr);
         sleepQr.setAlpha(0.35f);
-        sleepBox.addView(sleepQr, new LinearLayout.LayoutParams(160, 160));
+        // Sizes follow the screen height, not fixed px / sp: the QR is 15 % of it and the clock is shrunk until "88:88" fits under the QR,
+        // so the clock never wraps or overflows on any screen, density or font.
+        final int qrPx = Math.round(getResources().getDisplayMetrics().heightPixels * 0.15f);
+        sleepBox.addView(sleepQr, new LinearLayout.LayoutParams(qrPx, qrPx));
         sleepClock = new TextView(this);
         sleepClock.setTextColor(0xFF666666);
-        sleepClock.setTextSize(36);
+        sleepClock.setSingleLine(true);
         sleepClock.setGravity(Gravity.CENTER);
-        sleepBox.addView(sleepClock, new LinearLayout.LayoutParams(160, -2));
+        float clockPx = qrPx * 0.40f;
+        sleepClock.setTextSize(android.util.TypedValue.COMPLEX_UNIT_PX, clockPx);
+        while (clockPx > 12f && sleepClock.getPaint().measureText("88:88") > qrPx * 0.94f) {
+            clockPx *= 0.95f;
+            sleepClock.setTextSize(android.util.TypedValue.COMPLEX_UNIT_PX, clockPx);
+        }
+        sleepBox.addView(sleepClock, new LinearLayout.LayoutParams(qrPx, -2));
         sleepView.addView(sleepBox, new FrameLayout.LayoutParams(-2, -2, Gravity.CENTER));
         root.addView(sleepView, new FrameLayout.LayoutParams(-1, -1));
         setupView = new FrameLayout(this);                     // first run: choose the Karaoke folder (and a warning about USB drives)
@@ -846,7 +855,10 @@ public class MainActivity extends Activity implements Server.Host {
                 java.util.Random r = new java.util.Random();
                 FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) sleepBox.getLayoutParams();
                 lp.gravity = Gravity.TOP | Gravity.START;
-                lp.setMargins(100 + r.nextInt(1400), 80 + r.nextInt(700), 0, 0);
+                android.util.DisplayMetrics dm = getResources().getDisplayMetrics();           // stay on the real screen, whatever its size
+                int bw = Math.max(sleepBox.getWidth(), 1), bh = Math.max(sleepBox.getHeight(), 1);
+                int mx = dm.widthPixels / 20, my = dm.heightPixels / 14;
+                lp.setMargins(mx + r.nextInt(Math.max(1, dm.widthPixels - bw - 2 * mx)), my + r.nextInt(Math.max(1, dm.heightPixels - bh - 2 * my)), 0, 0);
                 sleepBox.setLayoutParams(lp);
             }
         }
