@@ -9,6 +9,7 @@ The first time the app starts it shows **"Choose your Karaoke folder"**.
    - On a box **without** a system chooser (the Google TV box, Android 16) the app opens its **own chooser**: first the list of storages (internal, and a USB drive when one is plugged in, each with its free space), then the folders inside. Use Up / Down / OK; **Back** goes up one level.
    - If the box offers no chooser at all, the app falls back to its **own folder** on the box (the app tells you where it is) and you copy the songs there.
 2. A **USB drive** works on the Google TV box. Plug it in before choosing; the app's folder on the drive is `Android/data/com.superghosttim.karaokeking/files`. Do **not** unplug or eject the drive while a song is playing: Android stops the app when its drive disappears (it restarts with your queue, but the song is lost). On boxes with a slow stick or one that disconnects, prefer the box's own storage.
+   **Warning:** songs kept in the app's own folder (including `Android/data/.../files` on a USB drive) are **deleted when the app is uninstalled**, and also when it is reinstalled with a different signing key. Keep your master copy on the PC (or anywhere else), and do not uninstall the app to "fix" a problem unless you can copy the songs back.
 3. To change the location later, open the TV **Settings** (Menu while nothing is playing) and use **Song location**.
 
 ### Does it ask again?
