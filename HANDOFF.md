@@ -142,6 +142,14 @@ The app was renamed to **K歌之王** (label, notification channel, idle title) 
 - **Never uninstall the app while the library is in its app folder** (it deletes the songs; this wiped 144 songs on 2026-11-18). Debug builds are signed with the upload key, so `adb install -r` works both ways.
 - Still open: Android 10 box not reinstalled/checked (rule 5); back up `D:\ai\keys\` off the PC; Play listing items (privacy-policy placeholders and hosting, banner 1280x720, TV screenshots, first-run help, licences screen); scratch files in `tools\` that can go (`realign_one*`, `realign_work`, `usb_rebuild.log`, `usb_verify.log`, `full_play.log`, `sd_fill.log`, `sd_verify.log`).
 
+## Session 2026-11-19 - latest state
+
+- **First unattended 03:00 run on the SD card worked** (03:00-09:18, 379 min, exit 0): made 4, aligned 61, pushed 99 songs (11.2 GB), 0 failed, 0 held; rescan 152 -> **248 songs**; 62 songs left to align (time limit), about one or two more nights. Card has ~94.6 GB free.
+- **24 songs got no exactly-timed line** (estimated lyrics only): DIOR, Eric Chou, LuHan, Ma Shifu, Mayday x3, Meng Ran, Patrick Brasca, Ren Ran, Silence Wang x2, Tian Yuan, Tr33, WOLF(S), Wang Heye, Xiao A Qi, Yao Xiaotang, Yu Dongran, Zhang Yuan x3, Mrs. GREEN APPLE, Vaundy. All 24 played 50 s on the TV with 0 player errors and the lyric display/highlight looks right in screenshots; **timing not judged by ear: the user should listen** (nudge with the `Lyrics +/-` keys). The other new songs were pushed and md5-checked but not played.
+- **Test gotcha:** `adb exec-out screencap` captures whatever is in front; bring the app up first (`am start -n com.superghosttim.karaokeking/com.setupbox.karaoke.MainActivity`) or you get the launcher/screensaver.
+- **Android 10 box check is parked by the user until further notice** (rule 5 still applies: say it was not checked).
+- Open: listen to the 24 songs; back up `D:\ai\keys\`; Play listing items; delete scratch files in `tools\`; `processed.csv` is rewritten by every nightly run (commit it when convenient).
+
 ## Google TV box (added 2026-11-18)
 
 Second box `Google_TV`: Android 16, armeabi-v7a, adb over wireless debugging (`adb mdns services`; port changes, was 192.168.3.97:2025). The Android 10 box is 192.168.3.79:5555.
