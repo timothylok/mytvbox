@@ -51,7 +51,7 @@ KARAOKE = r"D:\ai\Karaoke"
 PKG = "com.superghosttim.karaokeking"
 TARGETS = {
     # addr = last known adb address; mdns = the box's wireless-debugging name (its serial); usb_uuid = the drive that holds the songs
-    "google": {"addr": "192.168.3.97:2025", "mdns": "adb-1e5517831b69e12c", "usb_uuid": "85F8-1509"},   # SD card (the old WDC USB drive A6D0-F59E is failing: do not use)
+    "google": {"addr": "192.168.3.101:2025", "mdns": "adb-1e5517831b69e12c", "usb_uuid": "85F8-1509"},   # SD card (the old WDC USB drive A6D0-F59E is failing: do not use)
     "old": {"addr": "192.168.3.79:5555", "mdns": None, "usb_uuid": None},
 }
 ADDR_FILE = os.path.join(LOGDIR, "box_address.json")
