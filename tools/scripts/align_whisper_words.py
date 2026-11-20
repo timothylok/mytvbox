@@ -167,6 +167,9 @@ def main():
             first = re.search(r"<(\d+):(\d+\.\d+)>", out[0]) if out else None
             if on is not None and first:
                 ft = int(first.group(1)) * 60 + float(first.group(2))
+                if a.install and abs(ft - on) > 3.0:
+                    print(f"NOT installed: first timed character {ft:.1f}s vs first vocal {on:.1f}s (Whisper missed the opening: lines would be mistimed)", file=sys.stderr)
+                    sys.exit(4)
                 print(f"first vocal energy at {on:.2f}s, first timed character at {ft:.2f}s"
                       + ("  <-- CHECK line 1 (>1.5 s apart)" if abs(ft - on) > 1.5 else ""), file=sys.stderr)
         print(f"{len(out) - plain}/{len(out)} lines timed from heard characters -> {a.out}", file=sys.stderr)
