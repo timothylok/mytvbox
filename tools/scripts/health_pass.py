@@ -48,19 +48,33 @@ def check_sync():
         problems.append(f"daily sync: {d['failed']} failed step(s)")
     for a in d.get("attention", []):
         problems.append("daily sync ATTENTION: " + a)
+    if d.get("pending"):
+        problems.append(f"{d['pending']} song(s) still waiting to be pushed after {d.get('retries', 0)} retry run(s) (TV busy/off?)")
+    try:
+        st = json.load(open(os.path.join(LOGS, "daily_sync_state.json"), encoding="utf-8"))
+        streak = [k for k, v in st.get("fails", {}).items() if v >= 3]
+        if streak:
+            problems.append(f"{len(streak)} song(s) failed 3+ nights in a row: " + "; ".join(streak[:3]))
+        held = st.get("held", {})
+        est = [k for k, v in held.items() if v.get("reason", "").startswith("estimated timing")]
+        notes.append(f"held songs: {len(held)} ({len(est)} for estimated timing; list: daily_sync.py --list-held)")
+    except Exception:
+        pass
+    if d.get("box_extras") or d.get("duplicates"):
+        notes.append(f"library report (logs/library_report.txt): {d.get('box_extras')} file(s) on the box not in the library, {d.get('duplicates')} duplicate title(s)")
     notes.append(f"last sync {fin}: made {d.get('karaoke_made')}, aligned {d.get('aligned')}, pushed {d.get('pushed_songs')} "
                  f"({d.get('pushed_mb')} MB), held {d.get('held')}, box {d.get('box')}, rescan {d.get('rescan')}")
 
 
 def check_tasks():
-    for name in ("Karaoke Daily Sync", "Karaoke Health Pass"):
+    for name in ("Karaoke Daily Sync", "Karaoke Sync Retry", "Karaoke Health Pass"):
         c, o = run(["powershell", "-NoProfile", "-Command",
                     f"$i=Get-ScheduledTaskInfo -TaskName '{name}' -ErrorAction Stop; '{{0}}|{{1}}' -f $i.LastTaskResult,$i.NextRunTime"])
         if c != 0 or "|" not in o:
             problems.append(f"scheduled task '{name}' not found / unreadable")
             continue
         res, nxt = o.strip().splitlines()[-1].split("|", 1)
-        if name == "Karaoke Daily Sync" and res.strip() not in ("0", "267009", "267011"):   # 0 ok, 267009 running, 267011 never run
+        if name != "Karaoke Health Pass" and res.strip() not in ("0", "267009", "267011"):   # 0 ok, 267009 running, 267011 never run
             problems.append(f"task '{name}' last result {res.strip()} (0 = success)")
         notes.append(f"task {name}: last result {res.strip()}, next run {nxt.strip()}")
 
@@ -105,8 +119,7 @@ def check_batch():
     t = open(p, encoding="utf-8", errors="replace").read()
     ok, bad = len(re.findall(r"^\s+installed ", t, re.M)), len(re.findall(r"NOT installed", t))
     notes.append(f"lyric batch: {ok} installed, {bad} NOT installed (log {datetime.datetime.fromtimestamp(os.path.getmtime(p)):%m-%d %H:%M})")
-    if bad:
-        problems.append(f"lyric batch: {bad} song(s) NOT installed (too few lines heard): need better lyric text")
+    # songs the batch could not time are held by daily_sync (see "held songs"), so they are not a problem by themselves
 
 
 def check_pc():

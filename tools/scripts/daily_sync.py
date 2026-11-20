@@ -70,7 +70,7 @@ LINE = re.compile(r"^\s*\[(\d+):(\d+(?:\.\d+)?)\]")
 
 lg = logging.getLogger("daily_sync")
 summary = {"karaoke_made": 0, "aligned": 0, "held": 0, "pushed_songs": 0, "pushed_mb": 0.0, "failed": 0,
-           "attention": [], "box": "not tried", "rescan": "no"}
+           "attention": [], "box": "not tried", "rescan": "no", "pending": 0, "whisper_fixed": 0, "box_extras": None, "duplicates": None}
 
 
 def attention(msg):
@@ -174,6 +174,17 @@ def line_counts(lrc):
             else:
                 est += 1
     return exact, est
+
+
+def est_problem(lrc):
+    """Why this lyric file has no usable timing (mostly estimated lines), or None. Such songs are held, not pushed."""
+    try:
+        exact, est = line_counts(lrc)
+    except OSError as e:
+        return "cannot read lyric file: %s" % e
+    if exact + est >= 8 and exact < 0.5 * (exact + est):
+        return "estimated timing: only %d of %d lines timed exactly" % (exact, exact + est)
+    return None
 
 
 # ------------------------------------------------------------------ state, lock
@@ -375,6 +386,34 @@ def phase_a(songs, st, a, deadline):
             left -= len(batch)
 
 
+def whisper_words_fallback(s, st):
+    """Songs align_folder could barely time: re-time them with align_whisper_words.py (Whisper word times on Demucs vocals),
+    using the lyric text the song already has. Installed only when that script's own gates pass (>= 70 % of lines heard,
+    first character near the first vocal). -> True when installed."""
+    try:
+        from align_whisper_words_batch import lyric_lines
+        lines, _ = lyric_lines(s.k_lrc)
+        if len(lines) < 8:
+            return False
+        txt, out = os.path.join(WORK, "wwords_lyrics.txt"), os.path.join(WORK, "wwords_out.lrc")
+        with open(txt, "w", encoding="utf-8") as fh:
+            fh.write("\n".join(lines) + "\n")
+        rc = sub([sys.executable, "-X", "utf8", os.path.join(HERE, "align_whisper_words.py"), "--mp3", s.src, "--lyrics", txt,
+                  "--out", out, "--install", s.k_lrc, "--min-timed", "0.7", "--language", LANGCODE.get(s.lang, "zh")],
+                 3600, "whisper-words " + s.key)
+        if rc != 0:
+            lg.info("whisper-words gave no usable result for %s (exit %s)", s.key, rc)
+            return False
+        if os.path.isfile(s.src_lrc):
+            shutil.copy2(s.k_lrc, s.src_lrc)
+        st["aligned"][s.key] = sha(s.k_lrc)
+        summary["whisper_fixed"] += 1
+        return True
+    except Exception:
+        lg.error("whisper-words fallback failed for %s\n%s", s.key, traceback.format_exc())
+        return False
+
+
 def align_batch(batch, st, language):
     work = os.path.join(WORK, "stage")
     shutil.rmtree(work, ignore_errors=True)
@@ -417,8 +456,9 @@ def align_batch(batch, st, language):
             st["fails"].pop(s.key, None)
             summary["aligned"] += 1
             log("align", s.src, s.k_lrc, "ok", "%d lines exact, %d estimated (daily_sync; original kept in %s)" % (exact, est, bak))
-            if exact == 0 and est >= 8:
-                attention("%s: no line could be timed exactly (%d estimated); check it on the TV" % (s.key, est))
+            if exact + est >= 8 and exact < 0.5 * (exact + est):      # quality gate: mostly estimated -> Whisper-words method, else hold
+                if not whisper_words_fallback(s, st):
+                    hold(s, st, "estimated timing: only %d of %d lines timed exactly and the Whisper-words method could not time it" % (exact, exact + est))
             save_state(st)
         except Exception:
             lg.error("finishing alignment failed for %s\n%s", s.key, traceback.format_exc())
@@ -557,7 +597,7 @@ def wait_idle(minutes):
             return True
         lg.info("TV not idle: %s", why)
         if time.time() + 300 > end:
-            attention("TV not idle (%s): nothing pushed; will retry tomorrow" % why)
+            attention("TV not idle (%s): nothing pushed; will retry at the next trigger" % why)
             return False
         time.sleep(300)
 
@@ -582,10 +622,32 @@ def free_bytes():
         return None
 
 
+RMD5 = {}        # remote .lrc path -> md5 (a realigned lyric file can have the same size as the old one)
+
+
+def remote_md5():
+    rc, out = adb(["shell", "find %s -type f -name '*.lrc' -exec md5sum {} +" % q(BOX_ROOT)], 180)
+    d = {}
+    if rc == 0:
+        for ln in out.splitlines():
+            h, _, p = ln.partition("  ")
+            if len(h) == 32:
+                d[p.strip()] = h
+    return d
+
+
+def same_on_box(local, remote, step, rem):
+    if rem.get(remote) != os.path.getsize(local):
+        return False
+    if step == "lrc" and remote in RMD5:
+        return RMD5[remote] == md5(local)
+    return True
+
+
 def push_file(local, remote, step, rem):
-    """One file: skip when the same size is already there, else .part + rename + size check, one retry. -> 'ok'/'skipped'/'failed'."""
+    """One file: skip when the same size (and for .lrc the same md5) is already there, else .part + rename + size check, one retry. -> 'ok'/'skipped'/'failed'."""
     size = os.path.getsize(local)
-    if rem.get(remote) == size:
+    if same_on_box(local, remote, step, rem):
         return "skipped"
     for attempt in (1, 2):
         rdir = remote.rsplit("/", 1)[0]
@@ -599,6 +661,8 @@ def push_file(local, remote, step, rem):
             ok = out2.strip() == str(size)
         if ok:
             rem[remote] = size
+            if step == "lrc":
+                RMD5[remote] = md5(local)
             log(step, local, remote, "ok", "%d bytes" % size)
             return "ok"
         lg.warning("push failed (try %d) %s: %s", attempt, remote, out.strip()[-150:])
@@ -619,25 +683,69 @@ def files_for(s, static):
 
 
 def missing(files, rem):
-    return [(l, r, step) for l, r, step in files if rem.get(r) != os.path.getsize(l)]
+    return [(l, r, step) for l, r, step in files if not same_on_box(l, r, step, rem)]
+
+
+def norm_title(stem):
+    t = re.sub(r"official|music video|lyric video|lyrics|\bmv\b|\bm/v\b|4k|hd|官方|完整版|動態歌詞|动态歌词|歌詞付き|フル", "", stem.lower())
+    return re.sub(r"[\W_]+", "", t)
+
+
+def library_report(rem):
+    """Read-only: files on the box that are no longer in the Karaoke library (deleted or renamed on the PC) and duplicate titles. Nothing is deleted."""
+    extras = []
+    root = BOX_ROOT + "/"
+    for p in sorted(rem):
+        if p.startswith(root) and p.lower().endswith((".mp3", ".lrc", ".mp4")):
+            rel = p[len(root):].replace("/", os.sep)
+            if p.lower().endswith(".mp4"):                   # videos come from GetVideo: judge them by their karaoke mp3
+                rel = rel[:-4] + ".mp3"
+            if not os.path.isfile(os.path.join(KARAOKE, rel)):
+                extras.append(p[len(root):])
+    groups = {}
+    for dp, _, fns in os.walk(KARAOKE):
+        for f in fns:
+            if f.lower().endswith(".mp3"):
+                key = (os.path.relpath(dp, KARAOKE), norm_title(os.path.splitext(f)[0]))
+                groups.setdefault(key, []).append(f)
+    dups = [v for k, v in groups.items() if len(v) > 1 and k[1]]
+    summary["box_extras"], summary["duplicates"] = len(extras), len(dups)
+    with open(os.path.join(LOGDIR, "library_report.txt"), "w", encoding="utf-8") as fh:
+        fh.write("On the box but not in D:\\ai\\Karaoke (%d; nothing is deleted automatically):\n" % len(extras))
+        fh.writelines("  %s\n" % x for x in extras)
+        fh.write("Duplicate titles in D:\\ai\\Karaoke (%d):\n" % len(dups))
+        fh.writelines("  %s\n" % " | ".join(v) for v in dups)
 
 
 def phase_b_to_e(songs, st, a):
     if not connect():
         summary["box"] = "unreachable"
-        lg.warning("box unreachable: push skipped, will retry tomorrow")
+        lg.warning("box unreachable: push skipped, will retry at the next trigger")
         log("sync", BOX, "", "skipped", "box unreachable")
         return
     summary["box"] = "connected"
     if not ensure_root(create=not a.dry_run):
         summary["box"] = "usb drive not mounted"
-        attention("the song folder %s is not available (USB drive %s not plugged in / not mounted): nothing pushed; will retry tomorrow" % (BOX_ROOT, USB_UUID))
+        attention("the song folder %s is not available (USB drive %s not plugged in / not mounted): nothing pushed; will retry at the next trigger" % (BOX_ROOT, USB_UUID))
         log("sync", BOX, "", "skipped", "song folder / USB drive not available")
         return
     rem = remote_list()
     if rem is None:
         attention("cannot list the box's Karaoke folder; push skipped")
         return
+    stale = [p for p in rem if p.endswith(".part")]
+    if stale and not a.dry_run:                             # left by an interrupted push (this run holds the lock)
+        for p in stale:
+            adb(["shell", "rm -f " + q(p)], 30)
+            rem.pop(p, None)
+        log("sync", BOX, "", "ok", "removed %d stale .part file(s) from the box" % len(stale))
+    RMD5.clear()
+    RMD5.update(remote_md5())
+    if not a.only:
+        try:
+            library_report(rem)
+        except Exception:
+            lg.error("library report failed: %s", traceback.format_exc())
     led = ledger_aligned()
     static = read_list(os.path.join(KARAOKE, "static_videos.txt"))
     cand = []
@@ -655,7 +763,7 @@ def phase_b_to_e(songs, st, a):
             if not miss:
                 continue
             if any(step in ("lrc", "push") for _, _, step in miss):          # a song new to the box: quarantine check first
-                why = lrc_problem(s.k_lrc, duration(s.kmp3))
+                why = lrc_problem(s.k_lrc, duration(s.kmp3)) or est_problem(s.k_lrc)
                 if why:
                     if a.dry_run:
                         print("  would HOLD:", s.key, "-", why)
@@ -674,6 +782,7 @@ def phase_b_to_e(songs, st, a):
         static = read_list(os.path.join(KARAOKE, "static_videos.txt"))
     todo = [(s, files_for(s, static)) for s in cand]
     todo = [(s, f) for s, f in todo if missing(f, rem)]
+    summary["pending"] = len(todo)
     lg.info("D: %d songs to push", len(todo))
     if a.dry_run:
         for s, full in todo:
@@ -719,6 +828,7 @@ def phase_b_to_e(songs, st, a):
             summary["failed"] += 1
     if push_meta():
         pushed_any = True
+    summary["pending"] = len([1 for s, full in todo if missing(full, rem)])
     if pushed_any:
         rescan()
 
@@ -805,6 +915,33 @@ def rescan():
         log("rescan", "", "", "failed", str(e))
 
 
+def merge_previous(sm):
+    """A push-only retry run (--no-process) adds to the report of the 03:00 run it follows instead of replacing it."""
+    try:
+        old = json.load(open(LAST_RUN, encoding="utf-8"))
+        fin = time.mktime(time.strptime(old["finished"], "%Y-%m-%d %H:%M:%S"))
+    except Exception:
+        return sm
+    if time.time() - fin > 12 * 3600:
+        return sm
+    for k in ("karaoke_made", "aligned", "held", "pushed_songs", "whisper_fixed"):
+        sm[k] = old.get(k, 0) + sm.get(k, 0)
+    sm["pushed_mb"] = round(old.get("pushed_mb", 0) + sm["pushed_mb"], 3)
+    sm["minutes"] = round(old.get("minutes", 0) + sm.get("minutes", 0), 1)
+    sm["started"] = old.get("started", sm["started"])
+    sm["retries"] = old.get("retries", 0) + 1
+    if sm["box"] == "connected":                             # the retry's push result replaces the earlier push problems
+        keep = [x for x in old.get("attention", []) if not re.search(r"TV not idle|not available|press Rescan|storage low|cannot list", x)]
+        sm["attention"] = keep + [x for x in sm["attention"] if x not in keep]
+    else:
+        sm["failed"] += old.get("failed", 0)
+        sm["box"], sm["rescan"], sm["pending"] = old.get("box", sm["box"]), old.get("rescan", sm["rescan"]), old.get("pending", sm["pending"])
+        sm["attention"] = old.get("attention", []) + sm["attention"]
+    if sm["rescan"] == "no":
+        sm["rescan"] = old.get("rescan", "no")
+    return sm
+
+
 # ------------------------------------------------------------------ main
 def main():
     ap = argparse.ArgumentParser()
@@ -884,6 +1021,9 @@ def main():
             summary["finished"] = time.strftime("%Y-%m-%d %H:%M:%S")
             summary["minutes"] = round((time.time() - t0) / 60, 1)
             summary["exit_code"] = code
+            summary["held_total"] = len(st["held"])
+            if a.no_process:
+                merge_previous(summary)
             try:
                 with open(LAST_RUN, "w", encoding="utf-8") as fh:
                     json.dump(summary, fh, ensure_ascii=False, indent=1)
