@@ -124,6 +124,8 @@ def main():
     ap.add_argument("--model", default="medium")
     ap.add_argument("--language", default="zh")
     ap.add_argument("--device", default="cpu")
+    ap.add_argument("--min-timed", type=float, default=0.0,
+                    help="with --install: only install when at least this share of lines was timed (e.g. 0.7)")
     ap.add_argument("--keep-dir", help="keep vocals.wav and words.json here")
     ap.add_argument("--stage", help=argparse.SUPPRESS)
     a = ap.parse_args()
@@ -168,6 +170,9 @@ def main():
                 print(f"first vocal energy at {on:.2f}s, first timed character at {ft:.2f}s"
                       + ("  <-- CHECK line 1 (>1.5 s apart)" if abs(ft - on) > 1.5 else ""), file=sys.stderr)
         print(f"{len(out) - plain}/{len(out)} lines timed from heard characters -> {a.out}", file=sys.stderr)
+        if a.install and (len(out) - plain) < a.min_timed * len(out):
+            print(f"NOT installed: only {len(out) - plain}/{len(out)} lines timed (< {a.min_timed:.0%})", file=sys.stderr)
+            sys.exit(3)
         if a.install:
             sys.path.insert(0, HERE)
             from ledger import log
