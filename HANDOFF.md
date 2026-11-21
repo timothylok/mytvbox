@@ -170,6 +170,16 @@ The app was renamed to **K歌之王** (label, notification channel, idle title) 
 - **Gotchas found today:** a song queued through `/api/queue/add` while the launcher is in front plays in the background (no karaoke screen); open the app (`monkey -p com.superghosttim.karaokeking -c android.intent.category.LAUNCHER 1`) to see it, `/api/player/skip` + HOME to put the TV back. `/api/library` returns at most 100 songs: pass `q=` and `limit=`. Elevated commands (Register-ScheduledTask) can be run from the session with `Start-Process powershell -Verb RunAs`, the user approves the UAC prompt.
 - **Open:** the 13 held songs need correct lyric text (then `align_whisper_words.py --install` and `daily_sync.py --release`); the user's improvement prompt for the GetVideo -> TV pipeline was worked through goals 1-6 except automatic deletion on the box (deliberately report-only) and a notification channel; the GetVideo download task `Cantopop Top50 Daily` still runs at 15:00 "interactive only" (needs the user logged on).
 
+## Session 2026-11-22 - latest state (first night with the new pipeline)
+
+- **Overnight 2026-11-22 (03:00 run, finished 06:10, ~190 min):** 91 karaoke songs made, 18 aligned, 13 songs pushed (844 MB), 0 failures. The 05:30 retry hit the lock and stepped aside; the 07:30 retry ran and merged into `last_run.json` (`retries: 1`). The nightly rescan was skipped ("app not running"); starting the app on the TV scanned at launch: **312 -> 325 songs**.
+- **Quality gate seen in real use:** 6 poorly aligned songs went through `whisper_words_fallback`: 1 fixed (Dear Jane 未開始已經結束, 46/46 lines), 5 HELD for estimated timing: COLLAR Back In The Game and Keung To Dear My Friend, (opening missed by Whisper), Edan E先生連環不幸事件 (29/42 heard), Jer 狂人日記 (33/53), Kiri T 哈姆雷特下班了 (2/31). Held total 34 (18 estimated timing). They need the correct lyric text from the user, then `align_whisper_words.py --install` and `daily_sync.py --release`.
+- **Health pass (09:00 task, report `logs/health_pass.txt`):** says PROBLEMS because of those 5 HELD attention lines (they are the "needs attention" list by design; the attention list is rebuilt every night). The old "lyric batch: 12 NOT installed" note is stale (log of 2026-11-21).
+- **Box address changed** to 192.168.3.106:2025; found by mDNS name, no action needed.
+- The user watched songs on the TV after the rescan ("Boulder" by Keung To was theirs); do not stop a song that started on the TV without asking.
+- **Commits today:** ef19e72 (pipeline), c1c97b9 (HANDOFF 11-21), 0967ba3 (ledger).
+- **Open:** correct lyrics for the held songs; no notification channel for problems; automatic deletion on the box not built (report only); GetVideo task `Cantopop Top50 Daily` needs the user logged on at 15:00.
+
 ## Google TV box (added 2026-11-18)
 
 Second box `Google_TV`: Android 16, armeabi-v7a, adb over wireless debugging (`adb mdns services`; port changes, was 192.168.3.97:2025, now 192.168.3.101:2025). The Android 10 box is 192.168.3.79:5555.
