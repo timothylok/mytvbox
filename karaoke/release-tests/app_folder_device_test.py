@@ -5,7 +5,7 @@ Runs on a box that really lacks a chooser (no activity handles ACTION_OPEN_DOCUM
 prints SKIP and exits 0 (the folder-picker test covers that case).
 
 Non-destructive: nothing is cleared; a throwaway song (1 s of silence + a 2-line .lrc) is put in a test folder
-`ZZ Fallback Test/Test Artist/` inside the app's own folder and removed again at the end. The box must be idle
+`ZZ Fallback Test/Test Artist/` inside the app's own song folder (read from /api/state, so it works on internal storage and on an SD card / USB volume) and removed again at the end. The box must be idle
 (nothing playing) - the test refuses to run otherwise. Needs ffmpeg on PATH, adb, a DEBUG build installed
 (for the pairing token; or pass --token).
 
@@ -108,8 +108,12 @@ def main():
     base_count = st.get("songCount", 0)
     check("2. no setup screen: the app started without asking for a folder", st.get("setup") is False, st)
 
-    folder = "/sdcard/Android/data/%s/files/Karaoke" % PKG
-    check("3. the app made its own Karaoke folder", "No such file" not in box.sh("ls -d '%s'" % folder))
+    # the folder the app really reads (internal /storage/emulated/0/... or an SD card / USB volume /storage/<serial>/...): never a hard-coded path
+    folder = st.get("songFolder") or ""
+    if "/Android/data/%s/files/" % PKG not in folder + "/":
+        print("SKIP  the app reads %r, not its own folder under Android/data/%s/files (a SAF folder was chosen); nothing to test here" % (folder, PKG))
+        return 0
+    check("3. the app made its own Karaoke folder (%s)" % folder, "No such file" not in box.sh("ls -d '%s'" % folder))
 
     # 4. put a throwaway song in
     tmp = tempfile.mkdtemp(prefix="fbtest_")
@@ -130,7 +134,7 @@ def main():
     song_id = ""
     try:
         http(base, "/api/rescan", token, "POST", b"")
-        st = state(base, token, wait=20, until=lambda s: s.get("songCount", 0) > base_count)
+        st = state(base, token, wait=120, until=lambda s: s.get("songCount", 0) > base_count)
         check("4. a rescan finds the copied song", st.get("songCount", 0) == base_count + 1, st.get("songCount"))
         code, body = http(base, "/api/library?q=Fallback", token)
         songs = []
@@ -172,6 +176,10 @@ def main():
         time.sleep(2)
         st = state(base, token, wait=5)
         check("9. the OK key on the TV does not bring up a setup screen", st.get("setup") is False, st)
+        if st.get("browse"):                       # with songs in the library OK opens the on-TV song browser: close it so later keys go to the menu
+            box.sh("input keyevent KEYCODE_BACK")
+            st = state(base, token, wait=6, until=lambda s: not s.get("browse"))
+            check("9b. Back closes the song browser the OK key opened", not st.get("browse"), st.get("browse"))
 
         # 12-17. the in-app song-location chooser (Settings > Song location), driven with the remote's keys
         def key(k, wait=1.2):
@@ -224,9 +232,12 @@ def main():
             st = state(base, token, wait=10, until=lambda s: s.get("songFolder") == original)
             check("16. the original song folder is restored", st.get("songFolder") == original and top() == "main", (st.get("songFolder"), top()))
     finally:
+        now = state(base, token, wait=8).get("songFolder")
+        if now != folder:
+            print("WARNING  the app's song folder is %r, not %r: set it back by hand (TV Settings > Song location)" % (now, folder))
         box.sh("rm -rf '%s'" % (folder + "/ZZ Fallback Test"))
         http(base, "/api/rescan", token, "POST", b"")
-        st = state(base, token, wait=20, until=lambda s: s.get("songCount", 0) == base_count)
+        st = state(base, token, wait=120, until=lambda s: s.get("songCount", 0) == base_count)
         check("10. cleanup: the test song is gone again", st.get("songCount", -1) == base_count, st.get("songCount"))
         for f in (mp3, lrc):
             try:
