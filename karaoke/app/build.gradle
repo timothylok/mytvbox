@@ -4,8 +4,8 @@ android {
     compileSdk 36
     defaultConfig {
         applicationId 'com.superghosttim.karaokeking'
-        minSdk 21
-        targetSdk 36          // Play needs API 36 for new apps/updates from 2026-08-31; Android 10 (API 29) boxes still run it, minSdk stays 21
+        minSdk 29
+        targetSdk 36          // Play needs API 36 for new apps/updates from 2026-08-31; Android 10 (API 29) boxes still run it, minSdk is 29 (Android 10); nothing older is supported
         versionCode 1
         versionName '1.0'
     }
@@ -35,6 +35,13 @@ android {
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+    }
+    // Version guardrail: new-API misuse, wrong-version attributes and bad manifest/service settings fail the build (lintDebug).
+    // Media3 @UnstableApi calls need @OptIn next to them (onCreate, startFile, VocalProcessor), so a Media3 upgrade shows new ones.
+    lint {
+        abortOnError true
+        checkReleaseBuilds true
+        fatal 'NewApi', 'InlinedApi', 'UnsafeOptInUsageError', 'ByteOrderMark', 'WrongConstant', 'ForegroundServicePermission', 'MissingForegroundServiceType'
     }
     compileOptions { sourceCompatibility JavaVersion.VERSION_1_8; targetCompatibility JavaVersion.VERSION_1_8 }
 }

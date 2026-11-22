@@ -55,7 +55,7 @@ public class MainActivity extends Activity implements Server.Host {
     private volatile boolean scanning = false;
     private boolean wantMp3 = false;            // a music video is merged in: its own audio must not be heard
     private long hintUntil = 0;                 // show the key help line until this time
-    private final android.os.Handler ui = new android.os.Handler();
+    private final android.os.Handler ui = new android.os.Handler(android.os.Looper.getMainLooper());
 
     // lyrics
     private Lrc lrc;
@@ -129,6 +129,7 @@ public class MainActivity extends Activity implements Server.Host {
 
     // ---------- start-up ----------
 
+    @androidx.annotation.OptIn(markerClass = androidx.media3.common.util.UnstableApi.class)
     @Override protected void onCreate(Bundle b) {
         super.onCreate(b);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
@@ -395,7 +396,6 @@ public class MainActivity extends Activity implements Server.Host {
         String path = getIntent().getStringExtra("path");
         if (path != null) { debugSingleFile = true; startFile(new FileStorage(new File(path).getParentFile()).uri(path), null, null, "", false); ui.post(tick); return; }
 
-        migrateLegacyFiles();
         queue = QueueManager.withFile(priv("state.txt"));
         history = new History(priv("history.jsonl"));
         loadFlips();
@@ -724,10 +724,8 @@ public class MainActivity extends Activity implements Server.Host {
         android.content.Intent i = new android.content.Intent(android.content.Intent.ACTION_OPEN_DOCUMENT_TREE);
         i.addFlags(android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION | android.content.Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION
                 | android.content.Intent.FLAG_GRANT_PREFIX_URI_PERMISSION);
-        if (android.os.Build.VERSION.SDK_INT >= 26) {
-            i.putExtra(android.provider.DocumentsContract.EXTRA_INITIAL_URI,
-                    android.provider.DocumentsContract.buildDocumentUri("com.android.externalstorage.documents", "primary:Karaoke"));
-        }
+        i.putExtra(android.provider.DocumentsContract.EXTRA_INITIAL_URI,
+                android.provider.DocumentsContract.buildDocumentUri("com.android.externalstorage.documents", "primary:Karaoke"));
         try { startActivityForResult(i, REQ_PICK); android.util.Log.i("Karaoke", "folder chooser started"); }
         catch (Exception e) {
             android.util.Log.w("Karaoke", "no folder chooser: " + e);
@@ -761,6 +759,11 @@ public class MainActivity extends Activity implements Server.Host {
             showSetup("That folder is on a USB drive or SD card.\nPlease copy your songs to the box's internal storage and choose that folder.\n\n");
             return;
         }
+        String oldTree = prefs.getString("tree", null);
+        if (oldTree != null && !oldTree.equals(tree.toString())) {
+            try { getContentResolver().releasePersistableUriPermission(android.net.Uri.parse(oldTree), android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION); }
+            catch (Exception e) { android.util.Log.w("Karaoke", "could not release old folder grant: " + e); }
+        }
         try {
             getContentResolver().takePersistableUriPermission(tree, android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION);
         } catch (Exception e) {
@@ -778,19 +781,6 @@ public class MainActivity extends Activity implements Server.Host {
         super.onNewIntent(i);
         setIntent(i);
         if (i != null && i.getBooleanExtra("pickfolder", false) && !debugSingleFile) showSetup("");
-    }
-
-    /** One-time copy of the app's own files from the old /sdcard/Karaoke location into private storage. */
-    private void migrateLegacyFiles() {
-        if (prefs.getBoolean("migrated", false)) return;
-        File old = new File(android.os.Environment.getExternalStorageDirectory(), "Karaoke");
-        for (String n : new String[]{"state.txt", "history.jsonl", "flips.txt"}) {
-            File from = new File(old, n), to = priv(n);
-            if (from.isFile() && !to.exists()) {
-                try { java.nio.file.Files.copy(from.toPath(), to.toPath()); } catch (Exception ignored) { }
-            }
-        }
-        prefs.edit().putBoolean("migrated", true).apply();
     }
 
     private static String textInRoot(Storage st, String name) {
@@ -845,7 +835,7 @@ public class MainActivity extends Activity implements Server.Host {
             currentSongId = s.id;
             vocalOn = false;
             String vstem = s.video.isEmpty() ? "" : s.video.substring(s.video.lastIndexOf('/') + 1).replaceFirst("\\.[^.]+$", "");
-            startFile(st.uri(s.audioH), s.videoH.isEmpty() ? null : st.uri(s.videoH), null, vstem, s.file.toLowerCase().endsWith(".mp4"));
+            startFile(st.uri(s.audioH), s.videoH.isEmpty() ? null : st.uri(s.videoH), null, vstem, s.file.toLowerCase(java.util.Locale.ROOT).endsWith(".mp4"));
             Prefetcher.Result pre = prefetcher.take(s.id);
             if (pre != null && pre.lrc != null) {                 // warmed while the previous song played: lyrics are ready, no read, no parse
                 lrc = pre.lrc;
@@ -914,6 +904,7 @@ public class MainActivity extends Activity implements Server.Host {
      * Plays the karaoke audio (a URI from the Storage); if a music video URI is given it is shown muted behind the lyrics, in sync.
      * lrcText = the lyric file's text or null; videoStem = the video's file name without extension (key into crops.txt).
      */
+    @androidx.annotation.OptIn(markerClass = androidx.media3.common.util.UnstableApi.class)
     private void startFile(String audioUri, String video, String lrcText, String videoStem, boolean audioIsVideo) {
         songPath = currentSongId.isEmpty() ? audioUri : currentSongId;
         lrc = lrcText == null ? null : Lrc.parse(lrcText);
@@ -1112,7 +1103,7 @@ public class MainActivity extends Activity implements Server.Host {
 
     // ---------- screen ----------
 
-    private static String fmt(long ms) { long s = Math.max(0, ms) / 1000; return String.format("%d:%02d", s / 60, s % 60); }
+    private static String fmt(long ms) { long s = Math.max(0, ms) / 1000; return String.format(java.util.Locale.US, "%d:%02d", s / 60, s % 60); }
 
     private void refresh() {
         if (player == null) return;
@@ -1177,7 +1168,7 @@ public class MainActivity extends Activity implements Server.Host {
         status.setVisibility(android.view.View.INVISIBLE);       // the old top-left Now/Next bar is gone
         status.setText("");
         sb.append(st).append("  |  ").append(vocalOn ? "VOCAL ON" : "KARAOKE").append("  |  ").append(time);
-        if (lrc != null) sb.append("  |  Lyrics ").append(lyricOffsetMs >= 0 ? "+" : "-").append(String.format("%.1fs", Math.abs(lyricOffsetMs) / 1000.0));
+        if (lrc != null) sb.append("  |  Lyrics ").append(lyricOffsetMs >= 0 ? "+" : "-").append(String.format(java.util.Locale.US, "%.1fs", Math.abs(lyricOffsetMs) / 1000.0));
         if (System.currentTimeMillis() < hintUntil) {
             sb.append("\nOK: pause   hold OK / Menu: vocal   Left/Right: seek or skip   Up/Down: lyrics later/earlier   Back: songs");
         }

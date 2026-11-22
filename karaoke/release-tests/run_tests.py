@@ -59,6 +59,11 @@ def main():
     if rc == 0:
         rc = run([os.path.join(JAVA, "bin", "java"), "-Dfile.encoding=UTF-8", "-cp", out, "LrcTest"])
     ok = ok and rc == 0
+    print("== QueueManagerTest (JVM)")
+    rc = run([os.path.join(JAVA, "bin", "javac"), "-encoding", "UTF-8", "-d", out, os.path.join(SRC, "QueueManager.java"), os.path.join(KARAOKE, "tests", "QueueManagerTest.java")])
+    if rc == 0:
+        rc = run([os.path.join(JAVA, "bin", "java"), "-Dfile.encoding=UTF-8", "-cp", out, "QueueManagerTest"])
+    ok = ok and rc == 0
     print("== AppFoldersTest (JVM)")
     rc = run([os.path.join(JAVA, "bin", "javac"), "-encoding", "UTF-8", "-d", out, os.path.join(SRC, "AppFolders.java"), os.path.join(HERE, "AppFoldersTest.java")])
     if rc == 0:

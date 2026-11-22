@@ -10,6 +10,7 @@ import java.nio.ByteBuffer;
  * Stereo 16-bit PCM channel selector for KTV files that carry the vocal guide on one channel
  * and the backing track on the other. LEFT/RIGHT copy the chosen channel to both speakers.
  */
+@androidx.annotation.OptIn(markerClass = androidx.media3.common.util.UnstableApi.class)
 public final class VocalProcessor extends BaseAudioProcessor {
     public static final int BOTH = 0, LEFT = 1, RIGHT = 2;
     private volatile int mode = BOTH;

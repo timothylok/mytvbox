@@ -40,13 +40,19 @@ un_tests.py --ui` (see `karaoke/release-tests/README.md`; the box must be idle: 
    chooser, so code must fall back, see `useAppFolder()`); never trust reported storage size (`df -h /data`); scripts and tests must take the
    device as a parameter (`--device`), not hard-code an address.
 
-6. **Keep `usermanual.md` current.** Any change to what the user sees or does (remote keys, screens, menus, settings, storage / USB behaviour,
+6. **Minimum supported Android is 10 (API 29); nothing older is supported.** `minSdk 29` in `karaoke/app/build.gradle` and
+   `launcher/app/build.gradle`. Do not add `SDK_INT < 29` fallbacks, `toPath`/`java.nio` workarounds or other pre-Android-10 code; APIs up to
+   API 29 can be called directly, anything newer (30-36) must be guarded by `Build.VERSION.SDK_INT` with a working fallback. `lintDebug` is
+   the guardrail (NewApi etc. are fatal): run `gradle lintDebug` in `karaoke/` before calling a change done. Build with
+   `tools\gradle-8.11.1\bin\gradle.bat` (8.7 is too old for the Android Gradle plugin).
+
+7. **Keep `usermanual.md` current.** Any change to what the user sees or does (remote keys, screens, menus, settings, storage / USB behaviour,
    phone page, launcher) updates `usermanual.md` in the same piece of work, before the commit. A hook (`.claude/hooks/manual_reminder.py`, set up in
    `.claude/settings.json`) reminds you once per session when app / launcher sources are edited.
 
 ## Working notes
 
 - `adb` is not on PATH: `D:\ai\setupbox\tools\sdk\platform-tools\adb.exe` (box at 192.168.3.79:5555). Git Bash needs `MSYS_NO_PATHCONV=1`.
-- Build from PowerShell: `JAVA_HOME=C:\Program Files\Java\jdk-20`, `ANDROID_HOME=D:\ai\setupbox\tools\sdk`, `tools\gradle-8.7\bin\gradle.bat assembleDebug` in `karaoke/`.
+- Build from PowerShell: `JAVA_HOME=C:\Program Files\Java\jdk-20`, `ANDROID_HOME=D:\ai\setupbox\tools\sdk`, `tools\gradle-8.11.1\bin\gradle.bat assembleDebug` in `karaoke/`.
 - Song, video and audio files are git-ignored. Do not write Java/regex backslashes through bash heredocs; use the Edit/Write tools.
 - Do not interrupt a song that is playing on the TV (installing the app restarts it): wait for the song to end or ask.

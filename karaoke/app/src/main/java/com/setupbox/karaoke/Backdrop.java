@@ -181,7 +181,7 @@ public final class Backdrop {
         File[] fs = photoDir == null ? null : photoDir.listFiles();
         if (fs != null) {
             for (File f : fs) {
-                String n = f.getName().toLowerCase();
+                String n = f.getName().toLowerCase(java.util.Locale.ROOT);
                 if (n.endsWith(".jpg") || n.endsWith(".jpeg") || n.endsWith(".png")) photos.add(f);
             }
         }

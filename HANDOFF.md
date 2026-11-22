@@ -180,6 +180,19 @@ The app was renamed to **K歌之王** (label, notification channel, idle title) 
 - **Commits today:** ef19e72 (pipeline), c1c97b9 (HANDOFF 11-21), 0967ba3 (ledger).
 - **Open:** correct lyrics for the held songs; no notification channel for problems; automatic deletion on the box not built (report only); GetVideo task `Cantopop Top50 Daily` needs the user logged on at 15:00.
 
+## Android version robustness (2026-11-22)
+
+- **minSdk 29 (Android 10) in the app and the launcher; nothing older is supported** (user decision, CLAUDE.md rule 6). Tested range: API 29 (old box, 192.168.3.79) to API 36 (Google_TV).
+- The Android 10 box now runs the renamed app `com.superghosttim.karaokeking` (old `com.setupbox.karaoke` uninstalled 2026-11-22; songs in `/sdcard/Karaoke` kept, old history/queue lost).
+- Guardrail: `karaoke/app/build.gradle` `lint {}` makes NewApi, InlinedApi, UnsafeOptInUsageError (Media3 needs `@OptIn` next to the call), ByteOrderMark, WrongConstant and foreground-service issues fatal; `gradle lintDebug` must pass. Checked: a throwaway API-30 call fails the build.
+- Done from the version plan: dead nio code removed (`Lrc.load(File)`, `migrateLegacyFiles`), `index.json` written via temp+rename, `Locale.ROOT/US` formatting, `Handler(Looper.getMainLooper())`, old folder grant released before a new pick, `startForeground` wrapped (Android 12+ background-start refusal), `dataExtractionRules` (no cloud backup / device transfer of the pairing token), test grants POST_NOTIFICATIONS after `pm clear`, QueueManagerTest in `run_tests.py`.
+- **Still open from the plan:**
+  - Screen-relative sizing + ~5 % TV safe area for fixed px/sp views in `MainActivity` (setup/menu text 1400 px wide, QR 440/160 px, 18 sp text in a 36 dp bar clips at large font scale); verify with screenshots at font_scale 1.0 and 1.3 on both boxes; update usermanual.md if positions change.
+  - Predictive back: `android:enableOnBackInvokedCallback="false"` keeps KEYCODE_BACK working at target 36 but Google will remove the opt-out; add an `OnBackInvokedCallback` (API 33+) routed to the same Back logic, then flip the flag and run `tv_browser_device_test.py`.
+  - Media3 1.3.1 -> current as its own step (the `buildAudioSink` override is the likely break).
+  - Launcher: `targetSdk 29` is deliberate (raw `/sdcard/Launcher/config.json`, `requestLegacyExternalStorage`, no `<queries>`); its lint has 2 old errors (MissingLeanbackLauncher, ExpiredTargetSdkVersion) - sideload only, not a Play app.
+  - Optional emulators (API 33/34 TV image) - not installed in `tools/sdk`.
+
 ## Google TV box (added 2026-11-18)
 
 Second box `Google_TV`: Android 16, armeabi-v7a, adb over wireless debugging (`adb mdns services`; port changes, was 192.168.3.97:2025, now 192.168.3.101:2025). The Android 10 box is 192.168.3.79:5555.

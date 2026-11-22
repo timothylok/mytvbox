@@ -189,7 +189,9 @@ public final class Library {
             for (Song s : songs) arr.put(s.toCacheJson());
             File dir = cache.getParentFile();
             if (dir != null) dir.mkdirs();
-            Files.write(cache.toPath(), arr.toString().getBytes(StandardCharsets.UTF_8));
+            File tmp = new File(cache.getPath() + ".tmp");
+            Files.write(tmp.toPath(), arr.toString().getBytes(StandardCharsets.UTF_8));
+            if (!tmp.renameTo(cache)) { cache.delete(); if (!tmp.renameTo(cache)) tmp.delete(); }
         } catch (Exception ignored) { }
     }
 
@@ -270,9 +272,7 @@ public final class Library {
     static synchronized String toSimplified(String s) {
         if (!t2sTried) {
             t2sTried = true;
-            if (android.os.Build.VERSION.SDK_INT >= 29) {
-                try { t2s = android.icu.text.Transliterator.getInstance("Traditional-Simplified"); } catch (Throwable ignored) { }
-            }
+            try { t2s = android.icu.text.Transliterator.getInstance("Traditional-Simplified"); } catch (Throwable ignored) { }
         }
         if (t2s == null) return s;
         try { return ((android.icu.text.Transliterator) t2s).transliterate(s); } catch (Throwable e) { return s; }
@@ -282,7 +282,7 @@ public final class Library {
         try {
             byte[] d = MessageDigest.getInstance("MD5").digest(s.getBytes(StandardCharsets.UTF_8));
             StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < 6; i++) sb.append(String.format("%02x", d[i]));
+            for (int i = 0; i < 6; i++) sb.append(String.format(java.util.Locale.ROOT, "%02x", d[i]));
             return sb.toString();
         } catch (Exception e) { return Integer.toHexString(s.hashCode()); }
     }

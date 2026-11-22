@@ -1,8 +1,6 @@
 package com.setupbox.karaoke;
 
-import java.io.File;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -37,14 +35,6 @@ public final class Lrc {
     private static final Pattern OFFSET = Pattern.compile("\\[offset:\\s*([+-]?\\d+)\\s*\\]", Pattern.CASE_INSENSITIVE);
 
     public final List<Line> lines = new ArrayList<>();
-
-    public static Lrc load(File f) {
-        try {
-            String s = new String(Files.readAllBytes(f.toPath()), StandardCharsets.UTF_8);
-            if (s.startsWith("﻿")) s = s.substring(1);
-            return parse(s);
-        } catch (Exception e) { return null; }
-    }
 
     private static long ms(Matcher m) {
         long ms = Long.parseLong(m.group(1)) * 60000L + Long.parseLong(m.group(2)) * 1000L;

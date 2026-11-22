@@ -44,7 +44,7 @@ public interface Storage {
             byte[] b = new byte[8192];
             for (int n; (n = in.read(b)) > 0; ) out.write(b, 0, n);
             String t = new String(out.toByteArray(), "UTF-8");
-            return t.startsWith("﻿") ? t.substring(1) : t;
+            return t.startsWith("\uFEFF") ? t.substring(1) : t;
         } catch (Exception e) {
             return null;
         }

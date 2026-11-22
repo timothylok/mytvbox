@@ -6,7 +6,6 @@ import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.IBinder;
 
 /**
@@ -19,27 +18,27 @@ public class KeepAliveService extends Service {
 
     public static void start(Context c, String url) {
         Intent i = new Intent(c, KeepAliveService.class).putExtra("url", url);
-        if (Build.VERSION.SDK_INT >= 26) c.startForegroundService(i); else c.startService(i);
+        c.startForegroundService(i);
     }
 
     public static void stop(Context c) { c.stopService(new Intent(c, KeepAliveService.class)); }
 
     @Override public int onStartCommand(Intent intent, int flags, int startId) {
         String url = intent == null ? "" : intent.getStringExtra("url");
-        Notification.Builder b;
-        if (Build.VERSION.SDK_INT >= 26) {
-            NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-            nm.createNotificationChannel(new NotificationChannel(CHANNEL, "K歌之王", NotificationManager.IMPORTANCE_LOW));
-            b = new Notification.Builder(this, CHANNEL);
-        } else {
-            b = new Notification.Builder(this);
-        }
+        NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        nm.createNotificationChannel(new NotificationChannel(CHANNEL, "K歌之王", NotificationManager.IMPORTANCE_LOW));
+        Notification.Builder b = new Notification.Builder(this, CHANNEL);
         b.setContentTitle("Karaoke is running")
          .setContentText(url == null || url.isEmpty() ? "Phone page is on" : "Phones: " + url)
          .setSmallIcon(android.R.drawable.ic_media_play)
          .setOngoing(true);
-        if (Build.VERSION.SDK_INT >= 29) startForeground(1, b.build(), android.content.pm.ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PLAYBACK);
-        else startForeground(1, b.build());
+        try {
+            startForeground(1, b.build(), android.content.pm.ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PLAYBACK);
+        } catch (Exception e) {
+            // Android 12+ refuses a foreground start while the app is in the background; the activity keeps playing anyway.
+            android.util.Log.w("Karaoke", "foreground service not allowed: " + e);
+            stopSelf();
+        }
         return START_NOT_STICKY;      // only meaningful while the activity (which owns the player and server) exists
     }
 

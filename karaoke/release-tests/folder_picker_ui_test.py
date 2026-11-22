@@ -156,6 +156,7 @@ def main():
     try:
         # 1. fresh state: clear the app's data (this also drops the saved folder permission)
         box.sh("pm clear " + PKG)
+        box.sh("pm grant " + PKG + " android.permission.POST_NOTIFICATIONS 2>/dev/null")   # Android 13+: no prompt over the test's key presses
         box.sh("am start -n " + ACT)
         TOKEN = a.token or read_token(box)
         check("0. the app made a pairing token", len(TOKEN) >= 8, TOKEN)
