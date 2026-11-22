@@ -129,9 +129,22 @@ public class MainActivity extends Activity implements Server.Host {
 
     // ---------- start-up ----------
 
+    // Screen-relative sizing (rule 5): everything is laid out from the real screen, not from dp, density, Android version or the user's font scale.
+    // u = screen height / 1080, so a value written for a 1080p TV ("ref") scales on 720p / 4K; text sizes use the old sp numbers at 1.5 px per sp
+    // (the 1080p box runs at 240 dpi), so 1080p looks as before. safeX / safeY keep content inside the TV's overscan-safe area (4 % / 5 %).
+    private float u = 1f;
+    private int safeX, safeY;
+    private int px(float ref) { return Math.round(ref * u); }
+    private void sizeText(TextView t, float sp) { t.setTextSize(android.util.TypedValue.COMPLEX_UNIT_PX, sp * 1.5f * u); }
+
     @androidx.annotation.OptIn(markerClass = androidx.media3.common.util.UnstableApi.class)
     @Override protected void onCreate(Bundle b) {
         super.onCreate(b);
+        android.util.DisplayMetrics dmS = getResources().getDisplayMetrics();
+        u = Math.max(0.5f, dmS.heightPixels / 1080f);
+        safeX = Math.round(dmS.widthPixels * 0.04f);
+        safeY = Math.round(dmS.heightPixels * 0.05f);
+        final int barH = px(54);                               // both bottom bars: one fixed height (from the screen), so they line up
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         FrameLayout root = new FrameLayout(this);
         root.setBackgroundColor(Color.BLACK);
@@ -154,7 +167,7 @@ public class MainActivity extends Activity implements Server.Host {
         root.addView(dimView, new FrameLayout.LayoutParams(-1, -1));
         lyricsView = new TextView(this);
         lyricsView.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.BOTTOM);
-        lyricsView.setPadding(60, 0, 60, 84);                  // just clear of the status bar (~75 px) at the bottom
+        lyricsView.setPadding(Math.max(px(60), safeX), 0, Math.max(px(60), safeX), safeY + barH + px(12));   // inside the safe area and clear of the bottom bars
         lyricsView.setShadowLayer(10f, 0f, 0f, Color.BLACK);
         // Sizes follow the screen height (not the density or the Android version): 7 % for the line being sung, 68 % of that for the others.
         lyricsView.setTextSize(android.util.TypedValue.COMPLEX_UNIT_PX, Math.max(40f, getResources().getDisplayMetrics().heightPixels * 0.07f));
@@ -164,19 +177,19 @@ public class MainActivity extends Activity implements Server.Host {
         root.addView(lyricsView, lyp);
         countdownView = new TextView(this);                    // the 3-2-1 dots before the singing starts
         countdownView.setGravity(Gravity.CENTER);
-        countdownView.setTextSize(64);
+        sizeText(countdownView, 64);
         countdownView.setShadowLayer(10f, 0f, 0f, Color.BLACK);
         FrameLayout.LayoutParams clp = new FrameLayout.LayoutParams(-1, -2, Gravity.CENTER_HORIZONTAL | Gravity.TOP);
-        clp.setMargins(0, 280, 0, 0);
+        clp.setMargins(0, Math.max(px(280), safeY), 0, 0);
         root.addView(countdownView, clp);
         bannerView = new TextView(this);                       // "Next up" banner
         bannerView.setTextColor(Color.WHITE);
         bannerView.setBackgroundColor(0xB3101418);
-        bannerView.setTextSize(30);
-        bannerView.setPadding(28, 14, 28, 14);
+        sizeText(bannerView, 30);
+        bannerView.setPadding(px(28), px(14), px(28), px(14));
         bannerView.setVisibility(android.view.View.GONE);
         FrameLayout.LayoutParams blp = new FrameLayout.LayoutParams(-2, -2, Gravity.BOTTOM | Gravity.START);
-        blp.setMargins(24, 0, 0, 130);
+        blp.setMargins(safeX, 0, 0, safeY + barH + px(24));
         root.addView(bannerView, blp);
         ip = localIp();
         android.content.SharedPreferences pp = getSharedPreferences("karaoke", MODE_PRIVATE);
@@ -189,62 +202,68 @@ public class MainActivity extends Activity implements Server.Host {
         idleBox.setOrientation(LinearLayout.VERTICAL);
         idleBox.setGravity(Gravity.CENTER);
         idleBox.setBackgroundColor(0xFF101418);
+        idleBox.setPadding(safeX, safeY, safeX, safeY);
         TextView idleTitle = new TextView(this);
         idleTitle.setText("K歌之王");
         idleTitle.setTextColor(0xFFFFE23B);
-        idleTitle.setTextSize(64);
+        sizeText(idleTitle, 64);
         idleTitle.setGravity(Gravity.CENTER);
         idleBox.addView(idleTitle);
         ImageView qrBig = new ImageView(this);
         qrBigView = qrBig;
         qrBig.setImageBitmap(bigQr);
-        LinearLayout.LayoutParams qlp = new LinearLayout.LayoutParams(440, 440);
-        qlp.setMargins(0, 24, 0, 24);
+        LinearLayout.LayoutParams qlp = new LinearLayout.LayoutParams(px(440), px(440));
+        qlp.setMargins(0, px(24), 0, px(24));
         idleBox.addView(qrBig, qlp);
         TextView idleUrl = new TextView(this);
         idleUrl.setText("Scan the code with your phone's camera");
         idleUrl.setTextColor(Color.WHITE);
-        idleUrl.setTextSize(36);
+        sizeText(idleUrl, 36);
         idleUrl.setGravity(Gravity.CENTER);
         idleBox.addView(idleUrl);
         idleInfo = new TextView(this);
         idleInfo.setTextColor(0xFF9AA0AD);
-        idleInfo.setTextSize(26);
+        sizeText(idleInfo, 26);
         idleInfo.setGravity(Gravity.CENTER);
-        idleInfo.setPadding(40, 16, 40, 0);
+        idleInfo.setPadding(px(40), px(16), px(40), 0);
         idleBox.addView(idleInfo);
         root.addView(idleBox, new FrameLayout.LayoutParams(-1, -1));
 
         qrSmall = new ImageView(this);
         qrSmall.setImageBitmap(smallQr);
         qrSmall.setAlpha(0.85f);
-        FrameLayout.LayoutParams slp = new FrameLayout.LayoutParams(160, 160, Gravity.TOP | Gravity.END);
-        slp.setMargins(0, 24, 24, 0);
+        FrameLayout.LayoutParams slp = new FrameLayout.LayoutParams(px(160), px(160), Gravity.TOP | Gravity.END);
+        slp.setMargins(0, safeY, safeX, 0);
         root.addView(qrSmall, slp);
 
         status = new TextView(this);
         status.setTextColor(Color.WHITE);
         status.setBackgroundColor(0x99000000);
-        status.setTextSize(24);
-        status.setPadding(24, 12, 24, 12);
-        root.addView(status, new FrameLayout.LayoutParams(-2, -2, Gravity.TOP | Gravity.START));
+        sizeText(status, 24);
+        status.setPadding(px(24), px(12), px(24), px(12));
+        FrameLayout.LayoutParams stp = new FrameLayout.LayoutParams(-2, -2, Gravity.TOP | Gravity.START);
+        stp.setMargins(safeX, safeY, 0, 0);
+        root.addView(status, stp);
         statusBar = new TextView(this);                        // "Playing | KARAOKE | time" line, bottom-left
         statusBar.setTextColor(Color.WHITE);
         statusBar.setBackgroundColor(0x99000000);
-        statusBar.setTextSize(18);
-        statusBar.setPadding(24, 12, 24, 12);
+        sizeText(statusBar, 18);
+        statusBar.setPadding(px(24), px(5), px(24), px(5));
         statusBar.setSingleLine(true);
         statusBar.setGravity(Gravity.CENTER_VERTICAL);
-        final int barH = Math.round(getResources().getDisplayMetrics().density * 36);   // both bottom bars: one fixed height, so they line up
-        root.addView(statusBar, new FrameLayout.LayoutParams(-2, barH, Gravity.BOTTOM | Gravity.START));
+        FrameLayout.LayoutParams sbp = new FrameLayout.LayoutParams(-2, barH, Gravity.BOTTOM | Gravity.START);
+        sbp.setMargins(safeX, 0, 0, safeY);
+        root.addView(statusBar, sbp);
         nowView = new TextView(this);                          // "Now: song (artist) Singer: x", bottom-right, level with the status bar
         nowView.setTextColor(Color.WHITE);
         nowView.setBackgroundColor(0x99000000);
-        nowView.setTextSize(18);
-        nowView.setPadding(24, 12, 24, 12);
+        sizeText(nowView, 18);
+        nowView.setPadding(px(24), px(5), px(24), px(5));
         nowView.setSingleLine(true);
         nowView.setGravity(Gravity.END | Gravity.CENTER_VERTICAL);
-        root.addView(nowView, new FrameLayout.LayoutParams(-2, barH, Gravity.BOTTOM | Gravity.END));
+        FrameLayout.LayoutParams nvp = new FrameLayout.LayoutParams(-2, barH, Gravity.BOTTOM | Gravity.END);
+        nvp.setMargins(0, 0, safeX, safeY);
+        root.addView(nowView, nvp);
 
         sleepView = new FrameLayout(this);                     // sleep mode: black, with a dim QR + clock that drift around
         sleepView.setBackgroundColor(0xFF000000);
@@ -275,67 +294,69 @@ public class MainActivity extends Activity implements Server.Host {
         root.addView(sleepView, new FrameLayout.LayoutParams(-1, -1));
         setupView = new FrameLayout(this);                     // first run: choose the Karaoke folder (and a warning about USB drives)
         setupView.setBackgroundColor(0xFF101418);
+        setupView.setPadding(safeX, safeY, safeX, safeY);
         setupView.setVisibility(android.view.View.GONE);
         LinearLayout setupBox = new LinearLayout(this);
         setupBox.setOrientation(LinearLayout.VERTICAL);
         setupBox.setGravity(Gravity.CENTER_HORIZONTAL);
         setupText = new TextView(this);
         setupText.setTextColor(Color.WHITE);
-        setupText.setTextSize(28);
+        sizeText(setupText, 28);
         setupText.setGravity(Gravity.CENTER);
-        setupBox.addView(setupText, new LinearLayout.LayoutParams(1400, -2));
+        setupBox.addView(setupText, new LinearLayout.LayoutParams(Math.min(px(1400), Math.round(dmS.widthPixels * 0.9f)), -2));
         setupButton = new android.widget.Button(this);
         setupButton.setText("Choose the Karaoke folder");
-        setupButton.setTextSize(26);
+        sizeText(setupButton, 26);
         setupButton.setFocusable(true);
         setupButton.setFocusableInTouchMode(true);                // a mouse/touch must not leave the button unfocusable
         setupButton.setOnClickListener(new android.view.View.OnClickListener() {
             @Override public void onClick(android.view.View v) { pickFolder(); }
         });
         LinearLayout.LayoutParams bl = new LinearLayout.LayoutParams(-2, -2);
-        bl.topMargin = 48;
+        bl.topMargin = px(48);
         setupBox.addView(setupButton, bl);
         setupView.addView(setupBox, new FrameLayout.LayoutParams(-2, -2, Gravity.CENTER));
         root.addView(setupView, new FrameLayout.LayoutParams(-1, -1));
         menuView = new FrameLayout(this);                      // TV settings (only reachable with the remote while nothing is playing)
         menuView.setBackgroundColor(0xF0101418);
+        menuView.setPadding(safeX, safeY, safeX, safeY);
         menuView.setVisibility(android.view.View.GONE);
         LinearLayout menuBox = new LinearLayout(this);
         menuBox.setOrientation(LinearLayout.VERTICAL);
         menuBox.setGravity(Gravity.CENTER_HORIZONTAL);
         menuText = new TextView(this);
         menuText.setTextColor(Color.WHITE);
-        menuText.setTextSize(28);
+        sizeText(menuText, 28);
         menuText.setGravity(Gravity.CENTER);
-        menuBox.addView(menuText, new LinearLayout.LayoutParams(1400, -2));
+        menuBox.addView(menuText, new LinearLayout.LayoutParams(Math.min(px(1400), Math.round(dmS.widthPixels * 0.9f)), -2));
         menuReset = new android.widget.Button(this);
-        menuReset.setTextSize(26);
+        sizeText(menuReset, 26);
         menuReset.setFocusableInTouchMode(true);
         menuReset.setOnClickListener(new android.view.View.OnClickListener() {
             @Override public void onClick(android.view.View v) { resetPairingClicked(); }
         });
         LinearLayout.LayoutParams mb = new LinearLayout.LayoutParams(-2, -2);
-        mb.topMargin = 40;
+        mb.topMargin = px(40);
         menuBox.addView(menuReset, mb);
         menuLocation = new android.widget.Button(this);        // only shown on devices with no system folder chooser
         menuLocation.setText("Song location");
-        menuLocation.setTextSize(26);
+        sizeText(menuLocation, 26);
         menuLocation.setFocusableInTouchMode(true);
         menuLocation.setOnClickListener(new android.view.View.OnClickListener() {
             @Override public void onClick(android.view.View v) { chooseLocation(); }
         });
         LinearLayout.LayoutParams ml = new LinearLayout.LayoutParams(-2, -2);
-        ml.topMargin = 24;
+        ml.topMargin = px(24);
         menuBox.addView(menuLocation, ml);
         menuClose = new android.widget.Button(this);
         menuClose.setText("Close");
-        menuClose.setTextSize(26);
+        sizeText(menuClose, 26);
         menuClose.setFocusableInTouchMode(true);
         menuClose.setOnClickListener(new android.view.View.OnClickListener() {
             @Override public void onClick(android.view.View v) { hideMenu(); }
         });
         LinearLayout.LayoutParams mc = new LinearLayout.LayoutParams(-2, -2);
-        mc.topMargin = 24;
+        mc.topMargin = px(24);
         menuBox.addView(menuClose, mc);
         menuView.addView(menuBox, new FrameLayout.LayoutParams(-2, -2, Gravity.CENTER));
         buildBrowse(root);
@@ -412,14 +433,14 @@ public class MainActivity extends Activity implements Server.Host {
 
     /** Builds the (hidden) overlay. Sizes follow the screen height, so it reads the same on any TV. */
     private void buildBrowse(FrameLayout root) {
-        final float px = Math.max(26f, getResources().getDisplayMetrics().heightPixels * 0.036f);
+        final float px = Math.max(26f, getResources().getDisplayMetrics().heightPixels * 0.036f);   // (text unit of the browser; px(...) is the layout helper)
         browseView = new FrameLayout(this);
         browseView.setBackgroundColor(0xF2101418);
         browseView.setVisibility(android.view.View.GONE);
         LinearLayout box = new LinearLayout(this);
         box.setOrientation(LinearLayout.VERTICAL);
         int pad = Math.round(px * 1.4f);
-        box.setPadding(pad, Math.round(px * 0.9f), pad, Math.round(px * 0.6f));
+        box.setPadding(Math.max(pad, safeX), Math.max(Math.round(px * 0.9f), safeY), Math.max(pad, safeX), Math.max(Math.round(px * 0.6f), safeY));
         browseTitle = new TextView(this);
         browseTitle.setTextColor(Color.WHITE);
         browseTitle.setTextSize(android.util.TypedValue.COMPLEX_UNIT_PX, px * 1.3f);
@@ -1127,8 +1148,9 @@ public class MainActivity extends Activity implements Server.Host {
     private static final float NOW_MAX_FRACTION = 0.48f;    // the bottom-right Now line may use at most this share of the width
 
     private String fitLine(String prefix, String title, String suffix, float widthFraction) {
-        int maxPx = widthFraction >= 1f ? getResources().getDisplayMetrics().widthPixels - 48 /* padding */ - 24 - 200 /* QR + gap */
-                : Math.round(getResources().getDisplayMetrics().widthPixels * widthFraction) - 48;
+        int usable = getResources().getDisplayMetrics().widthPixels - 2 * safeX;
+        int maxPx = widthFraction >= 1f ? usable - px(48) /* padding */ - px(24) - px(200) /* QR + gap */
+                : Math.round(usable * widthFraction) - px(48);
         android.graphics.Paint paint = status.getPaint();
         String full = prefix + title + suffix;
         if (paint.measureText(full) <= maxPx) return full;

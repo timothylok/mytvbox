@@ -69,6 +69,8 @@ Inside the song browser, Up / Down / OK / hold OK / Back work as described in se
 
 ## 6. What you see on the TV
 
+Everything on the TV is laid out from the screen itself: sizes scale with the screen height (720p, 1080p and 4K look alike), and the text, QR code, status bars and lyrics stay inside a 4 % / 5 % border so a TV that overscans does not cut them off. The TV's own font-size setting does not change the app's text.
+
 - Top left: **Now** (and **Next** when there is one), top right: the small QR code. Two thin bars at the bottom: the left bar shows the song and the singer, status (Playing / Paused, KARAOKE or VOCAL ON, time, lyric offset); the right bar shows the key hints.
 - On the idle screen: "N songs - press OK to choose one here, or scan the code with your phone".
 - Music videos are shown centred with a small margin above and below; black bars baked into a video are zoomed away when the video is listed in `crops.txt`.

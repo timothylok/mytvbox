@@ -54,7 +54,8 @@ public class FolderChooserActivity extends Activity {
         box.setOrientation(LinearLayout.VERTICAL);
         box.setBackgroundColor(0xFF101418);
         int pad = Math.round(px * 1.4f);
-        box.setPadding(pad, Math.round(px), pad, Math.round(px));
+        int sx = Math.round(getResources().getDisplayMetrics().widthPixels * 0.04f), sy = Math.round(getResources().getDisplayMetrics().heightPixels * 0.05f);
+        box.setPadding(Math.max(pad, sx), Math.max(Math.round(px), sy), Math.max(pad, sx), Math.max(Math.round(px), sy));   // TV safe area
         title = text(px * 1.25f, Color.WHITE);
         hint = text(px * 0.8f, 0xFFB8C2D6);
         hint.setPadding(0, Math.round(px * 0.3f), 0, Math.round(px * 0.5f));
