@@ -6190,3 +6190,44 @@
 2026-11-22 06:10:14,sync,,,ok,"run finished: made 91, aligned 18, held 5, pushed 13 songs (844 MB), failed 0, box connected, rescan app not running (it scans at start), 190 min; ATTENTION: HELD Cantopop/COLLAR/COLLAR 《Back In The Game》Official Music Video: estimated timing: only 0 of 73 lines timed exactly and the Whisper-words method could not time it | HELD Cantopop/Edan/Edan 呂爵安 《E先生連環不幸事件》: estimated timing: only 0 of 49 lines timed exactly and the Whisper-words method could not time it | HELD Cantopop/Jer/Jer 柳應廷《狂人日記》Official Music Video: estimated timing: only 0 of 69 lines timed exactly and the Whisper-words method could not time it | HELD Cantopop/Keung To/姜濤 Keung To《Dear My Friend,》Official Music Video: estimated timing: only 0 of 60 lines timed exactly and the Whisper-words method could not time it | HELD Cantopop/Kiri T/Kiri T 台灣猛鬼荒廢酒店拍新歌《哈姆雷特下班了》MV 遇怪事丨影片記憶卡無法讀取 盡力救回少部份拍攝鏡頭丨田木集作: estimated timing: only 1 of 46 lines timed exactly and the Whisper-words method could not time it"
 2026-11-22 07:30:01,sync,,,ok,run started
 2026-11-22 07:30:14,sync,,,ok,"run finished: made 91, aligned 18, held 5, pushed 13 songs (844 MB), failed 0, box connected, rescan app not running (it scans at start), 190 min; ATTENTION: HELD Cantopop/COLLAR/COLLAR 《Back In The Game》Official Music Video: estimated timing: only 0 of 73 lines timed exactly and the Whisper-words method could not time it | HELD Cantopop/Edan/Edan 呂爵安 《E先生連環不幸事件》: estimated timing: only 0 of 49 lines timed exactly and the Whisper-words method could not time it | HELD Cantopop/Jer/Jer 柳應廷《狂人日記》Official Music Video: estimated timing: only 0 of 69 lines timed exactly and the Whisper-words method could not time it | HELD Cantopop/Keung To/姜濤 Keung To《Dear My Friend,》Official Music Video: estimated timing: only 0 of 60 lines timed exactly and the Whisper-words method could not time it | HELD Cantopop/Kiri T/Kiri T 台灣猛鬼荒廢酒店拍新歌《哈姆雷特下班了》MV 遇怪事丨影片記憶卡無法讀取 盡力救回少部份拍攝鏡頭丨田木集作: estimated timing: only 1 of 46 lines timed exactly and the Whisper-words method could not time it"
+2026-11-23 03:00:02,sync,,,ok,run started
+2026-11-23 03:00:44,karaoke,D:\ai\GetVideo\Cantopop\Panther Chan\陳蕾 Panther Chan - 凡星 【天星銀行Airstar樂劇主題曲】 [歌詞同步⧸粵拼字幕][Jyutping Lyrics].mp3,D:\ai\Karaoke\Cantopop\Panther Chan\陳蕾 Panther Chan - 凡星 【天星銀行Airstar樂劇主題曲】 [歌詞同步⧸粵拼字幕][Jyutping Lyrics].mp3,ok,
+2026-11-23 03:01:16,normalize,D:\ai\Karaoke\Mandarin\Jay Chou\周杰倫 Jay Chou【夜曲 Nocturne】-Official Music Video.mp3,D:\ai\Karaoke\Mandarin\Jay Chou\周杰倫 Jay Chou【夜曲 Nocturne】-Official Music Video.mp3,ok,"-22.4 LUFS -> gain +4.4 dB (target -18.0), done by make_karaoke"
+2026-11-23 03:01:16,karaoke,D:\ai\GetVideo\Mandarin\Jay Chou\周杰倫 Jay Chou【夜曲 Nocturne】-Official Music Video.mp3,D:\ai\Karaoke\Mandarin\Jay Chou\周杰倫 Jay Chou【夜曲 Nocturne】-Official Music Video.mp3,ok,
+2026-11-23 03:01:48,karaoke,D:\ai\GetVideo\Mandarin\Jeryl Lee\李佩玲 - 糊涂一时的我 Little Did I Know (Official Lyric Video) 歌词版.mp3,D:\ai\Karaoke\Mandarin\Jeryl Lee\李佩玲 - 糊涂一时的我 Little Did I Know (Official Lyric Video) 歌词版.mp3,ok,
+2026-11-23 03:02:14,karaoke,D:\ai\GetVideo\Mandarin\Jess Lee\遲來的海嘯 - 李佳薇『Chi lai de hai xiao - Jess Lee』.mp3,D:\ai\Karaoke\Mandarin\Jess Lee\遲來的海嘯 - 李佳薇『Chi lai de hai xiao - Jess Lee』.mp3,ok,
+2026-11-23 03:02:43,normalize,D:\ai\Karaoke\KPop\BTS\BTS (방탄소년단) 'Life Goes On' Official MV.mp3,D:\ai\Karaoke\KPop\BTS\BTS (방탄소년단) 'Life Goes On' Official MV.mp3,ok,"-13.3 LUFS -> gain -4.7 dB (target -18.0), done by make_karaoke"
+2026-11-23 03:02:43,karaoke,D:\ai\GetVideo\KPop\BTS\BTS (방탄소년단) 'Life Goes On' Official MV.mp3,D:\ai\Karaoke\KPop\BTS\BTS (방탄소년단) 'Life Goes On' Official MV.mp3,ok,
+2026-11-23 03:03:11,normalize,D:\ai\Karaoke\KPop\BTS\BTS(방탄소년단) - I NEED U MV [繁中韓字].mp3,D:\ai\Karaoke\KPop\BTS\BTS(방탄소년단) - I NEED U MV [繁中韓字].mp3,ok,"-15.9 LUFS -> gain -2.1 dB (target -18.0), done by make_karaoke"
+2026-11-23 03:03:11,karaoke,D:\ai\GetVideo\KPop\BTS\BTS(방탄소년단) - I NEED U MV [繁中韓字].mp3,D:\ai\Karaoke\KPop\BTS\BTS(방탄소년단) - I NEED U MV [繁中韓字].mp3,ok,
+2026-11-23 03:08:38,align,D:\ai\setupbox\tools\daily_sync\stage\s000.mp3,D:\ai\setupbox\tools\daily_sync\stage\s000.lrc,ok,"60 lines exact, 5 estimated; original in D:\ai\setupbox\tools\daily_sync\stage_orig"
+2026-11-23 03:13:13,align,D:\ai\setupbox\tools\daily_sync\stage\s001.mp3,D:\ai\setupbox\tools\daily_sync\stage\s001.lrc,ok,"0 lines exact, 58 estimated; original in D:\ai\setupbox\tools\daily_sync\stage_orig"
+2026-11-23 03:13:13,align,D:\ai\GetVideo\Mandarin\Jeryl Lee\李佩玲 - 糊涂一时的我 Little Did I Know (Official Lyric Video) 歌词版.mp3,D:\ai\Karaoke\Mandarin\Jeryl Lee\李佩玲 - 糊涂一时的我 Little Did I Know (Official Lyric Video) 歌词版.lrc,ok,"60 lines exact, 5 estimated (daily_sync; original kept in D:\ai\setupbox\tools\daily_sync\orig\Mandarin\Jeryl Lee)"
+2026-11-23 03:13:13,align,D:\ai\GetVideo\Mandarin\Jess Lee\遲來的海嘯 - 李佳薇『Chi lai de hai xiao - Jess Lee』.mp3,D:\ai\Karaoke\Mandarin\Jess Lee\遲來的海嘯 - 李佳薇『Chi lai de hai xiao - Jess Lee』.lrc,ok,"0 lines exact, 66 estimated (daily_sync; original kept in D:\ai\setupbox\tools\daily_sync\orig\Mandarin\Jess Lee)"
+2026-11-23 03:18:32,quarantine,D:\ai\GetVideo\Mandarin\Jess Lee\遲來的海嘯 - 李佳薇『Chi lai de hai xiao - Jess Lee』.lrc,,held,estimated timing: only 0 of 66 lines timed exactly and the Whisper-words method could not time it
+2026-11-23 03:20:35,sync,192.168.3.106:2025,,skipped,box unreachable
+2026-11-23 03:20:35,sync,,,ok,"run finished: made 6, aligned 2, held 1, pushed 0 songs (0 MB), failed 0, box unreachable, rescan no, 21 min; ATTENTION: HELD Mandarin/Jess Lee/遲來的海嘯 - 李佳薇『Chi lai de hai xiao - Jess Lee』: estimated timing: only 0 of 66 lines timed exactly and the Whisper-words method could not time it"
+2026-11-23 05:30:01,sync,,,ok,run started
+2026-11-23 05:32:05,sync,192.168.3.106:2025,,skipped,box unreachable
+2026-11-23 05:32:05,sync,,,ok,"run finished: made 6, aligned 2, held 1, pushed 0 songs (0 MB), failed 0, box unreachable, rescan no, 23 min; ATTENTION: HELD Mandarin/Jess Lee/遲來的海嘯 - 李佳薇『Chi lai de hai xiao - Jess Lee』: estimated timing: only 0 of 66 lines timed exactly and the Whisper-words method could not time it"
+2026-11-23 07:30:01,sync,,,ok,run started
+2026-11-23 07:32:05,sync,192.168.3.106:2025,,skipped,box unreachable
+2026-11-23 07:32:05,sync,,,ok,"run finished: made 6, aligned 2, held 1, pushed 0 songs (0 MB), failed 0, box unreachable, rescan no, 25 min; ATTENTION: HELD Mandarin/Jess Lee/遲來的海嘯 - 李佳薇『Chi lai de hai xiao - Jess Lee』: estimated timing: only 0 of 66 lines timed exactly and the Whisper-words method could not time it"
+2026-11-23 09:12:37,sync,192.168.3.106:2025,,skipped,box unreachable
+2026-11-23 09:15:51,sync,192.168.3.106:2025,,skipped,box unreachable
+2026-11-23 09:18:21,sync,192.168.3.106:2025,,skipped,box unreachable
+2026-11-23 09:18:30,sync,,,ok,run started
+2026-11-23 09:18:40,years,D:\ai\GetVideo\KPop\BTS\BTS (방탄소년단) 'Life Goes On' Official MV.mp3,D:\ai\Karaoke\years.txt,ok,BTS/BTS (방탄소년단) 'Life Goes On' Official MV -> 2020
+2026-11-23 09:18:40,years,D:\ai\GetVideo\KPop\BTS\BTS(방탄소년단) - I NEED U MV [繁中韓字].mp3,D:\ai\Karaoke\years.txt,ok,BTS/BTS(방탄소년단) - I NEED U MV [繁中韓字] -> 2016
+2026-11-23 09:18:42,years,D:\ai\GetVideo\Mandarin\Jay Chou\周杰倫 Jay Chou【夜曲 Nocturne】-Official Music Video.mp3,D:\ai\Karaoke\years.txt,ok,Jay Chou/周杰倫 Jay Chou【夜曲 Nocturne】-Official Music Video -> 2005
+2026-11-23 09:18:42,years,D:\ai\GetVideo\Mandarin\Jeryl Lee\李佩玲 - 糊涂一时的我 Little Did I Know (Official Lyric Video) 歌词版.mp3,D:\ai\Karaoke\years.txt,ok,Jeryl Lee/李佩玲 - 糊涂一时的我 Little Did I Know (Official Lyric Video) 歌词版 -> 2026
+2026-11-23 09:18:42,years,D:\ai\GetVideo\Mandarin\Jess Lee\遲來的海嘯 - 李佳薇『Chi lai de hai xiao - Jess Lee』.mp3,D:\ai\Karaoke\years.txt,ok,Jess Lee/遲來的海嘯 - 李佳薇『Chi lai de hai xiao - Jess Lee』 -> 2026
+2026-11-23 09:18:44,lrc,D:\ai\Karaoke\KPop\IVE\06. Glow Motion.lrc,/sdcard/Karaoke/KPop/IVE/06. Glow Motion.lrc,ok,3977 bytes
+2026-11-23 09:18:45,push,D:\ai\Karaoke\KPop\IVE\06. Glow Motion.mp3,/sdcard/Karaoke/KPop/IVE/06. Glow Motion.mp3,ok,4553218 bytes
+2026-11-23 09:18:46,meta,D:\ai\Karaoke\crops.txt,/sdcard/Karaoke/crops.txt,ok,
+2026-11-23 09:18:46,meta,D:\ai\Karaoke\titles.txt,/sdcard/Karaoke/titles.txt,ok,
+2026-11-23 09:18:46,meta,D:\ai\Karaoke\years.txt,/sdcard/Karaoke/years.txt,ok,
+2026-11-23 09:18:46,meta,D:\ai\Karaoke\static_videos.txt,/sdcard/Karaoke/static_videos.txt,ok,
+2026-11-23 09:19:17,rescan,,,ok,songCount 187 -> 188
+2026-11-23 09:19:17,sync,,,ok,"run finished: made 6, aligned 2, held 1, pushed 1 songs (5 MB), failed 0, box connected, rescan ok (187 -> 188 songs), 26 min; ATTENTION: HELD Mandarin/Jess Lee/遲來的海嘯 - 李佳薇『Chi lai de hai xiao - Jess Lee』: estimated timing: only 0 of 66 lines timed exactly and the Whisper-words method could not time it"
+2026-11-23 09:21:43,sync,192.168.3.106:2025,,skipped,box unreachable

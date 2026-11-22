@@ -41,6 +41,7 @@ ROOT = os.path.abspath(os.path.join(HERE, "..", ".."))
 TOOLS = os.path.join(ROOT, "tools")
 ADB = os.path.join(TOOLS, "sdk", "platform-tools", "adb.exe")
 LOGDIR = os.path.join(ROOT, "logs")
+SYNC_LOGS = os.path.join(LOGDIR, "sync")
 STATE_FILE = os.path.join(LOGDIR, "daily_sync_state.json")
 LOCK_FILE = os.path.join(LOGDIR, "daily_sync.lock")
 LAST_RUN = os.path.join(LOGDIR, "last_run.json")
@@ -52,8 +53,11 @@ PKG = "com.superghosttim.karaokeking"
 TARGETS = {
     # addr = last known adb address; mdns = the box's wireless-debugging name (its serial); usb_uuid = the drive that holds the songs
     "google": {"addr": "192.168.3.101:2025", "mdns": "adb-1e5517831b69e12c", "usb_uuid": "85F8-1509"},   # SD card (the old WDC USB drive A6D0-F59E is failing: do not use)
-    "old": {"addr": "192.168.3.79:5555", "mdns": None, "usb_uuid": None},
+    # Android 10 box: internal storage only (~25 GB, shared with the system), so it cannot hold the whole library. "limited": push the newest
+    # songs first and leave "reserve_gb" free; whatever does not fit is skipped (counted in last_run.json targets.old.skipped_space).
+    "old": {"addr": "192.168.3.79:5555", "mdns": None, "usb_uuid": None, "limited": True, "reserve_gb": 2.5},
 }
+DEFAULT_TARGETS = "google,old"          # push order; phase A (Demucs / alignment) runs once for all of them
 ADDR_FILE = os.path.join(LOGDIR, "box_address.json")
 TARGET = "google"
 BOX = TARGETS["google"]["addr"]
@@ -85,6 +89,20 @@ def setup_logging(console):
     fh = RotatingFileHandler(os.path.join(LOGDIR, "daily_sync.log"), maxBytes=2_000_000, backupCount=5, encoding="utf-8")
     fh.setFormatter(logging.Formatter("%(asctime)s %(levelname)s %(message)s"))
     lg.addHandler(fh)
+    # one log per day (everything the run does, retries append), and one per day and box while it pushes: logs\sync\2026-11-23.log,
+    # 2026-11-23_google.log, 2026-11-23_old.log (the box log also holds the box's address, free space and each pushed file's result)
+    try:
+        os.makedirs(SYNC_LOGS, exist_ok=True)
+        dh = logging.FileHandler(os.path.join(SYNC_LOGS, time.strftime("%Y-%m-%d") + ".log"), encoding="utf-8")
+        dh.setFormatter(logging.Formatter("%(asctime)s %(levelname)s %(message)s"))
+        lg.addHandler(dh)
+        cutoff = time.time() - 90 * 86400
+        for fn in os.listdir(SYNC_LOGS):
+            p = os.path.join(SYNC_LOGS, fn)
+            if fn.endswith(".log") and os.path.getmtime(p) < cutoff:
+                os.remove(p)                                   # keep about three months
+    except OSError as e:
+        lg.warning("daily log folder not usable: %s", e)
     if console:
         sh = logging.StreamHandler()
         sh.setFormatter(logging.Formatter("%(message)s"))
@@ -717,6 +735,63 @@ def library_report(rem):
         fh.writelines("  %s\n" % " | ".join(v) for v in dups)
 
 
+PER_TARGET = ("pushed_songs", "pushed_mb", "failed", "box", "rescan", "pending", "skipped_space")
+
+
+def push_targets(songs, st, a, names):
+    """Push to each target in turn. The first target fills the top-level summary (what health_pass reads); the others are reported under
+    summary["targets"][name], and their ATTENTION lines are prefixed with the target name."""
+    extra = {}
+    for i, name in enumerate(names):
+        use_target(name)
+        th = None
+        try:
+            th = logging.FileHandler(os.path.join(SYNC_LOGS, "%s_%s.log" % (time.strftime("%Y-%m-%d"), name)), encoding="utf-8")
+            th.setFormatter(logging.Formatter("%(asctime)s %(levelname)s %(message)s"))
+            lg.addHandler(th)
+            lg.info("=== push to %s (%s) %s", name, BOX, "dry run" if a.dry_run else ("push-only retry" if a.no_process else "daily run"))
+        except OSError:
+            th = None
+        res = None
+        try:
+            res = _push_one(i, name, songs, st, a, extra)
+        finally:
+            if th:
+                if res:
+                    lg.info("=== %s done: pushed %d songs (%.0f MB), box %s, pending %d, skipped for space %d", name, res["pushed_songs"], res["pushed_mb"],
+                            res["box"], res["pending"], res.get("skipped_space", 0))
+                else:
+                    lg.info("=== %s stopped by an error (see above)", name)
+                lg.removeHandler(th)
+                th.close()
+    if extra:
+        summary["targets"] = extra
+        for name, res in extra.items():
+            summary["attention"].extend(res["attention"])
+
+
+def _push_one(i, name, songs, st, a, extra):
+    if True:
+        if i == 0:
+            phase_b_to_e(songs, st, a)
+            return {k: summary.get(k, 0) for k in PER_TARGET}
+        saved = {k: summary.get(k, 0) for k in PER_TARGET}
+        saved_att = len(summary["attention"])
+        summary.update({"pushed_songs": 0, "pushed_mb": 0.0, "failed": 0, "box": "not tried", "rescan": "no", "pending": 0, "skipped_space": 0})
+        try:
+            phase_b_to_e(songs, st, a)
+        except Exception:
+            summary["failed"] += 1
+            lg.error("push to %s crashed\n%s", name, traceback.format_exc())
+            log("sync", "", "", "failed", "push to %s crashed: see logs\\daily_sync.log" % name)
+        res = {k: summary[k] for k in PER_TARGET}
+        res["attention"] = ["[%s] %s" % (name, x) for x in summary["attention"][saved_att:]]
+        extra[name] = res
+        del summary["attention"][saved_att:]
+        summary.update(saved)
+        return res
+
+
 def phase_b_to_e(songs, st, a):
     if not connect():
         summary["box"] = "unreachable"
@@ -741,7 +816,7 @@ def phase_b_to_e(songs, st, a):
         log("sync", BOX, "", "ok", "removed %d stale .part file(s) from the box" % len(stale))
     RMD5.clear()
     RMD5.update(remote_md5())
-    if not a.only:
+    if not a.only and TARGET == "google":
         try:
             library_report(rem)
         except Exception:
@@ -795,12 +870,26 @@ def phase_b_to_e(songs, st, a):
         return
     need_bytes = sum(os.path.getsize(l) for _, full in todo for l, r, _ in missing(full, rem))
     fb = free_bytes()
-    if fb is not None and fb < need_bytes + 1.5e9:
+    limited = bool(TARGETS[TARGET].get("limited"))
+    reserve = TARGETS[TARGET].get("reserve_gb", 1.5) * 1e9
+    if limited:
+        if fb is None:
+            attention("%s: cannot read the free space; push skipped" % TARGET)
+            return
+        todo.sort(key=lambda sf: os.path.getmtime(sf[0].kmp3), reverse=True)      # newest songs first
+    elif fb is not None and fb < need_bytes + 1.5e9:
         attention("box storage low: %.1f GB free, %.1f GB to push; push skipped" % (fb / 1e9, need_bytes / 1e9))
         return
     pushed_any = False
+    skipped_space = 0
+    failkey = "push:" if TARGET == "google" else "push@%s:" % TARGET
     for s, full in todo:
         try:
+            if limited:
+                song_bytes = sum(os.path.getsize(l) for l, r, _ in missing(full, rem))
+                if fb - song_bytes < reserve:
+                    skipped_space += 1                       # a smaller song later in the list may still fit
+                    continue
             ok, why = idle()
             if not ok and not wait_idle(a.idle_wait):
                 break
@@ -813,13 +902,15 @@ def phase_b_to_e(songs, st, a):
                 if r == "ok":
                     pushed_any = True
                     summary["pushed_mb"] += os.path.getsize(local) / 1e6
+            if limited and "ok" in res:
+                fb = free_bytes() or (fb - song_bytes)       # re-read the real free space after each song
             if "failed" in res:
-                st["fails"]["push:" + s.key] = st["fails"].get("push:" + s.key, 0) + 1
+                st["fails"][failkey + s.key] = st["fails"].get(failkey + s.key, 0) + 1
                 summary["failed"] += 1
-                if st["fails"]["push:" + s.key] >= 3:
-                    attention("push has failed %d days in a row: %s" % (st["fails"]["push:" + s.key], s.key))
+                if st["fails"][failkey + s.key] >= 3:
+                    attention("push has failed %d days in a row: %s" % (st["fails"][failkey + s.key], s.key))
             else:
-                st["fails"].pop("push:" + s.key, None)
+                st["fails"].pop(failkey + s.key, None)
                 if "ok" in res:
                     summary["pushed_songs"] += 1
             save_state(st)
@@ -829,6 +920,9 @@ def phase_b_to_e(songs, st, a):
     if push_meta():
         pushed_any = True
     summary["pending"] = len([1 for s, full in todo if missing(full, rem)])
+    summary["skipped_space"] = skipped_space
+    if skipped_space:
+        lg.warning("%s: %d songs not pushed: only %.1f GB free and %.1f GB are kept free", TARGET, skipped_space, (fb or 0) / 1e9, reserve / 1e9)
     if pushed_any:
         rescan()
 
@@ -939,6 +1033,16 @@ def merge_previous(sm):
         sm["attention"] = old.get("attention", []) + sm["attention"]
     if sm["rescan"] == "no":
         sm["rescan"] = old.get("rescan", "no")
+    for tn, new in sm.get("targets", {}).items():
+        prev = old.get("targets", {}).get(tn)
+        if not prev:
+            continue
+        new["pushed_songs"] += prev.get("pushed_songs", 0)
+        new["pushed_mb"] = round(new["pushed_mb"] + prev.get("pushed_mb", 0), 3)
+        new["failed"] += prev.get("failed", 0)
+        if new["box"] != "connected":
+            new["box"], new["rescan"], new["pending"] = prev.get("box", new["box"]), prev.get("rescan", new["rescan"]), prev.get("pending", new["pending"])
+            new["skipped_space"] = prev.get("skipped_space", 0)
     return sm
 
 
@@ -947,7 +1051,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--dry-run", action="store_true")
     ap.add_argument("--only")
-    ap.add_argument("--target", choices=sorted(TARGETS), default="google", help="google = Google_TV box, songs on its USB drive (default); old = Android 10 box")
+    ap.add_argument("--target", choices=sorted(TARGETS), default=None, help="push to this one box only (google = Google_TV, old = Android 10); default: both, google first")
     ap.add_argument("--no-process", action="store_true")
     ap.add_argument("--no-push", action="store_true")
     ap.add_argument("--max-hours", type=float, default=5.0, help="stop starting new Demucs/alignment work after this long")
@@ -956,7 +1060,8 @@ def main():
     ap.add_argument("--hold", nargs=2, metavar=("KEY", "REASON"))
     ap.add_argument("--release", metavar="KEY")
     a = ap.parse_args()
-    use_target(a.target)
+    names = [a.target] if a.target else DEFAULT_TARGETS.split(",")
+    use_target(names[0])
     sys.stdout.reconfigure(encoding="utf-8")
     setup_logging(console=sys.stdout.isatty())
 
@@ -1006,7 +1111,7 @@ def main():
                 log("sync", "", "", "failed", "phase A crashed: see logs\\daily_sync.log")
         if not a.no_push:
             try:
-                phase_b_to_e(songs, st, a)
+                push_targets(songs, st, a, names)
             except Exception:
                 code = 1
                 lg.error("push phase crashed\n%s", traceback.format_exc())
@@ -1032,6 +1137,9 @@ def main():
             note = "made %d, aligned %d, held %d, pushed %d songs (%.0f MB), failed %d, box %s, rescan %s, %.0f min" % (
                 summary["karaoke_made"], summary["aligned"], summary["held"], summary["pushed_songs"], summary["pushed_mb"],
                 summary["failed"], summary["box"], summary["rescan"], summary["minutes"])
+            for tn, tr in summary.get("targets", {}).items():
+                note += "; %s: pushed %d songs (%.0f MB), box %s, pending %d, skipped for space %d" % (
+                    tn, tr["pushed_songs"], tr["pushed_mb"], tr["box"], tr["pending"], tr.get("skipped_space", 0))
             lg.info("run finished: %s", note)
             log("sync", "", "", "ok" if code == 0 else "failed", "run finished: " + note + (
                 "; ATTENTION: " + " | ".join(summary["attention"]) if summary["attention"] else ""))

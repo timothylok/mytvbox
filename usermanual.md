@@ -81,6 +81,8 @@ Inside the song browser, Up / Down / OK / hold OK / Back work as described in se
 
 The box starts in the custom launcher (the Google TV launcher can be restored with `tools/scripts/home_launcher.py`). Its panels scale to the screen size. The storage panel shows the **USB drive's or SD card's** free space when one is plugged in, otherwise the box's internal storage (real numbers, not the size printed on the package).
 
+The app grid is one alphabetical list (A to Z by the name under each icon, case ignored; apps named in Chinese sort by their pinyin/Unicode order), five tiles across, three rows per page; There is no Power tile (it did not work on its own); use the box's own remote to turn it off. Apps listed under `hidden` in `/sdcard/Launcher/config.json` do not appear. The old `pinned` setting no longer changes the order.
+
 ## 8. Your Karaoke folder
 
 ```

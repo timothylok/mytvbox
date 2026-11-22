@@ -546,35 +546,28 @@ public class MainActivity extends Activity {
                 all.add(ri);
             }
         }
+        // One alphabetical list by the name shown under each icon (the old "pinned" config no longer changes the order). Labels are read once.
         final Collator col = Collator.getInstance();
+        col.setStrength(Collator.SECONDARY);                  // case-insensitive, accents still count
+        final java.util.Map<ResolveInfo, String> names = new java.util.HashMap<>();
+        for (ResolveInfo ri : all) names.put(ri, ri.loadLabel(pm).toString().trim());
         Collections.sort(all, new Comparator<ResolveInfo>() {
             @Override
             public int compare(ResolveInfo a, ResolveInfo b) {
-                int pa = pinned.indexOf(a.activityInfo.packageName);
-                int pb = pinned.indexOf(b.activityInfo.packageName);
-                if (pa >= 0 || pb >= 0) {
-                    if (pa < 0) return 1;
-                    if (pb < 0) return -1;
-                    return pa - pb;
-                }
-                return col.compare(a.loadLabel(pm).toString(), b.loadLabel(pm).toString());
+                int c = col.compare(names.get(a), names.get(b));
+                return c != 0 ? c : a.activityInfo.packageName.compareTo(b.activityInfo.packageName);
             }
         });
         allItems.clear();
         for (ResolveInfo ri : all) {
             AppItem it = new AppItem();
-            it.label = ri.loadLabel(pm).toString();
+            it.label = names.get(ri);
             it.icon = ri.loadIcon(pm);
             it.intent = new Intent(Intent.ACTION_MAIN)
                     .setClassName(ri.activityInfo.packageName, ri.activityInfo.name)
                     .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
             allItems.add(it);
         }
-        AppItem pw = new AppItem();
-        pw.label = "Power";
-        pw.icon = new PowerIcon();
-        pw.power = true;
-        allItems.add(pw);
         applyPage(-1);
     }
 
